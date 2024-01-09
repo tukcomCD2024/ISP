@@ -19,9 +19,6 @@
         <activity
             android:name=".view.activity.SplashActivity"
             android:theme="@style/Theme.HowAboutTrip.BlackStatusBar"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

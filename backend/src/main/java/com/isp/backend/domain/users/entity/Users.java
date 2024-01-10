@@ -35,6 +35,7 @@ public class Users extends BaseEntity {
     @Column(name = "login_type")
     private String loginType ;
 
+    @Builder.Default
     @Column(name = "activated", nullable = false)
     private boolean activated = true;
 }

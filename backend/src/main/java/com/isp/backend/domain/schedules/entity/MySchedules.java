@@ -29,6 +29,7 @@ public class MySchedules extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private Users users;
 
+    @Builder.Default
     @OneToMany(mappedBy = "mySchedules", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TravelPlaces> travelPlaces = new ArrayList<>();
 
@@ -45,6 +46,7 @@ public class MySchedules extends BaseEntity {
     @Column(name = "total_price")
     private double totalPrice ;
 
+    @Builder.Default
     @Column(name = "activated", nullable = false)
     private boolean activated = true;
 }

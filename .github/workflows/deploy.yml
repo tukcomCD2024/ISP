@@ -24,6 +24,14 @@ jobs:
         with:
           java-version: 17
 
+      - name: Set up MySQL
+        uses: actions/mysql-action@v1
+        with:
+          character set server: 'utf8'
+          mysql database: 'trip'
+          mysql user: ${DB_USERNAME}
+          mysql password: ${DB_PASSWORD}
+
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
         shell: bash

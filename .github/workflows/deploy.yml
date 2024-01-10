@@ -25,7 +25,7 @@ jobs:
           java-version: 17
 
       - name: Set up MySQL
-        uses: actions/mysql-action@v1
+        uses: samin/mysql-action@v1
         with:
           character set server: 'utf8'
           mysql database: 'trip'

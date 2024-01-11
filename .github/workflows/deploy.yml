@@ -48,7 +48,8 @@ jobs:
           utcOffset: "+09:00"
 
       - name: Generate deployment package
-        run: |
+      - run: ./gradlew build
+      - run: |
           mkdir -p deploy
           cp /build/libs/howAboutTrip.jar deploy/howAboutTrip-prod-ebextensions-1.jar
           cp Procfile deploy/Procfile

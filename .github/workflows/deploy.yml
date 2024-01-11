@@ -29,7 +29,7 @@ jobs:
         with:
           character set server: 'utf8'
           mysql database: 'trip'
-          mysql user: 'kjy'
+          mysql user: ${DB_USERNAME}
           mysql password: ${{ secrets.MYSQL_PASSWORD }}
 
       - name: Grant execute permission for gradlew
@@ -50,11 +50,10 @@ jobs:
       - name: Generate deployment package
         run: |
           mkdir -p deploy
-          cp build/libs/*.jar deploy/howAboutTrip.jar
+          cp /build/libs/backend.jar deploy/howAboutTrip-prod-ebextensions-1.jar
           cp Procfile deploy/Procfile
           cp -r .ebextensions deploy/.ebextensions
-          cp -r .platform deploy/.platform
-          cd deploy && zip -r deploy.zip .
+          cd deploy && zip -r howAboutTrip-prod-label-${{steps.current-time.outputs.formattedTime}}-${{github.sha}} .
 
       - name: Beanstalk Deploy
         uses: einaregilsson/beanstalk-deploy@v21
@@ -63,6 +62,6 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: how-about-trip
           environment_name: How-about-trip-env
-          version_label: github-action-${{steps.current-time.outputs.formattedTime}}
+          version_label: howAboutTrip-prod-label-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}
           region: ap-northeast-2
-          deployment_package: deploy/deploy.zip
+          deployment_package: deploy/howAboutTrip-prod-label-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}.zip

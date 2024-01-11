@@ -4,10 +4,6 @@
 :
 
 .gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
-C
-backend/gradlew.bat,7/b/7b3a79f800e85c8b44fcfc250f8be64bf945f627
-G
-backend/settings.gradle,b/3/b329b210b93dd6d96e8198d55bd14bd3361ac708
 ƒ
 Sbackend/src/main/java/com/isp/backend/domain/images/repository/ImageRepository.java,4/1/41b01f2e82f2e4212040a471a2d5455de6a4e605
 x
@@ -22,3 +18,7 @@ Ybackend/src/main/java/com/isp/backend/domain/schedules/controller/ScheduleContr
 Sbackend/src/main/java/com/isp/backend/domain/schedules/service/ScheduleService.java,9/8/988ee194fffff9c0b19490c3f17aec47381ae2a0
 Z
 *backend/src/main/resources/application.yml,9/6/9691797aa04d85d3238a4a45d4fa240168a3d92d
+m
+=backend/src/main/java/com/isp/backend/BackendApplication.java,c/5/c5d290b6f7e3435f1f1973dacc5c400a55e2e7f9
+T
+$backend/.elasticbeanstalk/config.yml,8/d/8d0402f9638fd4582735ae94036ef40d9a0cc8d9

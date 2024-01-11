@@ -11,6 +11,12 @@ java {
 	sourceCompatibility = '17'
 }
 
+bootJar{
+	archivesBaseName = 'howAboutTrip'
+	archiveFileName = 'howAboutTrip.jar'
+	archiveVersion = "0.0.1"
+}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor

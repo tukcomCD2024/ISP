@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "740845966307",
+    "project_id": "howabouttrip",
+    "storage_bucket": "howabouttrip.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:740845966307:android:71aff1bfe733b688ad46d6",
+        "android_client_info": {
+          "package_name": "com.project.how"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "740845966307-oulmuvm5mv595vlu9hf1a3j5n4ouvskg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.project.how",
+            "certificate_hash": "8f29dbe96504294182411cc8b5af35fee8e57de8"
+          }
+        },
+        {
+          "client_id": "740845966307-vhqequ0l999eglm9p87su14da4bjreid.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDg0_7_UQD4gNj9XmKnQZpBGREl0r9CZ_Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "740845966307-vhqequ0l999eglm9p87su14da4bjreid.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -3,7 +3,7 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL57Dialect
+        dialect: org.hibernate.dialect.MySQLDialect
   datasource:
     hikari:
       jdbc-url: jdbc:mysql://localhost:3306/trip;MODE=MYSQL

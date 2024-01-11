@@ -52,7 +52,6 @@ jobs:
           mkdir -p deploy
           cp build/libs/howAboutTrip.jar deploy/howAboutTrip-prod-ebextensions-1.jar
           cp Procfile deploy/Procfile
-          cp -r .ebextensions deploy/.ebextensions
           cd deploy && zip -r howAboutTrip-prod-label-${{steps.current-time.outputs.formattedTime}}-${{github.sha}} .
 
       - name: Beanstalk Deploy

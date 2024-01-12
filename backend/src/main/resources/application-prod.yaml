@@ -2,6 +2,10 @@ server:
   port: 5000
 
 spring:
+  profiles:
+    active: local
+    session:
+      store-type: jdbc
   jpa:
     database: MYSQL
     show-sql: true

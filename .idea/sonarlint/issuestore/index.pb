@@ -22,3 +22,7 @@ m
 =backend/src/main/java/com/isp/backend/BackendApplication.java,c/5/c5d290b6f7e3435f1f1973dacc5c400a55e2e7f9
 T
 $backend/.elasticbeanstalk/config.yml,8/d/8d0402f9638fd4582735ae94036ef40d9a0cc8d9
+p
+@backend/src/main/java/com/isp/backend/HealthCheckController.java,c/d/cd68cd5b981f8ffb78688aabc74e98dc22642568
+J
+.platform/nginx/nginx.conf,d/a/daf680be5ff8a320ee2d56ec1170464057a2332c

@@ -63,4 +63,4 @@ jobs:
           environment_name: How-about-trip-env
           version_label: howAboutTrip-prod-label-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}
           region: ap-northeast-2
-          deployment_package: deploy/howAboutTrip-prod-label-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}.zip
+          deployment_package: howAboutTrip-prod-label-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}.zip

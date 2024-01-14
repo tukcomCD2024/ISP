@@ -24,14 +24,6 @@ jobs:
         with:
           java-version: 17
 
-      - name: Set up MySQL
-        uses: samin/mysql-action@v1
-        with:
-          character set server: 'utf8'
-          mysql database: 'trip'
-          mysql user: ${DB_USERNAME}
-          mysql password: ${{ secrets.MYSQL_PASSWORD }}
-
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
         shell: bash
@@ -48,9 +40,15 @@ jobs:
           utcOffset: "+09:00"
 
       - name: Generate deployment package
-        run: zip -r deploy.zip . -x '*.git*'
+        run: |
+          mkdir -p deploy
+          cp build/libs/*.jar deploy/application.jar
+          cp Procfile deploy/Procfile
+          cp -r .ebextensions deploy/.ebextensions
+          cp -r .platform deploy/.platform
+          cd deploy && zip -r deploy.zip .
 
-      - name: Deploy to EB
+      - name: Beanstalk Deploy
         uses: einaregilsson/beanstalk-deploy@v21
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -59,4 +57,5 @@ jobs:
           environment_name: How-about-trip-env
           version_label: github-action-${{steps.current-time.outputs.formattedTime}}
           region: ap-northeast-2
-          deployment_package: ./deploy.zip
+          deployment_package: deploy/deploy.zip
+        

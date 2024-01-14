@@ -48,15 +48,10 @@ jobs:
           utcOffset: "+09:00"
 
       - name: Generate deployment package
-        run: |
-          mkdir -p deploy
-          cp build/libs/howAboutTrip.jar deploy/application.jar
-          cp Procfile deploy/Procfile
-          cp -r .platform deploy/.platform
-          cd deploy && zip -r deploy.zip .
+        run: zip -r deploy.zip ./backend -x '*.git*'
 
-      - name: Beanstalk Deploy
-        uses: einaregilsson/beanstalk-deploy@v20
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v21
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -64,4 +59,4 @@ jobs:
           environment_name: How-about-trip-env
           version_label: github-action-${{steps.current-time.outputs.formattedTime}}
           region: ap-northeast-2
-          deployment_package: deploy/deploy.zip
+          deployment_package: deploy.zip

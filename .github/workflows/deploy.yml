@@ -59,4 +59,4 @@ jobs:
           environment_name: How-about-trip-env
           version_label: github-action-${{steps.current-time.outputs.formattedTime}}
           region: ap-northeast-2
-          deployment_package: deploy.zip
+          deployment_package: ./deploy.zip

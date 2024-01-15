@@ -12,10 +12,9 @@ defaults:
     working-directory: ./backend
 
 env:
-  PROJECT_NAME: HowAboutTrip_project
   S3_BUCKET_NAME: howabouttrip-cicd-bucket
-  CODE_DEPLOY_APPLICATION_NAME: HowAboutTrip-CICD
-  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: HowAboutTrip_instance
+  CODE_DEPLOY_APPLICATION_NAME: HowAboutTrip-Backend-CICD
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: HowAboutTrip-Backend-Instance
 
 jobs:
   deploy:

@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Builder
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name="member")
 public class Member extends BaseEntity {
@@ -20,7 +21,7 @@ public class Member extends BaseEntity {
     @Column(name = "uid", nullable = false)
     private String uid ;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name ;
 
     @Column(name = "birth")

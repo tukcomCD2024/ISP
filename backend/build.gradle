@@ -21,12 +21,6 @@ repositories {
 	mavenCentral()
 }
 
-bootJar{
-	archivesBaseName = 'howAboutTrip'
-	archiveFileName = 'howAboutTrip.jar'
-	archiveVersion = "0.0.1"
-}
-
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'

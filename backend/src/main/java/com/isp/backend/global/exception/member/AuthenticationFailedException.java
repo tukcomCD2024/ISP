@@ -1,4 +1,4 @@
-package com.isp.backend.global.exception.users;
+package com.isp.backend.global.exception.member;
 
 import com.isp.backend.global.exception.CustomException;
 import com.isp.backend.global.exception.ErrorCode;

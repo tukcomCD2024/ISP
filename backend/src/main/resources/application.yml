@@ -13,3 +13,6 @@ spring:
     url: jdbc:mysql://localhost:3306/trip
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+
+jwt:
+  secret : ${JWT_SECRET_KEY}

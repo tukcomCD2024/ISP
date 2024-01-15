@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class GetGoogleUserDto {
+public class GoogleLoginRequest {
+
     private String uid;
+
 }

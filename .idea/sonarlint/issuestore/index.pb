@@ -40,3 +40,5 @@ t
 Dbackend/src/main/java/com/isp/backend/domain/image/entity/Image.java,3/e/3e7baf5788b82805f2e8de304ea856c7f50e4463
 †
 Vbackend/src/main/java/com/isp/backend/domain/receipt/controller/ReceiptController.java,8/6/86da04119b555391860b194466103596afaf9d52
+;
+appspec.yml,3/2/323482c68cf68aa6001a3280b1dbb38f31ee6cbc

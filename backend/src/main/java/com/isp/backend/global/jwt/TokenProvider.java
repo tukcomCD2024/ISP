@@ -33,10 +33,8 @@ public class TokenProvider implements InitializingBean {
                          @Value("${jwt.secret}") String secret) {
         this.customUserDetailsService = customUserDetailsService;
         this.secret = secret;
-//        this.accessExpirationTime = 3 * 60 * 60 * 1000L;       // 3 hours
-//        this.refreshExpirationTime = 15 * 24 * 60 * 60 * 1000L;  // 15 days
-        this.accessExpirationTime = 1 * 60 * 1000L;       // 1 minute
-        this.refreshExpirationTime = 2 * 60 * 1000L;      // 3 minutes
+        this.accessExpirationTime = 3 * 60 * 60 * 1000L;       // 3 hours
+        this.refreshExpirationTime = 15 * 24 * 60 * 60 * 1000L;  // 15 days
 
     }
 

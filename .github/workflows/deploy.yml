@@ -9,7 +9,6 @@ on:
 defaults:
   run:
     shell: bash
-    working-directory: ./backend
 
 env:
   AWS_S3_BUCKET: howabouttrip-backend-bucket
@@ -29,10 +28,12 @@ jobs:
           distribution: 'corretto'
 
       - name: Grant execute permission for gradlew
+        working-directory: ./backend
         run: chmod +x ./gradlew
         shell: bash
 
       - name: Build Project and Test
+        working-directory: ./backend
         run: ./gradlew build test
 
       - name: Configure AWS credential

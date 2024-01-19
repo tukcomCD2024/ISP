@@ -26,10 +26,10 @@ public class MemberController {
      *  test API
      */
     @GetMapping("/test")
-    public ResponseEntity<String> privateEndpoint(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        System.out.println("이메일 출력 = " + customUserDetails.getUsername());
-        String member = customUserDetails.getUsername();
-        return ResponseEntity.ok(member);
+    public ResponseEntity<String> privateEndpoint() {
+//        System.out.println("이메일 출력 = " + customUserDetails.getUsername());
+//        String member = customUserDetails.getUsername();
+        return ResponseEntity.ok("hi");
     }
 
 

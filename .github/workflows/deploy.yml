@@ -36,6 +36,13 @@ jobs:
         working-directory: ./backend
         run: ./gradlew build test
 
+      - name: Setup MySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql database: 'trip'
+          mysql user: ${DB_USERNAME}
+          mysql password: ${DB_PASSWORD}
+
       - name: Configure AWS credential
         uses: aws-actions/configure-aws-credentials@v1
         with:

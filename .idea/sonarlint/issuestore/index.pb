@@ -46,3 +46,5 @@ Vbackend/src/main/java/com/isp/backend/domain/receipt/controller/ReceiptControll
 scripts/stop.sh,3/3/33633e3a9eefbe48bcd3c206c80e66d4c371a6b9
 @
 scripts/start.sh,1/a/1a790e8df66ff79834187100aa54d881719ccd82
+„
+Tbackend/src/main/java/com/isp/backend/domain/member/controller/MemberController.java,b/f/bf8a91d94ba6d87e3accbb8ff83cce215d706910

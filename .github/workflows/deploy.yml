@@ -43,11 +43,6 @@ jobs:
           mysql user: ${DB_USERNAME}
           mysql password: ${DB_PASSWORD}
 
-      - name: Make zip file
-        working-directory: ./backend
-        run: zip -qq -r ./$GITHUB_SHA.zip .
-        shell: bash
-
       - name: Configure AWS credential
         uses: aws-actions/configure-aws-credentials@v1
         with:

@@ -36,10 +36,6 @@ t
 Dbackend/src/main/java/com/isp/backend/domain/image/entity/Image.java,3/e/3e7baf5788b82805f2e8de304ea856c7f50e4463
 ;
 appspec.yml,3/2/323482c68cf68aa6001a3280b1dbb38f31ee6cbc
-?
-scripts/stop.sh,3/3/33633e3a9eefbe48bcd3c206c80e66d4c371a6b9
-@
-scripts/start.sh,1/a/1a790e8df66ff79834187100aa54d881719ccd82
 „
 Tbackend/src/main/java/com/isp/backend/domain/member/controller/MemberController.java,b/f/bf8a91d94ba6d87e3accbb8ff83cce215d706910
 ~

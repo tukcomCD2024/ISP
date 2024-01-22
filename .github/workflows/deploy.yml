@@ -11,9 +11,9 @@ defaults:
     shell: bash
 
 env:
-  AWS_S3_BUCKET: howabouttrip-backend-bucket
-  AWS_CODE_DEPLOY_APPLICATION: HowAboutTrip-Backend-CD
-  AWS_CODE_DEPLOY_GROUP: HowAboutTrip-Backend-CD-Group
+  AWS_S3_BUCKET: howabouttrip-bucket
+  AWS_CODE_DEPLOY_APPLICATION: HowAboutTrip-CD
+  AWS_CODE_DEPLOY_GROUP: HowAboutTrip-CD-Group
 
 jobs:
   deploy:

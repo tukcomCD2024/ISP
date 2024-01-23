@@ -22,17 +22,10 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    /**
-     *  test API
-     */
     @GetMapping("/test")
-    public ResponseEntity<String> privateEndpoint() {
-//        System.out.println("이메일 출력 = " + customUserDetails.getUsername());
-//        String member = customUserDetails.getUsername();
-        return ResponseEntity.ok("hi");
+    public String testEndpoint() {
+        return "Test endpoint response";
     }
-
-
 
     /**
     *   로그인 API

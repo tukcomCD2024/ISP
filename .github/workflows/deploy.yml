@@ -11,9 +11,9 @@ defaults:
     shell: bash
 
 env:
-  AWS_S3_BUCKET: howabouttrip-backend-bucket
-  AWS_CODE_DEPLOY_APPLICATION: HowAboutTrip-Backend-CD
-  AWS_CODE_DEPLOY_GROUP: HowAboutTrip-Backend-CD-Group
+  AWS_S3_BUCKET: howabouttrip-bucket
+  AWS_CODE_DEPLOY_APPLICATION: HowAboutTrip-CD
+  AWS_CODE_DEPLOY_GROUP: HowAboutTrip-CD-Group
 
 jobs:
   deploy:
@@ -36,6 +36,13 @@ jobs:
         working-directory: ./backend
         run: ./gradlew build test
 
+      - name: Setup MySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql database: 'trip'
+          mysql user: ${DB_USERNAME}
+          mysql password: ${DB_PASSWORD}
+
       - name: Configure AWS credential
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -44,7 +51,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Upload to S3
-        run: aws deploy push --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://$AWS_S3_BUCKET/HowAboutTrip-Backend-EC2/$GITHUB_SHA.zip --source .
+        run: aws deploy push --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://$AWS_S3_BUCKET/HowAboutTrip-EC2/$GITHUB_SHA.zip --source .
 
       - name: Code Deploy to EC2
-        run: aws deploy create-deployment --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} --s3-location bucket=$AWS_S3_BUCKET,key=HowAboutTrip-Backend-EC2/$GITHUB_SHA.zip,bundleType=zip
+        run: aws deploy create-deployment --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} --s3-location bucket=$AWS_S3_BUCKET,key=HowAboutTrip-EC2/$GITHUB_SHA.zip,bundleType=zip

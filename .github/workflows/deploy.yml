@@ -51,7 +51,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Upload to S3
+        working-directory: ./backend
         run: aws deploy push --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://$AWS_S3_BUCKET/HowAboutTrip-EC2/$GITHUB_SHA.zip --source .
 
       - name: Code Deploy to EC2
+        working-directory: ./backend
         run: aws deploy create-deployment --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} --s3-location bucket=$AWS_S3_BUCKET,key=HowAboutTrip-EC2/$GITHUB_SHA.zip,bundleType=zip

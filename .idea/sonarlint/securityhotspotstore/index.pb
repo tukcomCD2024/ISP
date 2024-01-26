@@ -116,3 +116,5 @@ Pbackend/src/main/java/com/isp/backend/domain/travelPlace/entity/TravelPlace.jav
 ^backend/src/main/java/com/isp/backend/domain/travelPlace/controller/TravelPlaceController.java,f/f/ffc0d4916e8272a132bc762e4cfb73dd5a013adf
 A
 scripts/deploy.sh,7/c/7cb9bbdbbfab39da291abf148abedfdfbe6adebb
+C
+backend/appspec.yml,b/2/b29bd1f7028776d53a3de51178113ae25a5efa01

@@ -32,7 +32,7 @@ public class MemberService {
      *   로그인 메서드 - jwt 토큰 생성후 응답
      */
     @Transactional
-    public ResponseEntity.BodyBuilder memberLogin(GoogleLoginRequest request) {
+    public ResponseEntity<String> memberLogin(GoogleLoginRequest request) {
         Optional<Member> existingMember = memberRepository.findByUid(request.getUid());
 
         if (existingMember.isPresent()) {
@@ -47,7 +47,8 @@ public class MemberService {
 
             return ResponseEntity.ok()
                     .header("Access-Token", accessToken)
-                    .header("Refresh-Token", refreshToken);
+                    .header("Refresh-Token", refreshToken)
+                    .body("기존 회원 로그인");
         } else {
             // 신규 회원의 로그인 - db 저장
             Member newMember = Member.builder()
@@ -61,7 +62,8 @@ public class MemberService {
 
             return ResponseEntity.status(HttpStatus.CREATED)
                     .header("Access-Token", accessToken)
-                    .header("Refresh-Token", refreshToken);
+                    .header("Refresh-Token", refreshToken)
+                    .body("신규 회원 로그인");
             }
 
     }

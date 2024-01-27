@@ -34,8 +34,6 @@ Vbackend/src/main/java/com/isp/backend/domain/receipt/controller/ReceiptControll
 Lbackend/src/main/java/com/isp/backend/domain/image/service/ImageService.java,c/e/cee00c3d82e3eee78ff457f982ce6b7e5751346f
 t
 Dbackend/src/main/java/com/isp/backend/domain/image/entity/Image.java,3/e/3e7baf5788b82805f2e8de304ea856c7f50e4463
-;
-appspec.yml,3/2/323482c68cf68aa6001a3280b1dbb38f31ee6cbc
 „
 Tbackend/src/main/java/com/isp/backend/domain/member/controller/MemberController.java,b/f/bf8a91d94ba6d87e3accbb8ff83cce215d706910
 ~
@@ -114,7 +112,5 @@ Pbackend/src/main/java/com/isp/backend/domain/travelPlace/entity/TravelPlace.jav
 ^backend/src/main/java/com/isp/backend/domain/travelPlace/repository/TravelPlaceRepository.java,3/d/3de99115bf130d9ac74cb84cf73160d47a7d6f22
 Ž
 ^backend/src/main/java/com/isp/backend/domain/travelPlace/controller/TravelPlaceController.java,f/f/ffc0d4916e8272a132bc762e4cfb73dd5a013adf
-A
-scripts/deploy.sh,7/c/7cb9bbdbbfab39da291abf148abedfdfbe6adebb
 C
 backend/appspec.yml,b/2/b29bd1f7028776d53a3de51178113ae25a5efa01

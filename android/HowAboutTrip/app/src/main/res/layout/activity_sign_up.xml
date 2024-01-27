@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="sign_up"
+            type="com.project.how.view.activity.SignUpActivity" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:lottie_rawRes="@raw/sign_up_animation"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_repeatCount="5"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.17" />
+
+        <TextView
+            android:id="@+id/info_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/bm_hanna"
+            android:text="@string/sign_up_info_title"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lottie" />
+
+        <TextView
+            android:id="@+id/info_context"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/sign_up_info_context"
+            android:textSize="13sp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/noto_sans_kr_regular"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/info_title" />
+
+        <TextView
+            android:id="@+id/info_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:fontFamily="@font/bm_hanna"
+            android:text="@string/sign_up_info_name"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/input_complete"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/info_context"
+            app:layout_constraintVertical_bias="0.15"/>
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:minWidth="200dp"
+            android:textSize="13sp"
+            android:maxLines="1"
+            android:maxLength="20"
+            android:inputType="text"
+            android:hint="@string/sign_up_name_hint"
+            android:fontFamily="@font/noto_sans_kr_regular"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/info_name" />
+
+        <TextView
+            android:id="@+id/info_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:fontFamily="@font/bm_hanna"
+            android:text="@string/sign_up_info_phone"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            app:layout_constraintVertical_bias="0.15"/>
+
+        <EditText
+            android:id="@+id/phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:minWidth="200dp"
+            android:textSize="13sp"
+            android:maxLines="1"
+            android:inputType="phone"
+            android:hint="@string/sign_up_info_phone_hint"
+            android:maxLength="13"
+            android:fontFamily="@font/noto_sans_kr_regular"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/info_phone" />
+
+        <TextView
+            android:id="@+id/info_birth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:fontFamily="@font/bm_hanna"
+            android:text="@string/sign_up_info_birth"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/phone"
+            app:layout_constraintVertical_bias="0.15"/>
+
+<!--        <androidx.appcompat.widget.AppCompatButton-->
+<!--            android:id="@+id/birth_input"-->
+<!--            android:layout_width="41dp"-->
+<!--            android:layout_height="20dp"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:text="@string/input"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="10sp"-->
+<!--            style="@style/Base.Widget.AppCompat.Button.BlackRound"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/info_birth"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/phone"-->
+<!--            android:onClick="@{() -> sign_up.setCalenderBottomSheetView()}"/>-->
+
+        <EditText
+            android:id="@+id/birth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/noto_sans_kr_regular"
+            android:hint="YYYYMMDD"
+            android:maxLength="8"
+            android:background="@android:color/transparent"
+            android:textSize="13sp"
+            android:textColor="@color/black"
+            android:layout_marginStart="28dp"
+            android:inputType="date"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/info_birth" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/input_complete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:fontFamily="@font/bm_hanna"
+            android:padding="11dp"
+            android:text="@string/input_complete"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:onClick="@{() -> sign_up.sendInfo()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

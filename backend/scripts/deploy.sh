@@ -14,7 +14,7 @@ else
 fi
 
 echo "> 새 애플리케이션 배포"
-JAR_NAME=$(ls -tr $REPOSITORY/build/libs/*.jar | tail -n 1)
+JAR_NAME=$(ls -tr $REPOSITORY/build/libs/backend-0.0.1-SNAPSHOT.jar | tail -n 1)
 
 echo "> JAR NAME: $JAR_NAME"
 

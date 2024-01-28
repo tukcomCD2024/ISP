@@ -25,4 +25,11 @@ public class ErrorResponse {
         this.code = code.getCode();
     }
 
+    @Override
+    public String toString() {
+        return "Error Message: " + errorMessage + "\n" +
+                "HTTP Status: " + httpStatus + "\n" +
+                "Error Code: " + code + "\n";
+    }
+
 }

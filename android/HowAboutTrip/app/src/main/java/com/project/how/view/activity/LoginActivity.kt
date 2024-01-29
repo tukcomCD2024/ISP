@@ -71,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
     private fun sendUid(uid : String){
         lifecycleScope.launch {
             val loginRequest = LoginRequest(uid)
-            val code = viewModel.getTokens(loginRequest)
+            val code = viewModel.getTokens(this@LoginActivity, loginRequest)
             if(code == EXISTING_MEMBER){
                 Log.d("sendUid", "Existing member")
                 moveMain()

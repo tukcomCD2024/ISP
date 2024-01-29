@@ -194,7 +194,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/reset"
-            style="@style/Base.Widget.AppCompat.Button.GrayRound"
+            style="@style/Button.GrayRound"
             android:layout_width="51dp"
             android:layout_height="20dp"
             android:text="@string/reset"
@@ -207,7 +207,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/confirm"
-            style="@style/Base.Widget.AppCompat.Button.BlackRound"
+            style="@style/Button.BlackRound"
             android:layout_width="41dp"
             android:layout_height="20dp"
             android:text="@string/confirm"

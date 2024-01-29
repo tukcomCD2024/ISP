@@ -24,4 +24,11 @@
     <string name="saturday">SAT</string>
     <string name="confirm">확정</string>
     <string name="reset">초기화</string>
+    <string name="save_check">saveCheck</string>
+    <string name="menu_ticket">항공 숙박</string>
+    <string name="menu_calendar">일정 조회</string>
+    <string name="menu_picture">사진 기록</string>
+    <string name="menu_mypage">My</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

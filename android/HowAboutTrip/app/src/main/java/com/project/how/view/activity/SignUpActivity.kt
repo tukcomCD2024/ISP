@@ -18,15 +18,18 @@ import com.project.how.adapter.CalendarAdapter
 import com.project.how.databinding.ActivitySignUpBinding
 import com.project.how.databinding.CalendarBottomSheetBinding
 import com.project.how.view_model.CalendarViewModel
+import com.project.how.view_model.LoginViewModel
 import com.project.how.view_model.SignUpViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class SignUpActivity : AppCompatActivity(), CalendarAdapter.OnItemClickListener {
     private lateinit var binding : ActivitySignUpBinding
     private lateinit var calendarBinding : CalendarBottomSheetBinding
     private val signUpViewModel : SignUpViewModel by viewModels()
     private val calenderViewModel : CalendarViewModel by viewModels()
+    private val loginViewModel : LoginViewModel by viewModels()
     private lateinit var days : List<Int>
     private lateinit var adapter : CalendarAdapter
     private var selectedDay : LocalDate? = null
@@ -38,6 +41,8 @@ class SignUpActivity : AppCompatActivity(), CalendarAdapter.OnItemClickListener 
         binding.signUp = this
         binding.lifecycleOwner = this
 
+        loginViewModel.init(this)
+
         binding.phone.addTextChangedListener(PhoneNumberFormattingTextWatcher())
     }
 
@@ -46,11 +51,16 @@ class SignUpActivity : AppCompatActivity(), CalendarAdapter.OnItemClickListener 
         val phone = binding.phone.text.toString()
         val birth = binding.birth.text.toString()
 
+        Log.d("sendInfo", "IF Before\nname : $name\t${name.length}\nphone : $phone\t${phone.length}\nbirth : $birth\t${birth.length}")
+
         if(name.isNotEmpty() && phone.length == 13 && birth.length == 8){
-
-//            signUpViewModel.getInfo()
+            val n = name.trim()
+            val p = phone
+            val bDate = LocalDate.parse(birth, DateTimeFormatter.ofPattern("yyyyMMdd"))
+            val b = bDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            Log.d("sendInfo", "IF After\nname : $n\t${n.length}\nphone : $p\t${p.length}\nbirth : $b\t${b .length}")
+            loginViewModel.tokensLiveData.value?.let { signUpViewModel.getInfo(it.accessToken, n, p, b) }
             signUpViewModel.infoLiveData.observe(this){info ->
-
                 moveMainActivity()
             }
         }else{

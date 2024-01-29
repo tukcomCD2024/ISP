@@ -8,38 +8,105 @@
             name="main"
             type="com.project.how.view.activity.MainActivity" />
     </data>
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        >
+        android:layout_height="match_parent">
 
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/bottomAppBar"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" >
+            
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="18dp">
+
+                <ImageButton
+                    android:id="@+id/alarm"
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_alarm_none"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinatorLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@android:color/white"
-            app:fabAlignmentMode="center"
-            app:fabAnchorMode="cradle"
-            app:fabCradleRoundedCornerRadius="10dp">
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.bottomappbar.BottomAppBar>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/addButton"
+            <com.google.android.material.bottomappbar.BottomAppBar
+                android:id="@+id/bottomAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.BottomAppBar"
+                android:background="@drawable/white_rectangle_top_shadow"
+                android:backgroundTint="@color/white"
+                android:layout_marginTop="30dp"
+                android:paddingTop="10dp"
+                app:fabAnchorMode="cradle"
+                app:fabCradleMargin="-20dp"
+                app:fabAlignmentMode="center">
+
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:id="@+id/menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp"
+                    android:layout_marginEnd="10dp"
+                    style="@style/WhiteBottomNavigationView"
+                    app:labelVisibilityMode="labeled"
+                    app:itemIconSize="28dp"
+                    app:itemTextColor="@color/black"
+                    app:itemRippleColor="@color/white"
+                    app:itemActiveIndicatorStyle="@android:color/transparent"
+                    app:menu="@menu/main_bottom_navigation_menu" />
+            </com.google.android.material.bottomappbar.BottomAppBar>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/ai_calendar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/black_oval_fab"
+                app:shapeAppearance="@drawable/black_oval_fab"
+                android:clickable="true"
+                app:borderWidth="0dp"
+                app:fabCustomSize="70dp"
+                app:maxImageSize="30dp"
+                android:src="@drawable/icon_ai_calendar_size_fixed"
+                android:backgroundTint="@color/black"
+                app:tint="@color/white"
+                app:layout_anchor="@+id/bottomAppBar" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:clickable="true"
-            android:src="@drawable/black_oval_day_background"
-            app:layout_anchor="@+id/bottomAppBar"
-            app:layout_anchorGravity="top|center" />
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.9" />
 
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

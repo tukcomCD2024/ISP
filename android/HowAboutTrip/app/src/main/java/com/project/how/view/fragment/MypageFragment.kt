@@ -13,6 +13,7 @@ class MypageFragment : Fragment() {
     private var _binding : FragmentMypageBinding? = null
     private val binding : FragmentMypageBinding
         get() = _binding!!
+    var name = "닉네임 예시"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

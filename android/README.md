@@ -4,7 +4,7 @@
 - Tool : Android Studio
 	- Version : Hedgehog
 	- Java : Java 8
-	- Android Gradle Plugin : 8.2.0
+	- Android Gradle Plugin : 8.2.1
 	- Gradle Version : 8.2
 - - -
 ### 사용된 오픈소스 라이브러리 목록

@@ -37,18 +37,18 @@ public class MemberService {
 
         if (existingMember.isPresent()) {
 
-            Member activatedMemeber = existingMember
+            Member activatedMember = existingMember
                     .filter(Member::isActivated)
                     .orElseThrow(MemberNotActivatedException::new);
 
             // 기존 회원의 로그인
-            String accessToken = tokenProvider.createAccessToken(activatedMemeber.getUid());
-            String refreshToken = tokenProvider.createRefreshToken(activatedMemeber.getUid());
+            String accessToken = tokenProvider.createAccessToken(activatedMember.getUid());
+            String refreshToken = tokenProvider.createRefreshToken(activatedMember.getUid());
 
             return ResponseEntity.ok()
                     .header("Access-Token", accessToken)
                     .header("Refresh-Token", refreshToken)
-                    .body("기존 멤버 로그인");
+                    .body("기존 회원 로그인");
         } else {
             // 신규 회원의 로그인 - db 저장
             Member newMember = Member.builder()
@@ -63,7 +63,7 @@ public class MemberService {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .header("Access-Token", accessToken)
                     .header("Refresh-Token", refreshToken)
-                    .body("신규 멤버 로그인");
+                    .body("신규 회원 로그인");
             }
 
     }

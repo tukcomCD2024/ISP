@@ -6,13 +6,10 @@ import com.isp.backend.domain.member.dto.MemberDetailResponse;
 import com.isp.backend.domain.member.dto.SignUpRequest;
 import com.isp.backend.domain.member.service.MemberService;
 import com.isp.backend.global.security.CustomUserDetails;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

@@ -18,12 +18,12 @@ import com.project.how.BuildConfig
 import com.project.how.R
 import com.project.how.data_class.dto.LoginRequest
 import com.project.how.databinding.ActivityLoginBinding
-import com.project.how.view_model.LoginViewModel
+import com.project.how.view_model.MemberViewModel
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding : ActivityLoginBinding
-    private val viewModel: LoginViewModel by viewModels()
+    private val viewModel: MemberViewModel by viewModels()
     private lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
     private lateinit var googleSignInRequest: GoogleSignInClient
     private lateinit var gso : GoogleSignInOptions

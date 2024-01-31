@@ -127,17 +127,17 @@
             app:layout_constraintVertical_bias="0.15"/>
 
 <!--        <androidx.appcompat.widget.AppCompatButton-->
-<!--            android:id="@+id/birth_input"-->
+<!--            android:id="@+id/test"-->
 <!--            android:layout_width="41dp"-->
 <!--            android:layout_height="20dp"-->
 <!--            android:layout_marginStart="10dp"-->
 <!--            android:text="@string/input"-->
 <!--            android:textColor="@color/white"-->
 <!--            android:textSize="10sp"-->
-<!--            style="@style/Base.Widget.AppCompat.Button.BlackRound"-->
+<!--            style="@style/Button.BlackRound"-->
 <!--            app:layout_constraintStart_toEndOf="@+id/info_birth"-->
 <!--            app:layout_constraintTop_toBottomOf="@+id/phone"-->
-<!--            android:onClick="@{() -> sign_up.setCalenderBottomSheetView()}"/>-->
+<!--            android:onClick="@{() -> sign_up.authRecreate()}"/>-->
 
         <EditText
             android:id="@+id/birth"

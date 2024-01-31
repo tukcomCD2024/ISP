@@ -24,7 +24,7 @@ object TokenDataStore {
         }
     }
     fun getTokens(context: Context): Flow<Tokens?> = flow {
-        context.dataStore.data.map {
+        context.dataStore.data.collect {
             val accessToken = it[ACCESS_TOKEN]
             val refreshToken = it[REFRESH_TOKEN]
             if(accessToken.isNullOrEmpty() || refreshToken.isNullOrEmpty()){

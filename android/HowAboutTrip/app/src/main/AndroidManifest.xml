@@ -27,18 +27,18 @@
         </activity>
         <activity
             android:name=".view.activity.SplashActivity"
-            android:exported="false"
+            android:exported="true"
             android:theme="@style/Theme.HowAboutTrip.BlackStatusBar">
-        </activity>
-        <activity
-            android:name=".view.activity.MainActivity"
-            android:theme="@style/Theme.HowAboutTrip.BlackStatusBar"
-            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.activity.MainActivity"
+            android:theme="@style/Theme.HowAboutTrip.BlackStatusBar"
+            android:exported="true">
         </activity>
     </application>
 

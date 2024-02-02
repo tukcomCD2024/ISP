@@ -38,10 +38,6 @@ class SignUpActivity : AppCompatActivity(), CalendarAdapter.OnItemClickListener 
         binding.signUp = this
         binding.lifecycleOwner = this
 
-        lifecycleScope.launch {
-            memberViewModel.init(this@SignUpActivity)
-        }
-
         binding.phone.addTextChangedListener(PhoneNumberFormattingTextWatcher())
     }
 

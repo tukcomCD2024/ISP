@@ -11,7 +11,7 @@ import com.project.how.data_class.MemberInfo
 import com.project.how.data_class.Tokens
 import com.project.how.datastore.TokenDataStore
 
-class MemberRepository {
+object MemberRepository {
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val _currentUserLiveData = MutableLiveData<FirebaseUser>()
     private val _userLiveData = MutableLiveData<FirebaseUser>()

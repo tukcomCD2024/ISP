@@ -70,6 +70,7 @@
                     style="@style/WhiteBottomNavigationView"
                     app:labelVisibilityMode="labeled"
                     app:itemIconSize="28dp"
+                    app:itemIconTint="@color/black"
                     app:itemTextColor="@color/black"
                     app:itemRippleColor="@color/white"
                     app:itemActiveIndicatorStyle="@android:color/transparent"

@@ -23,6 +23,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabGravity="center"
+            app:tabMaxWidth="10dp"
+            android:background="@android:color/transparent"
+            app:tabBackground="@drawable/indicator_dot"
+            app:tabIndicator="@android:color/transparent"
+            app:tabRippleColor="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="@+id/viewPager2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <androidx.cardview.widget.CardView
             android:id="@+id/schedule"
             android:layout_width="match_parent"
@@ -53,7 +67,6 @@
 
                 <TextView
                     android:id="@+id/d_day"
-                    android:text="@string/d_day"
                     android:textSize="32sp"
                     android:textColor="@color/white"
                     android:fontFamily="@font/bm_hanna"

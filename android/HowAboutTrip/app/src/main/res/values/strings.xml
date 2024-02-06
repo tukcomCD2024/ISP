@@ -45,4 +45,15 @@
     <string name="calendar_add">일정 생성</string>
     <string name="d_day_zero">day</string>
     <string name="destination">목적지</string>
+    <string name="purpose">여행 목적</string>
+    <string name="personal">개인</string>
+    <string name="family">가족</string>
+    <string name="couple">커플</string>
+    <string name="people_num">인원수</string>
+    <string name="adult">어른</string>
+    <string name="zero">0</string>
+    <string name="child">어린이</string>
+    <string name="people_unit">명</string>
+    <string name="date">날짜</string>
+    <string name="search">검색</string>
 </resources>

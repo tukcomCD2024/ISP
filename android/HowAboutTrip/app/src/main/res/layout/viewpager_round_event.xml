@@ -1,37 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="304dp"
-        android:layout_height="180dp"
-        android:backgroundTint="@color/gray"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="0dp"
-        android:outlineAmbientShadowColor="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <data>
+        <variable
+            name="event_viewpager"
+            type="com.project.how.adapter.EventViewPagerAdapter" />
 
-        <ImageView
-            android:id="@+id/image"
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/event_viewpager_test" />
+            android:backgroundTint="@color/gray"
+            android:outlineAmbientShadowColor="@android:color/transparent"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/text"
-            android:layout_margin="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="나만의 일정\n만들기"
-            android:textSize="24sp"
-            android:textColor="@color/white"
-            android:fontFamily="@font/bm_hanna"/>
-    </androidx.cardview.widget.CardView>
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/event_viewpager_test" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:fontFamily="@font/bm_hanna"
+                android:text="나만의 일정\n만들기"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

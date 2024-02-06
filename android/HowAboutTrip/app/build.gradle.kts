@@ -30,6 +30,7 @@ android {
         resValue("string", "GOOGLE_AD_MOB_UNIT_ID", getApiKey("google_ad_mob_unit_id"))
         resValue("string", "GOOGLE_AD_MOB_BANNER_TEST", getApiKey("google_ad_mob_banner_test"))
 
+        buildConfigField("String", "ERROR_IMAGE_URl", getApiKey("error_image_url"))
         buildConfigField("String", "GOOGLE_OAUTH_ID", getApiKey("google_oauth_id"))
         buildConfigField("String", "GOOGLE_MAP_API_KEY", getApiKey("google_map_api_key"))
         buildConfigField("String", "GOOGLE_SERVER_ID", getApiKey("google_server_id"))

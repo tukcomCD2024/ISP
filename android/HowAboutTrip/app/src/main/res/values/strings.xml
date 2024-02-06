@@ -29,10 +29,8 @@
     <string name="menu_calendar">일정 조회</string>
     <string name="menu_picture">사진 기록</string>
     <string name="menu_mypage">My</string>
-    <!-- TODO: Remove or change this placeholder text -->류
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="bearer_token">Bearer %1$s</string>
-    <string name="error">오</string>
+    <string name="error">오류</string>
     <string name="calendar_search">일정 조회</string>
     <string name="name_edit">닉네임 수정</string>
     <string name="weather">날씨</string>
@@ -42,7 +40,9 @@
     <string name="inquiry">문의</string>
     <string name="setting">설정</string>
     <string name="empty_schedule_title">일정을 만드세요!</string>
-    <string name="d_day">D-day</string>
+    <string name="d_day">D-</string>
     <string name="calendar_ai">일정 템플릿</string>
     <string name="calendar_add">일정 생성</string>
+    <string name="d_day_zero">day</string>
+    <string name="destination">목적지</string>
 </resources>

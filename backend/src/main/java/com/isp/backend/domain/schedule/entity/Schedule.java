@@ -1,5 +1,6 @@
 package com.isp.backend.domain.schedule.entity;
 
+import com.isp.backend.domain.schedules.entity.Schedules;
 import com.isp.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,5 +28,10 @@ public class Schedule {
 
     @Column(name = "date")
     private String date ;
+
+    // Schedules 엔티티의 필드를 참조하도록 수정
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "schedules_id", nullable = false)
+    private Schedules schedules;
 
 }

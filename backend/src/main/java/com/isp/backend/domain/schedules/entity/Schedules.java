@@ -30,7 +30,7 @@ public class Schedules extends BaseEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "schedules", cascade = CascadeType.ALL)
     private List<Schedule> schedules = new ArrayList<>();
 
     // FK 연결 필요
@@ -49,5 +49,5 @@ public class Schedules extends BaseEntity {
     @Builder.Default
     @Column(name = "activated", nullable = false)
     private boolean activated = true;
-    
+
 }

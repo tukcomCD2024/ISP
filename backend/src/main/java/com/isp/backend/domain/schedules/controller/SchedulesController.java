@@ -7,5 +7,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/schedules")
 @RequiredArgsConstructor
-public class ScheduleController {
+public class SchedulesController {
 }

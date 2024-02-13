@@ -1,7 +1,7 @@
 package com.isp.backend.domain.schedules.entity;
 
 import com.isp.backend.domain.member.entity.Member;
-import com.isp.backend.domain.travelPlace.entity.TravelPlace;
+import com.isp.backend.domain.scheduleDetail.entity.ScheduleDetail;
 import com.isp.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,13 +9,15 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Getter
 @AllArgsConstructor
 @Entity
 @Builder
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name="my_schedule")
-public class MySchedule extends BaseEntity {
+@Table(name="schedules")
+public class Schedules extends BaseEntity {
 
     @Id
     @Column(name="id", unique = true, nullable = false)
@@ -30,8 +32,8 @@ public class MySchedule extends BaseEntity {
     private Member member;
 
     @Builder.Default
-    @OneToMany(mappedBy = "mySchedule", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TravelPlace> travelPlaces = new ArrayList<>();
+    @OneToMany(mappedBy = "schedules", cascade = CascadeType.ALL)
+    private List<ScheduleDetail> scheduleDetails = new ArrayList<>();
 
     // FK 연결 필요
     @Column(name = "booking_id")
@@ -49,4 +51,13 @@ public class MySchedule extends BaseEntity {
     @Builder.Default
     @Column(name = "activated", nullable = false)
     private boolean activated = true;
+
+//    // setScheduleDetails 메서드 추가
+//    public void setScheduleDetails(List<ScheduleDetail> scheduleDetails) {
+//        this.scheduleDetails.clear();
+//        if (scheduleDetails != null) {
+//            this.scheduleDetails.addAll(scheduleDetails);
+//        }
+//    }
+
 }

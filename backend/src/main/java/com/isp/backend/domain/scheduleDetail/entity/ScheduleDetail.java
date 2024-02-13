@@ -1,33 +1,43 @@
-package com.isp.backend.domain.schedule.entity;
+package com.isp.backend.domain.scheduleDetail.entity;
 
 import com.isp.backend.domain.schedules.entity.Schedules;
-import com.isp.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.sql.Timestamp;
 
 @Getter
 @AllArgsConstructor
 @Entity
+@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name="schedule")
-public class Schedule {
+@Table(name="schedule_detail")
+public class ScheduleDetail {
 
     @Id
     @Column(name="id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id ;
 
-    @Column(name = "todo")
+    @Column(name = "todo")  // 할 일
     private String todo ;
-
-    @Column(name = "num")
-    private int num ;
 
     @Column(name = "date")
     private String date ;
+
+    @Column(name = "place")  // 장소
+    private String place ;
+
+    @Column(name = "num")  // 일정 순서
+    private int num ;
+
+    @Column(name = "budget")  // 예산
+    private double budget ;
+
+    @Column(name = "latitude")  // 위도
+    private double latitude ;
+
+    @Column(name = "longitude")  // 경도
+    private double longitude ;
 
     // Schedules 엔티티의 필드를 참조하도록 수정
     @ManyToOne(fetch = FetchType.LAZY)

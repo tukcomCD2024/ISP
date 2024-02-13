@@ -1,7 +1,7 @@
 package com.isp.backend.domain.schedules.entity;
 
 import com.isp.backend.domain.member.entity.Member;
-import com.isp.backend.domain.travelPlace.entity.TravelPlace;
+import com.isp.backend.domain.schedule.entity.Schedule;
 import com.isp.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,13 +9,14 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Getter
 @AllArgsConstructor
 @Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name="my_schedule")
-public class MySchedule extends BaseEntity {
+@Table(name="schedules")
+public class Schedules extends BaseEntity {
 
     @Id
     @Column(name="id", unique = true, nullable = false)
@@ -29,9 +30,8 @@ public class MySchedule extends BaseEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "mySchedule", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TravelPlace> travelPlaces = new ArrayList<>();
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
+    private List<Schedule> schedules = new ArrayList<>();
 
     // FK 연결 필요
     @Column(name = "booking_id")
@@ -49,4 +49,5 @@ public class MySchedule extends BaseEntity {
     @Builder.Default
     @Column(name = "activated", nullable = false)
     private boolean activated = true;
+    
 }

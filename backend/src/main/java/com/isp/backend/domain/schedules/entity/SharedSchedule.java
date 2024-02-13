@@ -19,8 +19,8 @@ public class SharedSchedule extends BaseEntity {
     private Long id ;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "my_schedule_id", nullable = false)
-    private MySchedule mySchedule;
+    @JoinColumn(name = "schedule_id", nullable = false)
+    private Schedules schedules;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

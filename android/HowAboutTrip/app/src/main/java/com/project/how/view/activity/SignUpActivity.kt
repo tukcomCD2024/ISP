@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class SignUpActivity : AppCompatActivity(), CalendarAdapter.OnItemClickListener {
+class SignUpActivity : AppCompatActivity() {
     private lateinit var binding : ActivitySignUpBinding
     private lateinit var calendarBinding : CalendarBottomSheetBinding
     private val calenderViewModel : CalendarViewModel by viewModels()

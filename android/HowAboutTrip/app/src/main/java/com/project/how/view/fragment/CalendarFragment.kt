@@ -1,5 +1,6 @@
 package com.project.how.view.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -16,6 +17,7 @@ import com.project.how.R
 import com.project.how.adapter.EventViewPagerAdapter
 import com.project.how.data_class.EventViewPager
 import com.project.how.databinding.FragmentCalendarBinding
+import com.project.how.view.activity.AddAICalendarActivity
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -91,5 +93,9 @@ class CalendarFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun moveAddAICalendar(){
+        startActivity(Intent(activity, AddAICalendarActivity::class.java))
     }
 }

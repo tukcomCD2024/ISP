@@ -31,6 +31,7 @@
                     android:background="@android:color/transparent"
                     android:src="@drawable/icon_previous"
                     android:scaleType="fitCenter"
+                    android:onClick="@{()-> ai.finish()}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -56,17 +57,18 @@
             android:layout_marginHorizontal="24dp"
             android:layout_marginTop="22dp"
             android:background="@drawable/white_card_round_rectangle"
-            android:padding="30dp"
+            android:padding="40dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
             <TextView
-                android:id="@+id/textView10"
+                android:id="@+id/des"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/destination"
                 android:textColor="@color/black"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -81,162 +83,36 @@
                 android:text="@string/input"
                 android:textColor="@color/white"
                 android:textSize="11sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView10" />
+                android:onClick="@{()-> ai.showDesInput()}"
+                app:layout_constraintStart_toEndOf="@id/des_output"
+                app:layout_constraintTop_toBottomOf="@+id/des" />
 
             <TextView
-                android:id="@+id/textView11"
+                android:id="@+id/des_output"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="11sp"
+                android:visibility="gone"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/des" />
+
+            <TextView
+                android:id="@+id/purpose"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:text="@string/purpose"
                 android:textColor="@color/black"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/des_input" />
 
-            <RadioGroup
-                android:id="@+id/radioGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView11">
-
-                <RadioButton
-                    android:id="@+id/personal"
-                    android:layout_width="48dp"
-                    android:layout_height="22dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/radio_btn_round_rectangle"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:stateListAnimator="@null"
-                    android:text="@string/personal"
-                    android:textColor="@color/radio_text"
-                    android:textSize="11sp" />
-
-                <RadioButton
-                    android:id="@+id/family"
-                    android:layout_width="48dp"
-                    android:layout_height="22dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/radio_btn_round_rectangle"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:stateListAnimator="@null"
-                    android:text="@string/family"
-                    android:textColor="@color/radio_text"
-                    android:textSize="11sp" />
-
-                <RadioButton
-                    android:id="@+id/couple"
-                    android:layout_width="48dp"
-                    android:layout_height="22dp"
-                    android:background="@drawable/radio_btn_round_rectangle"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:stateListAnimator="@null"
-                    android:text="@string/couple"
-                    android:textColor="@color/radio_text"
-                    android:textSize="11sp" />
-            </RadioGroup>
-
-            <TextView
-                android:id="@+id/textView12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@string/people_num"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
-
-            <TextView
-                android:id="@+id/textView13"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/adult"
-                android:textColor="@color/black"
-                android:textSize="11sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
-            <EditText
-                android:id="@+id/adult_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:hint="@string/zero"
-                android:minWidth="40dp"
-                android:textColor="@color/black"
-                android:textSize="11sp"
-                app:layout_constraintStart_toEndOf="@+id/textView13"
-                app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
-            <TextView
-                android:id="@+id/textView14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/people_unit"
-                android:textColor="@color/black"
-                android:textSize="11sp"
-                app:layout_constraintStart_toEndOf="@+id/adult_num"
-                app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
-            <TextView
-                android:id="@+id/textView15"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/child"
-                android:textColor="@color/black"
-                android:textSize="11sp"
-                app:layout_constraintStart_toEndOf="@+id/textView14"
-                app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
-            <EditText
-                android:id="@+id/child_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:hint="@string/zero"
-                android:minWidth="40dp"
-                android:textColor="@color/black"
-                android:textSize="11sp"
-                app:layout_constraintStart_toEndOf="@+id/textView15"
-                app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/people_unit"
-                android:textColor="@color/black"
-                android:textSize="11sp"
-                app:layout_constraintStart_toEndOf="@+id/child_num"
-                app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
-            <TextView
-                android:id="@+id/textView16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@string/date"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/adult_num" />
-
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/date_input"
+                android:id="@+id/purpose_input"
                 style="@style/Button.BlackRound"
                 android:layout_width="48dp"
                 android:layout_height="22dp"
@@ -245,24 +121,40 @@
                 android:text="@string/input"
                 android:textColor="@color/white"
                 android:textSize="11sp"
-                android:onClick="@{() -> ai.showCalendar()}"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView16" />
+                android:onClick="@{()-> ai.showPurposeInput()}"
+                app:layout_constraintStart_toEndOf="@id/purpose_output"
+                app:layout_constraintTop_toBottomOf="@id/purpose"/>
 
             <TextView
-                android:id="@+id/date_output"
+                android:id="@+id/purpose_output"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="11sp"
                 android:visibility="gone"
+                android:maxWidth="200dp"
+                android:maxLines="2"
+                android:maxLength="40"
+                android:ellipsize="end"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView16" />
+                app:layout_constraintTop_toBottomOf="@+id/purpose" />
+
+            <TextView
+                android:id="@+id/departure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/departure_date_time"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/purpose_input" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/date_edit"
+                android:id="@+id/departure_input"
                 style="@style/Button.BlackRound"
                 android:layout_width="48dp"
                 android:layout_height="22dp"
@@ -271,11 +163,61 @@
                 android:text="@string/input"
                 android:textColor="@color/white"
                 android:textSize="11sp"
+                android:onClick="@{() -> ai.showDepartureInput()}"
+                app:layout_constraintStart_toEndOf="@id/departure_output"
+                app:layout_constraintTop_toBottomOf="@id/departure"/>
+
+            <TextView
+                android:id="@+id/departure_output"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="11sp"
                 android:visibility="gone"
-                app:layout_constraintStart_toEndOf="@id/date_output"
-                app:layout_constraintTop_toBottomOf="@+id/textView16" />
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/departure" />
+
+            <TextView
+                android:id="@+id/entrance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/entrance_date_time"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/departure_input" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/entrance_input"
+                style="@style/Button.BlackRound"
+                android:layout_width="48dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/input"
+                android:textColor="@color/white"
+                android:textSize="11sp"
+                android:onClick="@{() -> ai.showEntranceInput()}"
+                app:layout_constraintStart_toEndOf="@id/entrance_output"
+                app:layout_constraintTop_toBottomOf="@+id/entrance" />
+
+            <TextView
+                android:id="@+id/entrance_output"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="11sp"
+                android:visibility="gone"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/entrance" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/search"
                 style="@style/Button.BlackRound"
                 android:layout_width="65dp"
                 android:layout_height="22dp"
@@ -286,8 +228,9 @@
                 android:text="@string/search"
                 android:textColor="@color/white"
                 android:textSize="11sp"
+                android:onClick="@{()-> ai.search()}"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/date_input" />
+                app:layout_constraintTop_toBottomOf="@+id/entrance_input" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

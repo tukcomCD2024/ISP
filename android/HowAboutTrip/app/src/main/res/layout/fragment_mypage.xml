@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:text="@{mypage.name}"
             android:textSize="18sp"
+            android:textColor="@color/black"
             android:fontFamily="@font/bm_hanna"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

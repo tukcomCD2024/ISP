@@ -16,8 +16,12 @@
         android:theme="@style/Base.Theme.HowAboutTrip"
         tools:targetApi="31">
         <activity
-            android:name=".view.activity.AddAICalendarActivity"
+            android:name=".view.activity.AiScheduleListActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.activity.AddAICalendarActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -26,14 +30,17 @@
         <activity
             android:name=".view.activity.SignUpActivity"
             android:exported="true"
-            android:theme="@style/Theme.HowAboutTrip.BlackStatusBar"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.HowAboutTrip.BlackStatusBar" />
         <activity
             android:name=".view.activity.LoginActivity"
             android:exported="false"
-            android:theme="@style/Theme.HowAboutTrip.BlackStatusBar"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.HowAboutTrip.BlackStatusBar" />
         <activity
             android:name=".view.activity.SplashActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.HowAboutTrip.BlackStatusBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,7 +51,8 @@
         <activity
             android:name=".view.activity.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.HowAboutTrip.BlackStatusBar"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.HowAboutTrip.BlackStatusBar" />
     </application>
 
 </manifest>

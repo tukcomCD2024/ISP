@@ -6,16 +6,16 @@
     <data>
         <variable
             name="calendar"
-            type="com.project.how.view.bottom_sheet_dialog.CalendarBottomSheetDialog" />
+            type="com.project.how.view.dialog.bottom_sheet_dialog.CalendarBottomSheetDialog" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/white_round_bottom_sheet_backgroud"
+        android:background="@drawable/white_round_bottom_sheet_background"
         app:behavior_hideable="true"
         app:behavior_draggable="true"
-        android:paddingBottom="20dp"
+        android:paddingBottom="30dp"
         android:paddingTop="40dp"
         app:layout_behavior="com.google.android.material.bottom-sheet.BottomSheetBehavior">
 
@@ -194,10 +194,12 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/days"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:foregroundGravity="center"
             android:paddingHorizontal="35dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="7"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/days_of_week"
@@ -208,12 +210,13 @@
             style="@style/Button.GrayRound"
             android:layout_width="51dp"
             android:layout_height="20dp"
+            android:layout_marginTop="81dp"
+            android:layout_marginEnd="10dp"
+            android:onClick="@{()-> calendar.resetDay()}"
             android:text="@string/reset"
             android:textColor="@color/black"
             android:textSize="11sp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="61dp"
-            android:onClick="@{()-> calendar.resetDay()}"
+            app:layout_constraintBottom_toTopOf="@+id/guideline5"
             app:layout_constraintEnd_toStartOf="@+id/confirm"
             app:layout_constraintTop_toBottomOf="@+id/days" />
 
@@ -222,14 +225,61 @@
             style="@style/Button.BlackRound"
             android:layout_width="41dp"
             android:layout_height="20dp"
+            android:layout_marginTop="81dp"
+            android:onClick="@{()-> calendar.confirm()}"
             android:text="@string/confirm"
             android:textColor="@color/white"
             android:textSize="11sp"
-            android:layout_marginEnd="28dp"
-            android:layout_marginTop="61dp"
-            android:onClick="@{()-> calendar.confirm()}"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/guideline5"
+            app:layout_constraintEnd_toEndOf="@id/guideline3"
             app:layout_constraintTop_toBottomOf="@+id/days" />
+
+        <TextView
+            android:id="@+id/time_output"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="15dp"
+            app:layout_constraintBottom_toTopOf="@+id/time_input"
+            app:layout_constraintStart_toStartOf="@+id/guideline2" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/time_input"
+            android:layout_width="70dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="81dp"
+            style="@style/Button.BlackRound"
+            android:text="@string/time_input"
+            android:textColor="@color/white"
+            android:textSize="11sp"
+            android:onClick="@{()-> calendar.showTimePicker()}"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/guideline5"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/days" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="35dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="35dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="15dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -28,4 +28,9 @@
         <item name="android:itemBackground">@color/white</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
+    <style name="SimpleTimePicker">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/noto_sans_kr_bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>

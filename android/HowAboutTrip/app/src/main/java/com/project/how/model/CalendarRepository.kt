@@ -22,7 +22,7 @@ class CalendarRepository {
         lastDay = sd.lengthOfMonth()
         var week = fdw
         for (i in 0 until fdw)
-            monthInfo.add(Companion.EMPTY)
+            monthInfo.add(EMPTY)
         for(i in 1..lastDay){
             monthInfo.add(week)
             week = (week+1) % 7

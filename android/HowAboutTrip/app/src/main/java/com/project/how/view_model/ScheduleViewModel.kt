@@ -16,5 +16,4 @@ class ScheduleViewModel : ViewModel() {
     fun getNearScheduleDay(day : Long){
         scheduleRepository.getNearScheduleDay(day)
     }
-
 }

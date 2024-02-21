@@ -91,14 +91,14 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/reset"
             style="@style/Button.GrayRound"
-            android:layout_width="51dp"
+            android:layout_width="60dp"
             android:layout_height="20dp"
             android:layout_marginTop="40dp"
             android:layout_marginEnd="10dp"
             android:onClick="@{()-> purpose.reset()}"
             android:text="@string/reset"
             android:textColor="@color/black"
-            android:textSize="11sp"
+            android:textSize="13sp"
             app:layout_constraintBottom_toTopOf="@+id/guideline"
             app:layout_constraintEnd_toStartOf="@+id/confirm"
             app:layout_constraintTop_toBottomOf="@+id/theme_list" />
@@ -106,13 +106,13 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/confirm"
             style="@style/Button.BlackRound"
-            android:layout_width="41dp"
+            android:layout_width="50dp"
             android:layout_height="20dp"
             android:layout_marginTop="40dp"
             android:onClick="@{()-> purpose.confirm()}"
             android:text="@string/confirm"
             android:textColor="@color/white"
-            android:textSize="11sp"
+            android:textSize="13sp"
             app:layout_constraintBottom_toTopOf="@+id/guideline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/theme_list" />

@@ -4,22 +4,27 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.project.how.R
+import com.project.how.data_class.AiSchedule
 import com.project.how.databinding.ActivityAddAicalendarBinding
 import com.project.how.interface_af.OnDateTimeListener
 import com.project.how.interface_af.OnDesListener
 import com.project.how.interface_af.OnPurposeListener
 import com.project.how.interface_af.OnTimeListener
+import com.project.how.view.dialog.AiScheduleDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.CalendarBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.PurposeBottomSheetDialog
+import com.project.how.view_model.AiScheduleViewModel
 
 class AddAICalendarActivity :
     AppCompatActivity(), OnDateTimeListener, OnDesListener, OnPurposeListener {
     private lateinit var binding : ActivityAddAicalendarBinding
+    private val viewModel : AiScheduleViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,12 +58,19 @@ class AddAICalendarActivity :
     }
 
     fun search(){
-        moveAiScheduleList()
+        viewModel.getAiSchedule()
+        viewModel.aiScheduleLiveData.observe(this){
+            showAiSchedule(it)
+        }
     }
 
     private fun moveAiScheduleList(){
         val intent = Intent(this, AiScheduleListActivity::class.java)
         startActivity(intent)
+    }
+    private fun showAiSchedule(data : AiSchedule){
+        val schedule = AiScheduleDialog(data)
+        schedule.show(supportFragmentManager, "AiScheduleDialog")
     }
 
     override fun onSaveDate(date: String, type: Int) {

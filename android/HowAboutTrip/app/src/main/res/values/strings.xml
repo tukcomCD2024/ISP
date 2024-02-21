@@ -56,6 +56,8 @@
     <string name="people_unit">명</string>
     <string name="date">날짜</string>
     <string name="search">검색</string>
+    <string name="departure_date">출국 날짜</string>
+    <string name="entrance_date">입국 날짜</string>
     <string name="departure_date_time">출국 날짜 및 시간</string>
     <string name="entrance_date_time">입국 날짜 및 시간</string>
     <string name="departure_time">출국 시간\n%1$s</string>
@@ -122,4 +124,7 @@
     <string name="stress_relieving">스트레스를 푸는</string>
     <string name="cultural">문화적인</string>
     <string name="enjoying_local_cuisine">현지 음식을 즐기는</string>
+    <string name="buy">구매</string>
+    <string name="close">닫기</string>
+    <string name="days_title">%1$s일차 : %2$s</string>
 </resources>

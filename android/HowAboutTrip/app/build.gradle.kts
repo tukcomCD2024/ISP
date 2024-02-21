@@ -67,14 +67,14 @@ dependencies {
     implementation("com.airbnb.android:lottie:6.3.0")
 
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
-    implementation("androidx.fragment:fragment-ktx:1.7.0-alpha09")
+    implementation("androidx.fragment:fragment-ktx:1.7.0-alpha10")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth:22.3.1")
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
 
     implementation("com.squareup.retrofit:retrofit:2.0.0-beta2")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")

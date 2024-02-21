@@ -33,4 +33,8 @@
         <item name="android:fontFamily">@font/noto_sans_kr_bold</item>
         <item name="android:textColor">@color/black</item>
     </style>
+    
+    <style name="TabItemTextSize" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">11sp</item>
+    </style>
 </resources>

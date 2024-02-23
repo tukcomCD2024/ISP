@@ -5,7 +5,7 @@
     <data>
         <variable
             name="ai"
-            type="com.project.how.view.activity.AiScheduleListActivity" />
+            type="com.project.how.view.activity.ai.AiScheduleListActivity" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

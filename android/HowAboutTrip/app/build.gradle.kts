@@ -29,10 +29,12 @@ android {
         resValue("string", "GOOGLE_AD_MOB_ID", getApiKey("google_ad_mob_id"))
         resValue("string", "GOOGLE_AD_MOB_UNIT_ID", getApiKey("google_ad_mob_unit_id"))
         resValue("string", "GOOGLE_AD_MOB_BANNER_TEST", getApiKey("google_ad_mob_banner_test"))
+        resValue("string", "GOOGLE_MAP_API_KEY", getApiKey("google_map_api_key"))
 
         buildConfigField("String", "ERROR_IMAGE_URl", getApiKey("error_image_url"))
         buildConfigField("String", "GOOGLE_OAUTH_ID", getApiKey("google_oauth_id"))
         buildConfigField("String", "GOOGLE_MAP_API_KEY", getApiKey("google_map_api_key"))
+        buildConfigField("String", "GOOGLE_PLACE_API_KEY", getApiKey("google_place_api_key"))
         buildConfigField("String", "GOOGLE_SERVER_ID", getApiKey("google_server_id"))
         buildConfigField("String", "API_SERVER", getApiKey("api_server"))
     }
@@ -83,8 +85,10 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
 
     implementation("com.github.bumptech.glide:glide:5.0.0-rc01")
-    implementation ("de.hdodenhof:circleimageview:3.1.0")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
 
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.libraries.places:places:3.3.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

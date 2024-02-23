@@ -17,7 +17,7 @@ import com.project.how.R
 import com.project.how.adapter.EventViewPagerAdapter
 import com.project.how.data_class.EventViewPager
 import com.project.how.databinding.FragmentCalendarBinding
-import com.project.how.view.activity.AddAICalendarActivity
+import com.project.how.view.activity.ai.AddAICalendarActivity
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat

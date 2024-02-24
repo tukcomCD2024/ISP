@@ -1,4 +1,4 @@
-package com.isp.backend.domain.schedules.dto;
+package com.isp.backend.domain.schedule.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,9 +11,11 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SchedulesRequestDTO {
+public class ScheduleSaveRequestDTO {
 
     private String scheduleName;   // 여행 일정 이름
+
+    private String country;        // 여행할 국가
 
     private String startDate;      // 여행 시작 날짜
 

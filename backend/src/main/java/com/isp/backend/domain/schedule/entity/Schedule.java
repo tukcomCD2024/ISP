@@ -1,5 +1,6 @@
-package com.isp.backend.domain.schedules.entity;
+package com.isp.backend.domain.schedule.entity;
 
+import com.isp.backend.domain.country.entity.Country;
 import com.isp.backend.domain.member.entity.Member;
 import com.isp.backend.domain.scheduleDetail.entity.ScheduleDetail;
 import com.isp.backend.global.common.BaseEntity;
@@ -17,7 +18,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name="schedules")
-public class Schedules extends BaseEntity {
+public class Schedule extends BaseEntity {
 
     @Id
     @Column(name="id", unique = true, nullable = false)
@@ -28,11 +29,15 @@ public class Schedules extends BaseEntity {
     private String scheduleName ;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "country_id")
+    private Country country;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @Builder.Default
-    @OneToMany(mappedBy = "schedules", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
     private List<ScheduleDetail> scheduleDetails = new ArrayList<>();
 
     // FK 연결 필요

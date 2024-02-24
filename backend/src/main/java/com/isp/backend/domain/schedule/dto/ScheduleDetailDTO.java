@@ -1,4 +1,4 @@
-package com.isp.backend.domain.schedules.dto;
+package com.isp.backend.domain.schedule.dto;
 
 
 import lombok.AllArgsConstructor;

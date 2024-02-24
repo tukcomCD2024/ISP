@@ -38,5 +38,10 @@ public class ScheduleController {
         List<ScheduleListResponseDTO> scheduleList = scheduleService.getScheduleList(uid);
         return ResponseEntity.ok(scheduleList);
     }
-
+    @PostMapping("/")
+    @ResponseStatus(HttpStatus.OK)
+    public ScheduleResponseDTO login(@RequestBody ScheduleRequestDTO scheduleRequestDTO) {
+        return new ScheduleResponseDTO(schedule);
+        Schedule schedule = scheduleService.create(scheduleRequestDTO.toEntity());
+    }
 }

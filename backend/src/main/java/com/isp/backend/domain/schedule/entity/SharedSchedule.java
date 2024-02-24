@@ -1,4 +1,4 @@
-package com.isp.backend.domain.schedules.entity;
+package com.isp.backend.domain.schedule.entity;
 
 import com.isp.backend.domain.member.entity.Member;
 import com.isp.backend.global.common.BaseEntity;
@@ -20,7 +20,7 @@ public class SharedSchedule extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id", nullable = false)
-    private Schedules schedules;
+    private Schedule schedule;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

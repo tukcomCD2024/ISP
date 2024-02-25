@@ -1,5 +1,7 @@
 package com.isp.backend.domain.schedule.dto;
 
+import com.isp.backend.domain.country.entity.Country;
+import com.isp.backend.domain.schedule.entity.Schedule;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +12,16 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScheduleRequestDTO {
-    private String destination;
+    private Country country;
     private String purpose;
-    private String departureDate;
-    private String returnDate;
+    private String startDate;
+    private String endDate;
+
+    public Schedule toEntity() {
+        return Schedule.builder()
+                .country(country)
+                .startDate(startDate)
+                .endDate(endDate)
+                .build();
+    }
 }

@@ -6,15 +6,19 @@ import com.isp.backend.domain.country.entity.Country;
 import com.isp.backend.domain.country.repository.CountryRepository;
 import com.isp.backend.domain.member.entity.Member;
 import com.isp.backend.domain.member.repository.MemberRepository;
-import com.isp.backend.domain.scheduleDetail.entity.ScheduleDetail;
-import com.isp.backend.domain.scheduleDetail.repository.ScheduleDetailRepository;
+import com.isp.backend.domain.schedule.dto.ScheduleListResponseDTO;
+import com.isp.backend.domain.schedule.dto.ScheduleRequestDTO;
+import com.isp.backend.domain.schedule.dto.ScheduleResponseDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleSaveRequestDTO;
 import com.isp.backend.domain.schedule.entity.Schedule;
 import com.isp.backend.domain.schedule.mapper.ScheduleMapper;
 import com.isp.backend.domain.schedule.repository.ScheduleRepository;
+import com.isp.backend.domain.scheduleDetail.entity.ScheduleDetail;
+import com.isp.backend.domain.scheduleDetail.repository.ScheduleDetailRepository;
 import com.isp.backend.global.exception.member.MemberNotFoundException;
 import com.isp.backend.global.exception.schedule.CountryNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +36,12 @@ public class ScheduleService {
     private final MemberRepository memberRepository ;
     private final ScheduleMapper scheduleMapper;
 
+    @Transactional
+    public ScheduleResponseDTO createSchedule(ScheduleRequestDTO scheduleRequestDTO) {
+        // 프롬프트 생성하고
+        // schedule 일정 생성하기 openai 써서
+        return null;
+    }
 
     /**
      * 여행 일정 저장 API
@@ -84,9 +94,4 @@ public class ScheduleService {
                 .sum();
         schedule.setTotalPrice(totalPrice);
     }
-
-
-
-
-
 }

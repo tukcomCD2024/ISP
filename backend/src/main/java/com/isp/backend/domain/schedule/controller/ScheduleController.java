@@ -4,9 +4,11 @@ import com.isp.backend.domain.schedule.dto.ScheduleListResponseDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleRequestDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleResponseDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleSaveRequestDTO;
+import com.isp.backend.domain.schedule.entity.Schedule;
 import com.isp.backend.domain.schedule.service.ScheduleService;
 import com.isp.backend.global.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +22,11 @@ public class ScheduleController {
 
     private final ScheduleService scheduleService;
 
-    public ResponseEntity<ScheduleResponseDTO> createSchedule(@RequestBody ScheduleRequestDTO scheduleRequestDTO) {
     @PostMapping("/")
+    public ResponseEntity<ScheduleResponseDTO> createSchedule(@RequestBody ScheduleRequestDTO scheduleRequestDTO) {
+
         ScheduleResponseDTO scheduleResponseDTO = scheduleService.createSchedule(scheduleRequestDTO);
+        return ResponseEntity.ok(scheduleResponseDTO);
     }
     /**
      * 여행 일정 저장 API
@@ -44,12 +48,6 @@ public class ScheduleController {
         List<ScheduleListResponseDTO> scheduleList = scheduleService.getScheduleList(uid);
         return ResponseEntity.ok(scheduleList);
     }
-    @PostMapping("/")
-    @ResponseStatus(HttpStatus.OK)
-    public ScheduleResponseDTO login(@RequestBody ScheduleRequestDTO scheduleRequestDTO) {
-        return new ScheduleResponseDTO(schedule);
-        Schedule schedule = scheduleService.create(scheduleRequestDTO.toEntity());
-
 
     /**
      * 여행 일정 상세 조회 API
@@ -85,4 +83,6 @@ public class ScheduleController {
 //        return ResponseEntity.ok().build();  == public void로
         return ResponseEntity.ok(updatedSchedule);
     }
+
+
 }

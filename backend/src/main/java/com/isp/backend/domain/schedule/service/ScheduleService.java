@@ -38,6 +38,10 @@ public class ScheduleService {
     private final MemberRepository memberRepository ;
     private final ScheduleMapper scheduleMapper;
 
+
+    /**
+     * 여행 일정 생성형 API
+     */
     @Transactional
     public ScheduleResponseDTO createSchedule(ScheduleRequestDTO scheduleRequestDTO) {
         // 프롬프트 생성하고
@@ -195,4 +199,7 @@ public class ScheduleService {
                 .sum();
         schedule.setTotalPrice(totalPrice);
     }
+
+
+
 }

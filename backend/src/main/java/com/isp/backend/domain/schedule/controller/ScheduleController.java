@@ -22,12 +22,17 @@ public class ScheduleController {
 
     private final ScheduleService scheduleService;
 
+    /**
+     * 여행 일정 생성형 API
+     */
     @PostMapping("/")
     public ResponseEntity<ScheduleResponseDTO> createSchedule(@RequestBody ScheduleRequestDTO scheduleRequestDTO) {
 
         ScheduleResponseDTO scheduleResponseDTO = scheduleService.createSchedule(scheduleRequestDTO);
         return ResponseEntity.ok(scheduleResponseDTO);
     }
+
+
     /**
      * 여행 일정 저장 API
      */

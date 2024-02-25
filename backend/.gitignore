@@ -104,6 +104,7 @@ fabric.properties
 .gradle
 **/build/
 !src/**/build/
+.idea/sonarlint
 
 # Ignore Gradle GUI config
 gradle-app.setting

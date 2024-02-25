@@ -2,6 +2,7 @@ package com.isp.backend.domain.schedule.controller;
 
 import com.isp.backend.domain.schedule.dto.ScheduleListResponseDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleRequestDTO;
+import com.isp.backend.domain.schedule.dto.ScheduleResponseDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleSaveRequestDTO;
 import com.isp.backend.domain.schedule.entity.Schedule;
 import com.isp.backend.domain.schedule.service.ScheduleService;
@@ -21,13 +22,12 @@ public class ScheduleController {
 
     private final ScheduleService scheduleService;
 
-    //    @PostMapping("/")
-    //    @ResponseStatus(HttpStatus.OK)
-    //    public ScheduleResponseDTO login(@RequestBody ScheduleRequestDTO scheduleRequestDTO) {
-    //        return new ScheduleResponseDTO(schedule);
-    //        Schedule schedule = scheduleService.create(scheduleRequestDTO.toEntity());
-    //    }
+    @PostMapping("/")
+    public ResponseEntity<ScheduleResponseDTO> createSchedule(@RequestBody ScheduleRequestDTO scheduleRequestDTO) {
 
+        ScheduleResponseDTO scheduleResponseDTO = scheduleService.createSchedule(scheduleRequestDTO);
+        return ResponseEntity.ok(scheduleResponseDTO);
+    }
     /**
      * 여행 일정 저장 API
      */
@@ -49,7 +49,6 @@ public class ScheduleController {
         return ResponseEntity.ok(scheduleList);
     }
 
-
     /**
      * 여행 일정 상세 조회 API
      */
@@ -60,7 +59,6 @@ public class ScheduleController {
         ScheduleSaveRequestDTO scheduleDetail = scheduleService.getScheduleDetail(uid, scheduleId);
         return ResponseEntity.ok(scheduleDetail);
     }
-
 
     /**
      * 여행 일정 삭제 API

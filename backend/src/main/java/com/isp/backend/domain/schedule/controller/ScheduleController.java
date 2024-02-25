@@ -1,10 +1,13 @@
 package com.isp.backend.domain.schedule.controller;
 
 import com.isp.backend.domain.schedule.dto.ScheduleListResponseDTO;
+import com.isp.backend.domain.schedule.dto.ScheduleRequestDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleSaveRequestDTO;
+import com.isp.backend.domain.schedule.entity.Schedule;
 import com.isp.backend.domain.schedule.service.ScheduleService;
 import com.isp.backend.global.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +20,13 @@ import java.util.List;
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
+
+    //    @PostMapping("/")
+    //    @ResponseStatus(HttpStatus.OK)
+    //    public ScheduleResponseDTO login(@RequestBody ScheduleRequestDTO scheduleRequestDTO) {
+    //        return new ScheduleResponseDTO(schedule);
+    //        Schedule schedule = scheduleService.create(scheduleRequestDTO.toEntity());
+    //    }
 
     /**
      * 여행 일정 저장 API
@@ -38,10 +48,43 @@ public class ScheduleController {
         List<ScheduleListResponseDTO> scheduleList = scheduleService.getScheduleList(uid);
         return ResponseEntity.ok(scheduleList);
     }
-    @PostMapping("/")
-    @ResponseStatus(HttpStatus.OK)
-    public ScheduleResponseDTO login(@RequestBody ScheduleRequestDTO scheduleRequestDTO) {
-        return new ScheduleResponseDTO(schedule);
-        Schedule schedule = scheduleService.create(scheduleRequestDTO.toEntity());
+
+
+    /**
+     * 여행 일정 상세 조회 API
+     */
+    @GetMapping("/detail/{scheduleId}")
+    public ResponseEntity<ScheduleSaveRequestDTO> getScheduleDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                                    @PathVariable Long scheduleId) {
+        String uid = userDetails.getUsername();
+        ScheduleSaveRequestDTO scheduleDetail = scheduleService.getScheduleDetail(uid, scheduleId);
+        return ResponseEntity.ok(scheduleDetail);
     }
+
+
+    /**
+     * 여행 일정 삭제 API
+     */
+    @DeleteMapping("/{scheduleId}")
+    public ResponseEntity<Void> deleteSchedule(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                               @PathVariable Long scheduleId) {
+        String uid = userDetails.getUsername();
+        scheduleService.deleteSchedule(uid, scheduleId);
+        return ResponseEntity.ok().build();
+    }
+
+
+    /**
+     * 여행 일정 수정 API
+     */
+    @PutMapping("/update/{scheduleId}")
+    public ResponseEntity<ScheduleSaveRequestDTO> updateSchedule(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                               @PathVariable Long scheduleId,
+                                               @RequestBody ScheduleSaveRequestDTO requestDTO) {
+        ScheduleSaveRequestDTO updatedSchedule = scheduleService.updateSchedule(userDetails.getUsername(), scheduleId, requestDTO);
+//        return ResponseEntity.ok().build();  == public void로
+        return ResponseEntity.ok(updatedSchedule);
+    }
+
+
 }

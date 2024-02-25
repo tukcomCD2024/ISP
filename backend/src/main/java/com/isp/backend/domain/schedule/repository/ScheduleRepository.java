@@ -5,8 +5,11 @@ import com.isp.backend.domain.schedule.entity.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface ScheduleRepository extends JpaRepository<Schedule, String> {
-    List<Schedule> findByMember(Member findmember);
+public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
+//    List<Schedule> findByMember(Member findmember);
+    Optional<Schedule> findByIdAndActivatedIsTrue(Long scheduleId);
 
+    List<Schedule> findByMemberAndActivatedIsTrue(Member findmember);
 }

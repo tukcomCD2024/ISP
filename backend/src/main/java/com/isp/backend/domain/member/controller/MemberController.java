@@ -18,11 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
-
-    @GetMapping("/test")
-    public String testEndpoint() {
-        return "Test endpoint response";
-    }
+    
 
     /**
     *   로그인 API

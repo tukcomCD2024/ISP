@@ -13,16 +13,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/members")
+@RequestMapping("/api/member")
 @RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
-
-    @GetMapping("/test")
-    public String testEndpoint() {
-        return "Test endpoint response";
-    }
+    
 
     /**
     *   로그인 API

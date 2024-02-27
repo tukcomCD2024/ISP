@@ -4,11 +4,9 @@ import com.isp.backend.domain.schedule.dto.ScheduleListResponseDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleRequestDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleResponseDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleSaveRequestDTO;
-import com.isp.backend.domain.schedule.entity.Schedule;
 import com.isp.backend.domain.schedule.service.ScheduleService;
 import com.isp.backend.global.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/schedule")
+@RequestMapping("/api/schedules")
 @RequiredArgsConstructor
 public class ScheduleController {
 

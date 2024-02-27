@@ -4,7 +4,7 @@ cd $REPOSITORY
 JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep 'SNAPSHOT.jar' | tail -n 1)
 JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 
-CURRENT_PID=$(pgrep -fl action | grep java | awk '{print $1}')
+CURRENT_PID=$(pgrep -fl 'java -jar backend-0.0.1-SNAPSHOT.jar')
 
 if [ -z $CURRENT_PID ]
 then

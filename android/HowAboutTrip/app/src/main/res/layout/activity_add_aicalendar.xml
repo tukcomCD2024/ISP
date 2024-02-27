@@ -219,7 +219,7 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/search"
                 style="@style/Button.BlackRound"
-                android:layout_width="70dp"
+                android:layout_width="75dp"
                 android:layout_height="22dp"
                 android:layout_marginTop="15dp"
                 android:drawableStart="@drawable/icon_search_size_fixed"

@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.how.R
 import com.project.how.data_class.AiDaysSchedule
-import com.project.how.data_class.AiSchedule
 import com.project.how.databinding.AiDaysScheduleItemBinding
 
 class AiDaysScheduleAdapter(data: List<AiDaysSchedule>)

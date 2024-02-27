@@ -75,6 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="인천 → 오사카행"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"

@@ -97,6 +97,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:text="@string/date"
+                android:visibility="gone"
                 android:textSize="13sp"
                 app:layout_constraintEnd_toStartOf="@+id/buy"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -117,6 +118,19 @@
                 android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageView
+                android:id="@+id/edit_need"
+                android:layout_width="17dp"
+                android:layout_height="23dp"
+                android:layout_marginBottom="-13dp"
+                android:layout_marginEnd="-15dp"
+                android:elevation="10dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_edit_need"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/buy"
+                app:layout_constraintEnd_toStartOf="@+id/buy" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageButton
@@ -130,5 +144,6 @@
             android:layout_marginBottom="-30dp"
             app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
             app:layout_constraintStart_toEndOf="@+id/number_background" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

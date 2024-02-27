@@ -20,12 +20,13 @@ import com.project.how.R
 import com.project.how.adapter.AiDaysScheduleAdapter
 import com.project.how.data_class.AiSchedule
 import com.project.how.databinding.DialogAiScheduleBinding
+import com.project.how.interface_af.OnAddListener
 import com.project.how.view.dp.DpPxChanger
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class AiScheduleDialog(private val data : AiSchedule) : DialogFragment() {
+class AiScheduleDialog(private val data : AiSchedule, private val onAddListener: OnAddListener) : DialogFragment() {
     private var _binding : DialogAiScheduleBinding? = null
     private val binding : DialogAiScheduleBinding
         get() = _binding!!
@@ -91,6 +92,10 @@ class AiScheduleDialog(private val data : AiSchedule) : DialogFragment() {
         _binding = null
     }
 
+    fun addCalendar(){
+        onAddListener.onAddListener()
+    }
+
     private fun getPlacesText(places : List<String>): String{
         var hashTagPlaces = ""
         places.forEachIndexed { index, s ->
@@ -132,7 +137,7 @@ class AiScheduleDialog(private val data : AiSchedule) : DialogFragment() {
 
     companion object{
         const val TAB_ITEM_MARGIN = 8
-        const val TAB_ITEM_WIDTH = 53
+        const val TAB_ITEM_WIDTH = 60
         const val TAB_ITEM_HEIGHT = 20
     }
 }

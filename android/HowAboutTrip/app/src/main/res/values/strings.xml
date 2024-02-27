@@ -128,4 +128,11 @@
     <string name="close">닫기</string>
     <string name="days_title">%1$s일차 : %2$s</string>
     <string name="edit">수정</string>
+    <string name="aischedule">AiSchedule</string>
+    <string name="type">type</string>
+    <string name="schedule">Schedule</string>
+    <string name="get_data_failed">일정 정보를 가져오는 과정에서 오류가 발생했습니다.\n다시 한 번 더 시도해주세요.</string>
+    <string name="calendar_budget">예상 지출 금액 : %1$s 원</string>
+    <string name="calendar_title_max_length">최대 20자</string>
+    <string name="budget">예산 : %1$s</string>
 </resources>

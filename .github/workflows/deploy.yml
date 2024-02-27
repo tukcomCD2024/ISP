@@ -2,9 +2,9 @@ name: Build and Deploy to EC2
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "dev_backend" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "dev_backend" ]
 
 defaults:
   run:

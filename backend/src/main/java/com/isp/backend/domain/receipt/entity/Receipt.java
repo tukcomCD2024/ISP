@@ -1,6 +1,5 @@
 package com.isp.backend.domain.receipt.entity;
 
-import com.isp.backend.domain.schedules.entity.Schedules;
 import com.isp.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;

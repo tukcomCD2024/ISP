@@ -25,3 +25,6 @@ cloud:
       static: ${AWS_S3_REGION}
     stack:
       auto: false
+
+api-key:
+  chat-gpt: ${GPT_API_KEY}

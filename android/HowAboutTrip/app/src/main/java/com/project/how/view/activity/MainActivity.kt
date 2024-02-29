@@ -1,14 +1,16 @@
 package com.project.how.view.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import com.project.how.R
 import com.project.how.databinding.ActivityMainBinding
-import com.project.how.view.fragment.CalendarFragment
-import com.project.how.view.fragment.MypageFragment
-import com.project.how.view.fragment.PictureFragment
-import com.project.how.view.fragment.TicketFragment
+import com.project.how.view.activity.ai.AddAICalendarActivity
+import com.project.how.view.fragment.main.CalendarFragment
+import com.project.how.view.fragment.main.MypageFragment
+import com.project.how.view.fragment.main.PictureFragment
+import com.project.how.view.fragment.main.TicketFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -42,5 +44,9 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+    }
+
+    fun moveAddAICalendar(){
+        startActivity(Intent(this, AddAICalendarActivity::class.java))
     }
 }

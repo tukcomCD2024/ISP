@@ -8,13 +8,13 @@ import kotlinx.coroutines.flow.flow
 import java.time.LocalDate
 
 class CalendarRepository {
-    private val nowDate = LocalDate.now()
+    private val nowDate: LocalDate = LocalDate.now()
     private val _selectedDate = MutableLiveData<LocalDate>()
     val selectedDate : LiveData<LocalDate>
         get() = _selectedDate
     private lateinit var monthOfFirstDate : LocalDate
     private lateinit var sd : LocalDate
-    private var monthOfFirstDayOfWeek = Companion.EMPTY
+    private var monthOfFirstDayOfWeek = EMPTY
     private var lastDay = 0
 
     private fun getMonthInform(fdw : Int) : Flow<List<Int>> = flow {
@@ -22,7 +22,7 @@ class CalendarRepository {
         lastDay = sd.lengthOfMonth()
         var week = fdw
         for (i in 0 until fdw)
-            monthInfo.add(Companion.EMPTY)
+            monthInfo.add(EMPTY)
         for(i in 1..lastDay){
             monthInfo.add(week)
             week = (week+1) % 7

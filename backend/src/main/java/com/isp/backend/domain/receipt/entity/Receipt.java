@@ -1,6 +1,5 @@
 package com.isp.backend.domain.receipt.entity;
 
-import com.isp.backend.domain.schedules.entity.MySchedule;
 import com.isp.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,9 +17,9 @@ public class Receipt extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id ;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "schedule_id", nullable = false)
-    private MySchedule mySchedule;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "schedule_id", nullable = false)
+//    private Schedules schedules;
 
     @Column(name = "title")
     private String title ;

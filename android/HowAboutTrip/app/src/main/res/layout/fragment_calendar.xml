@@ -6,7 +6,7 @@
     <data>
         <variable
             name="calendar"
-            type="com.project.how.view.fragment.CalendarFragment" />
+            type="com.project.how.view.fragment.main.CalendarFragment" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_height="match_parent"

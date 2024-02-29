@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.project.how.R
-import com.project.how.adapter.CalendarAdapter
+import com.project.how.adapter.recyclerview.CalendarAdapter
 import com.project.how.databinding.CalendarBottomSheetBinding
 import com.project.how.interface_af.OnDateTimeListener
 import com.project.how.interface_af.OnTimeListener

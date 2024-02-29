@@ -89,41 +89,16 @@
             app:layout_constraintTop_toBottomOf="@+id/america" />
 
         <TextView
-            android:id="@+id/canada"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/bm_hanna"
-            android:text="@string/canada"
-            android:layout_marginTop="20dp"
-            android:textColor="@color/black"
-            android:textSize="13sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/america_places" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/canada_places"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/canada"
-            app:spanCount="1"
-            tools:listitem="@layout/simple_radiobutton_item" />
-
-        <TextView
             android:id="@+id/southeast_asia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/bm_hanna"
             android:text="@string/southeast_asia"
-            android:layout_marginTop="20dp"
             android:textColor="@color/black"
             android:textSize="13sp"
+            android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/canada_places" />
+            app:layout_constraintTop_toBottomOf="@+id/america_places" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/southeast_asia_places"
@@ -133,7 +108,7 @@
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            app:spanCount="2"
+            app:spanCount="4"
             app:layout_constraintTop_toBottomOf="@+id/southeast_asia" />
 
         <androidx.appcompat.widget.AppCompatButton

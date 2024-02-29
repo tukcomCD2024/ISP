@@ -5,7 +5,7 @@
     <data>
         <variable
             name="adapter"
-            type="com.project.how.adapter.CalendarAdapter" />
+            type="com.project.how.adapter.recyclerview.CalendarAdapter" />
     </data>
 
 
@@ -17,7 +17,7 @@
             android:id="@+id/background"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@drawable/white_oval_day_background"
+            android:background="@drawable/white_oval"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

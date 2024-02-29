@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.project.how.BuildConfig
 import com.project.how.R
-import com.project.how.adapter.AiDaysScheduleAdapter
+import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
 import com.project.how.data_class.AiSchedule
 import com.project.how.databinding.DialogAiScheduleBinding
 import com.project.how.interface_af.OnAddListener
@@ -138,6 +138,6 @@ class AiScheduleDialog(private val data : AiSchedule, private val onAddListener:
     companion object{
         const val TAB_ITEM_MARGIN = 8
         const val TAB_ITEM_WIDTH = 60
-        const val TAB_ITEM_HEIGHT = 20
+        const val TAB_ITEM_HEIGHT = 22
     }
 }

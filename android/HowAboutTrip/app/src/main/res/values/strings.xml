@@ -80,7 +80,7 @@
     <string name="swiss">스위스</string>
     <string name="germany">독일</string>
     <string name="austria">오스트리아</string>
-    <string name="america">미국</string>
+    <string name="america">미주</string>
     <string name="canada">캐나다</string>
     <string name="southeast_asia">동남아시아</string>
     <string name="yufuin">유후인</string>
@@ -135,4 +135,34 @@
     <string name="calendar_budget">예상 지출 금액 : %1$s 원</string>
     <string name="calendar_title_max_length">최대 20자</string>
     <string name="budget">예산 : %1$s</string>
+    <string name="some_schedule_lng_lat">특정 일정의 주소</string>
+    <string name="schedule_type">일정 유형</string>
+    <string name="airplane">항공</string>
+    <string name="hotel">숙소</string>
+    <string name="place">관광지</string>
+    <string name="preferred_departure_time">희망 출발 시간</string>
+    <string name="schedule_title">일정 제목</string>
+    <string name="input_limit">20자 이내에 입력</string>
+    <string name="budget_title">예산</string>
+    <string name="schedule_location">위치</string>
+    <string name="won">원</string>
+    <string name="autocomplete_fragment_hint">구글 지도에서 위치 검색</string>
+    <string name="tsushima">대마도</string>
+    <string name="kyushu">규슈</string>
+    <string name="czech">체코</string>
+    <string name="saipan">사이판</string>
+    <string name="guam">괌</string>
+    <string name="taiwan">대만</string>
+    <string name="laos">라오스</string>
+    <string name="kota_kinabalu">코타키나발루</string>
+    <string name="hanoi">하노이</string>
+    <string name="da_nang_and_hoi_an">다낭/호이안</string>
+    <string name="phu_quoc">푸꾸욱</string>
+    <string name="nha_trang_and_da_lat">나트랑/달랏</string>
+    <string name="bangkok">방콕</string>
+    <string name="chiang_mai">치앙마이</string>
+    <string name="phuket">푸켓</string>
+    <string name="bali">발리</string>
+    <string name="borikai">보리카이</string>
+
 </resources>

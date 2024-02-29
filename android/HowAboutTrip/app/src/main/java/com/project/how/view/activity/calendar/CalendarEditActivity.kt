@@ -17,14 +17,17 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.material.tabs.TabLayout
 import com.project.how.R
-import com.project.how.adapter.DaysScheduleAdapter
+import com.project.how.adapter.recyclerview.DaysScheduleAdapter
 import com.project.how.adapter.item_touch_helper.RecyclerViewItemTouchHelperCallback
 import com.project.how.data_class.AiSchedule
 import com.project.how.data_class.DaysSchedule
 import com.project.how.data_class.Schedule
 import com.project.how.databinding.ActivityCalendarEditBinding
+import com.project.how.interface_af.OnScheduleListener
 import com.project.how.interface_af.interface_ada.ItemStartDragListener
 import com.project.how.view.dialog.AiScheduleDialog
+import com.project.how.view.dialog.ConfirmDialog
+import com.project.how.view.dialog.bottom_sheet_dialog.EditScheduleBottomSheetDialog
 import com.project.how.view.dp.DpPxChanger
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.launch
@@ -35,12 +38,14 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 
-class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback {
+class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback, DaysScheduleAdapter.OnButtonClickListener, OnScheduleListener {
     private lateinit var binding : ActivityCalendarEditBinding
     private val viewModel : ScheduleViewModel by viewModels()
     private lateinit var data : Schedule
     private lateinit var adapter : DaysScheduleAdapter
     private lateinit var supportMapFragment: SupportMapFragment
+    private var selectedDays = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_calendar_edit)
@@ -70,7 +75,7 @@ class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback {
             binding.date.text = "${data.startDate} - ${data.endDate}"
             val formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(data.cost)
             binding.budget.text = getString(R.string.calendar_budget, formattedNumber)
-            adapter = DaysScheduleAdapter(data.dailySchedule[0], this@CalendarEditActivity)
+            adapter = DaysScheduleAdapter(data.dailySchedule[selectedDays], this@CalendarEditActivity, this@CalendarEditActivity)
             binding.daySchedules.adapter = adapter
 
             setDaysTab()
@@ -97,7 +102,9 @@ class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback {
                 Log.d("OnTabSelected", "selectedTabPosition : $selectedTabPosition")
                 binding.daysTitle.text = getString(R.string.days_title, (selectedTabPosition + 1).toString(), getDaysTitle(selectedTabPosition))
                 lifecycleScope.launch {
+                    data.dailySchedule[selectedDays] = adapter.getData()
                     adapter.update(data.dailySchedule[selectedTabPosition])
+                    selectedDays = selectedTabPosition
                 }
             }
 
@@ -166,10 +173,49 @@ class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    fun add(){
+
+    }
+
+    fun save(){
+        lifecycleScope.launch {
+            data.dailySchedule[selectedDays] = adapter.getData()
+            viewModel.getSchedule(data)
+
+
+            viewModel.saveSchedule(data).collect{check ->
+                when(check){
+                    ScheduleViewModel.NULL_LOCATIONS ->{
+                        val message = listOf<String>(getString(R.string.some_schedule_lng_lat))
+                        val confirmDialog = ConfirmDialog(message)
+                        confirmDialog.show(supportFragmentManager, "ConfirmDialog")
+                    }
+                    ScheduleViewModel.NETWORK_FAILED ->{
+
+                    }
+                    ScheduleViewModel.SUCCESS ->{
+
+                    }
+                }
+            }
+        }
+    }
+
+
     companion object{
         const val FAILURE = -1
         const val AI_SCHEDULE = 0
         const val BASIC_SCHEDULE = 1
+    }
+
+    override fun onEditButtonClickListener(data : DaysSchedule, position : Int) {
+        val editScheduleBottomSheet = EditScheduleBottomSheetDialog(data , position, this)
+        editScheduleBottomSheet.show(supportFragmentManager, "EditScheduleBottomSheetDialog")
+    }
+
+    override fun onDaysScheduleListener(schedule: DaysSchedule, position: Int) {
+        data.dailySchedule[selectedDays][position] = schedule
+        adapter.edit(schedule, position)
     }
 
 }

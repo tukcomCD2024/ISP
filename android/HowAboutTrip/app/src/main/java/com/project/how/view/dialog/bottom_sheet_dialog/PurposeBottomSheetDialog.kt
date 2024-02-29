@@ -8,16 +8,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.project.how.R
-import com.project.how.adapter.RadioButtonAdapter
+import com.project.how.adapter.recyclerview.RadioButtonAdapter
 import com.project.how.databinding.PurposeBottomSheetBinding
 import com.project.how.interface_af.OnPurposeListener
-import com.project.how.view.dialog.ConfirmDialog
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlin.coroutines.coroutineContext
 
 class PurposeBottomSheetDialog(private val onPurposeListener : OnPurposeListener) : BottomSheetDialogFragment(), RadioButtonAdapter.OnItemClickListener  {
     private var _binding: PurposeBottomSheetBinding? = null

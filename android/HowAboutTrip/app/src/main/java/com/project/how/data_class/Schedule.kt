@@ -11,7 +11,7 @@ class Schedule (
 ) : Serializable
 
 data class DaysSchedule(
-    val type : Int,
+    var type : Int,
     val todo: String,
     val places: String,
     val latitude : Double?,

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="adapter"
-            type="com.project.how.adapter.AiScheduleAdapter" />
+            type="com.project.how.adapter.recyclerview.AiScheduleAdapter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

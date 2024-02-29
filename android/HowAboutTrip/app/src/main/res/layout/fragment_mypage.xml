@@ -6,7 +6,7 @@
     <data>
         <variable
             name="mypage"
-            type="com.project.how.view.fragment.MypageFragment" />
+            type="com.project.how.view.fragment.main.MypageFragment" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_height="match_parent"

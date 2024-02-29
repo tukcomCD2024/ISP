@@ -7,10 +7,10 @@ import androidx.databinding.DataBindingUtil
 import com.project.how.R
 import com.project.how.databinding.ActivityMainBinding
 import com.project.how.view.activity.ai.AddAICalendarActivity
-import com.project.how.view.fragment.CalendarFragment
-import com.project.how.view.fragment.MypageFragment
-import com.project.how.view.fragment.PictureFragment
-import com.project.how.view.fragment.TicketFragment
+import com.project.how.view.fragment.main.CalendarFragment
+import com.project.how.view.fragment.main.MypageFragment
+import com.project.how.view.fragment.main.PictureFragment
+import com.project.how.view.fragment.main.TicketFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

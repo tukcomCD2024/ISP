@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="edit"
+            type="com.project.how.view.dialog.bottom_sheet_dialog.EditScheduleBottomSheetDialog" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/white_round_bottom_sheet_background"
+        app:behavior_hideable="true"
+        app:behavior_draggable="false"
+        app:layout_behavior="com.google.android.material.bottom-sheet.BottomSheetBehavior">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="40dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="29dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="29dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="29dp" />
+
+        <TextView
+            android:id="@+id/schedule_type_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/schedule_type"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="@+id/guideline7"
+            app:layout_constraintTop_toTopOf="@+id/guideline6" />
+
+        <RadioGroup
+            android:id="@+id/schedule_type"
+            android:layout_width="0dp"
+            android:layout_height="22dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline8"
+            app:layout_constraintStart_toStartOf="@+id/guideline7"
+            app:layout_constraintTop_toBottomOf="@+id/schedule_type_title">
+
+            <RadioButton
+                android:id="@+id/airplane"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:text="@string/airplane"
+                android:gravity="center"
+                android:textSize="13sp"
+                android:textColor="@color/radio_text"
+                android:layout_marginEnd="8dp"
+                android:button="@android:color/transparent"
+                android:background="@drawable/radio_btn_round_rectangle"/>
+
+            <RadioButton
+                android:id="@+id/hotel"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:text="@string/hotel"
+                android:gravity="center"
+                android:textSize="13sp"
+                android:textColor="@color/radio_text"
+                android:layout_marginEnd="8dp"
+                android:button="@android:color/transparent"
+                android:background="@drawable/radio_btn_round_rectangle"/>
+
+            <RadioButton
+                android:id="@+id/place"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:text="@string/place"
+                android:gravity="center"
+                android:textSize="13sp"
+                android:textColor="@color/radio_text"
+                android:layout_marginEnd="8dp"
+                android:button="@android:color/transparent"
+                android:background="@drawable/radio_btn_round_rectangle"/>
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/schedule_title_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/schedule_title"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/guideline7"
+            app:layout_constraintTop_toBottomOf="@+id/schedule_type" />
+
+        <EditText
+            android:id="@+id/schedule_title"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:maxLength="20"
+            android:maxLines="1"
+            android:inputType="text"
+            android:text="@{edit.title}"
+            android:textColor="@color/black"
+            android:hint="@string/input_limit"
+            app:layout_constraintStart_toStartOf="@+id/guideline7"
+            app:layout_constraintTop_toBottomOf="@+id/schedule_title_title" />
+
+        <TextView
+            android:id="@+id/schedule_budget_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/budget_title"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="@+id/guideline7"
+            app:layout_constraintTop_toBottomOf="@+id/schedule_title" />
+
+        <EditText
+            android:id="@+id/schedule_budget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/input_limit"
+            android:inputType="number"
+            android:maxLength="20"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:text="@{edit.cost}"
+            app:layout_constraintStart_toStartOf="@+id/guideline7"
+            app:layout_constraintTop_toBottomOf="@+id/schedule_budget_title" />
+
+        <TextView
+            android:id="@+id/won"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/won"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="3dp"
+            app:layout_constraintStart_toEndOf="@+id/schedule_budget"
+            app:layout_constraintTop_toBottomOf="@+id/schedule_budget_title" />
+
+        <TextView
+            android:id="@+id/schedule_location_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/schedule_location"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="@+id/guideline7"
+            app:layout_constraintTop_toBottomOf="@+id/schedule_budget" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/map_card"
+            android:layout_width="0dp"
+            android:layout_height="350dp"
+            android:backgroundTint="@color/gray"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline8"
+            app:layout_constraintStart_toStartOf="@+id/guideline7"
+            app:layout_constraintTop_toBottomOf="@+id/schedule_location_title">
+            
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <fragment
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <fragment
+                    android:id="@+id/autocomplete_fragment"
+                    android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/reset"
+            style="@style/Button.GrayRound"
+            android:layout_width="60dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="10dp"
+            android:text="@string/reset"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:onClick="@{()->edit.reset()}"
+            app:layout_constraintBottom_toTopOf="@+id/guideline9"
+            app:layout_constraintEnd_toStartOf="@+id/confirm"
+            app:layout_constraintTop_toBottomOf="@+id/map_card" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/confirm"
+            style="@style/Button.BlackRound"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:text="@string/confirm"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:layout_marginTop="30dp"
+            android:onClick="@{()-> edit.save()}"
+            app:layout_constraintBottom_toTopOf="@+id/guideline9"
+            app:layout_constraintEnd_toStartOf="@+id/guideline8"
+            app:layout_constraintTop_toBottomOf="@+id/map_card" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

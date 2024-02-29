@@ -6,7 +6,7 @@
     <data>
         <variable
             name="edit"
-            type="com.project.how.adapter.DaysScheduleAdapter" />
+            type="com.project.how.adapter.recyclerview.DaysScheduleAdapter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,7 +30,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:scaleType="fitXY"
-        android:src="@drawable/black_oval_day_background"
+        android:src="@drawable/black_oval"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
@@ -105,7 +105,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/schedule_title" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/buy"
+                android:id="@+id/edit"
                 style="@style/Button.BlackRound"
                 android:layout_width="70dp"
                 android:layout_height="20dp"
@@ -129,8 +129,8 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/icon_edit_need"
                 android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@+id/buy"
-                app:layout_constraintEnd_toStartOf="@+id/buy" />
+                app:layout_constraintBottom_toTopOf="@+id/edit"
+                app:layout_constraintEnd_toStartOf="@+id/edit" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageButton

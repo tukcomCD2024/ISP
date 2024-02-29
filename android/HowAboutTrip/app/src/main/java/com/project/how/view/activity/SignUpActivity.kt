@@ -8,17 +8,12 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.project.how.R
-import com.project.how.adapter.CalendarAdapter
-import com.project.how.data_class.dto.AuthRecreateRequest
+import com.project.how.adapter.recyclerview.CalendarAdapter
 import com.project.how.databinding.ActivitySignUpBinding
 import com.project.how.databinding.CalendarBottomSheetBinding
 import com.project.how.view_model.CalendarViewModel
 import com.project.how.view_model.MemberViewModel
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 

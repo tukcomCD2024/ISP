@@ -6,7 +6,7 @@
     <data>
         <variable
             name="adapter"
-            type="com.project.how.adapter.AiDaysScheduleAdapter" />
+            type="com.project.how.adapter.recyclerview.AiDaysScheduleAdapter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,7 +30,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:scaleType="fitXY"
-            android:src="@drawable/white_oval_day_background"
+            android:src="@drawable/white_oval"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />

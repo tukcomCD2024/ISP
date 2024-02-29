@@ -6,7 +6,7 @@
     <data>
         <variable
             name="event_viewpager"
-            type="com.project.how.adapter.EventViewPagerAdapter" />
+            type="com.project.how.adapter.recyclerview.EventViewPagerAdapter" />
 
     </data>
 

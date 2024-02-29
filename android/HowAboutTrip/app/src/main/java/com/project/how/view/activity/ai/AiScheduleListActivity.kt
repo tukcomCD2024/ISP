@@ -5,8 +5,8 @@ import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.project.how.R
-import com.project.how.adapter.AiDaysScheduleAdapter
-import com.project.how.adapter.AiScheduleAdapter
+import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
+import com.project.how.adapter.recyclerview.AiScheduleAdapter
 import com.project.how.data_class.AiDaysSchedule
 import com.project.how.data_class.AiSchedule
 import com.project.how.databinding.ActivityAiScheduleListBinding

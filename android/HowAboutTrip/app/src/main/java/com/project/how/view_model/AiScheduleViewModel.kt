@@ -2,7 +2,7 @@ package com.project.how.view_model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.project.how.adapter.AiDaysScheduleAdapter
+import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
 import com.project.how.data_class.AiDaysSchedule
 import com.project.how.data_class.AiSchedule
 import com.project.how.data_class.AiScheduleInput

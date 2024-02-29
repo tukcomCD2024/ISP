@@ -52,7 +52,7 @@ jobs:
 
       - name: Upload to S3
         working-directory: ./backend
-        run: aws deploy push --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://$AWS_S3_BUCKET/HowAboutTrip-Backend-EC2/$GITHUB_SHA.zip --source .
+        run: aws deploy push --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://{{$AWS_S3_BUCKET}}/HowAboutTrip-Backend-EC2/$GITHUB_SHA.zip --source .
 
       - name: Code Deploy to EC2
         working-directory: ./backend

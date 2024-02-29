@@ -4,6 +4,7 @@ import java.io.Serializable
 
 class AiSchedule(
     val title: String,
+    val country : String,
     val places : List<String>,
     val image : String,
     val startDate : String,

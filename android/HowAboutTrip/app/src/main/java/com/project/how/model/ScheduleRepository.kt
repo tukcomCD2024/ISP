@@ -40,6 +40,7 @@ class ScheduleRepository {
     fun getSchedule(aiSchedule : AiSchedule) : Flow<Schedule> = flow{
         this.emit(Schedule(
             aiSchedule.title,
+            aiSchedule.country,
             aiSchedule.startDate,
             aiSchedule.endDate,
             0,

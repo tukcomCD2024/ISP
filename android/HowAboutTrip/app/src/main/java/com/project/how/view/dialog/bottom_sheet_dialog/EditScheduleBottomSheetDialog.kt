@@ -105,7 +105,7 @@ class EditScheduleBottomSheetDialog(private val schedule : DaysSchedule, private
                     latitude = place.latLng.latitude
                     longitude = place.latLng.longitude
 
-                    val camera = makeScheduleCarmeraUpdate(placeLocation)
+                    val camera = makeScheduleCarmeraUpdate(placeLocation, 15f)
                     val markerOptions = makeScheduleMarkerOptions(requireContext(), type, position, placeLocation, place.name)
 
                     map.clear()
@@ -143,7 +143,7 @@ class EditScheduleBottomSheetDialog(private val schedule : DaysSchedule, private
     override fun onMapReady(map: GoogleMap) {
         if (schedule.latitude != null || schedule.longitude != null){
             val placeLocation = LatLng(schedule.latitude!!, schedule.longitude!!)
-            val camera = makeScheduleCarmeraUpdate(placeLocation)
+            val camera = makeScheduleCarmeraUpdate(placeLocation, 15f)
             val markerOptions = makeScheduleMarkerOptions(requireContext(), type, position, placeLocation, schedule.places)
 
             map.moveCamera(camera)
@@ -205,10 +205,10 @@ class EditScheduleBottomSheetDialog(private val schedule : DaysSchedule, private
 
     companion object{
 
-        fun makeScheduleCarmeraUpdate(location: LatLng) : CameraUpdate{
+        fun makeScheduleCarmeraUpdate(location: LatLng, zoom : Float) : CameraUpdate{
             val cameraOption = CameraPosition.builder()
                 .target(location)
-                .zoom(10f)
+                .zoom(zoom)
                 .build()
              return CameraUpdateFactory.newCameraPosition(cameraOption)
         }

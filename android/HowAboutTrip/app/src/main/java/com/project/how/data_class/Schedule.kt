@@ -4,6 +4,7 @@ import java.io.Serializable
 
 class Schedule (
     val title: String,
+    val country : String,
     val startDate : String,
     val endDate : String,
     val cost: Long,

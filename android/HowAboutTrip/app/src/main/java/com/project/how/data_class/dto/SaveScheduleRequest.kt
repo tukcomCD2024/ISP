@@ -2,6 +2,7 @@ package com.project.how.data_class.dto
 
 data class SaveScheduleRequest (
     val scheduleName: String,
+    val country : String,
     val startDate: String,
     val endDate: String,
     val dailySchedules: List<DailySchedule>

@@ -56,7 +56,7 @@ class AiScheduleViewModel : ViewModel() {
         testAiDaysSchedule2.add(AiDaysSchedule(AiDaysScheduleAdapter.PLACE, "test Todo", "test"))
         testAiDaysSchedule2.add(AiDaysSchedule(AiDaysScheduleAdapter.HOTEL, "test hotel", "hotel"))
         val dailySchedule = mutableListOf<MutableList<AiDaysSchedule>>()
-        for (i in 0..5){
+        for (i in 0..2){
             if (i % 2== 0){
                 dailySchedule.add(testAiDaysSchedule)
             }else{
@@ -65,10 +65,11 @@ class AiScheduleViewModel : ViewModel() {
         }
         return AiSchedule(
             "TestTitle",
+            "프랑스",
             listOf("test1", "test2", "test3", "test4", "test5", "tttteeeessssssss6"),
             "https://img.freepik.com/free-photo/vertical-shot-beautiful-eiffel-tower-captured-paris-france_181624-45445.jpg?w=740&t=st=1708260600~exp=1708261200~hmac=01d8abec61f555d0edb040d41ce8ea39904853aea6df7c37ce0b5a35e07c1954",
             "2024-02-18",
-            "2024-02-23",
+            "2024-02-20",
             dailySchedule)
     }
 }

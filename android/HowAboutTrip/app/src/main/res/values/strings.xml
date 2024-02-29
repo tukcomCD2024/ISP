@@ -164,5 +164,6 @@
     <string name="phuket">푸켓</string>
     <string name="bali">발리</string>
     <string name="borikai">보리카이</string>
+    <string name="server_network_error">서버와 통신하는 도중에 오류가 발생했습니다.\n다시 한 번 더 시도하신 다음에 문제가 지속되면 문의해주세요.</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.project.how.view.activity.calendar
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -15,10 +16,12 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.tabs.TabLayout
 import com.project.how.R
 import com.project.how.adapter.recyclerview.DaysScheduleAdapter
 import com.project.how.adapter.item_touch_helper.RecyclerViewItemTouchHelperCallback
+import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
 import com.project.how.data_class.AiSchedule
 import com.project.how.data_class.DaysSchedule
 import com.project.how.data_class.Schedule
@@ -29,6 +32,7 @@ import com.project.how.view.dialog.AiScheduleDialog
 import com.project.how.view.dialog.ConfirmDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.EditScheduleBottomSheetDialog
 import com.project.how.view.dp.DpPxChanger
+import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.launch
 import java.io.Serializable
@@ -42,9 +46,11 @@ class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback, DaysSchedu
     private lateinit var binding : ActivityCalendarEditBinding
     private val viewModel : ScheduleViewModel by viewModels()
     private lateinit var data : Schedule
+    private var type: Int = FAILURE
     private lateinit var adapter : DaysScheduleAdapter
     private lateinit var supportMapFragment: SupportMapFragment
     private var selectedDays = 0
+    private var mapInitCheck = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,16 +59,7 @@ class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback, DaysSchedu
         binding.lifecycleOwner = this
 
         lifecycleScope.launch {
-            supportMapFragment = SupportMapFragment.newInstance();
-
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.map_card, supportMapFragment)
-                .commit();
-            supportMapFragment.getMapAsync(this@CalendarEditActivity)
-        }
-
-        lifecycleScope.launch {
-            val type = intent.getIntExtra(resources.getString(R.string.type), FAILURE)
+            type = intent.getIntExtra(resources.getString(R.string.type), FAILURE)
             Log.d("CalendarEditActivity", "type : $type")
             getData(type)
         }
@@ -94,6 +91,13 @@ class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback, DaysSchedu
                 }
 
             })
+
+            supportMapFragment = SupportMapFragment.newInstance();
+
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.map_card, supportMapFragment)
+                .commit();
+            supportMapFragment.getMapAsync(this@CalendarEditActivity)
         }
 
         binding.daysTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -105,6 +109,11 @@ class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback, DaysSchedu
                     data.dailySchedule[selectedDays] = adapter.getData()
                     adapter.update(data.dailySchedule[selectedTabPosition])
                     selectedDays = selectedTabPosition
+                    if (mapInitCheck){
+                        supportMapFragment.getMapAsync(this@CalendarEditActivity)
+                    }else{
+                        mapInitCheck = true
+                    }
                 }
             }
 
@@ -120,8 +129,21 @@ class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback, DaysSchedu
 
     }
 
-    override fun onMapReady(p0: GoogleMap) {
-
+    override fun onMapReady(map: GoogleMap) {
+        map.clear()
+        var first = true
+        data.dailySchedule[selectedDays].forEachIndexed {position, data->
+            if(data.latitude != null && data.longitude != null){
+                val location = LatLng(data.latitude, data.longitude)
+                if (first){
+                    val camera = EditScheduleBottomSheetDialog.makeScheduleCarmeraUpdate(location, 10f)
+                    map.moveCamera(camera)
+                    first = false
+                }
+                val markerOptions = EditScheduleBottomSheetDialog.makeScheduleMarkerOptions(this, data.type, position, location, data.places)
+                map.addMarker(markerOptions)
+            }
+        }
     }
 
     private fun setDaysTab(){
@@ -167,14 +189,29 @@ class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback, DaysSchedu
             AI_SCHEDULE ->{
                 viewModel.getSchedule(getSerializable(this, resources.getString(R.string.aischedule), AiSchedule::class.java))
             }
-            BASIC_SCHEDULE ->{
+            NEW ->{
+                viewModel.getSchedule(getSerializable(this, getString(R.string.schedule), Schedule::class.java))
+            }
+            EDIT ->{
                 viewModel.getSchedule(getSerializable(this, getString(R.string.schedule), Schedule::class.java))
             }
         }
     }
 
     fun add(){
-
+        val newData = DaysSchedule(
+            AiDaysScheduleAdapter.AIRPLANE,
+            "",
+            "",
+            null,
+            null,
+            0.toLong(),
+            false,
+            null
+        )
+        data.dailySchedule[selectedDays].add(newData)
+        val editScheduleBottomSheet = EditScheduleBottomSheetDialog(newData , data.dailySchedule[selectedDays].lastIndex, this)
+        editScheduleBottomSheet.show(supportFragmentManager, "EditScheduleBottomSheetDialog")
     }
 
     fun save(){
@@ -182,30 +219,67 @@ class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback, DaysSchedu
             data.dailySchedule[selectedDays] = adapter.getData()
             viewModel.getSchedule(data)
 
-
-            viewModel.saveSchedule(data).collect{check ->
-                when(check){
-                    ScheduleViewModel.NULL_LOCATIONS ->{
-                        val message = listOf<String>(getString(R.string.some_schedule_lng_lat))
-                        val confirmDialog = ConfirmDialog(message)
-                        confirmDialog.show(supportFragmentManager, "ConfirmDialog")
-                    }
-                    ScheduleViewModel.NETWORK_FAILED ->{
-
-                    }
-                    ScheduleViewModel.SUCCESS ->{
-
-                    }
+            when(type){
+                NEW->{
+                    saveNewSchedule()
+                }
+                AI_SCHEDULE->{
+                    saveNewSchedule()
+                }
+                EDIT->{
+                    saveEditSchedule()
+                }
+                FAILURE->{
+                    Toast.makeText(this@CalendarEditActivity, getString(R.string.get_data_failed), Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
+    private suspend fun saveNewSchedule(){
+        viewModel.saveSchedule(this, MemberViewModel.tokensLiveData.value!!.accessToken, data).collect{check ->
+            when(check){
+                ScheduleViewModel.NULL_LOCATIONS ->{
+                    val message = listOf<String>(getString(R.string.some_schedule_lng_lat))
+                    val confirmDialog = ConfirmDialog(message)
+                    confirmDialog.show(supportFragmentManager, "ConfirmDialog")
+                }
+                ScheduleViewModel.NETWORK_FAILED ->{
+                    Toast.makeText(this@CalendarEditActivity,
+                        getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
+                }
+                ScheduleViewModel.SUCCESS ->{
+                    if (type == NEW)
+                        moveCalendarList()
+                    else
+                        moveCalendar()
+                }
+            }
+        }
+    }
+
+    private suspend fun saveEditSchedule(){
+
+    }
+
+    private fun moveCalendarList(){
+        val intent = Intent(this, CalendarListActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun moveCalendar(){
+        val intent = Intent(this, CalendarActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 
     companion object{
         const val FAILURE = -1
         const val AI_SCHEDULE = 0
-        const val BASIC_SCHEDULE = 1
+        const val NEW = 1
+        const val EDIT = 2
+
     }
 
     override fun onEditButtonClickListener(data : DaysSchedule, position : Int) {
@@ -216,6 +290,7 @@ class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback, DaysSchedu
     override fun onDaysScheduleListener(schedule: DaysSchedule, position: Int) {
         data.dailySchedule[selectedDays][position] = schedule
         adapter.edit(schedule, position)
+        supportMapFragment.getMapAsync(this)
     }
 
 }

@@ -26,7 +26,6 @@ public class ChatGptController {
         } catch (Exception e) {
             code = e.getMessage();
         }
-        //return 부분은 자유롭게 수정하시면됩니다. ex)return chatGptResponse;
         return ResponseEntity.ok(chatGptResponseDTO.getChoices().get(0).getMessage());
     }
 }

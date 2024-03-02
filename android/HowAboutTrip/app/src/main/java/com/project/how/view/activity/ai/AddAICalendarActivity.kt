@@ -68,6 +68,7 @@ class AddAICalendarActivity :
 
     fun showPurposeInput(){
         purpose = mutableListOf()
+        binding.purposeOutput.text = ""
         val purpose = PurposeBottomSheetDialog(this)
         purpose.show(supportFragmentManager, "PurposeBottomSheetDialog")
     }
@@ -132,7 +133,7 @@ class AddAICalendarActivity :
                     if(entranceDate!! >= date){
                         saveDepartureDate(date)
                     }else{
-                        Toast.makeText(this, "출국 날짜($entranceDate)보다 입국 날짜($date)가 더 늦습니다.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "출국 날짜($date)보다 입국 날짜($entranceDate)가 더 빠릅니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -143,7 +144,7 @@ class AddAICalendarActivity :
                     if (departureDate!! <= date){
                         saveEntranceDate(date)
                     }else{
-                        Toast.makeText(this, "입국 날짜($departureDate)보다 출국 날짜($date)가 더 빠릅니다.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "입국 날짜($date)보다 출국 날짜($departureDate)가 더 늦습니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

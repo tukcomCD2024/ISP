@@ -17,6 +17,7 @@ import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -87,7 +88,12 @@ class EditScheduleBottomSheetDialog(private val schedule : DaysSchedule, private
             Places.initialize(requireContext(), apiKey)
 
             placesClient = Places.createClient(requireContext())
-            supportMapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+            val googleMapOptions = GoogleMapOptions()
+                .zoomControlsEnabled(true)
+            supportMapFragment = SupportMapFragment.newInstance(googleMapOptions)
+            childFragmentManager.beginTransaction()
+                .replace(R.id.map_bs, supportMapFragment)
+                .commit()
             supportMapFragment.getMapAsync(this@EditScheduleBottomSheetDialog)
 
             autocompleteFragment = childFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
@@ -190,6 +196,7 @@ class EditScheduleBottomSheetDialog(private val schedule : DaysSchedule, private
             R.id.hotel -> type = AiDaysScheduleAdapter.HOTEL
             R.id.place -> type = AiDaysScheduleAdapter.PLACE
         }
+
 
         return type
     }

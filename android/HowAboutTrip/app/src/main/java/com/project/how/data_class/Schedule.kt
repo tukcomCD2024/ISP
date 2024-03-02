@@ -3,11 +3,11 @@ package com.project.how.data_class
 import java.io.Serializable
 
 class Schedule (
-    val title: String,
-    val country : String,
-    val startDate : String,
-    val endDate : String,
-    val cost: Long,
+    var title: String,
+    var country : String,
+    var startDate : String,
+    var endDate : String,
+    var cost: Long,
     val dailySchedule: MutableList<MutableList<DaysSchedule>>
 ) : Serializable
 

@@ -134,7 +134,7 @@
     <string name="get_data_failed">일정 정보를 가져오는 과정에서 오류가 발생했습니다.\n다시 한 번 더 시도해주세요.</string>
     <string name="calendar_budget">예상 지출 금액 : %1$s 원</string>
     <string name="calendar_title_max_length">최대 20자</string>
-    <string name="budget">예산 : %1$s</string>
+    <string name="budget">예산 : %1$s 원</string>
     <string name="some_schedule_lng_lat">특정 일정의 주소</string>
     <string name="schedule_type">일정 유형</string>
     <string name="airplane">항공</string>

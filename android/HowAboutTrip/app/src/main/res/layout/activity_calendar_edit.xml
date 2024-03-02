@@ -52,6 +52,7 @@
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
@@ -64,11 +65,12 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout2"
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
+                    android:layout_height="170dp"
                     android:background="@color/black"
                     android:paddingHorizontal="29dp"
                     android:paddingVertical="18dp"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -76,13 +78,13 @@
                         android:id="@+id/title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="15dp"
-                        android:fontFamily="@font/bm_hanna"
-                        android:text="test"
-                        android:maxLines="1"
-                        android:maxLength="20"
-                        android:hint="@string/calendar_title_max_length"
+                        android:layout_marginBottom="20dp"
                         android:background="@android:color/transparent"
+                        android:fontFamily="@font/bm_hanna"
+                        android:hint="@string/calendar_title_max_length"
+                        android:maxLength="20"
+                        android:maxLines="1"
+                        android:text="test"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         app:layout_constraintBottom_toTopOf="@+id/date"
@@ -105,7 +107,8 @@
                         android:text="예상 지출 금액 : 2,000,000 원"
                         android:textColor="@color/white"
                         android:textSize="13sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginBottom="8dp"
+                        app:layout_constraintBottom_toTopOf="@+id/country_change"
                         app:layout_constraintStart_toStartOf="parent" />
 
                     <androidx.appcompat.widget.AppCompatButton
@@ -114,13 +117,55 @@
                         android:layout_height="22dp"
                         android:background="@drawable/white_round_rectangle"
                         android:drawableStart="@drawable/icon_save_size_fixed"
+                        android:onClick="@{() -> edit.save()}"
                         android:paddingHorizontal="15dp"
                         android:text="@string/save"
                         android:textColor="@color/black"
                         android:textSize="13sp"
-                        android:onClick="@{() -> edit.save()}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
+
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/country_change"
+                        android:layout_width="60dp"
+                        android:layout_height="22dp"
+                        android:background="@drawable/white_round_rectangle"
+                        android:paddingHorizontal="8dp"
+                        android:text="@string/destination"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        android:onClick="@{() -> edit.showEditDes()}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/start_date_change"
+                        android:layout_width="75dp"
+                        android:layout_height="22dp"
+                        android:background="@drawable/white_round_rectangle"
+                        android:text="@string/departure_date"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        android:layout_marginStart="8dp"
+                        android:paddingHorizontal="8dp"
+                        android:onClick="@{() -> edit.showEditDeparture()}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/country_change" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/end_date_change"
+                        android:layout_width="75dp"
+                        android:layout_height="22dp"
+                        android:background="@drawable/white_round_rectangle"
+                        android:paddingHorizontal="8dp"
+                        android:text="@string/entrance_date"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        android:layout_marginStart="8dp"
+                        android:onClick="@{() -> edit.showEditEntrance()}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/start_date_change" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -154,7 +199,7 @@
                         android:id="@+id/map"
                         android:name="com.google.android.gms.maps.SupportMapFragment"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"/>
 
                 </androidx.cardview.widget.CardView>
 
@@ -168,7 +213,6 @@
                     app:tabBackground="@drawable/tab_btn_black_round_rectangle"
                     app:tabGravity="start"
                     app:tabIndicator="@null"
-                    app:tabMaxWidth="60dp"
                     app:tabMode="scrollable"
                     app:tabRippleColor="@android:color/transparent"
                     app:tabTextAppearance="@style/TabItemTextSize"

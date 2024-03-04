@@ -33,6 +33,10 @@ public class ScheduleDetail {
     @Column(name = "budget")  // 예산
     private double budget ;
 
+    @Column(name = "schedule_type", nullable = true)  // 일정 유형
+    @Enumerated(EnumType.STRING)
+    private ScheduleType scheduleType ;
+
     @Column(name = "latitude")  // 위도
     private double latitude ;
 

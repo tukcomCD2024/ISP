@@ -8,6 +8,7 @@ import com.isp.backend.domain.schedule.dto.ScheduleDetailDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleListResponseDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleSaveRequestDTO;
 import com.isp.backend.domain.schedule.entity.Schedule;
+import com.isp.backend.domain.scheduleDetail.entity.ScheduleType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -49,7 +50,7 @@ public class ScheduleMapper {
 
     // 일정 세부 DTO를 엔티티로 변환
     private ScheduleDetail toScheduleDetailEntity(ScheduleDetailDTO scheduleDetailDTO, DailyScheduleDTO dailyScheduleDTO, Schedule schedule, int num) {
-        return ScheduleDetail.builder()
+        ScheduleDetail scheduleDetail = ScheduleDetail.builder()
                 .todo(scheduleDetailDTO.getTodo())
                 .place(scheduleDetailDTO.getPlace())
                 .budget(scheduleDetailDTO.getBudget())
@@ -59,6 +60,11 @@ public class ScheduleMapper {
                 .num(num) // 일정 순서 저장
                 .schedule(schedule)
                 .build();
+
+        // ScheduleDetailDTO에서 직접 ScheduleType을 가져와서 설정
+        scheduleDetail.setScheduleType(scheduleDetailDTO.getType());
+
+        return scheduleDetail;
     }
 
 
@@ -70,7 +76,10 @@ public class ScheduleMapper {
                 schedule.getStartDate(),
                 schedule.getEndDate(),
                 schedule.getTotalPrice(),
-                schedule.getCountry().getImageUrl()
+                schedule.getCountry().getImageUrl(),
+                schedule.getCountry().getCity(),
+                schedule.getCountry().getLatitude(),
+                schedule.getCountry().getLongitude()
         );
     }
 
@@ -107,6 +116,7 @@ public class ScheduleMapper {
         return new ScheduleDetailDTO(
                 scheduleDetail.getTodo(),
                 scheduleDetail.getPlace(),
+                scheduleDetail.getScheduleType(),
                 scheduleDetail.getBudget(),
                 scheduleDetail.getLatitude(),
                 scheduleDetail.getLongitude()

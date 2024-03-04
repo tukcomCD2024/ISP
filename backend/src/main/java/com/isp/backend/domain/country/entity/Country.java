@@ -28,6 +28,15 @@ public class Country {
     @Column(name = "imageUrl")
     private String imageUrl;
 
+    @Column(name = "airport_code")
+    private String airportCode;
+
+    @Column(name = "latitude")  // 위도
+    private double latitude ;
+
+    @Column(name = "longitude")  // 경도
+    private double longitude ;
+
     @OneToMany (mappedBy = "country")
     private List<Schedule> schedules;
 

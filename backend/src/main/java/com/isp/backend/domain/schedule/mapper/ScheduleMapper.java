@@ -2,12 +2,12 @@ package com.isp.backend.domain.schedule.mapper;
 
 import com.isp.backend.domain.country.entity.Country;
 import com.isp.backend.domain.member.entity.Member;
-import com.isp.backend.domain.scheduleDetail.entity.ScheduleDetail;
 import com.isp.backend.domain.schedule.dto.DailyScheduleDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleDetailDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleListResponseDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleSaveRequestDTO;
 import com.isp.backend.domain.schedule.entity.Schedule;
+import com.isp.backend.domain.scheduleDetail.entity.ScheduleDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +20,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ScheduleMapper {
 
-    /** 일정 저장 **/
+    /**
+     * 일정 저장
+     **/
     // 여행 일정 요청 DTO -> 엔티티로 변환
     public Schedule toSchedulesEntity(ScheduleSaveRequestDTO scheduleSaveRequestDTO, Member member, Country country) {
         // 여행 일정 엔티티 생성
@@ -62,7 +64,9 @@ public class ScheduleMapper {
     }
 
 
-    /** 일정 전체 조회 **/
+    /**
+     * 일정 전체 조회
+     **/
     public ScheduleListResponseDTO toScheduleListResponseDTO(Schedule schedule) {
         return new ScheduleListResponseDTO(
                 schedule.getId(),
@@ -75,7 +79,9 @@ public class ScheduleMapper {
     }
 
 
-    /** 일정 상세 조회 **/
+    /**
+     * 일정 상세 조회
+     **/
     // 엔티티 -> ScheduleSaveRequestDTO 로 변환
     public ScheduleSaveRequestDTO toScheduleResponseDTO(Schedule schedule) {
         // 일정 세부를 날짜별로 그룹화하고, 날짜를 기준으로 정렬
@@ -114,7 +120,9 @@ public class ScheduleMapper {
     }
 
 
-    /** 일정 수정 **/
+    /**
+     * 일정 수정
+     **/
     // ScheduleDetailDTO 목록을 ScheduleDetail 엔티티 목록으로 변환하는 메서드
     public List<ScheduleDetail> updateSchedulesEntity(ScheduleSaveRequestDTO scheduleSaveRequestDTO, Schedule schedule) {
         return scheduleSaveRequestDTO.getDailySchedules().stream()
@@ -125,8 +133,6 @@ public class ScheduleMapper {
                 })
                 .collect(Collectors.toList());
     }
-
-
 
 
 }

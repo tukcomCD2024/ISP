@@ -10,13 +10,13 @@ import lombok.*;
 @Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name="shared_schedule")
+@Table(name = "shared_schedule")
 public class SharedSchedule extends BaseEntity {
 
     @Id
-    @Column(name="id", unique = true, nullable = false)
+    @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id ;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id", nullable = false)

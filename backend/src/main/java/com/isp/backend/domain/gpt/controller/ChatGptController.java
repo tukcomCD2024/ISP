@@ -19,13 +19,8 @@ public class ChatGptController {
 
     @PostMapping("/question")
     public ResponseEntity<ChatGptMessage> sendQuestion(@RequestBody QuestionRequestDTO questionRequestDTO) {
-        String code = "";
         ChatGptResponseDTO chatGptResponseDTO = new ChatGptResponseDTO();
-        try {
-            chatGptResponseDTO = chatGptService.askQuestion(questionRequestDTO);
-        } catch (Exception e) {
-            code = e.getMessage();
-        }
+        chatGptResponseDTO = chatGptService.askQuestion(questionRequestDTO);
         return ResponseEntity.ok(chatGptResponseDTO.getChoices().get(0).getMessage());
     }
 }

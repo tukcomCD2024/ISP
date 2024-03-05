@@ -19,7 +19,7 @@ public class ErrorResponse {
         this.httpStatus = status;
     }
 
-    public ErrorResponse(ErrorCode code){
+    public ErrorResponse(ErrorCode code) {
         this.errorMessage = code.getMessage();
         this.httpStatus = code.getStatus();
         this.code = code.getCode();

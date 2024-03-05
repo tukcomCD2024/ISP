@@ -80,8 +80,8 @@ public class ScheduleController {
      */
     @PutMapping("/update/{scheduleId}")
     public ResponseEntity<ScheduleSaveRequestDTO> updateSchedule(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                               @PathVariable Long scheduleId,
-                                               @RequestBody ScheduleSaveRequestDTO requestDTO) {
+                                                                 @PathVariable Long scheduleId,
+                                                                 @RequestBody ScheduleSaveRequestDTO requestDTO) {
         ScheduleSaveRequestDTO updatedSchedule = scheduleService.updateSchedule(userDetails.getUsername(), scheduleId, requestDTO);
 //        return ResponseEntity.ok().build();  == public void로
         return ResponseEntity.ok(updatedSchedule);

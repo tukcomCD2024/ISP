@@ -124,7 +124,9 @@ public class TokenProvider implements InitializingBean {
 
             // 토큰 타입 확인
             String tokenType = (String) claims.get("token_type");
-            if (!"refreshToken".equals(tokenType)) { return false; }
+            if (!"refreshToken".equals(tokenType)) {
+                return false;
+            }
 
             // 만료 날짜 확인
             return !claims.getExpiration().before(new Date());

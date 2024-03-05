@@ -9,16 +9,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ScheduleListResponseDTO {
 
-    private Long id ;
+    private Long id;
 
-    private String scheduleName ;
+    private String scheduleName;
 
-    private String startDate ;
+    private String startDate;
 
-    private String endDate ;
+    private String endDate;
 
-    private double totalPrice ;
+    private double totalPrice;
 
-    private String imageUrl ;
+    private String imageUrl;
 
 }

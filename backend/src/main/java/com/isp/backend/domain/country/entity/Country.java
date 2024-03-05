@@ -2,7 +2,10 @@ package com.isp.backend.domain.country.entity;
 
 import com.isp.backend.domain.schedule.entity.Schedule;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -11,7 +14,7 @@ import java.util.List;
 @Entity
 @Builder
 @NoArgsConstructor
-@Table(name="country")
+@Table(name = "country")
 public class Country {
 
     @Id
@@ -28,7 +31,7 @@ public class Country {
     @Column(name = "imageUrl")
     private String imageUrl;
 
-    @OneToMany (mappedBy = "country")
+    @OneToMany(mappedBy = "country")
     private List<Schedule> schedules;
 
 }

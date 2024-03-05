@@ -1,22 +1,24 @@
 package com.isp.backend.domain.member.dto;
 
 import com.isp.backend.domain.member.entity.Member;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberDetailResponse {
 
-    private final String uid ;
+    private final String uid;
 
-    private final String name ;
+    private final String name;
 
-    private final String birth ;
+    private final String birth;
 
-    private final String phoneNumber ;
+    private final String phoneNumber;
 
 
-    public static MemberDetailResponse fromEntity(Member member){
+    public static MemberDetailResponse fromEntity(Member member) {
         return new MemberDetailResponse(
                 member.getUid(),
                 member.getName(),

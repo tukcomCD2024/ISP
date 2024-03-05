@@ -27,10 +27,4 @@ public class ScheduleListResponseDTO {
 
     private double longitude ;
 
-    private String country;
-
-    private double latitude ;
-
-    private double longitude ;
-
 }

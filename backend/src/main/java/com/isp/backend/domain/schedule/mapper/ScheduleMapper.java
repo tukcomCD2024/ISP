@@ -7,6 +7,7 @@ import com.isp.backend.domain.schedule.dto.ScheduleDetailDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleListResponseDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleSaveRequestDTO;
 import com.isp.backend.domain.schedule.entity.Schedule;
+import com.isp.backend.domain.scheduleDetail.entity.ScheduleDetail;
 import com.isp.backend.domain.scheduleDetail.entity.ScheduleType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

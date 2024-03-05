@@ -21,4 +21,16 @@ public class ScheduleListResponseDTO {
 
     private String imageUrl;
 
+    private String country;
+
+    private double latitude ;
+
+    private double longitude ;
+
+    private String country;
+
+    private double latitude ;
+
+    private double longitude ;
+
 }

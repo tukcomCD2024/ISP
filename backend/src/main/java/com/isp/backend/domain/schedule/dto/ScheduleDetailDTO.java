@@ -1,6 +1,7 @@
 package com.isp.backend.domain.schedule.dto;
 
 
+import com.isp.backend.domain.scheduleDetail.entity.ScheduleType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,8 @@ public class ScheduleDetailDTO {
     private String todo;        // 할 일
 
     private String place;       // 장소
+
+    private ScheduleType type;        // 일정 유형
 
     private double budget;      // 예산
 

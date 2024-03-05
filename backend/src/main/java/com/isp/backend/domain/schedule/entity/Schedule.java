@@ -21,11 +21,10 @@ import java.util.List;
 public class Schedule extends BaseEntity {
 
     @Id
-    @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "schedule_name", nullable = false)
+    @Column(nullable = false)
     private String scheduleName;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,20 +40,16 @@ public class Schedule extends BaseEntity {
     private List<ScheduleDetail> scheduleDetails = new ArrayList<>();
 
     // FK 연결 필요
-    @Column(name = "booking_id")
     private String bookingId;
 
-    @Column(name = "start_date")
     private String startDate;
 
-    @Column(name = "end_date")
     private String endDate;
 
-    @Column(name = "total_price")
     private double totalPrice;
 
     @Builder.Default
-    @Column(name = "activated", nullable = false)
+    @Column(nullable = false)
     private boolean activated = true;
 
 //    // setScheduleDetails 메서드 추가

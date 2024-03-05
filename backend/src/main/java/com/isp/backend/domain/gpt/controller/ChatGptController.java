@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
-@RequestMapping("api/chat-gpt")
+@RequestMapping("/chat-gpt")
 @RestController
 public class ChatGptController {
     private final ChatGptService chatGptService;

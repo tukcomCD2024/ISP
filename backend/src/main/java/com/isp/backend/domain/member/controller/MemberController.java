@@ -13,7 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/members")
+@RequestMapping("/members")
 @RequiredArgsConstructor
 public class MemberController {
 
@@ -24,9 +24,10 @@ public class MemberController {
      * 로그인 API
      */
     @PostMapping("/login")
-    public ResponseEntity<String> memberLogin(@RequestBody GoogleLoginRequest request) {
+    public String memberLogin(@RequestBody GoogleLoginRequest request) {
         return memberService.memberLogin(request);
     }
+
 
 
     /**

@@ -24,6 +24,9 @@ public class ScheduleDetail {
     private String place;
 
     private int num;
+    
+    @Enumerated(EnumType.STRING)
+    private ScheduleType scheduleType ;
 
     private double budget;
 

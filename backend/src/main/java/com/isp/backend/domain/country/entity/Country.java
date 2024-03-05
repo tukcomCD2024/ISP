@@ -18,7 +18,7 @@ import java.util.List;
 public class Country {
 
     @Id
-    @Column(name = "id", unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nation;
@@ -27,7 +27,13 @@ public class Country {
 
     private String imageUrl;
 
-    @OneToMany(mappedBy = "country")
+    private String airportCode;
+
+    private double latitude ;  // 위도
+
+    private double longitude ;  // 경도
+
+    @OneToMany (mappedBy = "country")
     private List<Schedule> schedules;
 
 }

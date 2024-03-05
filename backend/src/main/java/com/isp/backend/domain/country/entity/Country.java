@@ -19,16 +19,12 @@ public class Country {
 
     @Id
     @Column(name = "id", unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nation")
     private String nation;
 
-    @Column(name = "city")
     private String city;
 
-    @Column(name = "imageUrl")
     private String imageUrl;
 
     @OneToMany(mappedBy = "country")

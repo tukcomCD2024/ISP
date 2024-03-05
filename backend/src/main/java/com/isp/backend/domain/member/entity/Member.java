@@ -10,28 +10,28 @@ import lombok.*;
 @Builder
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name="member")
+@Table(name = "member")
 public class Member extends BaseEntity {
 
     @Id
-    @Column(name="id", unique = true, nullable = false)
+    @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id ;
+    private Long id;
 
     @Column(name = "uid", nullable = false)
-    private String uid ;
+    private String uid;
 
     @Column(name = "name")
-    private String name ;
+    private String name;
 
     @Column(name = "birth")
-    private String birth ;
+    private String birth;
 
     @Column(name = "phone_number")
-    private String phoneNumber ;
+    private String phoneNumber;
 
     @Column(name = "login_type")
-    private String loginType ;
+    private String loginType;
 
     @Builder.Default
     @Column(name = "activated", nullable = false)

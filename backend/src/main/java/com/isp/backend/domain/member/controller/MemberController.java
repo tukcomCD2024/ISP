@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
-    
+
 
     /**
-    *   로그인 API
+     * 로그인 API
      */
     @PostMapping("/login")
     public ResponseEntity<String> memberLogin(@RequestBody GoogleLoginRequest request) {
@@ -30,40 +30,34 @@ public class MemberController {
 
 
     /**
-     *   회원가입 - 추가 정보 API
+     * 회원가입 - 추가 정보 API
      */
     @PutMapping("/signup")
-    public ResponseEntity<Void> signUp (@RequestBody SignUpRequest request,
-                                        @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public ResponseEntity<Void> signUp(@RequestBody SignUpRequest request,
+                                       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         String memberUid = customUserDetails.getUsername();
         memberService.signUp(request, memberUid);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 
-
     /**
-     *  토큰 재발행
+     * 토큰 재발행
      */
     @PostMapping("/refresh")
-    public ResponseEntity<String> authRecreate (@RequestBody AuthRecreateRequest authRecreateRequest) {
+    public ResponseEntity<String> authRecreate(@RequestBody AuthRecreateRequest authRecreateRequest) {
         return memberService.authRecreate(authRecreateRequest);
     }
 
 
     /**
-     *  멤버 정보 조회
+     * 멤버 정보 조회
      */
     @GetMapping("/info")
-    public ResponseEntity<MemberDetailResponse> getMemberInfo (@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public ResponseEntity<MemberDetailResponse> getMemberInfo(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
         return ResponseEntity.ok(memberService.getMemberInfo(customUserDetails.getUsername()));
     }
-
-
-
-
-
 
 
 }

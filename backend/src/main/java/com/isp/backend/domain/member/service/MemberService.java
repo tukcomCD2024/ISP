@@ -29,7 +29,7 @@ public class MemberService {
     private final TokenProvider tokenProvider;
 
     /**
-     *   로그인 메서드 - jwt 토큰 생성후 응답
+     * 로그인 메서드 - jwt 토큰 생성후 응답
      */
     @Transactional
     public ResponseEntity<String> memberLogin(GoogleLoginRequest request) {
@@ -64,14 +64,13 @@ public class MemberService {
                     .header("Access-Token", accessToken)
                     .header("Refresh-Token", refreshToken)
                     .body("신규 회원 로그인");
-            }
+        }
 
     }
 
 
-
     /**
-     *  회원가입 - 신규 유저의 경우 추가 정보 저장
+     * 회원가입 - 신규 유저의 경우 추가 정보 저장
      */
     @Transactional
     public void signUp(SignUpRequest signUpRequest, String memberUid) {
@@ -83,12 +82,11 @@ public class MemberService {
     }
 
 
-
     /**
-     *  토큰 재발행
+     * 토큰 재발행
      */
     @Transactional
-    public ResponseEntity<String> authRecreate (AuthRecreateRequest authRecreateRequest) {
+    public ResponseEntity<String> authRecreate(AuthRecreateRequest authRecreateRequest) {
 
         if (!tokenProvider.validateRefreshToken(authRecreateRequest.getRefreshToken())) {
             throw new AuthenticationFailedException();
@@ -108,17 +106,16 @@ public class MemberService {
 
 
     /**
-     *  멤버 정보 조회
+     * 멤버 정보 조회
      */
     @Transactional(readOnly = true)
-    public MemberDetailResponse getMemberInfo (String uid) {
+    public MemberDetailResponse getMemberInfo(String uid) {
 
         Member member = memberRepository.findByUid(uid)
                 .orElseThrow(MemberNotFoundException::new);
 
-        return(MemberDetailResponse.fromEntity(member));
+        return (MemberDetailResponse.fromEntity(member));
     }
-
 
 
 }

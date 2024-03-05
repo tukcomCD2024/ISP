@@ -1,12 +1,14 @@
 package com.isp.backend.global.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.*;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.isp.backend.global.exception.schedule.ImageNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -16,10 +18,9 @@ import java.util.UUID;
 @Service
 public class S3Service {
 
+    private final AmazonS3 amazonS3;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-
-    private final AmazonS3 amazonS3;
 
     // 이미지 파일 업로드
     public String uploadImage(BucketDir bucketDir, MultipartFile multipartFile) throws IOException {
@@ -52,7 +53,9 @@ public class S3Service {
     private String getS3FileNameFromUrl(String imageUrl) {
         final String delimiter = ".com/";
         int index = imageUrl.indexOf(delimiter);
-        if (index == -1) { throw new ImageNotFoundException(); }
+        if (index == -1) {
+            throw new ImageNotFoundException();
+        }
 
         String bucketAndKey = imageUrl.substring(index + delimiter.length());
         return URLDecoder.decode(bucketAndKey, StandardCharsets.UTF_8);

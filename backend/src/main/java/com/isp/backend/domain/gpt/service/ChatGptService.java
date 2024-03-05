@@ -35,7 +35,7 @@ public class ChatGptService {
         return new HttpEntity<>(chatGptRequestDTO, httpHeaders);
     }
 
-    public ChatGptResponseDTO getResponse(HttpEntity<ChatGptRequestDTO> chatGptRequestHttpEntity){
+    public ChatGptResponseDTO getResponse(HttpEntity<ChatGptRequestDTO> chatGptRequestHttpEntity) {
 
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(60000);
@@ -49,7 +49,8 @@ public class ChatGptService {
 
         return responseEntity.getBody();
     }
-    public ChatGptResponseDTO askQuestion(QuestionRequestDTO questionRequestDTO){
+
+    public ChatGptResponseDTO askQuestion(QuestionRequestDTO questionRequestDTO) {
         List<ChatGptMessage> messages = new ArrayList<>();
         messages.add(ChatGptMessage.builder()
                 .role(ChatGptConfig.ROLE)

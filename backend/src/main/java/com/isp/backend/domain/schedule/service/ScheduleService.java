@@ -1,9 +1,5 @@
 package com.isp.backend.domain.schedule.service;
 
-import com.isp.backend.domain.schedule.dto.ScheduleListResponseDTO;
-import com.isp.backend.global.exception.schedule.NotYourScheduleException;
-import com.isp.backend.global.exception.schedule.ScheduleNotFoundException;
-import lombok.extern.slf4j.Slf4j;
 import com.isp.backend.domain.country.entity.Country;
 import com.isp.backend.domain.country.repository.CountryRepository;
 import com.isp.backend.domain.member.entity.Member;
@@ -19,6 +15,8 @@ import com.isp.backend.domain.scheduleDetail.entity.ScheduleDetail;
 import com.isp.backend.domain.scheduleDetail.repository.ScheduleDetailRepository;
 import com.isp.backend.global.exception.member.MemberNotFoundException;
 import com.isp.backend.global.exception.schedule.CountryNotFoundException;
+import com.isp.backend.global.exception.schedule.NotYourScheduleException;
+import com.isp.backend.global.exception.schedule.ScheduleNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,9 +31,9 @@ import java.util.stream.Collectors;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
-    private final ScheduleDetailRepository scheduleDetailRepository ;
+    private final ScheduleDetailRepository scheduleDetailRepository;
     private final CountryRepository countryRepository;
-    private final MemberRepository memberRepository ;
+    private final MemberRepository memberRepository;
     private final ScheduleMapper scheduleMapper;
 
 
@@ -61,7 +59,7 @@ public class ScheduleService {
 
         // 여행할 국가 확인
         Country findCountry = countryRepository.findIdByCity(scheduleSaveRequestDTO.getCountry());
-        if(findCountry == null) {
+        if (findCountry == null) {
             throw new CountryNotFoundException();
         }
 
@@ -73,7 +71,6 @@ public class ScheduleService {
 
         scheduleRepository.save(schedule);
     }
-
 
 
     /**
@@ -94,7 +91,6 @@ public class ScheduleService {
     }
 
 
-
     /**
      * 여행 일정 상세 조회 API
      */
@@ -110,7 +106,6 @@ public class ScheduleService {
 
         return scheduleMapper.toScheduleResponseDTO(findSchedule);
     }
-
 
 
     /**
@@ -140,7 +135,6 @@ public class ScheduleService {
     }
 
 
-
     /**
      * 여행 일정 수정 API
      */
@@ -161,7 +155,7 @@ public class ScheduleService {
 
         // 여행할 국가 확인
         Country findCountry = countryRepository.findIdByCity(updateRequestDTO.getCountry());
-        if(findCountry == null) {
+        if (findCountry == null) {
             throw new CountryNotFoundException();
         }
 
@@ -189,7 +183,6 @@ public class ScheduleService {
     }
 
 
-
     /*
      * 여행 일정 총 경비 계산
      */
@@ -199,7 +192,6 @@ public class ScheduleService {
                 .sum();
         schedule.setTotalPrice(totalPrice);
     }
-
 
 
 }

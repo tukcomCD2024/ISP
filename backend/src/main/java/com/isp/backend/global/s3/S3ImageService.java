@@ -1,4 +1,5 @@
 package com.isp.backend.global.s3;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,6 @@ public class S3ImageService {
             return oriImage;
         }
         s3Service.deleteImage(oriImage);
-        return s3Service.uploadImage(bucketDir,newImage);
+        return s3Service.uploadImage(bucketDir, newImage);
     }
 }

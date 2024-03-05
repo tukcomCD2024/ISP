@@ -32,7 +32,7 @@ public class BaseEntity {
     }
 
     @PreUpdate
-    public void onPreUpdate(){
+    public void onPreUpdate() {
         this.updatedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
     }
 }

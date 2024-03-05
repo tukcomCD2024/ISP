@@ -9,22 +9,22 @@ import lombok.*;
 @Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name="image")
+@Table(name = "image")
 public class Image extends BaseEntity {
 
     @Id
-    @Column(name="id", unique = true, nullable = false)
+    @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id ;
+    private Long id;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "schedules_id", nullable = false)
 //    private Schedules schedules;
 
     @Column(name = "image_name")
-    private String imageName ;
+    private String imageName;
 
     @Column(name = "image_url")
-    private String imageUrl ;
+    private String imageUrl;
 
 }

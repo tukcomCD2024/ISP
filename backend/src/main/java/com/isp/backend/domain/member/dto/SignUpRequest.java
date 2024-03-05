@@ -1,18 +1,20 @@
 package com.isp.backend.domain.member.dto;
 
 import com.isp.backend.domain.member.entity.Member;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 public class SignUpRequest {
 
-    private String name ;
+    private String name;
 
-    private String birth ;
+    private String birth;
 
-    private String phoneNumber ;
+    private String phoneNumber;
 
 
     public void toEntity(Member member) {

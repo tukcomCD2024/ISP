@@ -17,16 +17,16 @@ import java.util.List;
 @Builder
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name="schedule")
+@Table(name = "schedule")
 public class Schedule extends BaseEntity {
 
     @Id
-    @Column(name="id", unique = true, nullable = false)
+    @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id ;
+    private Long id;
 
     @Column(name = "schedule_name", nullable = false)
-    private String scheduleName ;
+    private String scheduleName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "country_id")
@@ -42,16 +42,16 @@ public class Schedule extends BaseEntity {
 
     // FK 연결 필요
     @Column(name = "booking_id")
-    private String bookingId ;
+    private String bookingId;
 
     @Column(name = "start_date")
-    private String startDate ;
+    private String startDate;
 
     @Column(name = "end_date")
-    private String endDate ;
+    private String endDate;
 
     @Column(name = "total_price")
-    private double totalPrice ;
+    private double totalPrice;
 
     @Builder.Default
     @Column(name = "activated", nullable = false)

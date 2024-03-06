@@ -1,22 +1,25 @@
 package com.project.how.data_class.dto
 
+import com.google.gson.annotations.SerializedName
+
 data class ScheduleDetail (
-    val scheduleName: String,
-    val country : String,
-    val startDate: String,
-    val endDate: String,
-    val dailySchedules: List<DailySchedule>
+    @SerializedName("scheduleName") val scheduleName: String,
+    @SerializedName("country") val country : String,
+    @SerializedName("startDate") val startDate: String,
+    @SerializedName("endDate") val endDate: String,
+    @SerializedName("dailySchedules") val dailySchedules: List<DailySchedule>
 )
 
 data class DailySchedule (
-    val date: String,
-    val schedules: List<Schedule>
+    @SerializedName("date") val date: String,
+    @SerializedName("schedules") val schedules: List<Schedule>
 )
 
 data class Schedule (
-    val todo: String,
-    val place: String,
-    val budget: Long,
-    val latitude: Double,
-    val longitude: Double
+    @SerializedName("todo") val todo: String,
+    @SerializedName("place") val place: String,
+    @SerializedName("type") val type : String,
+    @SerializedName("budget") val budget: Long,
+    @SerializedName("latitude") val latitude: Double,
+    @SerializedName("longitude") val longitude: Double
 )

@@ -42,7 +42,6 @@ import com.project.how.view.dialog.bottom_sheet_dialog.EditScheduleBottomSheetDi
 import com.project.how.view.dp.DpPxChanger
 import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.Serializable
 import java.text.NumberFormat
@@ -52,7 +51,7 @@ import java.util.Locale
 
 
 class CalendarEditActivity
-    : AppCompatActivity(), OnMapReadyCallback, DaysScheduleAdapter.OnButtonClickListener, OnScheduleListener, OnDesListener, OnDateTimeListener {
+    : AppCompatActivity(), OnMapReadyCallback, DaysScheduleAdapter.OnDaysButtonClickListener, OnScheduleListener, OnDesListener, OnDateTimeListener {
     private lateinit var binding : ActivityCalendarEditBinding
     private val viewModel : ScheduleViewModel by viewModels()
     private lateinit var data : Schedule

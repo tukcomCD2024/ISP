@@ -18,6 +18,7 @@ import com.project.how.adapter.recyclerview.EventViewPagerAdapter
 import com.project.how.data_class.EventViewPager
 import com.project.how.databinding.FragmentCalendarBinding
 import com.project.how.view.activity.ai.AddAICalendarActivity
+import com.project.how.view.activity.calendar.CalendarListActivity
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -97,5 +98,9 @@ class CalendarFragment : Fragment() {
 
     fun moveAddAICalendar(){
         startActivity(Intent(activity, AddAICalendarActivity::class.java))
+    }
+
+    fun moveCalendarList(){
+        startActivity(Intent(activity, CalendarListActivity::class.java))
     }
 }

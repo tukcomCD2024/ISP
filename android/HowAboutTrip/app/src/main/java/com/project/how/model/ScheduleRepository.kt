@@ -7,6 +7,7 @@ import com.project.how.data_class.AiDaysSchedule
 import com.project.how.data_class.AiSchedule
 import com.project.how.data_class.DaysSchedule
 import com.project.how.data_class.Schedule
+import com.project.how.data_class.dto.GetScheduleListResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
@@ -24,10 +25,13 @@ class ScheduleRepository {
     }.time.time
     private val _nearScheduleDayLiveData : MutableLiveData<Long> = MutableLiveData()
     private val _scheduleLiveData : MutableLiveData<Schedule> = MutableLiveData()
+    private val _scheduleListLiveData : MutableLiveData<GetScheduleListResponse> = MutableLiveData()
     val nearScheduleDayLiveData : LiveData<Long>
         get() = _nearScheduleDayLiveData
     val scheduleLiveData : LiveData<Schedule>
         get() = _scheduleLiveData
+    val scheduleListLiveData : LiveData<GetScheduleListResponse>
+        get() = _scheduleListLiveData
 
 
     fun getDday() : Flow<Long> = flow {
@@ -117,6 +121,10 @@ class ScheduleRepository {
             Log.d("setDaysTab", "updateDailySchedule schedule.dailySchedule.lastIndex > diff\n after size : ${schedule.dailySchedule.size}")
             getSchedule(schedule)
         }
+    }
+
+    fun getScheduleList(scheduleList : GetScheduleListResponse){
+        _scheduleListLiveData.postValue(scheduleList)
     }
 
     companion object{

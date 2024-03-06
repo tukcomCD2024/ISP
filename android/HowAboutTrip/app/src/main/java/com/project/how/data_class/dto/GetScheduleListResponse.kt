@@ -1,12 +1,17 @@
 package com.project.how.data_class.dto
 
+import com.google.gson.annotations.SerializedName
+
 typealias GetScheduleListResponse = List<GetScheduleListResponseElement>
 
 data class GetScheduleListResponseElement (
-    val id: Long,
-    val scheduleName: String,
-    val startDate: String,
-    val endDate: String,
-    val totalPrice: Long,
-    val imageURL: String
+    @SerializedName("id") val id: Long,
+    @SerializedName("scheduleName") val scheduleName: String,
+    @SerializedName("startDate") val startDate: String,
+    @SerializedName("endDate") val endDate: String,
+    @SerializedName("totalPrice") val totalPrice: Long,
+    @SerializedName("imageUrl") val imageUrl: String,
+    @SerializedName("country") val country : String,
+    @SerializedName("latitude") val latitude : Double,
+    @SerializedName("longitude") val longitude : Double
 )

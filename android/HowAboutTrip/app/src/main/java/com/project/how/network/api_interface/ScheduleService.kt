@@ -33,18 +33,19 @@ interface ScheduleService {
     @GET("schedules/detail/{scheduleId}")
     fun getScheduleDetail(
         @Header("Authorization") accessToken : String,
-        @Path("scheduleId", encoded = true) scheduleId : Int
+        @Path("scheduleId", encoded = true) scheduleId : Long
     ) : Call<ScheduleDetail>
 
     @DELETE("schedules/{scheduleId}")
     fun deleteSchedule(
         @Header("Authorization") accessToken : String,
-        @Path("scheduleId", encoded = true) scheduleId : Int
+        @Path("scheduleId", encoded = true) scheduleId : Long
     ) : Call<String>
 
     @PUT("schedules/update/{scheduleId}")
     fun updateSchedule(
         @Header("Authorization") accessToken : String,
+        @Path("scheduleId", encoded = true) scheduleId: Long,
         @Body updateScheduleRequest: ScheduleDetail
     ) : Call<ScheduleDetail>
 }

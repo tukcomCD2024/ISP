@@ -17,7 +17,7 @@ import java.util.Locale
 class DaysScheduleAdapter (
     data: MutableList<DaysSchedule>,
     private val context: Context,
-    private val onButtonClickListener: OnButtonClickListener
+    private val onButtonClickListener: OnDaysButtonClickListener
 )
     : RecyclerView.Adapter<DaysScheduleAdapter.ViewHolder>(), ItemMoveListener{
     private var dailySchedule = data
@@ -128,7 +128,7 @@ class DaysScheduleAdapter (
         onItemDragListener?.onDropActivity(initList, dailySchedule)
     }
 
-    interface OnButtonClickListener{
+    interface OnDaysButtonClickListener{
         fun onEditButtonClickListener(data : DaysSchedule, position: Int)
         fun onDeleteButtonClickListener(position : Int)
     }

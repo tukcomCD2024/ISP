@@ -1,10 +1,12 @@
 package com.project.how.view.activity.calendar
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -14,9 +16,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.tabs.TabLayout
 import com.project.how.R
 import com.project.how.adapter.recyclerview.DaysScheduleAdapter
@@ -26,10 +30,14 @@ import com.project.how.data_class.AiSchedule
 import com.project.how.data_class.DaysSchedule
 import com.project.how.data_class.Schedule
 import com.project.how.databinding.ActivityCalendarEditBinding
+import com.project.how.interface_af.OnDateTimeListener
+import com.project.how.interface_af.OnDesListener
 import com.project.how.interface_af.OnScheduleListener
 import com.project.how.interface_af.interface_ada.ItemStartDragListener
 import com.project.how.view.dialog.AiScheduleDialog
 import com.project.how.view.dialog.ConfirmDialog
+import com.project.how.view.dialog.bottom_sheet_dialog.CalendarBottomSheetDialog
+import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.EditScheduleBottomSheetDialog
 import com.project.how.view.dp.DpPxChanger
 import com.project.how.view_model.MemberViewModel
@@ -42,7 +50,8 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 
-class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback, DaysScheduleAdapter.OnButtonClickListener, OnScheduleListener {
+class CalendarEditActivity
+    : AppCompatActivity(), OnMapReadyCallback, DaysScheduleAdapter.OnDaysButtonClickListener, OnScheduleListener, OnDesListener, OnDateTimeListener {
     private lateinit var binding : ActivityCalendarEditBinding
     private val viewModel : ScheduleViewModel by viewModels()
     private lateinit var data : Schedule
@@ -52,6 +61,7 @@ class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback, DaysSchedu
     private var selectedDays = 0
     private var mapInitCheck = false
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_calendar_edit)
@@ -72,8 +82,12 @@ class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback, DaysSchedu
             binding.date.text = "${data.startDate} - ${data.endDate}"
             val formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(data.cost)
             binding.budget.text = getString(R.string.calendar_budget, formattedNumber)
+            if (selectedDays > data.dailySchedule.lastIndex){
+                selectedDays = data.dailySchedule.lastIndex
+            }
             adapter = DaysScheduleAdapter(data.dailySchedule[selectedDays], this@CalendarEditActivity, this@CalendarEditActivity)
             binding.daySchedules.adapter = adapter
+            binding.daysTab.removeAllTabs()
 
             setDaysTab()
             setDaysTabItemMargin()
@@ -82,22 +96,46 @@ class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback, DaysSchedu
             val mItemTouchHelper = ItemTouchHelper(mCallback)
             mItemTouchHelper.attachToRecyclerView(binding.daySchedules)
 
+            val googleMapOptions = GoogleMapOptions()
+                .zoomControlsEnabled(true)
+
+            supportMapFragment = SupportMapFragment.newInstance(googleMapOptions);
+
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.map_card, supportMapFragment)
+                .commit()
+            supportMapFragment.getMapAsync(this@CalendarEditActivity)
+            supportMapFragment.view?.setOnTouchListener { v, event ->
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        v.parent.requestDisallowInterceptTouchEvent(false)
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        v.parent.requestDisallowInterceptTouchEvent(true)
+                    }
+                }
+                false
+            }
+
+            binding.scrollView.setOnTouchListener { v, event ->
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        v.parent.requestDisallowInterceptTouchEvent(false)
+                    }
+                }
+                false
+            }
+
             adapter.itemDragListener(object : ItemStartDragListener {
                 override fun onDropActivity(
                     initList: MutableList<DaysSchedule>,
                     changeList: MutableList<DaysSchedule>
                 ) {
                     adapter.notifyDataSetChanged()
+                    supportMapFragment.getMapAsync(this@CalendarEditActivity)
                 }
 
             })
-
-            supportMapFragment = SupportMapFragment.newInstance();
-
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.map_card, supportMapFragment)
-                .commit();
-            supportMapFragment.getMapAsync(this@CalendarEditActivity)
         }
 
         binding.daysTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -132,6 +170,7 @@ class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback, DaysSchedu
     override fun onMapReady(map: GoogleMap) {
         map.clear()
         var first = true
+        var polylineOptions = PolylineOptions()
         data.dailySchedule[selectedDays].forEachIndexed {position, data->
             if(data.latitude != null && data.longitude != null){
                 val location = LatLng(data.latitude, data.longitude)
@@ -140,13 +179,16 @@ class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback, DaysSchedu
                     map.moveCamera(camera)
                     first = false
                 }
+                polylineOptions.add(location)
                 val markerOptions = EditScheduleBottomSheetDialog.makeScheduleMarkerOptions(this, data.type, position, location, data.places)
                 map.addMarker(markerOptions)
             }
+            map.addPolyline(polylineOptions)
         }
     }
 
     private fun setDaysTab(){
+        Log.d("setDaysTab", "data.dailySchedule.size : ${data.dailySchedule.size}")
         for(i in 1..data.dailySchedule.size){
             val tab = binding.daysTab.newTab().setText("${i}일차")
             binding.daysTab.addTab(tab)
@@ -216,6 +258,7 @@ class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback, DaysSchedu
 
     fun save(){
         lifecycleScope.launch {
+            data.title = binding.title.text.toString()
             data.dailySchedule[selectedDays] = adapter.getData()
             viewModel.getSchedule(data)
 
@@ -236,7 +279,23 @@ class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback, DaysSchedu
         }
     }
 
+    fun showEditDes(){
+        val des = DesBottomSheetDialog(this)
+        des.show(supportFragmentManager, "DesBottomSheetDialog")
+    }
+
+    fun showEditDeparture(){
+        val calendar = CalendarBottomSheetDialog(CalendarBottomSheetDialog.DEPARTURE, this)
+        calendar.show(supportFragmentManager, "CalendarBottomSheetDialog")
+    }
+
+    fun showEditEntrance(){
+        val calendar = CalendarBottomSheetDialog(CalendarBottomSheetDialog.ENTRANCE, this)
+        calendar.show(supportFragmentManager, "CalendarBottomSheetDialog")
+    }
+
     private suspend fun saveNewSchedule(){
+
         viewModel.saveSchedule(this, MemberViewModel.tokensLiveData.value!!.accessToken, data).collect{check ->
             when(check){
                 ScheduleViewModel.NULL_LOCATIONS ->{
@@ -274,6 +333,12 @@ class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback, DaysSchedu
         finish()
     }
 
+    private fun setBudgetText(totalCost : Long){
+        data.cost = totalCost
+        val formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(data.cost)
+        binding.budget.text = getString(R.string.calendar_budget, formattedNumber)
+    }
+
     companion object{
         const val FAILURE = -1
         const val AI_SCHEDULE = 0
@@ -287,10 +352,58 @@ class CalendarEditActivity : AppCompatActivity(), OnMapReadyCallback, DaysSchedu
         editScheduleBottomSheet.show(supportFragmentManager, "EditScheduleBottomSheetDialog")
     }
 
+    override fun onDeleteButtonClickListener(position: Int) {
+        data.dailySchedule[selectedDays]= adapter.getData()
+        lifecycleScope.launch {
+            viewModel.getTotalCost(data).collect{
+                setBudgetText(it)
+            }
+        }
+    }
+
     override fun onDaysScheduleListener(schedule: DaysSchedule, position: Int) {
         data.dailySchedule[selectedDays][position] = schedule
         adapter.edit(schedule, position)
+        lifecycleScope.launch {
+            viewModel.getTotalCost(data).collect {
+                setBudgetText(it)
+            }
+        }
         supportMapFragment.getMapAsync(this)
+    }
+
+    override fun onDesListener(des: String) {
+        data.country = des
+    }
+
+    override fun onSaveDate(date: String, type: Int) {
+        when(type){
+            CalendarBottomSheetDialog.BASIC ->{
+
+            }
+            CalendarBottomSheetDialog.DEPARTURE->{
+                if(data.endDate >= date){
+                    data.startDate = date
+                    binding.date.text = "${data.startDate} - ${data.endDate}"
+                    viewModel.updateDailySchedule(data, data.startDate, data.endDate)
+                }else{
+                    Toast.makeText(this, "출국 날짜($date)보다 입국 날짜(${data.endDate})가 더 빠릅니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            CalendarBottomSheetDialog.ENTRANCE->{
+                if (data.startDate <= date){
+                    data.endDate = date
+                    binding.date.text = "${data.startDate} - ${data.endDate}"
+                    viewModel.updateDailySchedule(data, data.startDate, data.endDate)
+                }else{
+                    Toast.makeText(this, "입국 날짜($date)보다 출국 날짜(${data.startDate})가 더 늦습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    override fun onSaveDateTime(dateTime: String, type: Int) {
+
     }
 
 }

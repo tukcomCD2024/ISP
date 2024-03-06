@@ -137,7 +137,7 @@ class AiScheduleDialog(private val data : AiSchedule, private val onAddListener:
 
     companion object{
         const val TAB_ITEM_MARGIN = 8
-        const val TAB_ITEM_WIDTH = 60
+        const val TAB_ITEM_WIDTH = 70
         const val TAB_ITEM_HEIGHT = 22
     }
 }

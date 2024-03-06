@@ -134,7 +134,7 @@
     <string name="get_data_failed">일정 정보를 가져오는 과정에서 오류가 발생했습니다.\n다시 한 번 더 시도해주세요.</string>
     <string name="calendar_budget">예상 지출 금액 : %1$s 원</string>
     <string name="calendar_title_max_length">최대 20자</string>
-    <string name="budget">예산 : %1$s</string>
+    <string name="budget">예산 : %1$s 원</string>
     <string name="some_schedule_lng_lat">특정 일정의 주소</string>
     <string name="schedule_type">일정 유형</string>
     <string name="airplane">항공</string>
@@ -165,5 +165,17 @@
     <string name="bali">발리</string>
     <string name="borikai">보리카이</string>
     <string name="server_network_error">서버와 통신하는 도중에 오류가 발생했습니다.\n다시 한 번 더 시도하신 다음에 문제가 지속되면 문의해주세요.</string>
+    <string name="checklist">준비</string>
+    <string name="share">공유</string>
+    <string name="delete">삭제</string>
+    <string name="no">아니요</string>
+    <string name="yes">네</string>
+    <string name="schedule_delete_function_info">해당 여행 일정을 삭제하시겠습니까?</string>
+    <string name="address_check_function_info">위의 주소로 위치를 설정하시겠습니까?</string>
+    <string name="keep_check_function_info">계속 진행하시겠습니까?</string>
+    <string name="unknown_function_info">알 수 없는 작업이 실행되었습니다.\n다시 한 번 더 시도하시고 오류가 지속될 경우 문의해주세요.</string>
+    <string name="airplane_string">AIRPLANE</string>
+    <string name="hotel_string">HOTEL</string>
+    <string name="place_string">PLACE</string>
 
 </resources>

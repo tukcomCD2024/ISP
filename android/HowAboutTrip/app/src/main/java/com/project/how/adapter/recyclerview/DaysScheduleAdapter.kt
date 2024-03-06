@@ -17,7 +17,7 @@ import java.util.Locale
 class DaysScheduleAdapter (
     data: MutableList<DaysSchedule>,
     private val context: Context,
-    private val onEditButtonClickListener: OnButtonClickListener
+    private val onButtonClickListener: OnDaysButtonClickListener
 )
     : RecyclerView.Adapter<DaysScheduleAdapter.ViewHolder>(), ItemMoveListener{
     private var dailySchedule = data
@@ -30,7 +30,7 @@ class DaysScheduleAdapter (
             val formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(data.cost)
             binding.budget.text = context.getString(R.string.budget, formattedNumber)
 
-            if (data.latitude == null || data.longitude == null){
+            if ((data.latitude == null || data.longitude == null) || (data.latitude == 0.0 && data.longitude == 0.0)){
               binding.editNeed.visibility = View.VISIBLE
             }else{
                 binding.editNeed.visibility = View.GONE
@@ -69,10 +69,11 @@ class DaysScheduleAdapter (
 
             binding.delete.setOnClickListener {
                 remove(position)
+                onButtonClickListener.onDeleteButtonClickListener(position)
             }
 
             binding.edit.setOnClickListener {
-                onEditButtonClickListener.onEditButtonClickListener(data, position)
+                onButtonClickListener.onEditButtonClickListener(data, position)
             }
         }
     }
@@ -127,8 +128,9 @@ class DaysScheduleAdapter (
         onItemDragListener?.onDropActivity(initList, dailySchedule)
     }
 
-    interface OnButtonClickListener{
+    interface OnDaysButtonClickListener{
         fun onEditButtonClickListener(data : DaysSchedule, position: Int)
+        fun onDeleteButtonClickListener(position : Int)
     }
 
     companion object{

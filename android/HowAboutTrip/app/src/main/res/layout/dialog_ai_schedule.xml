@@ -69,7 +69,6 @@
             app:tabBackground="@drawable/tab_btn_white_round_rectangle"
             app:tabGravity="start"
             app:tabIndicator="@null"
-            app:tabMaxWidth="60dp"
             app:tabMode="scrollable"
             app:tabRippleColor="@android:color/transparent"
             app:tabTextAppearance="@style/TabItemTextSize"

@@ -35,7 +35,8 @@
         <activity
             android:name=".view.activity.ai.AddAICalendarActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+        </activity>
         <activity
             android:name=".view.activity.SignUpActivity"
             android:exported="true"

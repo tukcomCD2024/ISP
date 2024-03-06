@@ -1,13 +1,19 @@
 package com.project.how.model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.project.how.data_class.AiDaysSchedule
 import com.project.how.data_class.AiSchedule
 import com.project.how.data_class.DaysSchedule
 import com.project.how.data_class.Schedule
+import com.project.how.data_class.dto.GetScheduleListResponse
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.Calendar
 
 class ScheduleRepository {
@@ -19,10 +25,13 @@ class ScheduleRepository {
     }.time.time
     private val _nearScheduleDayLiveData : MutableLiveData<Long> = MutableLiveData()
     private val _scheduleLiveData : MutableLiveData<Schedule> = MutableLiveData()
+    private val _scheduleListLiveData : MutableLiveData<GetScheduleListResponse> = MutableLiveData()
     val nearScheduleDayLiveData : LiveData<Long>
         get() = _nearScheduleDayLiveData
     val scheduleLiveData : LiveData<Schedule>
         get() = _scheduleLiveData
+    val scheduleListLiveData : LiveData<GetScheduleListResponse>
+        get() = _scheduleListLiveData
 
 
     fun getDday() : Flow<Long> = flow {
@@ -33,7 +42,14 @@ class ScheduleRepository {
         _nearScheduleDayLiveData.postValue(day)
     }
 
-    fun getSchedule(schedule : Schedule) {
+    suspend fun getSchedule(schedule : Schedule) {
+        getTotalCost(schedule).collect{
+            schedule.cost = it
+            getScheduleAndTotalCost(schedule)
+        }
+    }
+
+    private fun getScheduleAndTotalCost(schedule : Schedule){
         _scheduleLiveData.postValue(schedule)
     }
 
@@ -46,6 +62,16 @@ class ScheduleRepository {
             0,
             getDailySchedule(aiSchedule.dailySchedule)
         ))
+    }
+
+    fun getTotalCost(schedule: Schedule) :Flow<Long> = flow {
+        var totalCost : Long = 0
+        for (i in schedule.dailySchedule.indices){
+            for (j in schedule.dailySchedule[i].indices){
+                totalCost += schedule.dailySchedule[i][j].cost
+            }
+        }
+        this.emit(totalCost)
     }
 
     private fun getDailySchedule(aiDailySchedule : List<List<AiDaysSchedule>>): MutableList<MutableList<DaysSchedule>> {
@@ -69,6 +95,36 @@ class ScheduleRepository {
             dailySchedule.add(oneDaysSchedule)
         }
         return dailySchedule
+    }
+
+    suspend fun updateDailySchedule(schedule: Schedule, startDate: String, endDate: String) {
+        val std = LocalDate.parse(startDate, DateTimeFormatter.ISO_DATE)
+        val end = LocalDate.parse(endDate, DateTimeFormatter.ISO_DATE)
+        val diff = ChronoUnit.DAYS.between(std, end)
+        Log.d("setDaysTab", "updateDailySchedule\nstd : $std\tend : $end\ndiff : $diff\t schedule.dailySchedule.lastIndex : ${schedule.dailySchedule.size}")
+        if (schedule.dailySchedule.lastIndex < diff){
+            for(i in 0 until  diff - schedule.dailySchedule.lastIndex){
+                Log.d("setDaysTab", "updateDailySchedule schedule.dailySchedule.lastIndex < diff\n schedule.dailySchedule.add(mutableListOf<DaysSchedule>())")
+                schedule.dailySchedule.add(mutableListOf())
+            }
+            Log.d("setDaysTab", "updateDailySchedule schedule.dailySchedule.lastIndex < diff\n after size : ${schedule.dailySchedule.size}")
+            getSchedule(schedule)
+        }else if(schedule.dailySchedule.lastIndex.toLong() == diff){
+            Log.d("setDaysTab", "updateDailySchedule schedule.dailySchedule.lastIndex == diff\n schedule.dailySchedule.add(mutableListOf<DaysSchedule>())")
+            Log.d("setDaysTab", "updateDailySchedule schedule.dailySchedule.lastIndex == diff\n after size : ${schedule.dailySchedule.size}")
+            getSchedule(schedule)
+        }else{
+            for (i in 0 until schedule.dailySchedule.lastIndex - diff){
+                Log.d("setDaysTab", "updateDailySchedule schedule.dailySchedule.lastIndex > diff\n schedule.dailySchedule.removeLast()")
+                schedule.dailySchedule.removeLast()
+            }
+            Log.d("setDaysTab", "updateDailySchedule schedule.dailySchedule.lastIndex > diff\n after size : ${schedule.dailySchedule.size}")
+            getSchedule(schedule)
+        }
+    }
+
+    fun getScheduleList(scheduleList : GetScheduleListResponse){
+        _scheduleListLiveData.postValue(scheduleList)
     }
 
     companion object{

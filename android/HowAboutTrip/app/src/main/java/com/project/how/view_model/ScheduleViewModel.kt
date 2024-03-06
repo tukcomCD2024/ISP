@@ -6,16 +6,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.how.R
+import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
 import com.project.how.data_class.AiSchedule
 import com.project.how.data_class.Schedule
 import com.project.how.data_class.dto.DailySchedule
-import com.project.how.data_class.dto.EmptyResponse
-import com.project.how.data_class.dto.SaveScheduleRequest
+import com.project.how.data_class.dto.GetScheduleListResponse
+import com.project.how.data_class.dto.ScheduleDetail
 import com.project.how.model.ScheduleRepository
+import com.project.how.network.client.MemberRetrofit
 import com.project.how.network.client.ScheduleRetrofit
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -28,10 +31,13 @@ class ScheduleViewModel : ViewModel() {
     private var scheduleRepository : ScheduleRepository = ScheduleRepository()
     private val _nearScheduleDayLiveData = scheduleRepository.nearScheduleDayLiveData
     private val _scheduleLiveData = scheduleRepository.scheduleLiveData
+    private val _scheduleListLiveData = scheduleRepository.scheduleListLiveData
     val nearScheduleDayLiveData : LiveData<Long>
         get() = _nearScheduleDayLiveData
     val scheduleLiveData : LiveData<Schedule>
         get() = _scheduleLiveData
+    val scheduleListLiveData : LiveData<GetScheduleListResponse>
+        get() = _scheduleListLiveData
 
     fun getDday() : Flow<Long> = scheduleRepository.getDday()
 
@@ -40,7 +46,9 @@ class ScheduleViewModel : ViewModel() {
     }
 
     fun getSchedule(schedule : Schedule){
-        scheduleRepository.getSchedule(schedule)
+        viewModelScope.launch {
+            scheduleRepository.getSchedule(schedule)
+        }
     }
 
     fun getSchedule(aiSchedule : AiSchedule){
@@ -51,40 +59,53 @@ class ScheduleViewModel : ViewModel() {
         }
     }
 
-    fun saveSchedule(context: Context, accessToken : String, schedule: Schedule): Flow<Int> = callbackFlow {
-        checkLocations(schedule).collect { check ->
-            if (check) {
-                ScheduleRetrofit.getApiService()?.let { apiService ->
-                    val callback = object : Callback<String> {
-                        override fun onResponse(call: Call<String>, response: Response<String>) {
-                            if (response.isSuccessful) {
-                                Log.d(
-                                    "saveSchedule is success", "response code : ${response.code()}")
-                                trySend(SUCCESS).isSuccess
-                            } else {
-                                Log.d(
-                                    "saveSchedule is not success", "response code : ${response.code()}")
-                                trySend(NETWORK_FAILED).isSuccess
-                            }
-                        }
+    fun getTotalCost(schedule: Schedule) : Flow<Long> = scheduleRepository.getTotalCost(schedule)
 
-                        override fun onFailure(call: Call<String>, t: Throwable) {
-                            Log.d("saveSchedule onFailure", "${t.message}")
+    fun saveSchedule(context: Context, accessToken: String, schedule: Schedule): Flow<Int> = callbackFlow {
+        // checkLocations의 결과를 받을 Flow 생성
+        val locationsFlow = checkLocations(schedule)
+
+        // checkLocations의 결과를 기다림
+        val check = locationsFlow.first()
+
+        if (check) {
+            ScheduleRetrofit.getApiService()?.let { apiService ->
+                val callback = object : Callback<String> {
+                    override fun onResponse(call: Call<String>, response: Response<String>) {
+                        if (response.isSuccessful) {
+                            Log.d("saveSchedule is success", "response code : ${response.code()}")
+                            trySend(SUCCESS).isSuccess
+                        } else {
+                            Log.d("saveSchedule is not success", "response code : ${response.code()}")
                             trySend(NETWORK_FAILED).isSuccess
                         }
                     }
-                    apiService.saveSchedule(context.getString(R.string.bearer_token, accessToken), changeClassFromScheduleToSaveSchedule(schedule))
-                        .enqueue(callback)
-                } ?: close() // 만약 apiService가 null이면 flow를 종료합니다.
-            } else {
-                // checkLocations가 false이면 NULL_LOCATIONS를 emit
-                trySend(NULL_LOCATIONS).isSuccess
-            }
+
+                    override fun onFailure(call: Call<String>, t: Throwable) {
+                        Log.d("saveSchedule onFailure", "${t.message}")
+                        trySend(NETWORK_FAILED).isSuccess
+                    }
+                }
+                apiService.saveSchedule(context.getString(R.string.bearer_token, accessToken), changeClassFromScheduleToSaveSchedule(context, schedule))
+                    .enqueue(callback)
+            } ?: close() // 만약 apiService가 null이면 flow를 종료합니다.
+        } else {
+            trySend(NULL_LOCATIONS).isSuccess
         }
+
         awaitClose()
     }
 
-    private fun changeClassFromScheduleToSaveSchedule(schedule: Schedule) : SaveScheduleRequest{
+    private fun getScheduleType(context: Context, type : Int): String {
+        when(type){
+            AiDaysScheduleAdapter.AIRPLANE ->{ return context.getString(R.string.airplane_string) }
+            AiDaysScheduleAdapter.HOTEL -> {return context.getString(R.string.hotel_string)}
+            AiDaysScheduleAdapter.PLACE -> {return context.getString(R.string.place_string)}
+        }
+        return context.getString(R.string.place_string)
+    }
+
+    private fun changeClassFromScheduleToSaveSchedule(context : Context, schedule: Schedule) : ScheduleDetail{
         val startDate = LocalDate.parse(schedule.startDate, DateTimeFormatter.ISO_DATE)
         var dailySchedules = listOf<DailySchedule>()
         schedule.dailySchedule.forEachIndexed { index, data ->
@@ -93,6 +114,7 @@ class ScheduleViewModel : ViewModel() {
                 val schedule = com.project.how.data_class.dto.Schedule(
                     daysSchedule.todo,
                     daysSchedule.places,
+                    getScheduleType(context, daysSchedule.type),
                     daysSchedule.cost,
                     daysSchedule.latitude ?: 0.0,
                     daysSchedule.longitude ?: 0.0)
@@ -107,7 +129,7 @@ class ScheduleViewModel : ViewModel() {
             dailySchedules = dailySchedules.plus(ds)
         }
 
-        return SaveScheduleRequest(
+        return ScheduleDetail(
             schedule.title,
             schedule.country,
             schedule.startDate,
@@ -124,6 +146,57 @@ class ScheduleViewModel : ViewModel() {
             }
         }
         this.emit(true)
+    }
+
+    fun updateDailySchedule(schedule: Schedule, startDate: String, endDate: String) {
+        viewModelScope.launch {
+            scheduleRepository.updateDailySchedule(schedule, startDate, endDate)
+        }
+    }
+
+    fun getScheduleList(context: Context, accessToken: String){
+        ScheduleRetrofit.getApiService()!!.getScheduleList(context.getString(R.string.bearer_token, accessToken))
+            .enqueue(object : Callback<GetScheduleListResponse>{
+                override fun onResponse(
+                    call: Call<GetScheduleListResponse>,
+                    response: Response<GetScheduleListResponse>
+                ) {
+                    if (response.isSuccessful){
+                        val result = response.body()
+                        if (result != null){
+                            Log.d("getSchedule is success", "size : ${result.size}\nresponse code : ${response.code()}")
+                            scheduleRepository.getScheduleList(result)
+                        }else{
+                            Log.d("getSchedule is success", "response.body() is null\nresponse code : ${response.code()}")
+                        }
+                    }else{
+                        Log.d("getSchedule is not success", "response code : ${response.code()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<GetScheduleListResponse>, t: Throwable) {
+                    Log.d("getScheduleList onFailure", "${t.message}")
+                }
+
+            })
+    }
+
+    fun deleteSchedule(context: Context, accessToken: String, id : Long){
+        ScheduleRetrofit.getApiService()!!
+            .deleteSchedule(context.getString(R.string.bearer_token, accessToken), id)
+            .enqueue(object : Callback<String>{
+                override fun onResponse(call: Call<String>, response: Response<String>) {
+                    if (response.isSuccessful){
+                        Log.d("deleteSchedule is success", "response code : ${response.code()}")
+                    }else{
+                        Log.d("deleteSchedule is not success", "response code : ${response.code()}\n${response.errorBody()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    Log.d("deleteSchedule", "${t.message}")
+                }
+            })
     }
 
     companion object{

@@ -34,9 +34,8 @@ public class ScheduleDetail {
 
     private double longitude;
 
-    // Schedules 엔티티의 필드를 참조하도록 수정
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "schedule_id" , nullable = false)
+    @JoinColumn(name = "schedules_id" , nullable = false)  // 컬럼명 삭제X
     private Schedule schedule;
 
 }

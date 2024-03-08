@@ -8,7 +8,6 @@ import com.isp.backend.domain.schedule.dto.ScheduleListResponseDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleSaveRequestDTO;
 import com.isp.backend.domain.schedule.entity.Schedule;
 import com.isp.backend.domain.scheduleDetail.entity.ScheduleDetail;
-import com.isp.backend.domain.scheduleDetail.entity.ScheduleType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +24,7 @@ public class ScheduleMapper {
      * 일정 저장
      **/
     // 여행 일정 요청 DTO -> 엔티티로 변환
-    public Schedule toSchedulesEntity(ScheduleSaveRequestDTO scheduleSaveRequestDTO, Member member, Country country) {
+    public Schedule toScheduleEntity(ScheduleSaveRequestDTO scheduleSaveRequestDTO, Member member, Country country) {
         // 여행 일정 엔티티 생성
         Schedule schedule = Schedule.builder()
                 .scheduleName(scheduleSaveRequestDTO.getScheduleName())

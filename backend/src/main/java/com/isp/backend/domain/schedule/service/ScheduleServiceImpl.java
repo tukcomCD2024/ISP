@@ -58,7 +58,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         Member findMember = validateUserCheck(uid);
         Country findCountry = validateCountry(scheduleSaveRequestDTO.getCountry());
         // 여행 일정 저장
-        Schedule schedule = scheduleMapper.toSchedulesEntity(scheduleSaveRequestDTO, findMember, findCountry);
+        Schedule schedule = scheduleMapper.toScheduleEntity(scheduleSaveRequestDTO, findMember, findCountry);
         // 여행 전체 일정 총 경비 저장
         calculateTotalPrice(schedule);
 

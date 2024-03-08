@@ -11,6 +11,10 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
+server:
+  servlet:
+    context-path: /api
+
 jwt:
   secret: ${JWT_SECRET_KEY}
 

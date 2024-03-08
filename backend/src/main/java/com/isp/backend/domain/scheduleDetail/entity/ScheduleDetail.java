@@ -36,7 +36,7 @@ public class ScheduleDetail {
 
     // Schedules 엔티티의 필드를 참조하도록 수정
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "schedule_id" , nullable = false)
     private Schedule schedule;
 
 }

@@ -52,12 +52,5 @@ public class Schedule extends BaseEntity {
     @Column(nullable = false)
     private boolean activated = true;
 
-//    // setScheduleDetails 메서드 추가
-//    public void setScheduleDetails(List<ScheduleDetail> scheduleDetails) {
-//        this.scheduleDetails.clear();
-//        if (scheduleDetails != null) {
-//            this.scheduleDetails.addAll(scheduleDetails);
-//        }
-//    }
 
 }

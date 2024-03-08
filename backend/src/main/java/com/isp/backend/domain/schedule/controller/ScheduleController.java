@@ -4,7 +4,7 @@ import com.isp.backend.domain.schedule.dto.ScheduleListResponseDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleRequestDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleResponseDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleSaveRequestDTO;
-import com.isp.backend.domain.schedule.service.ScheduleService;
+import com.isp.backend.domain.schedule.service.ScheduleServiceImpl;
 import com.isp.backend.global.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/schedules")
+@RequestMapping("/schedules")
 @RequiredArgsConstructor
 public class ScheduleController {
 
-    private final ScheduleService scheduleService;
+    private final ScheduleServiceImpl scheduleServiceImpl;
 
     /**
      * 여행 일정 생성형 API
@@ -26,7 +26,7 @@ public class ScheduleController {
     @PostMapping("/")
     public ResponseEntity<ScheduleResponseDTO> createSchedule(@RequestBody ScheduleRequestDTO scheduleRequestDTO) {
 
-        ScheduleResponseDTO scheduleResponseDTO = scheduleService.createSchedule(scheduleRequestDTO);
+        ScheduleResponseDTO scheduleResponseDTO = scheduleServiceImpl.createSchedule(scheduleRequestDTO);
         return ResponseEntity.ok(scheduleResponseDTO);
     }
 
@@ -37,7 +37,7 @@ public class ScheduleController {
     @PostMapping("/save")
     public ResponseEntity<Void> saveSchedule(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                              @RequestBody ScheduleSaveRequestDTO requestDTO) {
-        scheduleService.saveSchedule(customUserDetails.getUsername(), requestDTO);
+        scheduleServiceImpl.saveSchedule(customUserDetails.getUsername(), requestDTO);
         return ResponseEntity.ok().build();
     }
 
@@ -48,7 +48,7 @@ public class ScheduleController {
     @GetMapping("/list")
     public ResponseEntity<List<ScheduleListResponseDTO>> getScheduleList(@AuthenticationPrincipal CustomUserDetails userDetails) {
         String uid = userDetails.getUsername();
-        List<ScheduleListResponseDTO> scheduleList = scheduleService.getScheduleList(uid);
+        List<ScheduleListResponseDTO> scheduleList = scheduleServiceImpl.getScheduleList(uid);
         return ResponseEntity.ok(scheduleList);
     }
 
@@ -59,7 +59,7 @@ public class ScheduleController {
     public ResponseEntity<ScheduleSaveRequestDTO> getScheduleDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                     @PathVariable Long scheduleId) {
         String uid = userDetails.getUsername();
-        ScheduleSaveRequestDTO scheduleDetail = scheduleService.getScheduleDetail(uid, scheduleId);
+        ScheduleSaveRequestDTO scheduleDetail = scheduleServiceImpl.getScheduleDetail(uid, scheduleId);
         return ResponseEntity.ok(scheduleDetail);
     }
 
@@ -70,7 +70,7 @@ public class ScheduleController {
     public ResponseEntity<Void> deleteSchedule(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                @PathVariable Long scheduleId) {
         String uid = userDetails.getUsername();
-        scheduleService.deleteSchedule(uid, scheduleId);
+        scheduleServiceImpl.deleteSchedule(uid, scheduleId);
         return ResponseEntity.ok().build();
     }
 
@@ -82,7 +82,7 @@ public class ScheduleController {
     public ResponseEntity<ScheduleSaveRequestDTO> updateSchedule(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                  @PathVariable Long scheduleId,
                                                                  @RequestBody ScheduleSaveRequestDTO requestDTO) {
-        ScheduleSaveRequestDTO updatedSchedule = scheduleService.updateSchedule(userDetails.getUsername(), scheduleId, requestDTO);
+        ScheduleSaveRequestDTO updatedSchedule = scheduleServiceImpl.updateSchedule(userDetails.getUsername(), scheduleId, requestDTO);
 //        return ResponseEntity.ok().build();  == public void로
         return ResponseEntity.ok(updatedSchedule);
     }

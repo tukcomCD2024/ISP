@@ -25,8 +25,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class WebSecurityConfig {
 
     private static final String[] AUTH_WHITE_LIST = {
+            "/members/login",
             "/api/members/login",
-            "/api/members/test",
+            "/members/test",
             "/error",
             "/h2-console/**"
     };

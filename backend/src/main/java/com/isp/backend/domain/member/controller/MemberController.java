@@ -24,7 +24,7 @@ public class MemberController {
      * 로그인 API
      */
     @PostMapping("/login")
-    public String memberLogin(@RequestBody GoogleLoginRequest request) {
+    public ResponseEntity<String> memberLogin(@RequestBody GoogleLoginRequest request) {
         return memberService.memberLogin(request);
     }
 

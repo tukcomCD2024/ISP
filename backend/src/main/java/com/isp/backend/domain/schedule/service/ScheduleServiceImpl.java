@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 

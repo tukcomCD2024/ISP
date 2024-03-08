@@ -30,7 +30,7 @@ public class MemberServiceImpl implements MemberService {
      */
     @Transactional
     @Override
-    public String memberLogin(GoogleLoginRequest request) {
+    public ResponseEntity<String> memberLogin(GoogleLoginRequest request) {
         Member existingMember = memberRepository.findByUid(request.getUid());
 
         if (existingMember != null) {
@@ -45,19 +45,24 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
+
     /** 기존 회원의 로그인 **/
     @Override
-    public String handleExistingMemberLogin(Member existingMember) {
+    public ResponseEntity<String> handleExistingMemberLogin(Member existingMember) {
         String accessToken = tokenProvider.createAccessToken(existingMember.getUid());
         String refreshToken = tokenProvider.createRefreshToken(existingMember.getUid());
-        return "기존 회원 로그인";
+        return ResponseEntity.ok()
+                .header("Access-Token", accessToken)
+                .header("Refresh-Token", refreshToken)
+                .body("기존 회원 로그인");
     }
+
 
 
 
     /** 신규 회원의 로그인 -> DB 저장 **/
     @Override
-    public String handleNewMemberLogin(GoogleLoginRequest request) {
+    public ResponseEntity<String> handleNewMemberLogin(GoogleLoginRequest request) {
         Member newMember = Member.builder()
                 .uid(request.getUid())
                 .loginType("google")
@@ -67,7 +72,10 @@ public class MemberServiceImpl implements MemberService {
         String accessToken = tokenProvider.createAccessToken(newMember.getUid());
         String refreshToken = tokenProvider.createRefreshToken(newMember.getUid());
 
-        return "신규 회원 로그인";
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .header("Access-Token", accessToken)
+                .header("Refresh-Token", refreshToken)
+                .body("신규 회원 로그인");
     }
 
 
@@ -99,6 +107,7 @@ public class MemberServiceImpl implements MemberService {
         }
         String uid = tokenProvider.getUid(authRecreateRequest.getRefreshToken());
         Member member = memberRepository.findByUidAndActivatedIsTrue(uid);
+
         if (member == null) {
             throw new MemberNotFoundException();
         }
@@ -122,7 +131,6 @@ public class MemberServiceImpl implements MemberService {
         if (findMember == null) {
             throw new MemberNotFoundException();
         }
-
         return (MemberDetailResponse.fromEntity(findMember));
     }
 

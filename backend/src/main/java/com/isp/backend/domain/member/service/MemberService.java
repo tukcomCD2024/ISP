@@ -8,13 +8,13 @@ import com.isp.backend.domain.member.entity.Member;
 import org.springframework.http.ResponseEntity;
 
 public interface MemberService {
-    String memberLogin(GoogleLoginRequest request);
+    ResponseEntity<String> memberLogin(GoogleLoginRequest request);
 
     void signUp(SignUpRequest signUpRequest, String memberUid);
 
-    String handleExistingMemberLogin(Member existingMember);
+    ResponseEntity<String> handleExistingMemberLogin(Member existingMember);
 
-    String handleNewMemberLogin(GoogleLoginRequest request);
+    ResponseEntity<String> handleNewMemberLogin(GoogleLoginRequest request);
 
     ResponseEntity<String> authRecreate(AuthRecreateRequest authRecreateRequest);
 

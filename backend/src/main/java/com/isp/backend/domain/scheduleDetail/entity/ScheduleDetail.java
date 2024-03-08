@@ -35,7 +35,7 @@ public class ScheduleDetail {
     private double longitude;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "schedules_id" , nullable = false)  // 컬럼명 삭제X
+    @JoinColumn(name = "schedule_id" , nullable = false)  // 컬럼명 삭제X
     private Schedule schedule;
 
 }

@@ -54,7 +54,7 @@ public class GptService {
 
     public GptResponseDTO askQuestion(GptScheduleRequestDto questionRequestDTO) {
         List<GptMessage> messages = new ArrayList<>();
-        String question = questionRequestDTO.getDepartureDate();
+        String question = makeQuestion(questionRequestDTO);
         messages.add(GptMessage.builder()
                 .role(GptConfig.ROLE)
                 .content(question)
@@ -69,6 +69,58 @@ public class GptService {
                                 messages
                         )
                 )
+        );
+    }
+
+    private String makeQuestion(GptScheduleRequestDto questionRequestDTO) {
+        return String.format(
+                """
+                        I would like you to plan a package tour program to plan your travel itinerary.Destination: %s
+                        Purpose of travel: %s
+                        Departure date: %s
+                        Entry date: %s
+                        The flight schedule is as follows.
+                        
+                        Also, plan your itinerary based on the travel distance and famous tourist destinations.
+                        If possible, create the schedule in one-hour intervals.
+                        Make sure to plan for at least 10 hours of activity each day.
+                        
+                        I would like the format to be as follows:
+                        For example
+                        ---
+                        day 1: 2024-02-06
+                        1. Go to location
+                        2. See the place
+                        3. Eat the Lunch
+                        4. Go to location
+                        5. See the place
+                        6. Eat the dinner
+                        7. shopping
+                        
+                        day 2: 2024-02-07
+                        1. Go to location
+                        2. See the place
+                        3. Eat the Lunch
+                        4. Go to location
+                        5. See the place
+                        6. Eat the dinner
+                        7. shopping
+                        
+                        day 3: 2024-02-08
+                        1. Go to location
+                        2. See the place
+                        3. Eat the Lunch
+                        4. Go to location
+                        5. See the place
+                        6. Eat the dinner
+                        7. shopping
+                        ---
+                        No need to say anything else, just plan your schedule right away.
+                        Please create the result in Korean.""",
+                questionRequestDTO.getDestination(),
+                questionRequestDTO.getPurpose(),
+                questionRequestDTO.getDepartureDate(),
+                questionRequestDTO.getReturnDate()
         );
     }
 }

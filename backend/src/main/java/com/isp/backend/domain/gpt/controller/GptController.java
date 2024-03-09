@@ -1,8 +1,7 @@
 package com.isp.backend.domain.gpt.controller;
 
-import com.isp.backend.domain.gpt.dto.GptResponseDTO;
 import com.isp.backend.domain.gpt.dto.GptScheduleRequestDto;
-import com.isp.backend.domain.gpt.entity.GptMessage;
+import com.isp.backend.domain.gpt.dto.GptScheduleResponseDto;
 import com.isp.backend.domain.gpt.service.GptService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +17,8 @@ public class GptController {
     private final GptService gptService;
 
     @PostMapping("/question")
-    public ResponseEntity<GptMessage> sendQuestion(@RequestBody GptScheduleRequestDto gptScheduleRequestDto) {
-        GptResponseDTO gptResponseDTO = gptService.askQuestion(gptScheduleRequestDto);
-        return ResponseEntity.ok(gptResponseDTO.getChoices().get(0).getMessage());
+    public ResponseEntity<GptScheduleResponseDto> sendQuestion(@RequestBody GptScheduleRequestDto gptScheduleRequestDto) {
+        GptScheduleResponseDto gptScheduleResponseDto = gptService.askQuestion(gptScheduleRequestDto);
+        return ResponseEntity.ok(gptScheduleResponseDto);
     }
 }

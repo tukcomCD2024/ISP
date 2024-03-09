@@ -27,7 +27,7 @@ public class GptConfig {
                         I would like the format to be as follows:
                         For example
                         ---
-                        day 1: 2024-02-06
+                        2024-02-06
                         1. Go to location
                         2. See the place
                         3. Eat the Lunch
@@ -36,7 +36,7 @@ public class GptConfig {
                         6. Eat the dinner
                         7. shopping
                         
-                        day 2: 2024-02-07
+                        2024-02-07
                         1. Go to location
                         2. See the place
                         3. Eat the Lunch
@@ -45,7 +45,7 @@ public class GptConfig {
                         6. Eat the dinner
                         7. shopping
                         
-                        day 3: 2024-02-08
+                        2024-02-08
                         1. Go to location
                         2. See the place
                         3. Eat the Lunch

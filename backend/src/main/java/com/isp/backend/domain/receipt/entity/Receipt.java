@@ -18,7 +18,7 @@ public class Receipt extends BaseEntity {
     private Long id;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "schedule_id", nullable = false)
+//    @JoinColumn(name = "schedules_id", nullable = false)
 //    private Schedules schedules;
 
     @Column(name = "title")

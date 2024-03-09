@@ -3,7 +3,7 @@ package com.isp.backend.domain.gpt.config;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ChatGptConfig {
+public class GptConfig {
     public static final String AUTHORIZATION = "Authorization";
     public static final String BEARER = "Bearer ";
     public static final String CHAT_MODEL = "gpt-3.5-turbo";

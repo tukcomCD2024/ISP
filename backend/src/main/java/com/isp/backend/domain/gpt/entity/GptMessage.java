@@ -8,12 +8,12 @@ import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
-public class ChatGptMessage implements Serializable {
+public class GptMessage implements Serializable {
     private String role;
     private String content;
 
     @Builder
-    public ChatGptMessage(String role, String content) {
+    public GptMessage(String role, String content) {
         this.role = role;
         this.content = content;
     }

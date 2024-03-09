@@ -1,7 +1,7 @@
 package com.isp.backend.domain.gpt.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.isp.backend.domain.gpt.entity.ChatGptMessage;
+import com.isp.backend.domain.gpt.entity.GptMessage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatGptResponseDTO {
+public class GptResponseDTO {
     private String id;
     private String object;
     private long created;
@@ -34,7 +34,7 @@ public class ChatGptResponseDTO {
     @Getter
     @Setter
     public static class Choice {
-        private ChatGptMessage message;
+        private GptMessage message;
         @JsonProperty("finish_reason")
         private String finishReason;
         private int index;

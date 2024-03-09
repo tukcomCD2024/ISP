@@ -7,7 +7,7 @@ import com.isp.backend.domain.gpt.dto.GptScheduleRequestDto;
 import com.isp.backend.domain.gpt.dto.GptScheduleResponseDto;
 import com.isp.backend.domain.gpt.entity.GptMessage;
 import com.isp.backend.domain.gpt.entity.GptSchedule;
-import com.isp.backend.domain.gpt.mapper.JsonMapper;
+import com.isp.backend.domain.gpt.entity.GptScheduleParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +27,7 @@ import java.util.List;
 @Service
 public class GptService {
     private final RestTemplate restTemplate;
-    private final JsonMapper jsonMapper;
+    private final GptScheduleParser gptScheduleParser;
 
     @Value("${api-key.chat-gpt}")
     private String apiKey;
@@ -50,7 +50,7 @@ public class GptService {
                 GptConfig.CHAT_URL,
                 chatGptRequestHttpEntity,
                 GptResponseDTO.class);
-        List<GptSchedule> gptSchedules = jsonMapper.parseScheduleText(getScheduleText(responseEntity));
+        List<GptSchedule> gptSchedules = gptScheduleParser.parseScheduleText(getScheduleText(responseEntity));
         return new GptScheduleResponseDto(gptSchedules);
     }
 

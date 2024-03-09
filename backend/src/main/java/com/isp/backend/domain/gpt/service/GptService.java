@@ -4,8 +4,10 @@ import com.isp.backend.domain.gpt.config.GptConfig;
 import com.isp.backend.domain.gpt.dto.GptRequestDTO;
 import com.isp.backend.domain.gpt.dto.GptResponseDTO;
 import com.isp.backend.domain.gpt.dto.GptScheduleRequestDto;
+import com.isp.backend.domain.gpt.dto.GptScheduleResponseDto;
 import com.isp.backend.domain.gpt.entity.GptMessage;
-import com.isp.backend.domain.gpt.mapper.GptMapper;
+import com.isp.backend.domain.gpt.entity.GptSchedule;
+import com.isp.backend.domain.gpt.entity.GptScheduleParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +27,7 @@ import java.util.List;
 @Service
 public class GptService {
     private final RestTemplate restTemplate;
-    private final GptMapper gptMapper;
+    private final GptScheduleParser gptScheduleParser;
 
     @Value("${api-key.chat-gpt}")
     private String apiKey;
@@ -37,7 +39,7 @@ public class GptService {
         return new HttpEntity<>(gptRequestDTO, httpHeaders);
     }
 
-    public GptResponseDTO getResponse(HttpEntity<GptRequestDTO> chatGptRequestHttpEntity) {
+    public GptScheduleResponseDto getResponse(HttpEntity<GptRequestDTO> chatGptRequestHttpEntity) {
 
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(60000);
@@ -48,13 +50,29 @@ public class GptService {
                 GptConfig.CHAT_URL,
                 chatGptRequestHttpEntity,
                 GptResponseDTO.class);
+        List<GptSchedule> gptSchedules = gptScheduleParser.parseScheduleText(getScheduleText(responseEntity));
+        return new GptScheduleResponseDto(gptSchedules);
+    }
 
+    private String getScheduleText(ResponseEntity<GptResponseDTO> responseEntity) {
+        return getGptMessage(responseEntity).toString();
+    }
+
+    private GptMessage getGptMessage(ResponseEntity<GptResponseDTO> responseEntity) {
+        return getChoices(responseEntity).get(0).getMessage();
+    }
+
+    private List<GptResponseDTO.Choice> getChoices(ResponseEntity<GptResponseDTO> responseEntity) {
+        return getBody(responseEntity).getChoices();
+    }
+
+    private GptResponseDTO getBody(ResponseEntity<GptResponseDTO> responseEntity) {
         return responseEntity.getBody();
     }
 
-    public GptResponseDTO askQuestion(GptScheduleRequestDto questionRequestDTO) {
+    public GptScheduleResponseDto askQuestion(GptScheduleRequestDto questionRequestDTO) {
         List<GptMessage> messages = new ArrayList<>();
-        String question = questionRequestDTO.getDepartureDate();
+        String question = makeQuestion(questionRequestDTO);
         messages.add(GptMessage.builder()
                 .role(GptConfig.ROLE)
                 .content(question)
@@ -69,6 +87,15 @@ public class GptService {
                                 messages
                         )
                 )
+        );
+    }
+
+    private String makeQuestion(GptScheduleRequestDto questionRequestDTO) {
+        return String.format(GptConfig.PROMPT,
+                questionRequestDTO.getDestination(),
+                questionRequestDTO.getPurpose(),
+                questionRequestDTO.getDepartureDate(),
+                questionRequestDTO.getReturnDate()
         );
     }
 }

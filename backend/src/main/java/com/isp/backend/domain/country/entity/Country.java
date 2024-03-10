@@ -27,7 +27,7 @@ public class Country {
 
     private String imageUrl;
 
-    private String airportCode;
+    private String airportCode;  // 공항 코드
 
     private double latitude ;  // 위도
 

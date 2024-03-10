@@ -32,3 +32,6 @@ cloud:
 
 api-key:
   chat-gpt: ${GPT_API_KEY}
+  amadeus:
+    accessKey: ${AMADEUS_ACCESS_KEY}
+    secretKey: ${AMADEUS_SECRET_KEY}

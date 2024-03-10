@@ -73,7 +73,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<ScheduleListResponseDTO> getScheduleList(String uid) {
         Member findMember = validateUserCheck(uid);
         // 내가 쓴 일정 불러오기
-        List<Schedule> scheduleList = scheduleRepository.findByMemberAndActivatedIsTrue(findMember);
+        List<Schedule> scheduleList = scheduleRepository.findSchedulesByMember(findMember);
+
 
         return scheduleList.stream()
                 .map(scheduleMapper::toScheduleListResponseDTO)

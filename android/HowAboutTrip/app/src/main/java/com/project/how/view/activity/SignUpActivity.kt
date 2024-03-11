@@ -8,21 +8,16 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.project.how.R
-import com.project.how.adapter.CalendarAdapter
-import com.project.how.data_class.dto.AuthRecreateRequest
+import com.project.how.adapter.recyclerview.CalendarAdapter
 import com.project.how.databinding.ActivitySignUpBinding
 import com.project.how.databinding.CalendarBottomSheetBinding
 import com.project.how.view_model.CalendarViewModel
 import com.project.how.view_model.MemberViewModel
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class SignUpActivity : AppCompatActivity(), CalendarAdapter.OnItemClickListener {
+class SignUpActivity : AppCompatActivity() {
     private lateinit var binding : ActivitySignUpBinding
     private lateinit var calendarBinding : CalendarBottomSheetBinding
     private val calenderViewModel : CalendarViewModel by viewModels()
@@ -37,10 +32,6 @@ class SignUpActivity : AppCompatActivity(), CalendarAdapter.OnItemClickListener 
         calendarBinding = CalendarBottomSheetBinding.inflate(layoutInflater)
         binding.signUp = this
         binding.lifecycleOwner = this
-
-        lifecycleScope.launch {
-            memberViewModel.init(this@SignUpActivity)
-        }
 
         binding.phone.addTextChangedListener(PhoneNumberFormattingTextWatcher())
     }
@@ -72,86 +63,4 @@ class SignUpActivity : AppCompatActivity(), CalendarAdapter.OnItemClickListener 
         startActivity(intent)
         finish()
     }
-
-//    test용 코드
-//    fun authRecreate(){
-//        memberViewModel.tokensLiveData.value?.let {
-//            memberViewModel.authRecreate(this, AuthRecreateRequest(it.refreshToken))
-//        }
-//    }
-
-//    캘린더 테스트용 코드
-//    fun setCalenderBottomSheetView() {
-//        initializeCalendarBottomSheet()
-//        observeCalendarData()
-//    }
-//
-//    private fun initializeCalendarBottomSheet() {
-//        calendarBinding = CalendarBottomSheetBinding.inflate(layoutInflater)
-//        val bottomSheetDialog = BottomSheetDialog(this)
-//        bottomSheetDialog.setContentView(calendarBinding.root)
-//        bottomSheetDialog.show()
-//
-//
-//        calenderViewModel.selectedDate.observe(this@SignUpActivity) { sd ->
-//            Log.d("selectedData observe", "initializeCalendarBottom() 시작")
-//            days = listOf()
-//            adapter = CalendarAdapter(days, sd, this)
-//            calendarBinding.days.layoutManager = GridLayoutManager(this, 7)
-//            calendarBinding.days.adapter = adapter
-//        }
-//
-//        calendarBinding.left.setOnClickListener{ minusMonth() }
-//        calendarBinding.right.setOnClickListener { plusMonth() }
-//        calendarBinding.reset.setOnClickListener { resetDay() }
-//        calendarBinding.confirm.setOnClickListener {  }
-//    }
-//
-//    private fun observeCalendarData() {
-//        lifecycleScope.launch {
-//            calenderViewModel.init().collect { updatedDays ->
-//                calenderViewModel.selectedDate.observe(this@SignUpActivity) { sd ->
-//                    Log.d("selectedData observe", "observeCalendarData() 시작")
-//                    adapter.update(updatedDays, sd)
-//                    calendarBinding.month.text = sd.month.value.toString()
-//                    calendarBinding.year.text = sd.year.toString()
-//                }
-//            }
-//        }
-//    }
-//
-//    private fun minusMonth(){
-//        lifecycleScope.launch {
-//            calenderViewModel.minusSelectedDate().collect { updatedDays ->
-//                calenderViewModel.selectedDate.observe(this@SignUpActivity) { sd ->
-//                    Log.d("selectedData observe", "left.setOnClickListener() 시작")
-//                    adapter.update(updatedDays, sd)
-//                }
-//            }
-//        }
-//    }
-//
-//
-//    private fun resetDay() {
-//        selectedDay = null
-//        adapter.resetSelected()
-//    }
-//
-//    private fun plusMonth(){
-//        lifecycleScope.launch {
-//            calenderViewModel.plusSelectedDate().collect { updatedDays ->
-//                calenderViewModel.selectedDate.observe(this@SignUpActivity) { sd ->
-//                    Log.d("selectedData observe", "right.setOnClickListener() 시작")
-//                    adapter.update(updatedDays, sd)
-//                }
-//            }
-//        }
-//    }
-//
-//    override fun onItemClickListener(data: Int, selected: MutableList<Boolean>, position: Int, sd : LocalDate) {
-//        adapter.resetSelected()
-//        selected[position] = !selected[position]
-//        selectedDay = sd
-//    }
-
 }

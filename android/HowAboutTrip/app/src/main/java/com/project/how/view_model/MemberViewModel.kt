@@ -25,8 +25,8 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class MemberViewModel : ViewModel() {
-    private var memberRepository : MemberRepository = MemberRepository()
+object MemberViewModel : ViewModel() {
+    private var memberRepository : MemberRepository = MemberRepository
     private val _currentUserLiveData = memberRepository.currentUserLiveData
     private val _userLiveData = memberRepository.userLiveData
     private val _tokensLiveData = memberRepository.tokensLiveData
@@ -42,6 +42,11 @@ class MemberViewModel : ViewModel() {
         get() = _tokensSaveLiveData
     val memberInfoLiveData : LiveData<MemberInfo>
         get() = _infoLiveData
+
+    private const val ON_FAILURE = 99999
+    private const val ACCESS_TOKEN = "Access-Token"
+    private const val REFRESH_TOKEN = "Refresh-Token"
+    private const val BAD_REQUEST = 400
 
     private var authRecreateCount = 0
 
@@ -179,12 +184,5 @@ class MemberViewModel : ViewModel() {
                     Log.d("getInfo onFailure", "${t.message}")
                 }
             })
-    }
-
-    companion object{
-        private const val ON_FAILURE = 99999
-        private const val ACCESS_TOKEN = "Access-Token"
-        private const val REFRESH_TOKEN = "Refresh-Token"
-        private const val BAD_REQUEST = 400
     }
 }

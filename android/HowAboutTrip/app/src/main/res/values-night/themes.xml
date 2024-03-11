@@ -28,4 +28,17 @@
         <item name="android:itemBackground">@color/white</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
+    <style name="SimpleTimePicker">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/noto_sans_kr_bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TabItemTextSize" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="FabRoundedCorner">
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

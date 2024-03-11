@@ -3,6 +3,7 @@ package com.project.how.adapter
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.how.R
@@ -16,12 +17,9 @@ class CalendarAdapter(
     : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
     private var sd = selectedDate
     private var selected : MutableList<Boolean> = mutableListOf()
-    private val selectedMonthDays : MutableMap<Int, MutableList<Boolean>> = mutableMapOf()
-    private val selectedTwoDay : MutableMap<Int, LocalDate> = mutableMapOf()
     private var days = repositoryDays
     private var emptyCount = 0
-    private var dayCount = 1
-    private var selectedCount = 0
+    private var dayCount = 0
 
     init {
         Log.d("CalendarAdapter", "init repositoryDays.size : ${repositoryDays.size}\n${days.size}")
@@ -32,43 +30,15 @@ class CalendarAdapter(
         fun bind(data: Int, position: Int){
             if(data != EMPTY){
                 binding.day.text = dayCount++.toString()
-                val firstSelected = selectedTwoDay[FIRST]
-                val secondSelected = selectedTwoDay[SECOND]
-                if(firstSelected != null && secondSelected != null){
-                    if(firstSelected.month.value < secondSelected.month.value){
-                        if((position - emptyCount) < secondSelected.dayOfMonth){
-                            binding.day.setTextColor(Color.parseColor("#00000000"))
-                            binding.background.setBackgroundResource(R.color.black)
-                        }
-                    }else if(firstSelected.month.value > secondSelected.month.value){
-                        if((position - emptyCount) < firstSelected.dayOfMonth){
-                            binding.day.setTextColor(Color.parseColor("#00000000"))
-                            binding.background.setBackgroundResource(R.color.black)
-                        }
-                    }else{
-                        if(firstSelected.dayOfMonth < secondSelected.dayOfMonth){
-                            if((firstSelected.dayOfMonth < (position - emptyCount)) && (secondSelected.dayOfMonth > (position - emptyCount))) {
-                                binding.day.setTextColor(Color.parseColor("#00000000"))
-                                binding.background.setBackgroundResource(R.color.black)
-                            }
-                        }else if(firstSelected.dayOfMonth > secondSelected.dayOfMonth){
-                            if((firstSelected.dayOfMonth > (position - emptyCount)) && (secondSelected.dayOfMonth < (position - emptyCount))) {
-                                binding.day.setTextColor(Color.parseColor("#00000000"))
-                                binding.background.setBackgroundResource(R.color.black)
-                            }
-                        }
-                    }
-                }
                 binding.day.setOnClickListener {
-//                    selected[position] = !selected[position]
-                    selectedTwoDay[selectedCount++%2] = sd.withDayOfMonth(position-emptyCount)
-                    val sd = sd.withDayOfMonth(position-emptyCount)
-                    onItemClickListener.onItemClickListener(data, selected, position, sd)
+                    val dayOfMonthNum = position-emptyCount+1
+                    val selectedDay = sd.withDayOfMonth(dayOfMonthNum)
+                    onItemClickListener.onItemClickListener(selected, selectedDay, position)
                 }
 
                 changeColor(binding, position)
             }else{
-                binding.day.text = " "
+                binding.day.visibility = View.GONE
                 emptyCount++
             }
 
@@ -99,7 +69,6 @@ class CalendarAdapter(
     }
 
     fun observeMonthChange(sd : LocalDate){
-        selectedMonthDays[this.sd.month.value] = selected
         this.sd = sd
         initSelected()
     }
@@ -114,37 +83,26 @@ class CalendarAdapter(
     }
 
     fun resetSelected(){
-        for(i in days.indices)
+        for(i in days.indices){
             selected[i] = false
+        }
         dayCount = 1
         emptyCount = 0
         notifyDataSetChanged()
     }
 
-    private fun changeColor(binding: CalendarDayItemBinding, position: Int){
-        if(selected[position]){
+    private fun changeColor(binding: CalendarDayItemBinding, position: Int) {
+        if (selected[position] && days[position] != EMPTY) {
             binding.day.setTextColor(Color.parseColor("#FFFFFFFF"))
             binding.background.setBackgroundResource(R.drawable.black_oval_day_background)
-        }else{
+        } else {
             binding.day.setTextColor(Color.parseColor("#FF000000"))
             binding.background.setBackgroundResource(R.drawable.white_oval_day_background)
         }
     }
 
-    fun getSelectedDays() : MutableMap<Int, LocalDate>?{
-        if (selectedTwoDay[FIRST] != null || selectedTwoDay[SECOND] != null)
-            return selectedTwoDay
-        return null
-    }
-
-    fun getSelectedDay() : LocalDate?{
-        if (selectedTwoDay[FIRST] != null)
-            return selectedTwoDay[FIRST]
-        return null
-    }
-
     interface OnItemClickListener{
-        fun onItemClickListener(data : Int, selected : MutableList<Boolean>, position: Int, sd: LocalDate){}
+        fun onItemClickListener(selected : MutableList<Boolean>, sd: LocalDate, position: Int)
     }
     companion object{
         private const val EMPTY = 99

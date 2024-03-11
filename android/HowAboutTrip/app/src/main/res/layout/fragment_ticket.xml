@@ -5,7 +5,7 @@
     <data>
         <variable
             name="ticket"
-            type="com.project.how.view.fragment.TicketFragment" />
+            type="com.project.how.view.fragment.main.TicketFragment" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_height="match_parent"

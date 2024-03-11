@@ -70,6 +70,7 @@
                     style="@style/WhiteBottomNavigationView"
                     app:labelVisibilityMode="labeled"
                     app:itemIconSize="28dp"
+                    app:itemIconTint="@color/black"
                     app:itemTextColor="@color/black"
                     app:itemRippleColor="@color/white"
                     app:itemActiveIndicatorStyle="@android:color/transparent"
@@ -89,7 +90,8 @@
                 android:src="@drawable/icon_ai_calendar_size_fixed"
                 android:backgroundTint="@color/black"
                 app:tint="@color/white"
-                app:layout_anchor="@+id/bottomAppBar" />
+                app:layout_anchor="@+id/bottomAppBar"
+                android:onClick="@{() -> main.moveAddAICalendar()}"/>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

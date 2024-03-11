@@ -24,7 +24,9 @@ class TicketFragment : Fragment() {
     ): View? {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_ticket, container, false)
         binding.ticket = this
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
+
+
         return binding.root
     }
 

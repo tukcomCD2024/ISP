@@ -23,7 +23,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.tabs.TabLayout
 import com.project.how.R
-import com.project.how.adapter.recyclerview.DaysScheduleAdapter
+import com.project.how.adapter.recyclerview.DaysScheduleEditAdapter
 import com.project.how.adapter.item_touch_helper.RecyclerViewItemTouchHelperCallback
 import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
 import com.project.how.data_class.AiSchedule
@@ -51,12 +51,12 @@ import java.util.Locale
 
 
 class CalendarEditActivity
-    : AppCompatActivity(), OnMapReadyCallback, DaysScheduleAdapter.OnDaysButtonClickListener, OnScheduleListener, OnDesListener, OnDateTimeListener {
+    : AppCompatActivity(), OnMapReadyCallback, DaysScheduleEditAdapter.OnDaysButtonClickListener, OnScheduleListener, OnDesListener, OnDateTimeListener {
     private lateinit var binding : ActivityCalendarEditBinding
     private val viewModel : ScheduleViewModel by viewModels()
     private lateinit var data : Schedule
     private var type: Int = FAILURE
-    private lateinit var adapter : DaysScheduleAdapter
+    private lateinit var adapter : DaysScheduleEditAdapter
     private lateinit var supportMapFragment: SupportMapFragment
     private var selectedDays = 0
     private var mapInitCheck = false
@@ -77,17 +77,19 @@ class CalendarEditActivity
         viewModel.scheduleLiveData.observe(this){
             Log.d("CalendarEditActivity", "scheduleLiveData.observe start\n data.title : ${it.title}")
             data = it
-
-            binding.title.setText(data.title)
+            if (!mapInitCheck){
+                binding.title.setText(data.title)
+            }
             binding.date.text = "${data.startDate} - ${data.endDate}"
             val formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(data.cost)
             binding.budget.text = getString(R.string.calendar_budget, formattedNumber)
             if (selectedDays > data.dailySchedule.lastIndex){
                 selectedDays = data.dailySchedule.lastIndex
             }
-            adapter = DaysScheduleAdapter(data.dailySchedule[selectedDays], this@CalendarEditActivity, this@CalendarEditActivity)
+            adapter = DaysScheduleEditAdapter(data.dailySchedule[selectedDays], this@CalendarEditActivity, this@CalendarEditActivity)
             binding.daySchedules.adapter = adapter
             binding.daysTab.removeAllTabs()
+            binding.daysTitle.text = getString(R.string.days_title, (selectedDays+1).toString(), getDaysTitle( selectedDays+1))
 
             setDaysTab()
             setDaysTabItemMargin()
@@ -172,7 +174,7 @@ class CalendarEditActivity
         var first = true
         var polylineOptions = PolylineOptions()
         data.dailySchedule[selectedDays].forEachIndexed {position, data->
-            if(data.latitude != null && data.longitude != null){
+            if((data.latitude != null && data.longitude != null) || (data.longitude == 0.0 && data.latitude == 0.0)){
                 val location = LatLng(data.latitude, data.longitude)
                 if (first){
                     val camera = EditScheduleBottomSheetDialog.makeScheduleCarmeraUpdate(location, 10f)
@@ -213,14 +215,6 @@ class CalendarEditActivity
         val startDate = LocalDate.parse(data.startDate, DateTimeFormatter.ISO_DATE)
         val formatter = DateTimeFormatter.ofPattern("MM.dd")
         return startDate.plusDays(tabNum.toLong()).format(formatter)
-    }
-
-    private fun <T : Serializable?> getSerializable(activity: Activity, name: String, clazz: Class<T>): T
-    {
-        return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            activity.intent.getSerializableExtra(name, clazz)!!
-        else
-            activity.intent.getSerializableExtra(name) as T
     }
 
     private fun getData (type : Int){
@@ -308,10 +302,7 @@ class CalendarEditActivity
                         getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
                 }
                 ScheduleViewModel.SUCCESS ->{
-                    if (type == NEW)
-                        moveCalendarList()
-                    else
-                        moveCalendar()
+                    moveCalendarList()
                 }
             }
         }
@@ -337,14 +328,6 @@ class CalendarEditActivity
         data.cost = totalCost
         val formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(data.cost)
         binding.budget.text = getString(R.string.calendar_budget, formattedNumber)
-    }
-
-    companion object{
-        const val FAILURE = -1
-        const val AI_SCHEDULE = 0
-        const val NEW = 1
-        const val EDIT = 2
-
     }
 
     override fun onEditButtonClickListener(data : DaysSchedule, position : Int) {
@@ -404,6 +387,21 @@ class CalendarEditActivity
 
     override fun onSaveDateTime(dateTime: String, type: Int) {
 
+    }
+
+    companion object{
+        const val FAILURE = -1
+        const val AI_SCHEDULE = 0
+        const val NEW = 1
+        const val EDIT = 2
+
+        fun <T : Serializable?> getSerializable(activity: Activity, name: String, clazz: Class<T>): T
+        {
+            return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                activity.intent.getSerializableExtra(name, clazz)!!
+            else
+                activity.intent.getSerializableExtra(name) as T
+        }
     }
 
 }

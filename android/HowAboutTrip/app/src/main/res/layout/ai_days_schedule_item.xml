@@ -83,14 +83,14 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buy"
-                android:layout_width="70dp"
+                android:layout_width="75dp"
                 android:layout_height="20dp"
                 android:layout_marginBottom="10dp"
-                android:drawableStart="@drawable/icon_buy_size_fixed"
+                android:drawableStart="@drawable/icon_search_size_fixed"
                 style="@style/Button.BlackRound"
                 android:gravity="center"
-                android:paddingHorizontal="15dp"
-                android:text="@string/buy"
+                android:paddingHorizontal="13dp"
+                android:text="@string/search"
                 android:textColor="@color/white"
                 android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="parent"

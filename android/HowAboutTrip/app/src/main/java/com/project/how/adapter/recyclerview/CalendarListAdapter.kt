@@ -3,6 +3,7 @@ package com.project.how.adapter.recyclerview
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -22,6 +23,7 @@ class CalendarListAdapter (private val context: Context, data : GetScheduleListR
     inner class ViewHolder(val binding: CalendarListItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(data : GetScheduleListResponseElement, position: Int){
             val formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(data.totalPrice)
+            binding.link.visibility = View.GONE
             binding.budget.text = context.getString(R.string.calendar_budget, formattedNumber)
             binding.title.text = data.scheduleName
             binding.date.text = "${data.startDate} - ${data.endDate}"
@@ -58,8 +60,8 @@ class CalendarListAdapter (private val context: Context, data : GetScheduleListR
         holder.bind(data, position)
 
         holder.itemView.setOnClickListener {
-            val latLng = LatLng(data.latitude, data.longitude)
-            onButtonClickListener.onItemClickListener(data.id, latLng)
+
+            onButtonClickListener.onItemClickListener(data.id, data.latitude, data.longitude)
         }
     }
 
@@ -72,7 +74,7 @@ class CalendarListAdapter (private val context: Context, data : GetScheduleListR
 
     interface OnCalendarListButtonClickListener{
         fun onDeleteButtonClickListener(data : GetScheduleListResponseElement, position: Int)
-        fun onItemClickListener(id: Long, latLng: LatLng)
+        fun onItemClickListener(id: Long, latitude : Double, longitude : Double)
         fun onCheckListButtonClickListener(id: Long)
         fun onShareButtonClickListener(id: Long)
     }

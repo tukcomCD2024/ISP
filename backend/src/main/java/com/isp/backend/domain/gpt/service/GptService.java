@@ -59,15 +59,7 @@ public class GptService {
     }
 
     private GptMessage getGptMessage(ResponseEntity<GptResponseDTO> responseEntity) {
-        return getChoices(responseEntity).get(0).getMessage();
-    }
-
-    private List<GptResponseDTO.Choice> getChoices(ResponseEntity<GptResponseDTO> responseEntity) {
-        return getBody(responseEntity).getChoices();
-    }
-
-    private GptResponseDTO getBody(ResponseEntity<GptResponseDTO> responseEntity) {
-        return responseEntity.getBody();
+        return responseEntity.getBody().getChoices().get(0).getMessage();
     }
 
     public GptScheduleResponseDto askQuestion(GptScheduleRequestDto questionRequestDTO) {

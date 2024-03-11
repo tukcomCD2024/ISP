@@ -15,46 +15,30 @@ public class GptScheduleParser {
 
     public List<GptSchedule> parseScheduleText(String scheduleText) {
         List<GptSchedule> schedules = new ArrayList<>();
-        Pattern pattern = Pattern.compile(ParsingConstants.DATE_REGEX);
+        Pattern datePattern = Pattern.compile(ParsingConstants.DATE_REGEX);
 
         List<String> lines = List.of(scheduleText.split(ParsingConstants.NEW_LINE_REGEX));
         List<String> currentScheduleDetail = new ArrayList<>();
-        String currentDate = ParsingConstants.CURRENT_DATE;
+        String currentDate = "";
 
         for (String line : lines) {
-            processLine(line, pattern, schedules, currentScheduleDetail, currentDate);
+            Matcher dateMatcher = datePattern.matcher(line);
+            if (dateMatcher.find()) {
+                if (!currentDate.isEmpty()) {
+                    schedules.add(new GptSchedule(currentDate, currentScheduleDetail));
+                    currentScheduleDetail = new ArrayList<>();
+                }
+                currentDate = dateMatcher.group(1);
+            } else if (!line.trim().isEmpty() && ParsingConstants.FILTER_STRINGS.stream().noneMatch(line::contains)) {
+                currentScheduleDetail.add(line.trim().substring(ParsingConstants.BEGIN_INDEX)); // Remove leading index
+            }
         }
 
-        addScheduleIfNotEmpty(currentDate, schedules, currentScheduleDetail);
+        if (!currentDate.isEmpty()) {
+            schedules.add(new GptSchedule(currentDate, currentScheduleDetail));
+        }
 
         return schedules;
     }
 
-    private void processLine(String line, Pattern pattern, List<GptSchedule> schedules, List<String> currentScheduleDetail, String currentDate) {
-        Matcher dateMatcher = pattern.matcher(line);
-
-        if (dateMatcher.find()) {
-            handleNewDate(currentDate, schedules, currentScheduleDetail, dateMatcher.group(1));
-        } else {
-            handleNonDateLine(line, currentScheduleDetail);
-        }
-    }
-
-    private void handleNewDate(String currentDate, List<GptSchedule> schedules, List<String> currentScheduleDetail, String newDate) {
-        if (!currentDate.isEmpty()) {
-            schedules.add(new GptSchedule(currentDate, currentScheduleDetail));
-        }
-    }
-
-    private void handleNonDateLine(String line, List<String> currentScheduleDetail) {
-        if (!line.trim().isEmpty() && ParsingConstants.FILTER_STRINGS.stream().noneMatch(line::contains)) {
-            currentScheduleDetail.add(line.trim().substring(ParsingConstants.BEGIN_INDEX)); // Remove leading index
-        }
-    }
-
-    private void addScheduleIfNotEmpty(String currentDate, List<GptSchedule> schedules, List<String> currentScheduleDetail) {
-        if (!currentDate.isEmpty()) {
-            schedules.add(new GptSchedule(currentDate, currentScheduleDetail));
-        }
-    }
 }

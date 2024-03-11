@@ -37,8 +37,11 @@ dependencies {
 
 	// AWS
 	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.2'
+    implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.2")
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3'
 
-	// Open API
+
+    // Open API
 	implementation "com.amadeus:amadeus-java:8.0.0"
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

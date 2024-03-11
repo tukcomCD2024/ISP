@@ -10,6 +10,21 @@ spring:
     url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY_ID}
+        secret-key: ${AWS_SECRET_ACCESS_KEY}
+      region:
+        static: ${AWS_S3_REGION}
+      s3:
+        bucket: ${AWS_S3_BUCKET_NAME}
+      stack:
+        auto: false
 
 server:
   servlet:
@@ -17,18 +32,6 @@ server:
 
 jwt:
   secret: ${JWT_SECRET_KEY}
-
-cloud:
-  aws:
-    credentials:
-      accessKey: ${AWS_ACCESS_KEY_ID}
-      secretKey: ${AWS_SECRET_ACCESS_KEY}
-    s3:
-      bucket: ${AWS_S3_BUCKET_NAME}
-    region:
-      static: ${AWS_S3_REGION}
-    stack:
-      auto: false
 
 api-key:
   chat-gpt: ${GPT_API_KEY}

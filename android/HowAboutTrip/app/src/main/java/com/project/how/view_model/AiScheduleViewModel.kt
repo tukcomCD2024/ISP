@@ -1,5 +1,6 @@
 package com.project.how.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
@@ -7,7 +8,7 @@ import com.project.how.data_class.AiDaysSchedule
 import com.project.how.data_class.AiSchedule
 import com.project.how.data_class.AiScheduleInput
 import com.project.how.data_class.dto.CreateScheduleRequest
-import com.project.how.data_class.dto.CreateScheduleRespone
+import com.project.how.data_class.dto.CreateScheduleResponse
 import com.project.how.model.AiScheduleRepository
 import com.project.how.network.client.ScheduleRetrofit
 import retrofit2.Call
@@ -33,16 +34,16 @@ class AiScheduleViewModel : ViewModel() {
         )
         ScheduleRetrofit.getApiService()!!
             .createSchedule(createScheduleRequest)
-            .enqueue(object : Callback<CreateScheduleRespone>{
+            .enqueue(object : Callback<CreateScheduleResponse>{
                 override fun onResponse(
-                    call: Call<CreateScheduleRespone>,
-                    response: Response<CreateScheduleRespone>
+                    call: Call<CreateScheduleResponse>,
+                    response: Response<CreateScheduleResponse>
                 ) {
-                    TODO("Not yet implemented")
+
                 }
 
-                override fun onFailure(call: Call<CreateScheduleRespone>, t: Throwable) {
-                    TODO("Not yet implemented")
+                override fun onFailure(call: Call<CreateScheduleResponse>, t: Throwable) {
+                    Log.d("createSchedule is failed", "${t.message}")
                 }
 
             })

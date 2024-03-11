@@ -20,7 +20,7 @@
             app:lottie_rawRes="@raw/sign_up_animation"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_repeatCount="5"
+            app:lottie_repeatCount="7"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

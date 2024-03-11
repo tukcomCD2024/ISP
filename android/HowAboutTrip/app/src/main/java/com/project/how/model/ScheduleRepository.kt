@@ -1,13 +1,17 @@
 package com.project.how.model
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.project.how.R
+import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
 import com.project.how.data_class.AiDaysSchedule
 import com.project.how.data_class.AiSchedule
 import com.project.how.data_class.DaysSchedule
 import com.project.how.data_class.Schedule
 import com.project.how.data_class.dto.GetScheduleListResponse
+import com.project.how.data_class.dto.ScheduleDetail
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
@@ -125,6 +129,37 @@ class ScheduleRepository {
 
     fun getScheduleList(scheduleList : GetScheduleListResponse){
         _scheduleListLiveData.postValue(scheduleList)
+    }
+
+    fun getDaysSchedule(context: Context, schedule: Schedule, scheduleDetail: ScheduleDetail) = flow<Schedule>{
+        for(i in scheduleDetail.dailySchedules.indices){
+            val dailySchedule = mutableListOf<DaysSchedule>()
+            for (j in scheduleDetail.dailySchedules[i].schedules.indices){
+                dailySchedule.add(
+                    DaysSchedule(
+                        getScheduleType(context, scheduleDetail.dailySchedules[i].schedules[j].type),
+                        scheduleDetail.dailySchedules[i].schedules[j].todo,
+                        scheduleDetail.dailySchedules[i].schedules[j].place,
+                        scheduleDetail.dailySchedules[i].schedules[j].latitude,
+                        scheduleDetail.dailySchedules[i].schedules[j].longitude,
+                        scheduleDetail.dailySchedules[i].schedules[j].budget,
+                        false,
+                        null
+                    )
+                )
+            }
+            schedule.dailySchedule.add(dailySchedule)
+            emit(schedule)
+        }
+    }
+
+    private fun getScheduleType(context: Context, type : String) : Int {
+        when(type){
+            context.getString(R.string.airplane_string) -> {return AiDaysScheduleAdapter.AIRPLANE}
+            context.getString(R.string.hotel_string) -> {return AiDaysScheduleAdapter.HOTEL}
+            context.getString(R.string.place_string) -> {return AiDaysScheduleAdapter.PLACE}
+        }
+        return AiDaysScheduleAdapter.PLACE
     }
 
     companion object{

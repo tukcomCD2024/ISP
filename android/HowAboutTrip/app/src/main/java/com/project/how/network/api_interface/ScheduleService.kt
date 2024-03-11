@@ -1,7 +1,7 @@
 package com.project.how.network.api_interface
 
 import com.project.how.data_class.dto.CreateScheduleRequest
-import com.project.how.data_class.dto.CreateScheduleRespone
+import com.project.how.data_class.dto.CreateScheduleResponse
 import com.project.how.data_class.dto.GetScheduleListResponse
 import com.project.how.data_class.dto.ScheduleDetail
 import retrofit2.Call
@@ -14,10 +14,10 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ScheduleService {
-    @POST("schedules/schedule")
+    @POST("schedules/")
     fun createSchedule(
         @Body createCondition : CreateScheduleRequest
-    ) : Call<CreateScheduleRespone>
+    ) : Call<CreateScheduleResponse>
 
     @POST("schedules/save")
     fun saveSchedule(

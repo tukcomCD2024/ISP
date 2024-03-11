@@ -84,7 +84,7 @@
                         android:hint="@string/calendar_title_max_length"
                         android:maxLength="20"
                         android:maxLines="1"
-                        android:text="test"
+                        android:inputType="text"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         app:layout_constraintBottom_toTopOf="@+id/date"
@@ -94,7 +94,6 @@
                         android:id="@+id/date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2024.02.19 - 2024.02.20"
                         android:textColor="@color/white"
                         android:textSize="13sp"
                         app:layout_constraintBottom_toTopOf="@+id/budget"
@@ -104,7 +103,6 @@
                         android:id="@+id/budget"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="예상 지출 금액 : 2,000,000 원"
                         android:textColor="@color/white"
                         android:textSize="13sp"
                         android:layout_marginBottom="8dp"
@@ -227,7 +225,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:fontFamily="@font/bm_hanna"
-                    android:text="1일차"
                     android:textSize="16sp"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="@id/guideline2"
@@ -245,7 +242,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/guideline2"
                     app:layout_constraintStart_toStartOf="@+id/guideline1"
                     app:layout_constraintTop_toBottomOf="@id/days_title"
-                    tools:listitem="@layout/calendar_days_schedule_item" />
+                    tools:listitem="@layout/calendar_days_schedule_edit_item" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/add"

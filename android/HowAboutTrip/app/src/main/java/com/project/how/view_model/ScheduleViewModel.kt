@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.project.how.R
 import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
 import com.project.how.data_class.AiSchedule
+import com.project.how.data_class.DaysSchedule
 import com.project.how.data_class.Schedule
 import com.project.how.data_class.dto.DailySchedule
 import com.project.how.data_class.dto.GetScheduleListResponse
@@ -18,6 +19,7 @@ import com.project.how.network.client.ScheduleRetrofit
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
@@ -60,6 +62,7 @@ class ScheduleViewModel : ViewModel() {
     }
 
     fun getTotalCost(schedule: Schedule) : Flow<Long> = scheduleRepository.getTotalCost(schedule)
+    fun getDaysSchedule(context: Context, schedule: Schedule, response : ScheduleDetail) : Flow<Schedule> = scheduleRepository.getDaysSchedule(context, schedule, response)
 
     fun saveSchedule(context: Context, accessToken: String, schedule: Schedule): Flow<Int> = callbackFlow {
         // checkLocations의 결과를 받을 Flow 생성
@@ -181,27 +184,102 @@ class ScheduleViewModel : ViewModel() {
             })
     }
 
-    fun deleteSchedule(context: Context, accessToken: String, id : Long){
+    fun deleteSchedule(context: Context, accessToken: String, id : Long) = callbackFlow {
         ScheduleRetrofit.getApiService()!!
             .deleteSchedule(context.getString(R.string.bearer_token, accessToken), id)
             .enqueue(object : Callback<String>{
                 override fun onResponse(call: Call<String>, response: Response<String>) {
                     if (response.isSuccessful){
                         Log.d("deleteSchedule is success", "response code : ${response.code()}")
+                        trySend(SUCCESS)
+                        close()
                     }else{
                         Log.d("deleteSchedule is not success", "response code : ${response.code()}\n${response.errorBody()}")
+                        if (response.code() == 404){
+                            trySend(NOT_EXIST_SCHEDULE)
+                            close()
+                        }else if(response.code() == 401){
+                            trySend(OTHER_USER_SCHEDULE)
+                            close()
+                        }
+
                     }
                 }
 
                 override fun onFailure(call: Call<String>, t: Throwable) {
                     Log.d("deleteSchedule", "${t.message}")
+                    trySend(NETWORK_FAILED)
+                    close()
                 }
             })
+    }
+
+    fun getScheduleDetail(context: Context, accessToken: String, id : Long) = callbackFlow<Int>{
+        Log.d("onCreate", "getScheduleDetail start\naccessToken : $accessToken\nid : $id")
+        ScheduleRetrofit.getApiService()?.let {apiService ->
+            apiService.getScheduleDetail(context.getString(com.project.how.R.string.bearer_token, accessToken), id)
+            .enqueue(object : Callback<ScheduleDetail>{
+                override fun onResponse(
+                    call: Call<ScheduleDetail>,
+                    response: Response<ScheduleDetail>
+                ) {
+                    if (response.isSuccessful){
+                        val result = response.body()
+                        if(result != null){
+                            viewModelScope.launch {
+                                Log.d("getScheduleDetail is success", "schedule name : ${result.scheduleName}\ndailySchedules lastIndex : ${result.dailySchedules.lastIndex}")
+                                val schedule = Schedule(
+                                    result.scheduleName,
+                                    result.country,
+                                    result.startDate,
+                                    result.endDate,
+                                    0,
+                                    mutableListOf<MutableList<DaysSchedule>>()
+                                )
+                                if ((result.dailySchedules.isEmpty())){
+                                    getSchedule(schedule)
+                                    trySend(SUCCESS)
+                                    close()
+                                }else{
+                                    val setFlow = getDaysSchedule(context, schedule, result)
+                                    setFlow.collect{afterSchedule ->
+                                        getTotalCost(afterSchedule).collect{totalCost ->
+                                            schedule.cost = totalCost
+                                            getSchedule(schedule)
+                                            trySend(SUCCESS)
+                                            close()
+                                        }
+                                    }
+                                }
+                            }
+                        }else{
+                            Log.d("getScheduleDetail is success", "response body is null")
+                            trySend(NOT_EXIST_SCHEDULE)
+                            close()
+                        }
+                    }else{
+                        Log.d("getScheduleDetail is not success", "response code : ${response.code()}\n${response.errorBody()}")
+                        trySend(NOT_EXIST_SCHEDULE)
+                        close()
+                    }
+                }
+
+                override fun onFailure(call: Call<ScheduleDetail>, t: Throwable) {
+                    Log.d("getScheduleDetail is failed", "${t.message}")
+                    trySend(NETWORK_FAILED)
+                }
+
+            })
+        } ?: close()
+
+        awaitClose()
     }
 
     companion object{
         const val NULL_LOCATIONS = -1
         const val NETWORK_FAILED = -2
+        const val NOT_EXIST_SCHEDULE = -3
+        const val OTHER_USER_SCHEDULE = -4
         const val SUCCESS = 0
     }
 }

@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
-@RequestMapping("/chat-gpt")
+@RequestMapping("/gpt")
 @RestController
 public class GptController {
     private final GptService gptService;
 
-    @PostMapping("/question")
+    @PostMapping("/create")
     public ResponseEntity<GptScheduleResponseDto> sendQuestion(@RequestBody GptScheduleRequestDto gptScheduleRequestDto) {
         GptScheduleResponseDto gptScheduleResponseDto = gptService.askQuestion(gptScheduleRequestDto);
         return ResponseEntity.ok(gptScheduleResponseDto);

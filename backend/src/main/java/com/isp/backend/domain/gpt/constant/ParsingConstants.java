@@ -11,4 +11,5 @@ public class ParsingConstants {
     public static final List<String> FILTER_STRINGS = List.of(
             "Message(role=assistant, content=", ")"
             );
+    public static final int GROUP_MATCH = 1;
 }

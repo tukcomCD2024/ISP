@@ -60,6 +60,9 @@ class CalendarEditActivity
     private lateinit var supportMapFragment: SupportMapFragment
     private var selectedDays = 0
     private var mapInitCheck = false
+    private var id : Long = -1
+    private var latitude : Double = 0.0
+    private var longitude : Double = 0.0
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -230,6 +233,9 @@ class CalendarEditActivity
             }
             EDIT ->{
                 viewModel.getSchedule(getSerializable(this, getString(R.string.schedule), Schedule::class.java))
+                id = intent.getLongExtra(getString(R.string.server_calendar_id), -1)
+                latitude = intent.getDoubleExtra(getString(R.string.server_calendar_latitude), 0.0)
+                longitude = intent.getDoubleExtra(getString(R.string.server_calendar_longitude), 0.0)
             }
         }
     }
@@ -309,7 +315,25 @@ class CalendarEditActivity
     }
 
     private suspend fun saveEditSchedule(){
-
+        viewModel.updateSchedule(this, MemberViewModel.tokensLiveData.value!!.accessToken, id, data).collect{check->
+            when(check){
+                ScheduleViewModel.NULL_LOCATIONS ->{
+                    val message = listOf<String>(getString(R.string.some_schedule_lng_lat))
+                    val confirmDialog = ConfirmDialog(message)
+                    confirmDialog.show(supportFragmentManager, "ConfirmDialog")
+                }
+                ScheduleViewModel.NETWORK_FAILED ->{
+                    Toast.makeText(this@CalendarEditActivity,
+                        getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
+                }
+                ScheduleViewModel.EMPTY_SCHEDULE->{
+                    Toast.makeText(this@CalendarEditActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
+                }
+                ScheduleViewModel.SUCCESS->{
+                    moveCalendar()
+                }
+            }
+        }
     }
 
     private fun moveCalendarList(){
@@ -320,6 +344,9 @@ class CalendarEditActivity
 
     private fun moveCalendar(){
         val intent = Intent(this, CalendarActivity::class.java)
+        intent.putExtra(getString(R.string.server_calendar_id), id)
+        intent.putExtra(getString(R.string.server_calendar_latitude), latitude)
+        intent.putExtra(getString(R.string.server_calendar_longitude), longitude)
         startActivity(intent)
         finish()
     }

@@ -76,7 +76,7 @@ class AddAICalendarActivity :
     fun search(){
         lifecycleScope.launch {
             if ((destination != null) && (departureDate != null) && (entranceDate != null)){
-                viewModel.getAiSchedule(AiScheduleInput(destination!!, purpose, departureDate!!, entranceDate!!), true)
+                viewModel.getAiSchedule(AiScheduleInput(destination!!, purpose, departureDate!!, entranceDate!!), false)
             }else{
                 val message = mutableListOf<String>()
                 if (destination == null)

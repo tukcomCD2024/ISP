@@ -56,6 +56,7 @@ class CalendarListActivity : AppCompatActivity(), CalendarListAdapter.OnCalendar
         intent.putExtra(getString(R.string.server_calendar_latitude), latitude)
         intent.putExtra(getString(R.string.server_calendar_longitude), longitude)
         startActivity(intent)
+        finish()
     }
 
     override fun onCheckListButtonClickListener(id: Long) {

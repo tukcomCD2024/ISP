@@ -3,6 +3,7 @@ package com.project.how.view_model
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
 import com.project.how.data_class.AiDaysSchedule
 import com.project.how.data_class.AiSchedule
@@ -11,6 +12,7 @@ import com.project.how.data_class.dto.CreateScheduleRequest
 import com.project.how.data_class.dto.CreateScheduleResponse
 import com.project.how.model.AiScheduleRepository
 import com.project.how.network.client.ScheduleRetrofit
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,7 +41,19 @@ class AiScheduleViewModel : ViewModel() {
                     call: Call<CreateScheduleResponse>,
                     response: Response<CreateScheduleResponse>
                 ) {
-
+                    if(response.isSuccessful){
+                        val result = response.body()
+                        if (result != null){
+                            viewModelScope.launch {
+                                Log.d("createSchedule is success", "startDate : ${result.schedules[0].date}")
+                                aiScheduleRepository.getAiSchedule(getAiSchedule(result, createScheduleRequest))
+                            }
+                        }else{
+                            Log.d("createSchedule is success", "response.body is null\ncode : ${response.code()}")
+                        }
+                    }else{
+                        Log.d("createSchedule is not success", "code : ${response.code()}")
+                    }
                 }
 
                 override fun onFailure(call: Call<CreateScheduleResponse>, t: Throwable) {
@@ -47,6 +61,33 @@ class AiScheduleViewModel : ViewModel() {
                 }
 
             })
+    }
+
+    private fun getAiSchedule(createScheduleResponse : CreateScheduleResponse, createScheduleRequest: CreateScheduleRequest) : AiSchedule{
+        val title = createScheduleRequest.destination
+        val country = createScheduleRequest.destination
+        val startDate = createScheduleRequest.departureDate
+        val endDate = createScheduleRequest.returnDate
+        val image = createScheduleResponse.countryImage
+        val place = createScheduleResponse.schedules[0].scheduleDetail
+        val dailySchedule = mutableListOf<MutableList<AiDaysSchedule>>()
+        for (i in createScheduleResponse.schedules.indices){
+            val oneDaySchedule = mutableListOf<AiDaysSchedule>()
+            for(j in createScheduleResponse.schedules[i].scheduleDetail.indices){
+                oneDaySchedule.add(AiDaysSchedule(AiDaysScheduleAdapter.PLACE, createScheduleResponse.schedules[i].scheduleDetail[j], createScheduleResponse.schedules[i].scheduleDetail[j]))
+            }
+            dailySchedule.add(oneDaySchedule)
+        }
+
+        return AiSchedule(
+            title,
+            country,
+            place,
+            image,
+            startDate,
+            endDate,
+            dailySchedule
+        )
     }
 
     private fun getTestAiSchedule() : AiSchedule{

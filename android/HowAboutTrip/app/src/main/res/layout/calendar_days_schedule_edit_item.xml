@@ -78,6 +78,9 @@
                 android:text="인천 → 오사카행"
                 android:textSize="15sp"
                 android:textStyle="bold"
+                android:maxLines="1"
+                android:maxLength="13"
+                android:ellipsize="end"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -88,6 +91,7 @@
                 android:maxLines="1"
                 android:text="예산 : "
                 android:textSize="13sp"
+                android:ellipsize="middle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/schedule_title" />
 

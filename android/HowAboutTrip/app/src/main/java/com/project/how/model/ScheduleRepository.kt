@@ -132,6 +132,7 @@ class ScheduleRepository {
     }
 
     fun getDaysSchedule(context: Context, schedule: Schedule, scheduleDetail: ScheduleDetail) = flow<Schedule>{
+
         for(i in scheduleDetail.dailySchedules.indices){
             val dailySchedule = mutableListOf<DaysSchedule>()
             for (j in scheduleDetail.dailySchedules[i].schedules.indices){

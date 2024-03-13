@@ -1,6 +1,7 @@
 package com.isp.backend.domain.gpt.service;
 
 import com.isp.backend.domain.gpt.config.GptConfig;
+import com.isp.backend.domain.gpt.constant.ParsingConstants;
 import com.isp.backend.domain.gpt.dto.GptRequestDTO;
 import com.isp.backend.domain.gpt.dto.GptResponseDTO;
 import com.isp.backend.domain.gpt.dto.GptScheduleRequestDto;
@@ -8,6 +9,7 @@ import com.isp.backend.domain.gpt.dto.GptScheduleResponseDto;
 import com.isp.backend.domain.gpt.entity.GptMessage;
 import com.isp.backend.domain.gpt.entity.GptSchedule;
 import com.isp.backend.domain.gpt.entity.GptScheduleParser;
+import com.isp.backend.global.s3.service.S3ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +21,7 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -28,6 +30,7 @@ import java.util.List;
 public class GptService {
     private final RestTemplate restTemplate;
     private final GptScheduleParser gptScheduleParser;
+    private final S3ImageService s3ImageService;
 
     @Value("${api-key.chat-gpt}")
     private String apiKey;
@@ -39,7 +42,7 @@ public class GptService {
         return new HttpEntity<>(gptRequestDTO, httpHeaders);
     }
 
-    public GptScheduleResponseDto getResponse(HttpEntity<GptRequestDTO> chatGptRequestHttpEntity) {
+    public GptScheduleResponseDto getResponse(String destination, HttpEntity<GptRequestDTO> chatGptRequestHttpEntity) {
 
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(60000);
@@ -50,8 +53,10 @@ public class GptService {
                 GptConfig.CHAT_URL,
                 chatGptRequestHttpEntity,
                 GptResponseDTO.class);
+        String countryImage = s3ImageService.get(destination);
         List<GptSchedule> gptSchedules = gptScheduleParser.parseScheduleText(getScheduleText(responseEntity));
-        return new GptScheduleResponseDto(gptSchedules);
+
+        return new GptScheduleResponseDto(countryImage, gptSchedules);
     }
 
     private String getScheduleText(ResponseEntity<GptResponseDTO> responseEntity) {
@@ -63,13 +68,17 @@ public class GptService {
     }
 
     public GptScheduleResponseDto askQuestion(GptScheduleRequestDto questionRequestDTO) {
-        List<GptMessage> messages = new ArrayList<>();
         String question = makeQuestion(questionRequestDTO);
-        messages.add(GptMessage.builder()
-                .role(GptConfig.ROLE)
-                .content(question)
-                .build());
+        List<GptMessage> messages = Collections.singletonList(
+                GptMessage.builder()
+                        .role(GptConfig.ROLE)
+                        .content(question)
+                        .build()
+        );
+
+
         return this.getResponse(
+                questionRequestDTO.getDestination(),
                 this.buildHttpEntity(
                         new GptRequestDTO(
                                 GptConfig.CHAT_MODEL,
@@ -85,9 +94,9 @@ public class GptService {
     private String makeQuestion(GptScheduleRequestDto questionRequestDTO) {
         return String.format(GptConfig.PROMPT,
                 questionRequestDTO.getDestination(),
-                questionRequestDTO.getPurpose(),
                 questionRequestDTO.getDepartureDate(),
-                questionRequestDTO.getReturnDate()
+                questionRequestDTO.getReturnDate(),
+                String.join(ParsingConstants.COMMA, questionRequestDTO.getPurpose())
         );
     }
 }

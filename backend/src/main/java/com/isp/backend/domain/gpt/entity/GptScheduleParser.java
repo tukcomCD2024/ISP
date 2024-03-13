@@ -19,7 +19,7 @@ public class GptScheduleParser {
 
         List<String> lines = List.of(scheduleText.split(ParsingConstants.NEW_LINE_REGEX));
         List<String> currentScheduleDetail = new ArrayList<>();
-        String currentDate = "";
+        String currentDate = ParsingConstants.CURRENT_DATE;
 
         for (String line : lines) {
             Matcher dateMatcher = datePattern.matcher(line);
@@ -28,7 +28,7 @@ public class GptScheduleParser {
                     schedules.add(new GptSchedule(currentDate, currentScheduleDetail));
                     currentScheduleDetail = new ArrayList<>();
                 }
-                currentDate = dateMatcher.group(1);
+                currentDate = dateMatcher.group(ParsingConstants.GROUP_MATCH);
             } else if (!line.trim().isEmpty() && ParsingConstants.FILTER_STRINGS.stream().noneMatch(line::contains)) {
                 currentScheduleDetail.add(line.trim().substring(ParsingConstants.BEGIN_INDEX)); // Remove leading index
             }

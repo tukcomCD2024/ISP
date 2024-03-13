@@ -11,5 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GptScheduleResponseDto {
+    private String countryImage;
     private List<GptSchedule> schedules;
 }

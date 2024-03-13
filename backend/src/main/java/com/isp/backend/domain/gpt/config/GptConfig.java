@@ -15,9 +15,9 @@ public class GptConfig {
     public static final String CHAT_URL = "https://api.openai.com/v1/chat/completions";
     public static final String PROMPT = """
                         I would like you to plan a package tour program to plan your travel itinerary.Destination: %s
-                        Purpose of travel: %s
                         Departure date: %s
                         Entry date: %s
+                        Purpose of travel: %s
                         The flight schedule is as follows.
                         
                         Also, plan your itinerary based on the travel distance and famous tourist destinations.

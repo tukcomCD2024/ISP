@@ -1,6 +1,7 @@
 package com.isp.backend.domain.gpt.service;
 
 import com.isp.backend.domain.gpt.config.GptConfig;
+import com.isp.backend.domain.gpt.constant.ParsingConstants;
 import com.isp.backend.domain.gpt.dto.GptRequestDTO;
 import com.isp.backend.domain.gpt.dto.GptResponseDTO;
 import com.isp.backend.domain.gpt.dto.GptScheduleRequestDto;
@@ -85,9 +86,9 @@ public class GptService {
     private String makeQuestion(GptScheduleRequestDto questionRequestDTO) {
         return String.format(GptConfig.PROMPT,
                 questionRequestDTO.getDestination(),
-                questionRequestDTO.getPurpose(),
                 questionRequestDTO.getDepartureDate(),
-                questionRequestDTO.getReturnDate()
+                questionRequestDTO.getReturnDate(),
+                String.join(ParsingConstants.COMMA, questionRequestDTO.getPurpose())
         );
     }
 }

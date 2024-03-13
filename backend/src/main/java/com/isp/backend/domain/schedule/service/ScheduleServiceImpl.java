@@ -5,8 +5,6 @@ import com.isp.backend.domain.country.repository.CountryRepository;
 import com.isp.backend.domain.member.entity.Member;
 import com.isp.backend.domain.member.repository.MemberRepository;
 import com.isp.backend.domain.schedule.dto.ScheduleListResponseDTO;
-import com.isp.backend.domain.schedule.dto.ScheduleRequestDTO;
-import com.isp.backend.domain.schedule.dto.ScheduleResponseDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleSaveRequestDTO;
 import com.isp.backend.domain.schedule.entity.Schedule;
 import com.isp.backend.domain.schedule.mapper.ScheduleMapper;
@@ -36,19 +34,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final CountryRepository countryRepository;
     private final MemberRepository memberRepository;
     private final ScheduleMapper scheduleMapper;
-
-
-    /**
-     * 여행 일정 생성형 API
-     */
-    @Transactional
-    public ScheduleResponseDTO createSchedule(ScheduleRequestDTO scheduleRequestDTO) {
-        // 프롬프트 생성하고
-        // schedule 일정 생성하기 openai 써서
-        return null;
-    }
-
-
+    
     /**
      * 여행 일정 저장 API
      */

@@ -30,6 +30,12 @@ public class S3ImageRepository {
         return getUrl(result);
     }
 
+    public String find(String filename) {
+        String key = S3BucketDirectory.IMAGE.getDirectory() + filename;
+        final S3Resource result = s3template.download(bucketName, key);
+        return getUrl(result);
+    }
+
     private InputStream getInputStream(@RequestParam("file") MultipartFile file) {
         try {
             return file.getInputStream();

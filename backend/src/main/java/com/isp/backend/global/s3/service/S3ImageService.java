@@ -16,4 +16,8 @@ public class S3ImageService {
     public String create(MultipartFile file) {
         return s3ImageRepository.save(file);
     }
+
+    public String get(String fileName) {
+        return s3ImageRepository.find(fileName);
+    }
 }

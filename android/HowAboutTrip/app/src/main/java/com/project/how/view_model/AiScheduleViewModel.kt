@@ -44,10 +44,8 @@ class AiScheduleViewModel : ViewModel() {
                     if(response.isSuccessful){
                         val result = response.body()
                         if (result != null){
-                            viewModelScope.launch {
-                                Log.d("createSchedule is success", "startDate : ${result.schedules[0].date}")
-                                aiScheduleRepository.getAiSchedule(getAiSchedule(result, createScheduleRequest))
-                            }
+                            Log.d("createSchedule is success", "startDate : ${result.schedules[0].date}")
+                            aiScheduleRepository.getAiSchedule(getAiSchedule(result, createScheduleRequest))
                         }else{
                             Log.d("createSchedule is success", "response.body is null\ncode : ${response.code()}")
                         }

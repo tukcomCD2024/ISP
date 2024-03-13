@@ -224,8 +224,8 @@ class ScheduleViewModel : ViewModel() {
     }
 
     fun deleteSchedule(context: Context, accessToken: String, id : Long) = callbackFlow {
-        ScheduleRetrofit.getApiService()!!
-            .deleteSchedule(context.getString(R.string.bearer_token, accessToken), id)
+        ScheduleRetrofit.getApiService()?.let {apiService ->
+            apiService.deleteSchedule(context.getString(R.string.bearer_token, accessToken), id)
             .enqueue(object : Callback<String>{
                 override fun onResponse(call: Call<String>, response: Response<String>) {
                     if (response.isSuccessful){
@@ -251,6 +251,9 @@ class ScheduleViewModel : ViewModel() {
                     close()
                 }
             })
+        } ?: close()
+
+        awaitClose()
     }
 
     fun getScheduleDetail(context: Context, accessToken: String, id : Long) = callbackFlow<Int>{

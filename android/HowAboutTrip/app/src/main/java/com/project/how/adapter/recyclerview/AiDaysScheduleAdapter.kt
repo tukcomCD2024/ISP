@@ -17,6 +17,12 @@ class AiDaysScheduleAdapter(data: List<AiDaysSchedule>)
                 binding.scheduleTitle.text = data.places
                 if (position == 0)
                     binding.topDottedLine.visibility = View.GONE
+                else if(position == dailySchedule.lastIndex)
+                    binding.bottomDottedLine.visibility = View.GONE
+                else{
+                    binding.topDottedLine.visibility = View.VISIBLE
+                    binding.bottomDottedLine.visibility = View.VISIBLE
+                }
 
                 when(data.type){
                     AIRPLANE ->{
@@ -54,6 +60,8 @@ class AiDaysScheduleAdapter(data: List<AiDaysSchedule>)
         val data = dailySchedule[position]
         holder.bind(data, position)
     }
+
+    override fun getItemViewType(position: Int): Int = position
 
     fun update(data : List<AiDaysSchedule>){
         dailySchedule = data

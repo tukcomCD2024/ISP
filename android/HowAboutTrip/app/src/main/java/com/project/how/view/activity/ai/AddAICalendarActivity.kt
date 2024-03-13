@@ -32,7 +32,6 @@ class AddAICalendarActivity :
     AppCompatActivity(), OnDateTimeListener, OnDesListener, OnPurposeListener, OnAddListener {
     private lateinit var binding : ActivityAddAicalendarBinding
     private val viewModel : AiScheduleViewModel by viewModels()
-    private lateinit var scheduleDialog : AiScheduleDialog
     private var destination : String? = null
     private var purpose : MutableList<String>? = null
     private var departureDate : String? = null
@@ -50,6 +49,17 @@ class AddAICalendarActivity :
             val adRequest = AdRequest.Builder().build()
             binding.adView.loadAd(adRequest)
         }
+
+        viewModel.aiScheduleLiveData.observe(this){
+            if(it.startDate == departureDate && it.endDate == entranceDate){
+                Log.d("aiScheduleLiveData", "${it.startDate} - ${it.endDate}")
+                setEnabled()
+                stopLoaing()
+                aiSchedule = it
+                showAiSchedule(it)
+            }
+        }
+
     }
 
     fun showDepartureInput(){
@@ -93,15 +103,6 @@ class AddAICalendarActivity :
                 showConfirmDialog(message)
             }
         }
-        viewModel.aiScheduleLiveData.observe(this){
-            if(it.startDate == departureDate && it.endDate == entranceDate){
-                Log.d("aiScheduleLiveData", "${it.startDate} - ${it.endDate}")
-                setEnabled()
-                stopLoaing()
-                aiSchedule = it
-                showAiSchedule(it)
-            }
-        }
     }
 
     private fun load(){
@@ -139,7 +140,7 @@ class AddAICalendarActivity :
         startActivity(intent)
     }
     private fun showAiSchedule(data : AiSchedule){
-        scheduleDialog = AiScheduleDialog(data, this)
+        val scheduleDialog = AiScheduleDialog(data, this)
         scheduleDialog.show(supportFragmentManager, "AiScheduleDialog")
     }
 
@@ -231,7 +232,6 @@ class AddAICalendarActivity :
     }
 
     override fun onAddListener() {
-        scheduleDialog.dismiss()
         val intent = Intent(this, CalendarEditActivity::class.java)
         intent.putExtra(getString(R.string.type), CalendarEditActivity.AI_SCHEDULE)
         intent.putExtra(getString(R.string.aischedule), aiSchedule)

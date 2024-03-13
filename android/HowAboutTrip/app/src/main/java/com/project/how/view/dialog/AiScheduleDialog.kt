@@ -94,6 +94,7 @@ class AiScheduleDialog(private val data : AiSchedule, private val onAddListener:
 
     fun addCalendar(){
         onAddListener.onAddListener()
+        dismiss()
     }
 
     private fun getPlacesText(places : List<String>): String{

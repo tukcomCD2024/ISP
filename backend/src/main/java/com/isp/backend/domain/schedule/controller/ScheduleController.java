@@ -1,8 +1,6 @@
 package com.isp.backend.domain.schedule.controller;
 
 import com.isp.backend.domain.schedule.dto.ScheduleListResponseDTO;
-import com.isp.backend.domain.schedule.dto.ScheduleRequestDTO;
-import com.isp.backend.domain.schedule.dto.ScheduleResponseDTO;
 import com.isp.backend.domain.schedule.dto.ScheduleSaveRequestDTO;
 import com.isp.backend.domain.schedule.service.ScheduleServiceImpl;
 import com.isp.backend.global.security.CustomUserDetails;
@@ -19,17 +17,6 @@ import java.util.List;
 public class ScheduleController {
 
     private final ScheduleServiceImpl scheduleServiceImpl;
-
-    /**
-     * 여행 일정 생성형 API
-     */
-    @PostMapping("/")
-    public ResponseEntity<ScheduleResponseDTO> createSchedule(@RequestBody ScheduleRequestDTO scheduleRequestDTO) {
-
-        ScheduleResponseDTO scheduleResponseDTO = scheduleServiceImpl.createSchedule(scheduleRequestDTO);
-        return ResponseEntity.ok(scheduleResponseDTO);
-    }
-
 
     /**
      * 여행 일정 저장 API

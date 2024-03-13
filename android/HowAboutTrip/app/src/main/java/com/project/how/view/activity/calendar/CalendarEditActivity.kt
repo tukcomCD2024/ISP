@@ -26,6 +26,7 @@ import com.project.how.R
 import com.project.how.adapter.recyclerview.DaysScheduleEditAdapter
 import com.project.how.adapter.item_touch_helper.RecyclerViewItemTouchHelperCallback
 import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
+import com.project.how.data_class.AiDaysSchedule
 import com.project.how.data_class.AiSchedule
 import com.project.how.data_class.DaysSchedule
 import com.project.how.data_class.Schedule
@@ -89,8 +90,10 @@ class CalendarEditActivity
             if (selectedDays > data.dailySchedule.lastIndex){
                 selectedDays = data.dailySchedule.lastIndex
             }
+
             adapter = DaysScheduleEditAdapter(data.dailySchedule[selectedDays], this@CalendarEditActivity, this@CalendarEditActivity)
             binding.daySchedules.adapter = adapter
+
             binding.daysTab.removeAllTabs()
             binding.daysTitle.text = getString(R.string.days_title, (selectedDays+1).toString(), getDaysTitle( selectedDays+1))
 

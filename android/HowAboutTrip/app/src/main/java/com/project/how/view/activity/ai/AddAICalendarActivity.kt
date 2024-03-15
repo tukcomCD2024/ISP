@@ -3,6 +3,7 @@ package com.project.how.view.activity.ai
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -31,7 +32,6 @@ class AddAICalendarActivity :
     AppCompatActivity(), OnDateTimeListener, OnDesListener, OnPurposeListener, OnAddListener {
     private lateinit var binding : ActivityAddAicalendarBinding
     private val viewModel : AiScheduleViewModel by viewModels()
-    private lateinit var scheduleDialog : AiScheduleDialog
     private var destination : String? = null
     private var purpose : MutableList<String>? = null
     private var departureDate : String? = null
@@ -49,6 +49,17 @@ class AddAICalendarActivity :
             val adRequest = AdRequest.Builder().build()
             binding.adView.loadAd(adRequest)
         }
+
+        viewModel.aiScheduleLiveData.observe(this){
+            if(it.startDate == departureDate && it.endDate == entranceDate){
+                Log.d("aiScheduleLiveData", "${it.startDate} - ${it.endDate}")
+                setEnabled()
+                stopLoaing()
+                aiSchedule = it
+                showAiSchedule(it)
+            }
+        }
+
     }
 
     fun showDepartureInput(){
@@ -76,7 +87,10 @@ class AddAICalendarActivity :
     fun search(){
         lifecycleScope.launch {
             if ((destination != null) && (departureDate != null) && (entranceDate != null)){
-                viewModel.getAiSchedule(AiScheduleInput(destination!!, purpose, departureDate!!, entranceDate!!), true)
+                Log.d("aiScheduleLiveData", "start ${destination}, ${departureDate}, ${entranceDate}")
+                setUnEnabled()
+                load()
+                viewModel.getAiSchedule(AiScheduleInput(destination!!, purpose, departureDate!!, entranceDate!!), false)
             }else{
                 val message = mutableListOf<String>()
                 if (destination == null)
@@ -89,10 +103,36 @@ class AddAICalendarActivity :
                 showConfirmDialog(message)
             }
         }
-        viewModel.aiScheduleLiveData.observe(this){
-            aiSchedule = it
-            showAiSchedule(it)
-        }
+    }
+
+    private fun load(){
+        binding.loadingBackground.visibility = View.VISIBLE
+        binding.loadingInfo.visibility = View.VISIBLE
+        binding.loadingLottie.visibility = View.VISIBLE
+        binding.loadingLottie.playAnimation()
+    }
+
+    private fun stopLoaing(){
+        binding.loadingBackground.visibility = View.GONE
+        binding.loadingInfo.visibility = View.GONE
+        binding.loadingLottie.visibility = View.GONE
+        binding.loadingLottie.pauseAnimation()
+    }
+
+    private fun setUnEnabled(){
+        binding.search.isEnabled = false
+        binding.desInput.isEnabled = false
+        binding.purposeInput.isEnabled = false
+        binding.departureInput.isEnabled = false
+        binding.entranceInput.isEnabled = false
+    }
+
+    private fun setEnabled(){
+        binding.search.isEnabled = true
+        binding.desInput.isEnabled = true
+        binding.purposeInput.isEnabled = true
+        binding.departureInput.isEnabled = true
+        binding.entranceInput.isEnabled = true
     }
 
     private fun moveAiScheduleList(){
@@ -100,7 +140,7 @@ class AddAICalendarActivity :
         startActivity(intent)
     }
     private fun showAiSchedule(data : AiSchedule){
-        scheduleDialog = AiScheduleDialog(data, this)
+        val scheduleDialog = AiScheduleDialog(data, this)
         scheduleDialog.show(supportFragmentManager, "AiScheduleDialog")
     }
 
@@ -192,10 +232,10 @@ class AddAICalendarActivity :
     }
 
     override fun onAddListener() {
-        scheduleDialog.dismiss()
         val intent = Intent(this, CalendarEditActivity::class.java)
         intent.putExtra(getString(R.string.type), CalendarEditActivity.AI_SCHEDULE)
         intent.putExtra(getString(R.string.aischedule), aiSchedule)
         startActivity(intent)
+        finish()
     }
 }

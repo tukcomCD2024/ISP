@@ -2,10 +2,10 @@
 ### Android 개발 환경
 - Lanaguages : Kotlin
 - Tool : Android Studio
-	- Version : Hedgehog
+	- Version : Iguana
 	- Java : Java 8
-	- Android Gradle Plugin : 8.2.2
-	- Gradle Version : 8.2
+	- Android Gradle Plugin : 8.3
+	- Gradle Version : 8.4
 - - -
 ### 사용된 오픈소스 라이브러리 목록
 | 이름 | 라이센스 |

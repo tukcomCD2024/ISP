@@ -128,6 +128,7 @@
                 android:background="@android:color/transparent"
                 android:scaleType="fitCenter"
                 android:src="@drawable/icon_calendar_add"
+                android:onClick="@{() -> calendar.add()}"
                 app:layout_constraintStart_toEndOf="@+id/ai"
                 app:layout_constraintTop_toBottomOf="@+id/schedule"
                 app:layout_constraintEnd_toStartOf="@id/search"/>

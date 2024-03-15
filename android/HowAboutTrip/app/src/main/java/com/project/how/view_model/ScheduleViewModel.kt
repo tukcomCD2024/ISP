@@ -14,12 +14,10 @@ import com.project.how.data_class.dto.DailySchedule
 import com.project.how.data_class.dto.GetScheduleListResponse
 import com.project.how.data_class.dto.ScheduleDetail
 import com.project.how.model.ScheduleRepository
-import com.project.how.network.client.MemberRetrofit
 import com.project.how.network.client.ScheduleRetrofit
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
@@ -28,6 +26,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 class ScheduleViewModel : ViewModel() {
     private var scheduleRepository : ScheduleRepository = ScheduleRepository()
@@ -62,7 +61,21 @@ class ScheduleViewModel : ViewModel() {
     }
 
     fun getTotalCost(schedule: Schedule) : Flow<Long> = scheduleRepository.getTotalCost(schedule)
+
     fun getDaysSchedule(context: Context, schedule: Schedule, response : ScheduleDetail) : Flow<Schedule> = scheduleRepository.getDaysSchedule(context, schedule, response)
+
+    fun getEmptyDaysSchedule(startDate: String, endDate: String) : MutableList<MutableList<DaysSchedule>>{
+        val std = LocalDate.parse(startDate)
+        val end = LocalDate.parse(endDate)
+        val diff = ChronoUnit.DAYS.between(std, end)
+        var dailySchedule = mutableListOf<MutableList<DaysSchedule>>()
+
+        for (i in 0 ..diff){
+            dailySchedule.add(mutableListOf<DaysSchedule>())
+        }
+
+        return dailySchedule
+    }
 
     fun saveSchedule(context: Context, accessToken: String, schedule: Schedule): Flow<Int> = callbackFlow {
         // checkLocations의 결과를 받을 Flow 생성
@@ -279,6 +292,7 @@ class ScheduleViewModel : ViewModel() {
                                     mutableListOf<MutableList<DaysSchedule>>()
                                 )
                                 if ((result.dailySchedules.isEmpty())){
+                                    schedule.dailySchedule = getEmptyDaysSchedule(result.startDate, result.endDate)
                                     getSchedule(schedule)
                                     trySend(SUCCESS)
                                     close()

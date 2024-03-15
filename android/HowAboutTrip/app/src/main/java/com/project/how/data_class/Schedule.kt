@@ -8,7 +8,7 @@ class Schedule (
     var startDate : String,
     var endDate : String,
     var cost: Long,
-    val dailySchedule: MutableList<MutableList<DaysSchedule>>
+    var dailySchedule: MutableList<MutableList<DaysSchedule>>
 ) : Serializable
 
 data class DaysSchedule(

@@ -58,7 +58,7 @@ android {
     }
 }
 
-fun getApiKey(propertyKey: String):String = gradleLocalProperties(rootDir).getProperty(propertyKey)
+fun getApiKey(propertyKey: String):String = gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
 
 dependencies {
 

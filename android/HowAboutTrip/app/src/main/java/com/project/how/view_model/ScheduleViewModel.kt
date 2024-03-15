@@ -99,6 +99,45 @@ class ScheduleViewModel : ViewModel() {
         awaitClose()
     }
 
+    fun updateSchedule(context: Context, accessToken: String, id: Long, schedule: Schedule): Flow<Int> = callbackFlow {
+        val locationsFlow = checkLocations(schedule)
+
+        val check = locationsFlow.first()
+
+        if (check) {
+            ScheduleRetrofit.getApiService()?.let { apiService ->
+                val callback = object : Callback<ScheduleDetail> {
+                    override fun onResponse(call: Call<ScheduleDetail>, response: Response<ScheduleDetail>) {
+                        if (response.isSuccessful) {
+                            val result = response.body()
+                            if (result != null){
+                                Log.d("saveSchedule is success", "response code : ${response.code()}")
+                                trySend(SUCCESS)
+                            }else{
+                                Log.d("updateSchedule is success", "response.body is null")
+                                trySend(EMPTY_SCHEDULE)
+                            }
+                        } else {
+                            Log.d("saveSchedule is not success", "response code : ${response.code()}")
+                            trySend(NETWORK_FAILED).isSuccess
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ScheduleDetail>, t: Throwable) {
+                        Log.d("saveSchedule onFailure", "${t.message}")
+                        trySend(NETWORK_FAILED).isSuccess
+                    }
+                }
+                apiService.updateSchedule(context.getString(R.string.bearer_token, accessToken), id, changeClassFromScheduleToSaveSchedule(context, schedule))
+                    .enqueue(callback)
+            } ?: close() // 만약 apiService가 null이면 flow를 종료합니다.
+        } else {
+            trySend(NULL_LOCATIONS).isSuccess
+        }
+
+        awaitClose()
+    }
+
     private fun getScheduleType(context: Context, type : Int): String {
         when(type){
             AiDaysScheduleAdapter.AIRPLANE ->{ return context.getString(R.string.airplane_string) }
@@ -185,8 +224,8 @@ class ScheduleViewModel : ViewModel() {
     }
 
     fun deleteSchedule(context: Context, accessToken: String, id : Long) = callbackFlow {
-        ScheduleRetrofit.getApiService()!!
-            .deleteSchedule(context.getString(R.string.bearer_token, accessToken), id)
+        ScheduleRetrofit.getApiService()?.let {apiService ->
+            apiService.deleteSchedule(context.getString(R.string.bearer_token, accessToken), id)
             .enqueue(object : Callback<String>{
                 override fun onResponse(call: Call<String>, response: Response<String>) {
                     if (response.isSuccessful){
@@ -212,6 +251,9 @@ class ScheduleViewModel : ViewModel() {
                     close()
                 }
             })
+        } ?: close()
+
+        awaitClose()
     }
 
     fun getScheduleDetail(context: Context, accessToken: String, id : Long) = callbackFlow<Int>{
@@ -280,6 +322,7 @@ class ScheduleViewModel : ViewModel() {
         const val NETWORK_FAILED = -2
         const val NOT_EXIST_SCHEDULE = -3
         const val OTHER_USER_SCHEDULE = -4
+        const val EMPTY_SCHEDULE = -5
         const val SUCCESS = 0
     }
 }

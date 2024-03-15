@@ -1,5 +1,6 @@
 package com.project.how.view.activity.calendar
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -42,16 +43,21 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
     private lateinit var adapter : DaysScheduleAdapter
     private var mapInitCheck = false
     private lateinit var data : Schedule
+    private var idToLong: Long = -1
+    private var latitude : Double = 0.0
+    private var longitude : Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_calendar)
+        binding.calendar = this
+        binding.lifecycleOwner = this
 
         lifecycleScope.launch {
             val id = intent.getLongExtra(getString(R.string.server_calendar_id), -1)
-            val idToLong = id.toLong()
-            val latitude = intent.getDoubleExtra(getString(R.string.server_calendar_latitude), 0.0)
-            val longitude = intent.getDoubleExtra(getString(R.string.server_calendar_longitude), 0.0)
+            idToLong = id.toLong()
+            latitude = intent.getDoubleExtra(getString(R.string.server_calendar_latitude), 0.0)
+            longitude = intent.getDoubleExtra(getString(R.string.server_calendar_longitude), 0.0)
             Log.d("onCreate", "id : ${id}t\nlatitude : ${latitude}\tlongitude : ${longitude}\nidToLong : $idToLong")
             viewModel.getScheduleDetail(this@CalendarActivity, MemberViewModel.tokensLiveData.value!!.accessToken, idToLong).collect()
 
@@ -76,7 +82,7 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
                 if (schedule.dailySchedule.size != 0){
                     adapter = DaysScheduleAdapter(schedule.dailySchedule[selectedDays], this@CalendarActivity, this@CalendarActivity)
                     binding.daySchedules.adapter = adapter
-                    binding.daysTitle.text = getString(R.string.days_title, (selectedDays+1).toString(), getDaysTitle(data, selectedDays+1))
+                    binding.daysTitle.text = getString(R.string.days_title, (selectedDays+1).toString(), getDaysTitle(data, selectedDays))
 
                     supportMapFragment.getMapAsync(this@CalendarActivity)
 
@@ -156,6 +162,23 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
         val startDate = LocalDate.parse(data.startDate, DateTimeFormatter.ISO_DATE)
         val formatter = DateTimeFormatter.ofPattern("MM.dd")
         return startDate.plusDays(tabNum.toLong()).format(formatter)
+    }
+
+    fun delete(){
+        viewModel.deleteSchedule(this, MemberViewModel.tokensLiveData.value!!.accessToken, idToLong)
+        startActivity(Intent(this, CalendarListActivity::class.java))
+        finish()
+    }
+
+    fun edit(){
+        val intent = Intent(this, CalendarEditActivity::class.java)
+        intent.putExtra(getString(R.string.type), CalendarEditActivity.EDIT)
+        intent.putExtra(getString(R.string.schedule), data)
+        intent.putExtra(getString(R.string.server_calendar_id), idToLong)
+        intent.putExtra(getString(R.string.server_calendar_latitude), latitude)
+        intent.putExtra(getString(R.string.server_calendar_longitude), longitude)
+        startActivity(intent)
+        finish()
     }
 
     override fun onSearchButtonClickListener(data: DaysSchedule, position: Int) {

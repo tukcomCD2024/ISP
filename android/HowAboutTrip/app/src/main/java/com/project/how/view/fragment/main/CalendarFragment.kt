@@ -19,6 +19,7 @@ import com.project.how.data_class.EventViewPager
 import com.project.how.databinding.FragmentCalendarBinding
 import com.project.how.view.activity.ai.AddAICalendarActivity
 import com.project.how.view.activity.calendar.CalendarListActivity
+import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -31,6 +32,7 @@ class CalendarFragment : Fragment() {
         get() = _binding!!
     private val scheduleViewModel : ScheduleViewModel by viewModels()
     private lateinit var nowDate : LocalDate
+    private lateinit var nowDateString : String
     private var nearScheduleDate: Long = -1
     private val event = mutableListOf<EventViewPager>()
     private lateinit var adapter : EventViewPagerAdapter
@@ -40,15 +42,12 @@ class CalendarFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         nowDate = LocalDate.now()
-        val test = nowDate.plusDays(40) //test
-        val dateFormat = SimpleDateFormat("yyyyMMdd")
-        nearScheduleDate = dateFormat.parse(test.format(DateTimeFormatter.ofPattern("yyyyMMdd")))?.time ?: -1
+        val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        nowDateString = nowDate.format(dateFormat)
         for(i in 0..5){
             event.add(EventViewPager("일정 생성을\n해보세요$i", null))
         }
         adapter = EventViewPagerAdapter(event)
-
-        scheduleViewModel.getNearScheduleDay(nearScheduleDate)
     }
 
     override fun onCreateView(
@@ -63,6 +62,45 @@ class CalendarFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        scheduleViewModel.getScheduleList(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken)
+        scheduleViewModel.scheduleListLiveData.observe(viewLifecycleOwner){list->
+            if(list.isNotEmpty()){
+                var near = -1
+                var nearDateString = "2050-12-31"
+                list.forEachIndexed { index, getScheduleListResponseElement ->
+                    if (nearDateString > getScheduleListResponseElement.startDate && getScheduleListResponseElement.startDate > nowDateString){
+                        near = index
+                        nearDateString = getScheduleListResponseElement.startDate
+                    }
+                }
+
+                if (near == -1){
+                    Glide.with(binding.root)
+                        .load(R.drawable.event_viewpager_test)
+                        .error(BuildConfig.ERROR_IMAGE_URl)
+                        .into(binding.scheduleImage)
+                }else{
+                    val nearDate = LocalDate.parse(nearDateString, DateTimeFormatter.ISO_DATE)
+                    val dateFormat = SimpleDateFormat("yyyyMMdd")
+                    nearScheduleDate = dateFormat.parse(nearDate.format(DateTimeFormatter.ofPattern("yyyyMMdd")))?.time ?: -1
+                    scheduleViewModel.getNearScheduleDay(nearScheduleDate)
+
+                    binding.scheduleTitle.text = list[near].scheduleName
+                    Glide.with(binding.root)
+                        .load(list[near].imageUrl)
+                        .error(BuildConfig.ERROR_IMAGE_URl)
+                        .into(binding.scheduleImage)
+                }
+
+            }else{
+                Glide.with(binding.root)
+                    .load(R.drawable.event_viewpager_test)
+                    .error(BuildConfig.ERROR_IMAGE_URl)
+                    .into(binding.scheduleImage)
+            }
+        }
+
         scheduleViewModel.nearScheduleDayLiveData.observe(viewLifecycleOwner){
             lifecycleScope.launch {
                 scheduleViewModel.getDday().collect{
@@ -82,13 +120,10 @@ class CalendarFragment : Fragment() {
                 }
             }
         }
+
         binding.viewPager2.adapter = adapter
         TabLayoutMediator(binding.indicator, binding.viewPager2) { _, _ -> }.attach()
 
-        Glide.with(binding.root)
-            .load(R.drawable.event_viewpager_test)
-            .error(BuildConfig.ERROR_IMAGE_URl)
-            .into(binding.scheduleImage)
     }
 
     override fun onDestroyView() {

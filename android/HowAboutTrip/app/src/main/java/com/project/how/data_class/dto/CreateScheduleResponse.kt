@@ -1,10 +1,13 @@
 package com.project.how.data_class.dto
 
+import com.google.gson.annotations.SerializedName
+
 data class CreateScheduleResponse (
-    val schedules: List<AiSimpleSchedule>
+    @SerializedName("countryImage") val countryImage : String,
+    @SerializedName("schedules") val schedules: List<AiSimpleSchedule>
 )
 
 data class AiSimpleSchedule (
-    val date: String,
-    val scheduleDetail: List<String>
+    @SerializedName("date") val date: String,
+    @SerializedName("scheduleDetail") val scheduleDetail: List<String>
 )

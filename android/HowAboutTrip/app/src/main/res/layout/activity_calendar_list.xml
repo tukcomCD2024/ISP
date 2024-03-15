@@ -76,6 +76,7 @@
             app:fabCustomSize="50dp"
             android:clickable="true"
             app:borderWidth="0dp"
+            android:onClick="@{() -> list.add()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
@@ -11,37 +12,65 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.model.LatLng
 import com.project.how.R
 import com.project.how.adapter.recyclerview.CalendarListAdapter
+import com.project.how.data_class.Schedule
 import com.project.how.data_class.ScheduleIDAndLatLng
 import com.project.how.data_class.dto.GetScheduleListResponseElement
 import com.project.how.databinding.ActivityCalendarListBinding
+import com.project.how.interface_af.OnDateTimeListener
+import com.project.how.interface_af.OnDesListener
 import com.project.how.interface_af.OnYesOrNoListener
 import com.project.how.view.dialog.YesOrNoDialog
+import com.project.how.view.dialog.bottom_sheet_dialog.CalendarBottomSheetDialog
+import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
 import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.launch
 
-class CalendarListActivity : AppCompatActivity(), CalendarListAdapter.OnCalendarListButtonClickListener, OnYesOrNoListener {
+class CalendarListActivity
+    : AppCompatActivity(), CalendarListAdapter.OnCalendarListButtonClickListener, OnYesOrNoListener, OnDateTimeListener, OnDesListener {
     private lateinit var binding : ActivityCalendarListBinding
     private lateinit var adapter : CalendarListAdapter
     private val viewModel : ScheduleViewModel by viewModels()
+    private var destination : String? = null
+    private var departureDate : String? = null
+    private var entranceDate : String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_calendar_list)
         binding.list = this
         binding.lifecycleOwner = this
 
-        lifecycleScope.launch {
-            viewModel.getScheduleList(this@CalendarListActivity, MemberViewModel.tokensLiveData.value!!.accessToken)
-
-            viewModel.scheduleListLiveData.observe(this@CalendarListActivity){
-                adapter = CalendarListAdapter(this@CalendarListActivity, it, this@CalendarListActivity)
-                binding.calendarList.adapter = adapter
-            }
+        viewModel.scheduleListLiveData.observe(this@CalendarListActivity){
+            adapter = CalendarListAdapter(this@CalendarListActivity, it, this@CalendarListActivity)
+            binding.calendarList.adapter = adapter
         }
     }
 
-    fun add(){
+    override fun onStart() {
+        super.onStart()
 
+        lifecycleScope.launch {
+            viewModel.getScheduleList(this@CalendarListActivity, MemberViewModel.tokensLiveData.value!!.accessToken)
+        }
+    }
+
+    fun add() {
+        showDesInput()
+    }
+
+    private fun showDepartureInput(){
+        val calendar = CalendarBottomSheetDialog(CalendarBottomSheetDialog.DEPARTURE, this)
+        calendar.show(supportFragmentManager, "CalendarBottomSheetDialog")
+    }
+
+    private fun showEntranceInput(){
+        val calendar = CalendarBottomSheetDialog(CalendarBottomSheetDialog.ENTRANCE, this)
+        calendar.show(supportFragmentManager, "CalendarBottomSheetDialog")
+    }
+
+    private fun showDesInput(){
+        val des = DesBottomSheetDialog(this)
+        des.show(supportFragmentManager, "DesBottomSheetDialog")
     }
 
     override fun onDeleteButtonClickListener(data : GetScheduleListResponseElement, position : Int) {
@@ -87,5 +116,42 @@ class CalendarListActivity : AppCompatActivity(), CalendarListAdapter.OnCalendar
 
     override fun onKeepCheckListener() {
         TODO("Not yet implemented")
+    }
+
+    override fun onSaveDate(date: String, type: Int) {
+        if(type == CalendarBottomSheetDialog.ENTRANCE){
+            if(date < departureDate!!){
+                Toast.makeText(this, "입국 날짜($date)보다 출국 날짜($departureDate)가 더 늦습니다.", Toast.LENGTH_SHORT).show()
+                showEntranceInput()
+            }else{
+                entranceDate = date
+                val intent = Intent(this, CalendarEditActivity::class.java)
+                val schedule = Schedule(
+                    destination!!,
+                    destination!!,
+                    departureDate!!,
+                    entranceDate!!,
+                    0,
+                    viewModel.getEmptyDaysSchedule(departureDate!!, entranceDate!!)
+                )
+                intent.putExtra(getString(R.string.type), CalendarEditActivity.NEW)
+                intent.putExtra(getString(R.string.schedule), schedule)
+                startActivity(intent)
+                finish()
+            }
+
+        }else if(type == CalendarBottomSheetDialog.DEPARTURE){
+            departureDate = date
+            showEntranceInput()
+        }
+    }
+
+    override fun onSaveDateTime(dateTime: String, type: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDesListener(des: String) {
+        destination = des
+        showDepartureInput()
     }
 }

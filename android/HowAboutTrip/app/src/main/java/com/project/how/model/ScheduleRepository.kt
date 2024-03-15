@@ -132,26 +132,40 @@ class ScheduleRepository {
     }
 
     fun getDaysSchedule(context: Context, schedule: Schedule, scheduleDetail: ScheduleDetail) = flow<Schedule>{
+        val std = LocalDate.parse(scheduleDetail.startDate, DateTimeFormatter.ISO_DATE)
+        val end = LocalDate.parse(scheduleDetail.endDate, DateTimeFormatter.ISO_DATE)
+        val diff = ChronoUnit.DAYS.between(std, end)
+        var cnt = 0
 
-        for(i in scheduleDetail.dailySchedules.indices){
+        for(i in 0..diff.toInt()){
             val dailySchedule = mutableListOf<DaysSchedule>()
-            for (j in scheduleDetail.dailySchedules[i].schedules.indices){
-                dailySchedule.add(
-                    DaysSchedule(
-                        getScheduleType(context, scheduleDetail.dailySchedules[i].schedules[j].type),
-                        scheduleDetail.dailySchedules[i].schedules[j].todo,
-                        scheduleDetail.dailySchedules[i].schedules[j].place,
-                        scheduleDetail.dailySchedules[i].schedules[j].latitude,
-                        scheduleDetail.dailySchedules[i].schedules[j].longitude,
-                        scheduleDetail.dailySchedules[i].schedules[j].budget,
-                        false,
-                        null
-                    )
-                )
+            val currentDate = std.plusDays(i.toLong())
+            val cd = currentDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))
+            Log.d("getDaysSchedule", "${scheduleDetail.scheduleName} \t ${scheduleDetail.startDate} \t ${scheduleDetail.endDate}\n${i+1} 일차\t cnt : $cnt\tdailySchedule.lastIndex : ${scheduleDetail.dailySchedules.lastIndex}\n이번 날짜 : $cd 대기중인 일정 날짜 : ${scheduleDetail.dailySchedules[cnt].date}")
+            if (cd == scheduleDetail.dailySchedules[cnt].date){
+                if(scheduleDetail.dailySchedules[cnt].schedules.isNotEmpty()){
+                    for (j in 0 until scheduleDetail.dailySchedules[cnt].schedules.size){
+                        dailySchedule.add(
+                            DaysSchedule(
+                                getScheduleType(context, scheduleDetail.dailySchedules[cnt].schedules[j].type),
+                                scheduleDetail.dailySchedules[cnt].schedules[j].todo,
+                                scheduleDetail.dailySchedules[cnt].schedules[j].place,
+                                scheduleDetail.dailySchedules[cnt].schedules[j].latitude,
+                                scheduleDetail.dailySchedules[cnt].schedules[j].longitude,
+                                scheduleDetail.dailySchedules[cnt].schedules[j].budget,
+                                false,
+                                null
+                            )
+                        )
+                    }
+                }
+                if (cnt != scheduleDetail.dailySchedules.lastIndex){
+                    cnt++
+                }
             }
             schedule.dailySchedule.add(dailySchedule)
-            emit(schedule)
         }
+        emit(schedule)
     }
 
     private fun getScheduleType(context: Context, type : String) : Int {

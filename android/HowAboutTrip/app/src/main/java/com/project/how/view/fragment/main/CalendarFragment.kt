@@ -79,13 +79,19 @@ class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+
         scheduleViewModel.getScheduleList(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken)
         scheduleViewModel.scheduleListLiveData.observe(viewLifecycleOwner){list->
             if(list.isNotEmpty()){
                 var near = -1
                 var nearDateString = "2050-12-31"
                 list.forEachIndexed { index, getScheduleListResponseElement ->
-                    if (nearDateString > getScheduleListResponseElement.startDate && getScheduleListResponseElement.startDate > nowDateString){
+                    if (nearDateString > getScheduleListResponseElement.startDate && getScheduleListResponseElement.startDate >= nowDateString){
                         near = index
                         nearDateString = getScheduleListResponseElement.startDate
                     }
@@ -140,7 +146,6 @@ class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
         binding.recentAddedCalendar.adapter = recentAddedCalendarAdapter
         binding.viewPager2.adapter = eventAdapter
         TabLayoutMediator(binding.indicator, binding.viewPager2) { _, _ -> }.attach()
-
     }
 
     override fun onDestroyView() {

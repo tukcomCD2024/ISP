@@ -1,5 +1,6 @@
 package com.isp.backend.domain.country.controller;
 
+import com.isp.backend.domain.country.dto.LocationRequestDTO;
 import com.isp.backend.domain.country.dto.LocationResponseDTO;
 import com.isp.backend.domain.country.service.CountryService;
 import lombok.RequiredArgsConstructor;
@@ -17,15 +18,15 @@ public class CountryController {
     private CountryService countryService;
 
     /** 여행지 좌표 찾기 **/
-    @GetMapping("/location/{country}")
-    public ResponseEntity<LocationResponseDTO> findLocation(@PathVariable String country) {
+    @GetMapping("/location")
+    public ResponseEntity<LocationResponseDTO> findLocation(@RequestBody LocationRequestDTO requestDTO) {
+        String country = requestDTO.getCountry();
         LocationResponseDTO responseDTO = countryService.findLocationByCity(country);
         if (responseDTO == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
-
 
 
 }

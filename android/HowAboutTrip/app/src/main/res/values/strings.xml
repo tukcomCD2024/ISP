@@ -185,4 +185,6 @@
     <string name="server_calendar_longitude">longitude</string>
     <string name="ai_schedule_loading">일정 생성 중 입니다.\n조금만 기다려주세요.</string>
     <string name="recent_added_calendar">최근에 생성된 일정</string>
+    <string name="record_count_user_title">%1$s님의 여행 기록</string>
+    <string name="record_count">%1$s 개</string>
 </resources>

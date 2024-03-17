@@ -224,6 +224,7 @@ class EditScheduleBottomSheetDialog(private val schedule : DaysSchedule, private
             return MarkerOptions()
                 .position(location)
                 .title(name)
+                .anchor(0.25f, 0.5f)
                 .icon(inflateLayoutToBitmap(context, type, position)?.let {
                     BitmapDescriptorFactory.fromBitmap(
                         it

@@ -72,12 +72,18 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
                 val googleMapOptions = GoogleMapOptions()
                     .zoomControlsEnabled(true)
 
-                supportMapFragment = SupportMapFragment.newInstance(googleMapOptions);
+                supportMapFragment = SupportMapFragment.newInstance(googleMapOptions)
 
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.map_card, supportMapFragment)
                     .commit()
                 mapInitCheck = true
+
+                supportMapFragment.getMapAsync {map ->
+                    val location = LatLng(latitude, longitude)
+                    val camera = EditScheduleBottomSheetDialog.makeScheduleCarmeraUpdate(location, 10f)
+                    map.moveCamera(camera)
+                }
 
                 if (schedule.dailySchedule.size != 0){
                     adapter = DaysScheduleAdapter(schedule.dailySchedule[selectedDays], this@CalendarActivity, this@CalendarActivity)
@@ -124,12 +130,6 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
                         }
 
                     })
-                }else{
-                    supportMapFragment.getMapAsync {map ->
-                        val location = LatLng(latitude, longitude)
-                        val camera = EditScheduleBottomSheetDialog.makeScheduleCarmeraUpdate(location, 10f)
-                        map.moveCamera(camera)
-                    }
                 }
             }
         }

@@ -14,6 +14,7 @@ import com.google.android.gms.ads.MobileAds
 import com.project.how.R
 import com.project.how.data_class.AiSchedule
 import com.project.how.data_class.AiScheduleInput
+import com.project.how.data_class.dto.GetCountryLocationResponse
 import com.project.how.databinding.ActivityAddAicalendarBinding
 import com.project.how.interface_af.OnAddListener
 import com.project.how.interface_af.OnDateTimeListener
@@ -26,16 +27,19 @@ import com.project.how.view.dialog.bottom_sheet_dialog.CalendarBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.PurposeBottomSheetDialog
 import com.project.how.view_model.AiScheduleViewModel
+import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.launch
 
 class AddAICalendarActivity :
     AppCompatActivity(), OnDateTimeListener, OnDesListener, OnPurposeListener, OnAddListener {
     private lateinit var binding : ActivityAddAicalendarBinding
     private val viewModel : AiScheduleViewModel by viewModels()
+    private val scheduleViewModel : ScheduleViewModel by viewModels()
     private var destination : String? = null
     private var purpose : MutableList<String>? = null
     private var departureDate : String? = null
     private var entranceDate : String? = null
+    private var latLng : GetCountryLocationResponse? = null
     private lateinit var aiSchedule : AiSchedule
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -202,9 +206,27 @@ class AddAICalendarActivity :
     }
 
     override fun onDesListener(des: String) {
-        destination = des
-        binding.desOutput.text = des
-        binding.desOutput.visibility = View.VISIBLE
+        lifecycleScope.launch {
+            scheduleViewModel.getCountryLocation(des).collect{ location ->
+                location?.let {
+                    destination = des
+                    binding.desOutput.text = des
+                    binding.desOutput.visibility = View.VISIBLE
+                    latLng = location
+                } ?: run {
+                    scheduleViewModel.getCountryLocation(des).collect { newLocation ->
+                        newLocation?.let {
+                            destination = des
+                            binding.desOutput.text = des
+                            binding.desOutput.visibility = View.VISIBLE
+                            latLng = newLocation
+                        } ?: run {
+                            Toast.makeText(this@AddAICalendarActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onWhoListener(who: String) {
@@ -235,6 +257,8 @@ class AddAICalendarActivity :
         val intent = Intent(this, CalendarEditActivity::class.java)
         intent.putExtra(getString(R.string.type), CalendarEditActivity.AI_SCHEDULE)
         intent.putExtra(getString(R.string.aischedule), aiSchedule)
+        intent.putExtra(getString(R.string.server_calendar_latitude), latLng!!.lat)
+        intent.putExtra(getString(R.string.server_calendar_longitude), latLng!!.lng)
         startActivity(intent)
         finish()
     }

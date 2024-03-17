@@ -11,6 +11,8 @@ import com.project.how.data_class.AiSchedule
 import com.project.how.data_class.DaysSchedule
 import com.project.how.data_class.Schedule
 import com.project.how.data_class.dto.DailySchedule
+import com.project.how.data_class.dto.GetCountryLocationRequest
+import com.project.how.data_class.dto.GetCountryLocationResponse
 import com.project.how.data_class.dto.GetScheduleListResponse
 import com.project.how.data_class.dto.ScheduleDetail
 import com.project.how.model.ScheduleRepository
@@ -326,6 +328,41 @@ class ScheduleViewModel : ViewModel() {
                 }
 
             })
+        } ?: close()
+
+        awaitClose()
+    }
+
+    fun getCountryLocation(country : String) : Flow<GetCountryLocationResponse?> = callbackFlow {
+        ScheduleRetrofit.getApiService()?.let {apiService ->
+            apiService.getCountryLocation(GetCountryLocationRequest(country))
+                .enqueue(object : Callback<GetCountryLocationResponse>{
+                    override fun onResponse(
+                        call: Call<GetCountryLocationResponse>,
+                        response: Response<GetCountryLocationResponse>
+                    ) {
+                        if (response.isSuccessful){
+                            val result = response.body()
+                            if (result != null){
+                                Log.d("getCountryLocation", "country : $country\nlat : ${result.lat}\tlng : ${result.lng}")
+                                trySend(result)
+                                close()
+                            }else{
+                                Log.d("getCountryLocation", "response code : ${response.code()}")
+                                trySend(null)
+                            }
+                        }else{
+                            Log.d("getCountryLocation", "response code : ${response.code()}")
+                            trySend(null)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<GetCountryLocationResponse>, t: Throwable) {
+                        Log.d("getCountryLocation", "${t.message}")
+                        trySend(null)
+                    }
+
+                })
         } ?: close()
 
         awaitClose()

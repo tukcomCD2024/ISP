@@ -74,6 +74,8 @@ class CalendarEditActivity
 
         lifecycleScope.launch {
             type = intent.getIntExtra(resources.getString(R.string.type), FAILURE)
+            latitude = intent.getDoubleExtra(getString(R.string.server_calendar_latitude), 0.0)
+            longitude = intent.getDoubleExtra(getString(R.string.server_calendar_longitude), 0.0)
             Log.d("CalendarEditActivity", "type : $type")
             getData(type)
         }
@@ -112,7 +114,11 @@ class CalendarEditActivity
             supportFragmentManager.beginTransaction()
                 .replace(R.id.map_card, supportMapFragment)
                 .commit()
-            supportMapFragment.getMapAsync(this@CalendarEditActivity)
+            supportMapFragment.getMapAsync {map ->
+                val location = LatLng(latitude, longitude)
+                val camera = EditScheduleBottomSheetDialog.makeScheduleCarmeraUpdate(location, 10f)
+                map.moveCamera(camera)
+            }
             supportMapFragment.view?.setOnTouchListener { v, event ->
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
@@ -237,8 +243,6 @@ class CalendarEditActivity
             EDIT ->{
                 viewModel.getSchedule(getSerializable(this, getString(R.string.schedule), Schedule::class.java))
                 id = intent.getLongExtra(getString(R.string.server_calendar_id), -1)
-                latitude = intent.getDoubleExtra(getString(R.string.server_calendar_latitude), 0.0)
-                longitude = intent.getDoubleExtra(getString(R.string.server_calendar_longitude), 0.0)
             }
         }
     }

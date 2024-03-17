@@ -20,6 +20,7 @@ import com.project.how.adapter.recyclerview.RecentAddedCalendarsAdapter
 import com.project.how.data_class.EventViewPager
 import com.project.how.data_class.RecentAddedCalendar
 import com.project.how.data_class.Schedule
+import com.project.how.data_class.dto.GetCountryLocationResponse
 import com.project.how.databinding.FragmentCalendarBinding
 import com.project.how.interface_af.OnDateTimeListener
 import com.project.how.interface_af.OnDesListener
@@ -50,6 +51,7 @@ class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
     private var destination : String? = null
     private var departureDate : String? = null
     private var entranceDate : String? = null
+    private var latLng : GetCountryLocationResponse? = null
     private var dday : Long = -1
     var dDay : String = ""
 
@@ -83,7 +85,6 @@ class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
 
     override fun onStart() {
         super.onStart()
-
 
         scheduleViewModel.getScheduleList(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken)
         scheduleViewModel.scheduleListLiveData.observe(viewLifecycleOwner){list->
@@ -198,6 +199,8 @@ class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
                 )
                 intent.putExtra(getString(R.string.type), CalendarEditActivity.NEW)
                 intent.putExtra(getString(R.string.schedule), schedule)
+                intent.putExtra(getString(R.string.server_calendar_latitude), latLng!!.lat)
+                intent.putExtra(getString(R.string.server_calendar_longitude), latLng!!.lng)
                 startActivity(intent)
             }
 
@@ -212,7 +215,24 @@ class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
     }
 
     override fun onDesListener(des: String) {
-        destination = des
-        showDepartureInput()
+        lifecycleScope.launch {
+            scheduleViewModel.getCountryLocation(des).collect{ location ->
+                location?.let {
+                    destination = des
+                    latLng = location
+                    showDepartureInput()
+                } ?: run {
+                    scheduleViewModel.getCountryLocation(des).collect { newLocation ->
+                        newLocation?.let {
+                            destination = des
+                            latLng = newLocation
+                            showDepartureInput()
+                        } ?: run {
+                            Toast.makeText(activity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        }
     }
 }

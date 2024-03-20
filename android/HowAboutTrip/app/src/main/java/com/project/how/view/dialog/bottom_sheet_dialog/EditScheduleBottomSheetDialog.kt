@@ -39,7 +39,7 @@ import com.project.how.view.dialog.ConfirmDialog
 import kotlinx.coroutines.launch
 
 
-class EditScheduleBottomSheetDialog(private val schedule : DaysSchedule, private val position : Int, private val onScheduleListener: OnScheduleListener)
+class EditScheduleBottomSheetDialog(private val lat : Double, private val lng : Double, private val schedule : DaysSchedule, private val position : Int, private val onScheduleListener: OnScheduleListener)
     : BottomSheetDialogFragment(), OnMapReadyCallback {
     private var _binding : EditScheduleBottomSheetBinding? = null
     private val binding : EditScheduleBottomSheetBinding
@@ -145,13 +145,18 @@ class EditScheduleBottomSheetDialog(private val schedule : DaysSchedule, private
     }
 
     override fun onMapReady(map: GoogleMap) {
-        if (schedule.latitude != null || schedule.longitude != null){
+        if ((schedule.latitude != null || schedule.longitude != null) || (schedule.latitude == 0.0 && schedule.longitude == 0.0)){
             val placeLocation = LatLng(schedule.latitude!!, schedule.longitude!!)
             val camera = makeScheduleCarmeraUpdate(placeLocation, 15f)
             val markerOptions = makeScheduleMarkerOptions(requireContext(), type, position, placeLocation, schedule.places)
 
             map.moveCamera(camera)
             map.addMarker(markerOptions)
+        }else{
+            val placeLocation = LatLng(lat, lng)
+            val camera = makeScheduleCarmeraUpdate(placeLocation, 10f)
+
+            map.moveCamera(camera)
         }
     }
 

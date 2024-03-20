@@ -208,7 +208,7 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
             if((data.latitude != null && data.longitude != null) || (data.longitude == 0.0 && data.latitude == 0.0)){
                 val location = LatLng(data.latitude, data.longitude)
                 if (first){
-                    val camera = EditScheduleBottomSheetDialog.makeScheduleCarmeraUpdate(location, 10f)
+                    val camera = EditScheduleBottomSheetDialog.makeScheduleCarmeraUpdate(location, 15f)
                     map.moveCamera(camera)
                     first = false
                 }

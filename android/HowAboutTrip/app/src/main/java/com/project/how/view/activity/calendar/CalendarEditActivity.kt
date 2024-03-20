@@ -118,6 +118,9 @@ class CalendarEditActivity
                 val camera = EditScheduleBottomSheetDialog.makeScheduleCarmeraUpdate(location, 10f)
                 map.moveCamera(camera)
             }
+
+            supportMapFragment.getMapAsync(this@CalendarEditActivity)
+
             supportMapFragment.view?.setOnTouchListener { v, event ->
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
@@ -188,7 +191,7 @@ class CalendarEditActivity
             if((data.latitude != null && data.longitude != null) || (data.longitude == 0.0 && data.latitude == 0.0)){
                 val location = LatLng(data.latitude, data.longitude)
                 if (first){
-                    val camera = EditScheduleBottomSheetDialog.makeScheduleCarmeraUpdate(location, 10f)
+                    val camera = EditScheduleBottomSheetDialog.makeScheduleCarmeraUpdate(location, 15f)
                     map.moveCamera(camera)
                     first = false
                 }
@@ -258,7 +261,7 @@ class CalendarEditActivity
             null
         )
         data.dailySchedule[selectedDays].add(newData)
-        val editScheduleBottomSheet = EditScheduleBottomSheetDialog(newData , data.dailySchedule[selectedDays].lastIndex, this)
+        val editScheduleBottomSheet = EditScheduleBottomSheetDialog(latitude, longitude, newData , data.dailySchedule[selectedDays].lastIndex, this)
         editScheduleBottomSheet.show(supportFragmentManager, "EditScheduleBottomSheetDialog")
     }
 
@@ -364,7 +367,7 @@ class CalendarEditActivity
     }
 
     override fun onEditButtonClickListener(data : DaysSchedule, position : Int) {
-        val editScheduleBottomSheet = EditScheduleBottomSheetDialog(data , position, this)
+        val editScheduleBottomSheet = EditScheduleBottomSheetDialog(latitude, longitude, data , position, this)
         editScheduleBottomSheet.show(supportFragmentManager, "EditScheduleBottomSheetDialog")
     }
 
@@ -375,6 +378,7 @@ class CalendarEditActivity
                 setBudgetText(it)
             }
         }
+        supportMapFragment.getMapAsync(this)
     }
 
     override fun onDaysScheduleListener(schedule: DaysSchedule, position: Int) {

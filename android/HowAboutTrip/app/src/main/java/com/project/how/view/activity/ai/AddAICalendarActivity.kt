@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.project.how.R
-import com.project.how.data_class.AiSchedule
+import com.project.how.data_class.recyclerview.AiSchedule
 import com.project.how.data_class.AiScheduleInput
 import com.project.how.data_class.dto.GetCountryLocationResponse
 import com.project.how.databinding.ActivityAddAicalendarBinding

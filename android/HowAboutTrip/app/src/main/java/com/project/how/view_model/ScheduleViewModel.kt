@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.how.R
 import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
-import com.project.how.data_class.AiSchedule
-import com.project.how.data_class.DaysSchedule
-import com.project.how.data_class.Schedule
+import com.project.how.data_class.recyclerview.AiSchedule
+import com.project.how.data_class.recyclerview.DaysSchedule
+import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.data_class.dto.DailySchedule
 import com.project.how.data_class.dto.GetCountryLocationRequest
 import com.project.how.data_class.dto.GetCountryLocationResponse

@@ -4,16 +4,13 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.maps.model.LatLng
 import com.project.how.R
 import com.project.how.adapter.recyclerview.CalendarListAdapter
-import com.project.how.data_class.Schedule
-import com.project.how.data_class.ScheduleIDAndLatLng
+import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.data_class.dto.GetScheduleListResponseElement
 import com.project.how.databinding.ActivityCalendarListBinding
 import com.project.how.interface_af.OnDateTimeListener

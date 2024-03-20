@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.how.R
-import com.project.how.data_class.DaysSchedule
+import com.project.how.data_class.recyclerview.DaysSchedule
 import com.project.how.databinding.CalendarDaysScheduleEditItemBinding
 import com.project.how.interface_af.interface_ada.ItemMoveListener
 import com.project.how.interface_af.interface_ada.ItemStartDragListener
@@ -87,10 +87,13 @@ class DaysScheduleEditAdapter (
 
     override fun getItemCount(): Int = dailySchedule.size
 
+    override fun getItemViewType(position: Int): Int = position
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = dailySchedule[position]
         holder.bind(data, position)
     }
+
 
     fun itemDragListener(startDrag: ItemStartDragListener) {
         this.onItemDragListener = startDrag

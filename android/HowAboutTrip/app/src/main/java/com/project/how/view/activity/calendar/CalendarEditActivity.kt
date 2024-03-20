@@ -26,10 +26,9 @@ import com.project.how.R
 import com.project.how.adapter.recyclerview.DaysScheduleEditAdapter
 import com.project.how.adapter.item_touch_helper.RecyclerViewItemTouchHelperCallback
 import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
-import com.project.how.data_class.AiDaysSchedule
-import com.project.how.data_class.AiSchedule
-import com.project.how.data_class.DaysSchedule
-import com.project.how.data_class.Schedule
+import com.project.how.data_class.recyclerview.AiSchedule
+import com.project.how.data_class.recyclerview.DaysSchedule
+import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.databinding.ActivityCalendarEditBinding
 import com.project.how.interface_af.OnDateTimeListener
 import com.project.how.interface_af.OnDesListener
@@ -390,7 +389,25 @@ class CalendarEditActivity
     }
 
     override fun onDesListener(des: String) {
-        data.country = des
+        lifecycleScope.launch {
+            viewModel.getCountryLocation(des).collect{ location ->
+                location?.let {
+                    data.country = des
+                    latitude = location.lat
+                    longitude = location.lng
+                } ?: run {
+                    viewModel.getCountryLocation(des).collect { newLocation ->
+                        newLocation?.let {
+                            data.country = des
+                            latitude = newLocation.lat
+                            longitude = newLocation.lng
+                        } ?: run {
+                            Toast.makeText(this@CalendarEditActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onSaveDate(date: String, type: Int) {

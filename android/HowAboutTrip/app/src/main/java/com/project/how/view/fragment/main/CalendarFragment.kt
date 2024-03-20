@@ -11,15 +11,17 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.how.BuildConfig
 import com.project.how.R
 import com.project.how.adapter.recyclerview.EventViewPagerAdapter
 import com.project.how.adapter.recyclerview.RecentAddedCalendarsAdapter
-import com.project.how.data_class.EventViewPager
-import com.project.how.data_class.RecentAddedCalendar
-import com.project.how.data_class.Schedule
+import com.project.how.data_class.recyclerview.EventViewPager
+import com.project.how.data_class.recyclerview.RecentAddedCalendar
+import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.data_class.dto.GetCountryLocationResponse
 import com.project.how.databinding.FragmentCalendarBinding
 import com.project.how.interface_af.OnDateTimeListener
@@ -31,10 +33,12 @@ import com.project.how.view.dialog.bottom_sheet_dialog.CalendarBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
 import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import kotlin.concurrent.thread
 
 class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
     private var _binding : FragmentCalendarBinding? = null
@@ -53,6 +57,8 @@ class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
     private var entranceDate : String? = null
     private var latLng : GetCountryLocationResponse? = null
     private var dday : Long = -1
+    private lateinit var autoScrollJob : Job
+    private var viewPagerPosition = 0
     var dDay : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,6 +86,25 @@ class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.viewPager2.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
+        binding.viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                viewPagerPosition = position
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
+                when (state){
+                    ViewPager2.SCROLL_STATE_IDLE -> {if (!autoScrollJob.isActive) autoScrollJobCreate()}
+                    ViewPager2.SCROLL_STATE_DRAGGING -> {
+                        autoScrollJob.cancel()
+                    }
+                }
+            }
+        })
 
     }
 
@@ -152,6 +177,10 @@ class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun autoScrollJobCreate() {
+
     }
 
     fun add() {

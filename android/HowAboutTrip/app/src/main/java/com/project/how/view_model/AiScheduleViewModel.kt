@@ -3,16 +3,14 @@ package com.project.how.view_model
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
-import com.project.how.data_class.AiDaysSchedule
-import com.project.how.data_class.AiSchedule
+import com.project.how.data_class.recyclerview.AiDaysSchedule
+import com.project.how.data_class.recyclerview.AiSchedule
 import com.project.how.data_class.AiScheduleInput
 import com.project.how.data_class.dto.CreateScheduleRequest
 import com.project.how.data_class.dto.CreateScheduleResponse
 import com.project.how.model.AiScheduleRepository
 import com.project.how.network.client.ScheduleRetrofit
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -61,7 +59,7 @@ class AiScheduleViewModel : ViewModel() {
             })
     }
 
-    private fun getAiSchedule(createScheduleResponse : CreateScheduleResponse, createScheduleRequest: CreateScheduleRequest) : AiSchedule{
+    private fun getAiSchedule(createScheduleResponse : CreateScheduleResponse, createScheduleRequest: CreateScheduleRequest) : AiSchedule {
         val title = createScheduleRequest.destination
         val country = createScheduleRequest.destination
         val startDate = createScheduleRequest.departureDate
@@ -88,7 +86,7 @@ class AiScheduleViewModel : ViewModel() {
         )
     }
 
-    private fun getTestAiSchedule() : AiSchedule{
+    private fun getTestAiSchedule() : AiSchedule {
         val testAiDaysSchedule = mutableListOf<AiDaysSchedule>(AiDaysSchedule(AiDaysScheduleAdapter.PLACE, "test Todo", "test"))
         testAiDaysSchedule.add(AiDaysSchedule(AiDaysScheduleAdapter.AIRPLANE, "test airplane", "airplane"))
         testAiDaysSchedule.add(AiDaysSchedule(AiDaysScheduleAdapter.HOTEL, "test hotel", "hotel"))

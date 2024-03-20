@@ -1,11 +1,9 @@
 package com.project.how.view.dialog.bottom_sheet_dialog
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -33,7 +31,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.project.how.BuildConfig
 import com.project.how.R
 import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
-import com.project.how.data_class.DaysSchedule
+import com.project.how.data_class.recyclerview.DaysSchedule
 import com.project.how.databinding.EditScheduleBottomSheetBinding
 import com.project.how.databinding.MapMarkerScheduleBinding
 import com.project.how.interface_af.OnScheduleListener

@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.project.how.BuildConfig
 import com.project.how.R
-import com.project.how.data_class.AiSchedule
+import com.project.how.data_class.recyclerview.AiSchedule
 import com.project.how.databinding.AiScheduleItemBinding
 
 //현재 폐기

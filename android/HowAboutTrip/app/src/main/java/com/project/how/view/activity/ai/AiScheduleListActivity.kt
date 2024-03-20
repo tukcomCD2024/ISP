@@ -7,8 +7,8 @@ import androidx.lifecycle.lifecycleScope
 import com.project.how.R
 import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
 import com.project.how.adapter.recyclerview.AiScheduleAdapter
-import com.project.how.data_class.AiDaysSchedule
-import com.project.how.data_class.AiSchedule
+import com.project.how.data_class.recyclerview.AiDaysSchedule
+import com.project.how.data_class.recyclerview.AiSchedule
 import com.project.how.databinding.ActivityAiScheduleListBinding
 import kotlinx.coroutines.launch
 
@@ -30,9 +30,11 @@ class AiScheduleListActivity : AppCompatActivity() {
                 dailySchedule.add(testAiDaysSchedule)
             }
 
-            data.add(AiSchedule("RecyclerView Text", "프랑스",listOf("#text1", "#text2", "#text3"),
+            data.add(
+                AiSchedule("RecyclerView Text", "프랑스",listOf("#text1", "#text2", "#text3"),
                 "https://img.freepik.com/free-photo/vertical-shot-beautiful-eiffel-tower-captured-paris-france_181624-45445.jpg?w=740&t=st=1708260600~exp=1708261200~hmac=01d8abec61f555d0edb040d41ce8ea39904853aea6df7c37ce0b5a35e07c1954",
-                "2024-02-18", "2024-02-19", dailySchedule))
+                "2024-02-18", "2024-02-19", dailySchedule)
+            )
 
             adapter = AiScheduleAdapter(data)
 

@@ -187,4 +187,5 @@
     <string name="recent_added_calendar">최근에 생성된 일정</string>
     <string name="record_count_user_title">%1$s님의 여행 기록</string>
     <string name="record_count">%1$s 개</string>
+    <string name="recent_record_text">%1$s\n%2$s</string>
 </resources>

@@ -19,9 +19,8 @@ import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.tabs.TabLayout
 import com.project.how.R
 import com.project.how.adapter.recyclerview.DaysScheduleAdapter
-import com.project.how.data_class.DaysSchedule
-import com.project.how.data_class.Schedule
-import com.project.how.data_class.ScheduleIDAndLatLng
+import com.project.how.data_class.recyclerview.DaysSchedule
+import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.databinding.ActivityCalendarBinding
 import com.project.how.view.dialog.AiScheduleDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.EditScheduleBottomSheetDialog
@@ -165,9 +164,25 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
     }
 
     fun delete(){
-        viewModel.deleteSchedule(this, MemberViewModel.tokensLiveData.value!!.accessToken, idToLong)
-        startActivity(Intent(this, CalendarListActivity::class.java))
-        finish()
+        lifecycleScope.launch {
+            viewModel.deleteSchedule(this@CalendarActivity, MemberViewModel.tokensLiveData.value!!.accessToken, idToLong).collect{
+                when(it){
+                    ScheduleViewModel.SUCCESS -> {
+                        startActivity(Intent(this@CalendarActivity, CalendarListActivity::class.java))
+                        finish()
+                    }
+                    ScheduleViewModel.OTHER_USER_SCHEDULE -> {
+                        Toast.makeText(this@CalendarActivity, getString(R.string.other_user_schedule_delete_error), Toast.LENGTH_SHORT).show()
+                    }
+                    ScheduleViewModel.NOT_EXIST_SCHEDULE -> {
+                        Toast.makeText(this@CalendarActivity, getString(R.string.not_exist_schedule_delete_error), Toast.LENGTH_SHORT).show()
+                    }
+                    ScheduleViewModel.NETWORK_FAILED -> {
+                        Toast.makeText(this@CalendarActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
     }
 
     fun edit(){

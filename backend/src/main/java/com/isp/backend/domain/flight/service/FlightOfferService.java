@@ -7,7 +7,7 @@ import com.amadeus.resources.FlightOfferSearch;
 import com.google.gson.Gson;
 import com.isp.backend.domain.country.entity.Country;
 import com.isp.backend.domain.country.repository.CountryRepository;
-import com.isp.backend.domain.flight.dto.FlightSearchRequestDTO;
+import com.isp.backend.domain.flight.dto.request.FlightSearchRequest;
 import com.isp.backend.domain.flight.mapper.FlightOfferProcessor;
 import com.isp.backend.global.exception.schedule.CountryNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class FlightOfferService {
     /**
      *  항공편 조회
      */
-    public String getFlightOffers(FlightSearchRequestDTO request) throws ResponseException {
+    public String getFlightOffers(FlightSearchRequest request) throws ResponseException {
 
         String originLocationCode = findAirportCode(request.getOriginCity());
         String destinationLocationCode = findAirportCode(request.getDestinationCity());

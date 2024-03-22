@@ -4,8 +4,8 @@ import com.isp.backend.domain.country.entity.Country;
 import com.isp.backend.domain.country.repository.CountryRepository;
 import com.isp.backend.domain.member.entity.Member;
 import com.isp.backend.domain.member.repository.MemberRepository;
-import com.isp.backend.domain.schedule.dto.ScheduleListResponseDTO;
-import com.isp.backend.domain.schedule.dto.ScheduleSaveRequestDTO;
+import com.isp.backend.domain.schedule.dto.response.ScheduleListResponse;
+import com.isp.backend.domain.schedule.dto.request.ScheduleSaveRequest;
 import com.isp.backend.domain.schedule.entity.Schedule;
 import com.isp.backend.domain.schedule.mapper.ScheduleMapper;
 import com.isp.backend.domain.schedule.repository.ScheduleRepository;
@@ -40,11 +40,11 @@ public class ScheduleServiceImpl implements ScheduleService {
      */
     @Transactional
     @Override
-    public void saveSchedule(String uid, ScheduleSaveRequestDTO scheduleSaveRequestDTO) {
+    public void saveSchedule(String uid, ScheduleSaveRequest scheduleSaveRequest) {
         Member findMember = validateUserCheck(uid);
-        Country findCountry = validateCountry(scheduleSaveRequestDTO.getCountry());
+        Country findCountry = validateCountry(scheduleSaveRequest.getCountry());
         // 여행 일정 저장
-        Schedule schedule = scheduleMapper.toScheduleEntity(scheduleSaveRequestDTO, findMember, findCountry);
+        Schedule schedule = scheduleMapper.toScheduleEntity(scheduleSaveRequest, findMember, findCountry);
         // 여행 전체 일정 총 경비 저장
         calculateTotalPrice(schedule);
 
@@ -56,7 +56,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * 여행 일정 목록 조회 API
      */
     @Override
-    public List<ScheduleListResponseDTO> getScheduleList(String uid) {
+    public List<ScheduleListResponse> getScheduleList(String uid) {
         Member findMember = validateUserCheck(uid);
         // 내가 쓴 일정 불러오기
         List<Schedule> scheduleList = scheduleRepository.findSchedulesByMember(findMember);
@@ -72,7 +72,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * 여행 일정 상세 조회 API
      */
     @Override
-    public ScheduleSaveRequestDTO getScheduleDetail(String uid, Long scheduleId) {
+    public ScheduleSaveRequest getScheduleDetail(String uid, Long scheduleId) {
         Member findMember = validateUserCheck(uid);
         Schedule findSchedule = validateSchedule(scheduleId);
 
@@ -107,7 +107,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      */
     @Transactional
     @Override
-    public ScheduleSaveRequestDTO updateSchedule(String uid, Long scheduleId, ScheduleSaveRequestDTO updateRequestDTO) {
+    public ScheduleSaveRequest updateSchedule(String uid, Long scheduleId, ScheduleSaveRequest updateRequestDTO) {
         Member findMember = validateUserCheck(uid);
         Country findCountry = validateCountry(updateRequestDTO.getCountry());
         Schedule findSchedule = validateSchedule(scheduleId);

@@ -1,4 +1,4 @@
-package com.isp.backend.domain.gpt.dto;
+package com.isp.backend.domain.gpt.dto.response;
 
 import com.isp.backend.domain.gpt.entity.GptSchedule;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GptScheduleResponseDto {
+public class GptScheduleResponse {
     private String countryImage;
     private List<GptSchedule> schedules;
 }

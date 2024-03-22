@@ -1,4 +1,4 @@
-package com.isp.backend.domain.flight.dto;
+package com.isp.backend.domain.flight.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class FlightSearchRequestDTO {
+public class FlightSearchRequest {
 
     private String originCity;
 

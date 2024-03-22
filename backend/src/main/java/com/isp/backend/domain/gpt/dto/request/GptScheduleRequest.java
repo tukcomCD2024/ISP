@@ -1,4 +1,4 @@
-package com.isp.backend.domain.gpt.dto;
+package com.isp.backend.domain.gpt.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GptScheduleRequestDto {
+public class GptScheduleRequest {
     private String destination;
     private List<String> purpose;
     private String departureDate;

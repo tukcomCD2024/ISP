@@ -1,4 +1,4 @@
-package com.isp.backend.domain.member.dto;
+package com.isp.backend.domain.member.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

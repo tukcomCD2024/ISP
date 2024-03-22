@@ -1,7 +1,7 @@
 package com.isp.backend.domain.country.controller;
 
-import com.isp.backend.domain.country.dto.LocationRequestDTO;
-import com.isp.backend.domain.country.dto.LocationResponseDTO;
+import com.isp.backend.domain.country.dto.request.LocationRequest;
+import com.isp.backend.domain.country.dto.response.LocationResponse;
 import com.isp.backend.domain.country.service.CountryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +19,9 @@ public class CountryController {
 
     /** 여행지 좌표 찾기 **/
     @PostMapping("/location")
-    public ResponseEntity<LocationResponseDTO> findLocation(@RequestBody LocationRequestDTO requestDTO) {
+    public ResponseEntity<LocationResponse> findLocation(@RequestBody LocationRequest requestDTO) {
         String country = requestDTO.getCountry();
-        LocationResponseDTO responseDTO = countryService.findLocationByCity(country);
+        LocationResponse responseDTO = countryService.findLocationByCity(country);
         if (responseDTO == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

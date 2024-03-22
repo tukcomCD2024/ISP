@@ -1,4 +1,4 @@
-package com.isp.backend.domain.gpt.dto;
+package com.isp.backend.domain.gpt.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.isp.backend.domain.gpt.entity.GptMessage;
@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GptRequestDTO {
+public class GptRequest {
     private String model;
 
     @JsonProperty("max_tokens")

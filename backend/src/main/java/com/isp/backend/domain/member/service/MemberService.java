@@ -1,9 +1,9 @@
 package com.isp.backend.domain.member.service;
 
-import com.isp.backend.domain.member.dto.AuthRecreateRequest;
-import com.isp.backend.domain.member.dto.GoogleLoginRequest;
-import com.isp.backend.domain.member.dto.MemberDetailResponse;
-import com.isp.backend.domain.member.dto.SignUpRequest;
+import com.isp.backend.domain.member.dto.request.AuthRecreateRequest;
+import com.isp.backend.domain.member.dto.request.GoogleLoginRequest;
+import com.isp.backend.domain.member.dto.response.MemberDetailResponse;
+import com.isp.backend.domain.member.dto.request.SignUpRequest;
 import com.isp.backend.domain.member.entity.Member;
 import org.springframework.http.ResponseEntity;
 

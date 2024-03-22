@@ -1,7 +1,7 @@
 package com.isp.backend.domain.schedule.controller;
 
-import com.isp.backend.domain.schedule.dto.ScheduleListResponseDTO;
-import com.isp.backend.domain.schedule.dto.ScheduleSaveRequestDTO;
+import com.isp.backend.domain.schedule.dto.response.ScheduleListResponse;
+import com.isp.backend.domain.schedule.dto.request.ScheduleSaveRequest;
 import com.isp.backend.domain.schedule.service.ScheduleServiceImpl;
 import com.isp.backend.global.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class ScheduleController {
      */
     @PostMapping("/save")
     public ResponseEntity<Void> saveSchedule(@AuthenticationPrincipal CustomUserDetails customUserDetails,
-                                             @RequestBody ScheduleSaveRequestDTO requestDTO) {
+                                             @RequestBody ScheduleSaveRequest requestDTO) {
         scheduleServiceImpl.saveSchedule(customUserDetails.getUsername(), requestDTO);
         return ResponseEntity.ok().build();
     }
@@ -33,9 +33,9 @@ public class ScheduleController {
      * 여행 일정 목록 조회 API
      */
     @GetMapping("/list")
-    public ResponseEntity<List<ScheduleListResponseDTO>> getScheduleList(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<List<ScheduleListResponse>> getScheduleList(@AuthenticationPrincipal CustomUserDetails userDetails) {
         String uid = userDetails.getUsername();
-        List<ScheduleListResponseDTO> scheduleList = scheduleServiceImpl.getScheduleList(uid);
+        List<ScheduleListResponse> scheduleList = scheduleServiceImpl.getScheduleList(uid);
         return ResponseEntity.ok(scheduleList);
     }
 
@@ -43,10 +43,10 @@ public class ScheduleController {
      * 여행 일정 상세 조회 API
      */
     @GetMapping("/detail/{scheduleId}")
-    public ResponseEntity<ScheduleSaveRequestDTO> getScheduleDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                                    @PathVariable Long scheduleId) {
+    public ResponseEntity<ScheduleSaveRequest> getScheduleDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                                 @PathVariable Long scheduleId) {
         String uid = userDetails.getUsername();
-        ScheduleSaveRequestDTO scheduleDetail = scheduleServiceImpl.getScheduleDetail(uid, scheduleId);
+        ScheduleSaveRequest scheduleDetail = scheduleServiceImpl.getScheduleDetail(uid, scheduleId);
         return ResponseEntity.ok(scheduleDetail);
     }
 
@@ -66,10 +66,10 @@ public class ScheduleController {
      * 여행 일정 수정 API
      */
     @PutMapping("/update/{scheduleId}")
-    public ResponseEntity<ScheduleSaveRequestDTO> updateSchedule(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                                 @PathVariable Long scheduleId,
-                                                                 @RequestBody ScheduleSaveRequestDTO requestDTO) {
-        ScheduleSaveRequestDTO updatedSchedule = scheduleServiceImpl.updateSchedule(userDetails.getUsername(), scheduleId, requestDTO);
+    public ResponseEntity<ScheduleSaveRequest> updateSchedule(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                              @PathVariable Long scheduleId,
+                                                              @RequestBody ScheduleSaveRequest requestDTO) {
+        ScheduleSaveRequest updatedSchedule = scheduleServiceImpl.updateSchedule(userDetails.getUsername(), scheduleId, requestDTO);
 //        return ResponseEntity.ok().build();  == public void로
         return ResponseEntity.ok(updatedSchedule);
     }

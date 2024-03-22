@@ -2,7 +2,7 @@ package com.isp.backend.domain.flight.controller;
 
 import com.amadeus.exceptions.ResponseException;
 import com.isp.backend.domain.flight.service.FlightOfferService;
-import com.isp.backend.domain.flight.dto.FlightSearchRequestDTO;
+import com.isp.backend.domain.flight.dto.request.FlightSearchRequest;
 import com.isp.backend.global.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class FlightOfferController {
      */
     @GetMapping("/search")
     public ResponseEntity<String> getFlightOffers(@AuthenticationPrincipal CustomUserDetails customUserDetails,
-                                                  @RequestBody FlightSearchRequestDTO request) {
+                                                  @RequestBody FlightSearchRequest request) {
         String memberUid = customUserDetails.getUsername();
         try {
             String flightOffersJson = flightOfferService.getFlightOffers(request);

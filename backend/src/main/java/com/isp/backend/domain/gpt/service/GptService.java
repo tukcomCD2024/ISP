@@ -2,10 +2,10 @@ package com.isp.backend.domain.gpt.service;
 
 import com.isp.backend.domain.gpt.config.GptConfig;
 import com.isp.backend.domain.gpt.constant.ParsingConstants;
-import com.isp.backend.domain.gpt.dto.GptRequestDTO;
-import com.isp.backend.domain.gpt.dto.GptResponseDTO;
-import com.isp.backend.domain.gpt.dto.GptScheduleRequestDto;
-import com.isp.backend.domain.gpt.dto.GptScheduleResponseDto;
+import com.isp.backend.domain.gpt.dto.request.GptRequest;
+import com.isp.backend.domain.gpt.dto.response.GptResponse;
+import com.isp.backend.domain.gpt.dto.request.GptScheduleRequest;
+import com.isp.backend.domain.gpt.dto.response.GptScheduleResponse;
 import com.isp.backend.domain.gpt.entity.GptMessage;
 import com.isp.backend.domain.gpt.entity.GptSchedule;
 import com.isp.backend.domain.gpt.entity.GptScheduleParser;
@@ -35,39 +35,39 @@ public class GptService {
     @Value("${api-key.chat-gpt}")
     private String apiKey;
 
-    public HttpEntity<GptRequestDTO> buildHttpEntity(GptRequestDTO gptRequestDTO) {
+    public HttpEntity<GptRequest> buildHttpEntity(GptRequest gptRequest) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.parseMediaType(GptConfig.MEDIA_TYPE));
         httpHeaders.add(GptConfig.AUTHORIZATION, GptConfig.BEARER + apiKey);
-        return new HttpEntity<>(gptRequestDTO, httpHeaders);
+        return new HttpEntity<>(gptRequest, httpHeaders);
     }
 
-    public GptScheduleResponseDto getResponse(String destination, HttpEntity<GptRequestDTO> chatGptRequestHttpEntity) {
+    public GptScheduleResponse getResponse(String destination, HttpEntity<GptRequest> chatGptRequestHttpEntity) {
 
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(60000);
         requestFactory.setReadTimeout(60 * 1000);
         restTemplate.setRequestFactory(requestFactory);
 
-        ResponseEntity<GptResponseDTO> responseEntity = restTemplate.postForEntity(
+        ResponseEntity<GptResponse> responseEntity = restTemplate.postForEntity(
                 GptConfig.CHAT_URL,
                 chatGptRequestHttpEntity,
-                GptResponseDTO.class);
+                GptResponse.class);
         String countryImage = s3ImageService.get(destination);
         List<GptSchedule> gptSchedules = gptScheduleParser.parseScheduleText(getScheduleText(responseEntity));
 
-        return new GptScheduleResponseDto(countryImage, gptSchedules);
+        return new GptScheduleResponse(countryImage, gptSchedules);
     }
 
-    private String getScheduleText(ResponseEntity<GptResponseDTO> responseEntity) {
+    private String getScheduleText(ResponseEntity<GptResponse> responseEntity) {
         return getGptMessage(responseEntity).toString();
     }
 
-    private GptMessage getGptMessage(ResponseEntity<GptResponseDTO> responseEntity) {
+    private GptMessage getGptMessage(ResponseEntity<GptResponse> responseEntity) {
         return responseEntity.getBody().getChoices().get(0).getMessage();
     }
 
-    public GptScheduleResponseDto askQuestion(GptScheduleRequestDto questionRequestDTO) {
+    public GptScheduleResponse askQuestion(GptScheduleRequest questionRequestDTO) {
         String question = makeQuestion(questionRequestDTO);
         List<GptMessage> messages = Collections.singletonList(
                 GptMessage.builder()
@@ -80,7 +80,7 @@ public class GptService {
         return this.getResponse(
                 questionRequestDTO.getDestination(),
                 this.buildHttpEntity(
-                        new GptRequestDTO(
+                        new GptRequest(
                                 GptConfig.CHAT_MODEL,
                                 GptConfig.MAX_TOKEN,
                                 GptConfig.TEMPERATURE,
@@ -91,7 +91,7 @@ public class GptService {
         );
     }
 
-    private String makeQuestion(GptScheduleRequestDto questionRequestDTO) {
+    private String makeQuestion(GptScheduleRequest questionRequestDTO) {
         return String.format(GptConfig.PROMPT,
                 questionRequestDTO.getDestination(),
                 questionRequestDTO.getDepartureDate(),

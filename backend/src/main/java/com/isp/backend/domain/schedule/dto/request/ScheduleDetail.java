@@ -1,4 +1,4 @@
-package com.isp.backend.domain.schedule.dto;
+package com.isp.backend.domain.schedule.dto.request;
 
 
 import com.isp.backend.domain.scheduleDetail.entity.ScheduleType;
@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ScheduleDetailDTO {
+public class ScheduleDetail {
 
     private String todo;        // 할 일
 

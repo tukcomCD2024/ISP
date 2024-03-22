@@ -1,4 +1,4 @@
-package com.isp.backend.domain.member.dto;
+package com.isp.backend.domain.member.dto.response;
 
 import com.isp.backend.domain.member.entity.Member;
 import lombok.AccessLevel;

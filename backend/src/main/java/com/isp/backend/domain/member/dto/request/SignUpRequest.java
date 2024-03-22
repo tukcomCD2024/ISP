@@ -1,4 +1,4 @@
-package com.isp.backend.domain.member.dto;
+package com.isp.backend.domain.member.dto.request;
 
 import com.isp.backend.domain.member.entity.Member;
 import lombok.AllArgsConstructor;

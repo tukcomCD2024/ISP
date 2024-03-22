@@ -1,4 +1,4 @@
-package com.isp.backend.domain.gpt.dto;
+package com.isp.backend.domain.gpt.dto.response;
 
 import com.isp.backend.domain.gpt.entity.GptMessage;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GptResponseDTO {
+public class GptResponse {
     private List<Choice> choices;
 
     @Getter

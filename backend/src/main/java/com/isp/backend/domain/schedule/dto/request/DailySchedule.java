@@ -1,4 +1,4 @@
-package com.isp.backend.domain.schedule.dto;
+package com.isp.backend.domain.schedule.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,10 +11,10 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DailyScheduleDTO {
+public class DailySchedule {
 
     private String date; // 일정 날짜
 
-    private List<ScheduleDetailDTO> schedules; // 해당 날짜의 일정 목록
+    private List<ScheduleDetail> schedules; // 해당 날짜의 일정 목록
 
 }

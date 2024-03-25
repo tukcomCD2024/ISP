@@ -6,7 +6,7 @@
     <data>
         <variable
             name="event_viewpager"
-            type="com.project.how.adapter.recyclerview.EventViewPagerAdapter" />
+            type="com.project.how.adapter.recyclerview.viewpager.EventViewPagerAdapter" />
 
     </data>
 
@@ -31,7 +31,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/event_viewpager_test" />
+                android:src="@drawable/location_image" />
+
+            <ImageView
+                android:id="@+id/fade"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/gradient_radial_fade"/>
 
             <TextView
                 android:id="@+id/text"

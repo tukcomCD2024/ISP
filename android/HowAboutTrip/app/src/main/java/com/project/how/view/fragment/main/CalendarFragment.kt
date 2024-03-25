@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.how.BuildConfig
 import com.project.how.R
-import com.project.how.adapter.recyclerview.EventViewPagerAdapter
+import com.project.how.adapter.recyclerview.viewpager.EventViewPagerAdapter
 import com.project.how.adapter.recyclerview.RecentAddedCalendarsAdapter
 import com.project.how.data_class.recyclerview.EventViewPager
 import com.project.how.data_class.recyclerview.RecentAddedCalendar
@@ -81,6 +81,7 @@ class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_calendar, container, false)
         binding.calendar = this
         binding.lifecycleOwner = viewLifecycleOwner
+        autoScrollJobCreate()
         return binding.root
     }
 
@@ -180,7 +181,9 @@ class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
     }
 
     private fun autoScrollJobCreate() {
+        autoScrollJob = lifecycleScope.launch{
 
+        }
     }
 
     fun add() {

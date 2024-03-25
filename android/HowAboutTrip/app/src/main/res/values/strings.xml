@@ -188,4 +188,7 @@
     <string name="record_count_user_title">%1$s님의 여행 기록</string>
     <string name="record_count">%1$s 개</string>
     <string name="recent_record_text">%1$s\n%2$s</string>
+    <string name="my_purchased">내 예약</string>
+    <string name="recent_airplane">최근 본 항공권</string>
+    <string name="recent_hotel">최근에 본 숙소</string>
 </resources>

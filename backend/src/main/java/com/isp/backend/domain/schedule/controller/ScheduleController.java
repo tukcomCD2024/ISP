@@ -19,20 +19,9 @@ public class ScheduleController {
     private final ScheduleServiceImpl scheduleServiceImpl;
 
     /**
-     * 여행 일정 저장 API
-     */
-    @PostMapping("/save")
-    public ResponseEntity<Void> saveSchedule(@AuthenticationPrincipal CustomUserDetails customUserDetails,
-                                             @RequestBody ScheduleSaveRequest requestDTO) {
-        scheduleServiceImpl.saveSchedule(customUserDetails.getUsername(), requestDTO);
-        return ResponseEntity.ok().build();
-    }
-
-
-    /**
      * 여행 일정 목록 조회 API
      */
-    @GetMapping("/list")
+    @GetMapping()
     public ResponseEntity<List<ScheduleListResponse>> getScheduleList(@AuthenticationPrincipal CustomUserDetails userDetails) {
         String uid = userDetails.getUsername();
         List<ScheduleListResponse> scheduleList = scheduleServiceImpl.getScheduleList(uid);
@@ -40,9 +29,19 @@ public class ScheduleController {
     }
 
     /**
+     * 여행 일정 저장 API
+     */
+    @PostMapping()
+    public ResponseEntity<Void> saveSchedule(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+                                             @RequestBody ScheduleSaveRequest requestDTO) {
+        scheduleServiceImpl.saveSchedule(customUserDetails.getUsername(), requestDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
      * 여행 일정 상세 조회 API
      */
-    @GetMapping("/detail/{scheduleId}")
+    @GetMapping("/details/{scheduleId}")
     public ResponseEntity<ScheduleSaveRequest> getScheduleDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                  @PathVariable Long scheduleId) {
         String uid = userDetails.getUsername();
@@ -65,14 +64,12 @@ public class ScheduleController {
     /**
      * 여행 일정 수정 API
      */
-    @PutMapping("/update/{scheduleId}")
+    @PutMapping("/{scheduleId}")
     public ResponseEntity<ScheduleSaveRequest> updateSchedule(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                               @PathVariable Long scheduleId,
                                                               @RequestBody ScheduleSaveRequest requestDTO) {
         ScheduleSaveRequest updatedSchedule = scheduleServiceImpl.updateSchedule(userDetails.getUsername(), scheduleId, requestDTO);
-//        return ResponseEntity.ok().build();  == public void로
         return ResponseEntity.ok(updatedSchedule);
     }
-
 
 }

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class GptController {
     private final GptService gptService;
 
-    @PostMapping("/create")
+    @PostMapping("/schedules")
     public ResponseEntity<GptScheduleResponse> sendQuestion(@RequestBody GptScheduleRequest gptScheduleRequest) {
         GptScheduleResponse gptScheduleResponse = gptService.askQuestion(gptScheduleRequest);
         return ResponseEntity.ok(gptScheduleResponse);

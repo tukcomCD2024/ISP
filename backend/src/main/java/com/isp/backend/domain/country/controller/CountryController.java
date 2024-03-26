@@ -18,7 +18,7 @@ public class CountryController {
     private CountryService countryService;
 
     /** 여행지 좌표 찾기 **/
-    @PostMapping("/location")
+    @PostMapping("/locations")
     public ResponseEntity<LocationResponse> findLocation(@RequestBody LocationRequest requestDTO) {
         String country = requestDTO.getCountry();
         LocationResponse responseDTO = countryService.findLocationByCity(country);

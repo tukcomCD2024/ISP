@@ -33,7 +33,7 @@ public class MemberController {
     /**
      * 회원가입 - 추가 정보 API
      */
-    @PutMapping("/signup")
+    @PutMapping("/signUp")
     public ResponseEntity<Void> signUp(@RequestBody SignUpRequest request,
                                        @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         String memberUid = customUserDetails.getUsername();
@@ -54,7 +54,7 @@ public class MemberController {
     /**
      * 멤버 정보 조회
      */
-    @GetMapping("/info")
+    @GetMapping("/information")
     public ResponseEntity<MemberDetailResponse> getMemberInfo(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
         return ResponseEntity.ok(memberService.getMemberInfo(customUserDetails.getUsername()));

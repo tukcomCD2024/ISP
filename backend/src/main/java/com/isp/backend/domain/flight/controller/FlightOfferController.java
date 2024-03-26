@@ -25,7 +25,7 @@ public class FlightOfferController {
     /**
      *  항공권 검색 API
      */
-    @GetMapping("/search")
+    @GetMapping("/flights")
     public ResponseEntity<String> getFlightOffers(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                                   @RequestBody FlightSearchRequest request) {
         String memberUid = customUserDetails.getUsername();

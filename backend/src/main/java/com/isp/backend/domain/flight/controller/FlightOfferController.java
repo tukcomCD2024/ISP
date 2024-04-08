@@ -22,9 +22,7 @@ public class FlightOfferController {
     @Autowired
     private FlightOfferService flightOfferService;
 
-    /**
-     *  항공권 검색 API
-     */
+    /** 항공권 검색 API **/
     @GetMapping("/flights")
     public ResponseEntity<String> getFlightOffers(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                                   @RequestBody FlightSearchRequest request) {

@@ -24,9 +24,7 @@ public class FlightOfferService {
     private final FlightOfferProcessor flightOfferProcessor ;
 
 
-    /**
-     *  항공편 조회
-     */
+    /** 항공편 조회 **/
     public String getFlightOffers(FlightSearchRequest request) throws ResponseException {
 
         String originLocationCode = findAirportCode(request.getOriginCity());
@@ -52,13 +50,10 @@ public class FlightOfferService {
 
 
     /** 공항 코드 찾기 **/
-    public String findAirportCode(String countryName) {
-        Country findCountry = countryRepository.findAirportCodeByCity(countryName);
-        if (findCountry == null) {
-            throw new CountryNotFoundException();
-        }
+    private String findAirportCode(String countryName) {
+        Country findCountry = countryRepository.findAirportCodeByCity(countryName)
+                .orElseThrow(()-> new CountryNotFoundException());
         return findCountry.getAirportCode();
     }
-
 
 }

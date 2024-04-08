@@ -2,6 +2,7 @@ package com.isp.backend.domain.schedule.service;
 
 import com.isp.backend.domain.country.entity.Country;
 import com.isp.backend.domain.country.repository.CountryRepository;
+import com.isp.backend.domain.member.dto.response.MemberDetailResponse;
 import com.isp.backend.domain.member.entity.Member;
 import com.isp.backend.domain.member.repository.MemberRepository;
 import com.isp.backend.domain.schedule.dto.response.ScheduleListResponse;
@@ -34,10 +35,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final CountryRepository countryRepository;
     private final MemberRepository memberRepository;
     private final ScheduleMapper scheduleMapper;
+
     
-    /**
-     * 여행 일정 저장 API
-     */
+    /** 여행 일정 저장 API **/
     @Transactional
     @Override
     public void saveSchedule(String uid, ScheduleSaveRequest scheduleSaveRequest) {
@@ -52,15 +52,12 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
 
-    /**
-     * 여행 일정 목록 조회 API
-     */
+    /** 여행 일정 목록 조회 API **/
     @Override
     public List<ScheduleListResponse> getScheduleList(String uid) {
         Member findMember = validateUserCheck(uid);
         // 내가 쓴 일정 불러오기
         List<Schedule> scheduleList = scheduleRepository.findSchedulesByMember(findMember);
-
 
         return scheduleList.stream()
                 .map(scheduleMapper::toScheduleListResponseDTO)
@@ -68,9 +65,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
 
-    /**
-     * 여행 일정 상세 조회 API
-     */
+    /** 여행 일정 상세 조회 API **/
     @Override
     public ScheduleSaveRequest getScheduleDetail(String uid, Long scheduleId) {
         Member findMember = validateUserCheck(uid);
@@ -80,9 +75,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
 
-    /**
-     * 여행 일정 삭제 API
-     */
+    /** 여행 일정 삭제 API **/
     @Transactional
     @Override
     public void deleteSchedule(String uid, Long scheduleId) {
@@ -102,9 +95,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
 
-    /**
-     * 여행 일정 수정 API
-     */
+    /** 여행 일정 수정 API **/
     @Transactional
     @Override
     public ScheduleSaveRequest updateSchedule(String uid, Long scheduleId, ScheduleSaveRequest updateRequestDTO) {
@@ -133,7 +124,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         calculateTotalPrice(findSchedule);
         scheduleRepository.save(findSchedule);
 
-        // 수정된 일정을 반환 -- 없애도 됨 public void fh
+        // 수정된 일정을 반환 -- 없애도 됨 public void 로 추후 변경 가능
         return updateRequestDTO;
     }
 
@@ -151,22 +142,18 @@ public class ScheduleServiceImpl implements ScheduleService {
     /**  유저 정보 확인 **/
     @Override
     public Member validateUserCheck(String uid) {
-        Member findMember = memberRepository.findByUid(uid);
-        if (findMember == null) {
-            throw new MemberNotFoundException();
-        }
+        Member findMember = memberRepository.findByUid(uid)
+                .orElseThrow(MemberNotFoundException::new);
         return findMember;
     }
+
 
 
     /**  여행 일정 검증 **/
     @Override
     public Schedule validateSchedule(Long scheduleId) {
-        // 여행 일정 찾기
-        Schedule findSchedule = scheduleRepository.findByIdAndActivatedIsTrue(scheduleId);
-        if (findSchedule == null) {
-            throw new ScheduleNotFoundException();
-        }
+        Schedule findSchedule = scheduleRepository.findByIdAndActivatedIsTrue(scheduleId)
+                .orElseThrow(ScheduleNotFoundException::new);
         return findSchedule;
     }
 
@@ -174,10 +161,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     /** 여행 국가 검증 **/
     @Override
     public Country validateCountry(String countryName) {
-        Country findCountry = countryRepository.findIdByCity(countryName);
-        if (findCountry == null) {
-            throw new CountryNotFoundException();
-        }
+        Country findCountry = countryRepository.findIdByCity(countryName)
+                .orElseThrow(() -> new CountryNotFoundException());
         return findCountry;
     }
 

@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/countries")
 @RequiredArgsConstructor
@@ -21,11 +23,12 @@ public class CountryController {
     @PostMapping("/locations")
     public ResponseEntity<LocationResponse> findLocation(@RequestBody LocationRequest requestDTO) {
         String country = requestDTO.getCountry();
-        LocationResponse responseDTO = countryService.findLocationByCity(country);
-        if (responseDTO == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Optional<LocationResponse> responseDTO = countryService.findLocationByCity(country);
+        if (responseDTO.isPresent()) {
+            return ResponseEntity.ok(responseDTO.get());
+        } else {
+            return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
 

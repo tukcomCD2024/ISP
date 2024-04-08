@@ -20,9 +20,7 @@ public class MemberController {
     private final MemberService memberService;
 
 
-    /**
-     * 로그인 API
-     */
+    /** 로그인 API **/
     @PostMapping("/login")
     public ResponseEntity<String> memberLogin(@RequestBody GoogleLoginRequest request) {
         return memberService.memberLogin(request);
@@ -30,9 +28,7 @@ public class MemberController {
 
 
 
-    /**
-     * 회원가입 - 추가 정보 API
-     */
+    /** 회원가입 - 추가 정보 API **/
     @PutMapping("/signUp")
     public ResponseEntity<Void> signUp(@RequestBody SignUpRequest request,
                                        @AuthenticationPrincipal CustomUserDetails customUserDetails) {
@@ -42,18 +38,14 @@ public class MemberController {
     }
 
 
-    /**
-     * 토큰 재발행
-     */
+    /** 토큰 재발행 **/
     @PostMapping("/refresh")
     public ResponseEntity<String> authRecreate(@RequestBody AuthRecreateRequest authRecreateRequest) {
         return memberService.authRecreate(authRecreateRequest);
     }
 
 
-    /**
-     * 멤버 정보 조회
-     */
+    /** 멤버 정보 조회 **/
     @GetMapping("/information")
     public ResponseEntity<MemberDetailResponse> getMemberInfo(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
 

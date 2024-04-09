@@ -23,7 +23,7 @@ public class FlightOfferController {
     private FlightOfferService flightOfferService;
 
     /** 항공권 검색 API **/
-    @GetMapping("/flights")
+    @GetMapping("/search")
     public ResponseEntity<String> getFlightOffers(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                                   @RequestBody FlightSearchRequest request) {
         String memberUid = customUserDetails.getUsername();
@@ -34,6 +34,14 @@ public class FlightOfferController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching flight offers");
         }
     }
+
+    /** 항공권 다른 사이트로 연결 API **/
+
+
+    /** 항공권 좋아요 API **/
+
+
+    /** 항공권 좋아요 목록 불러오기 API **/
 
 
 }

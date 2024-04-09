@@ -15,7 +15,6 @@ public class FlightOfferProcessor {
 
     /** 추출한 정보 json으로 반환 **/
     public String processFlightOffers(String flightOffersJson) {
-        // JSON 형식의 항공편 정보 -> JsonObject로 변환
         JsonArray flightOffersArray = new Gson().fromJson(flightOffersJson, JsonArray.class);
 
         // 필요한 정보만 객체로 변환
@@ -26,7 +25,6 @@ public class FlightOfferProcessor {
             filteredFlightOffers.add(filteredFlightOffer);
         }
 
-        // 새로운 JsonArray를 JSON 형식으로 변환하여 반환
         return filteredFlightOffers.toString();
     }
 
@@ -35,7 +33,13 @@ public class FlightOfferProcessor {
     public JsonObject filterFlightOffer(JsonObject flightOffer) {
         JsonObject filteredFlightOffer = new JsonObject();
         filteredFlightOffer.addProperty("id", flightOffer.get("id").getAsString());
-        filteredFlightOffer.addProperty("numberOfBookableSeats", flightOffer.get("numberOfBookableSeats").getAsInt());
+
+        // 항공사 코드 정보 추가
+        JsonArray itinerarySegments = flightOffer.getAsJsonArray("itineraries").get(0).getAsJsonObject().getAsJsonArray("segments");
+        String carrierCode = itinerarySegments.get(0).getAsJsonObject().get("carrierCode").getAsString();
+        filteredFlightOffer.addProperty("carrierCode", carrierCode);
+
+
 
         // 여행 일정 - itineraries
         JsonArray itineraries = flightOffer.getAsJsonArray("itineraries");
@@ -46,8 +50,6 @@ public class FlightOfferProcessor {
 
             // duration 추출
             formatDuration(itinerary, filteredItinerary);
-            // filteredItinerary.addProperty("duration", itinerary.get("duration").getAsString()); // 비행 시간
-
 
             // segments 추출
             JsonArray segments = itinerary.getAsJsonArray("segments");
@@ -72,7 +74,6 @@ public class FlightOfferProcessor {
 
         // 가격 정보 추출
         JsonObject price = flightOffer.getAsJsonObject("price");
-        // filteredFlightOffer.addProperty("currency", price.get("currency").getAsString());
         filteredFlightOffer.addProperty("totalPrice", price.get("total").getAsString());
 
         return filteredFlightOffer;

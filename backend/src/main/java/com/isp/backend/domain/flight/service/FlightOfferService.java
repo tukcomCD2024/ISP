@@ -39,13 +39,12 @@ public class FlightOfferService {
                         .and("children", request.getChildren())
                         .and("max", request.getMax())
                         .and("nonStop", request.isNonStop())
-                        .and("currencyCode","KRW")  // 원화 설정 - 추후 유저에게 입력받을 수 있게 변경
+                        .and("currencyCode","KRW")  // 원화 설정 -> 추후 유저에게 입력받을 수 있게 변경
         );
 
-        // FlightOfferSearch 배열을 JSON 문자열로 변환
         Gson gson = new Gson();
         String flightOffersJson = gson.toJson(flightOffers);
-        return flightOfferProcessor.processFlightOffers(flightOffersJson);   // 원하는 정보만 조회
+        return flightOfferProcessor.processFlightOffers(flightOffersJson);
     }
 
 
@@ -55,5 +54,6 @@ public class FlightOfferService {
                 .orElseThrow(()-> new CountryNotFoundException());
         return findCountry.getAirportCode();
     }
+
 
 }

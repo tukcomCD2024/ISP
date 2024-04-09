@@ -39,6 +39,14 @@ public class FlightOfferController {
         }
     }
 
+    /** 항공권 다른 사이트로 연결 API **/
+
+
+    /** 항공권 좋아요 API **/
+
+
+    /** 항공권 좋아요 목록 불러오기 API **/
+
 
     /** 항공권 선택시 스카이스캐너 사이트로 연결 API **/
     @PostMapping("/skyscanner")

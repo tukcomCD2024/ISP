@@ -11,13 +11,13 @@ defaults:
     shell: bash
 
 env:
-  AWS_S3_BUCKET: howabouttrip-backend-bucket
+  AWS_S3_BUCKET: howabouttrip-backend-s3
   AWS_CODE_DEPLOY_APPLICATION: HowAboutTrip-Backend-CD
   AWS_CODE_DEPLOY_GROUP: HowAboutTrip-Backend-CD-Group
 
 jobs:
   deploy:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
 

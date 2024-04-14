@@ -11,6 +11,10 @@ import com.project.how.data_class.dto.CreateScheduleRequest
 import com.project.how.data_class.dto.CreateScheduleResponse
 import com.project.how.model.AiScheduleRepository
 import com.project.how.network.client.ScheduleRetrofit
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,10 +25,10 @@ class AiScheduleViewModel : ViewModel() {
     val aiScheduleLiveData : LiveData<AiSchedule>
         get() = _aiScheduleLiveData
 
-    fun getAiSchedule(aiScheduleInput : AiScheduleInput, test : Boolean){
+    fun getAiSchedule(aiScheduleInput : AiScheduleInput, test : Boolean) : Flow<Boolean> = callbackFlow {
         if (test){
             aiScheduleRepository.getAiSchedule(getTestAiSchedule())
-            return
+            close()
         }
         val createScheduleRequest = CreateScheduleRequest(
             aiScheduleInput.des,
@@ -32,31 +36,39 @@ class AiScheduleViewModel : ViewModel() {
             aiScheduleInput.startDate,
             aiScheduleInput.endDate
         )
-        ScheduleRetrofit.getApiService()!!
-            .createSchedule(createScheduleRequest)
-            .enqueue(object : Callback<CreateScheduleResponse>{
-                override fun onResponse(
-                    call: Call<CreateScheduleResponse>,
-                    response: Response<CreateScheduleResponse>
-                ) {
-                    if(response.isSuccessful){
-                        val result = response.body()
-                        if (result != null){
-                            Log.d("createSchedule is success", "startDate : ${result.schedules[0].date}")
-                            aiScheduleRepository.getAiSchedule(getAiSchedule(result, createScheduleRequest))
+
+        ScheduleRetrofit.getApiService()?.let { apiService ->
+            apiService.createSchedule(createScheduleRequest)
+                .enqueue(object : Callback<CreateScheduleResponse>{
+                    override fun onResponse(
+                        call: Call<CreateScheduleResponse>,
+                        response: Response<CreateScheduleResponse>
+                    ) {
+                        if(response.isSuccessful){
+                            val result = response.body()
+                            if (result != null){
+                                Log.d("createSchedule is success", "startDate : ${result.schedules[0].date}")
+                                aiScheduleRepository.getAiSchedule(getAiSchedule(result, createScheduleRequest))
+                                trySend(SUCCESS)
+                            }else{
+                                Log.d("createSchedule is success", "response.body is null\ncode : ${response.code()}")
+                                trySend(FAILD)
+                            }
                         }else{
-                            Log.d("createSchedule is success", "response.body is null\ncode : ${response.code()}")
+                            Log.d("createSchedule is not success", "code : ${response.code()}")
+                            trySend(FAILD)
                         }
-                    }else{
-                        Log.d("createSchedule is not success", "code : ${response.code()}")
                     }
-                }
 
-                override fun onFailure(call: Call<CreateScheduleResponse>, t: Throwable) {
-                    Log.d("createSchedule is failed", "${t.message}")
-                }
+                    override fun onFailure(call: Call<CreateScheduleResponse>, t: Throwable) {
+                        Log.d("createSchedule is failed", "${t.message}")
+                        trySend(FAILD)
+                    }
 
-            })
+                })
+        } ?: close()
+
+        awaitClose()
     }
 
     private fun getAiSchedule(createScheduleResponse : CreateScheduleResponse, createScheduleRequest: CreateScheduleRequest) : AiSchedule {
@@ -109,5 +121,9 @@ class AiScheduleViewModel : ViewModel() {
             "2024-02-18",
             "2024-02-20",
             dailySchedule)
+    }
+    companion object{
+        const val FAILD = false
+        const val SUCCESS = true
     }
 }

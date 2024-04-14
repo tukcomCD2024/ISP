@@ -80,75 +80,57 @@ class ScheduleViewModel : ViewModel() {
     }
 
     fun saveSchedule(context: Context, accessToken: String, schedule: Schedule): Flow<Int> = callbackFlow {
-        // checkLocations의 결과를 받을 Flow 생성
-        val locationsFlow = checkLocations(schedule)
-
-        // checkLocations의 결과를 기다림
-        val check = locationsFlow.first()
-
-        if (check) {
-            ScheduleRetrofit.getApiService()?.let { apiService ->
-                val callback = object : Callback<String> {
-                    override fun onResponse(call: Call<String>, response: Response<String>) {
-                        if (response.isSuccessful) {
-                            Log.d("saveSchedule is success", "response code : ${response.code()}")
-                            trySend(SUCCESS).isSuccess
-                        } else {
-                            Log.d("saveSchedule is not success", "response code : ${response.code()}")
-                            trySend(NETWORK_FAILED).isSuccess
-                        }
-                    }
-
-                    override fun onFailure(call: Call<String>, t: Throwable) {
-                        Log.d("saveSchedule onFailure", "${t.message}")
+        ScheduleRetrofit.getApiService()?.let { apiService ->
+            val callback = object : Callback<String> {
+                override fun onResponse(call: Call<String>, response: Response<String>) {
+                    if (response.isSuccessful) {
+                        Log.d("saveSchedule is success", "response code : ${response.code()}")
+                        trySend(SUCCESS).isSuccess
+                    } else {
+                        Log.d("saveSchedule is not success", "response code : ${response.code()}")
                         trySend(NETWORK_FAILED).isSuccess
                     }
                 }
-                apiService.saveSchedule(context.getString(R.string.bearer_token, accessToken), changeClassFromScheduleToSaveSchedule(context, schedule))
-                    .enqueue(callback)
-            } ?: close() // 만약 apiService가 null이면 flow를 종료합니다.
-        } else {
-            trySend(NULL_LOCATIONS).isSuccess
-        }
+
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    Log.d("saveSchedule onFailure", "${t.message}")
+                    trySend(NETWORK_FAILED).isSuccess
+                }
+            }
+            apiService.saveSchedule(context.getString(R.string.bearer_token, accessToken), changeClassFromScheduleToSaveSchedule(context, schedule))
+                .enqueue(callback)
+        } ?: close()
 
         awaitClose()
     }
 
     fun updateSchedule(context: Context, accessToken: String, id: Long, schedule: Schedule): Flow<Int> = callbackFlow {
-        val locationsFlow = checkLocations(schedule)
-
-        val check = locationsFlow.first()
-
-        if (check) {
-            ScheduleRetrofit.getApiService()?.let { apiService ->
-                val callback = object : Callback<ScheduleDetail> {
-                    override fun onResponse(call: Call<ScheduleDetail>, response: Response<ScheduleDetail>) {
-                        if (response.isSuccessful) {
-                            val result = response.body()
-                            if (result != null){
-                                Log.d("saveSchedule is success", "response code : ${response.code()}")
-                                trySend(SUCCESS)
-                            }else{
-                                Log.d("updateSchedule is success", "response.body is null")
-                                trySend(EMPTY_SCHEDULE)
-                            }
-                        } else {
-                            Log.d("saveSchedule is not success", "response code : ${response.code()}")
-                            trySend(NETWORK_FAILED).isSuccess
+        ScheduleRetrofit.getApiService()?.let { apiService ->
+            val callback = object : Callback<ScheduleDetail> {
+                override fun onResponse(call: Call<ScheduleDetail>, response: Response<ScheduleDetail>) {
+                    if (response.isSuccessful) {
+                        val result = response.body()
+                        if (result != null){
+                            Log.d("saveSchedule is success", "response code : ${response.code()}")
+                            trySend(SUCCESS)
+                        }else{
+                            Log.d("updateSchedule is success", "response.body is null")
+                            trySend(EMPTY_SCHEDULE)
                         }
-                    }
-
-                    override fun onFailure(call: Call<ScheduleDetail>, t: Throwable) {
-                        Log.d("saveSchedule onFailure", "${t.message}")
+                    } else {
+                        Log.d("saveSchedule is not success", "response code : ${response.code()}")
                         trySend(NETWORK_FAILED).isSuccess
                     }
                 }
-                apiService.updateSchedule(context.getString(R.string.bearer_token, accessToken), id, changeClassFromScheduleToSaveSchedule(context, schedule))
-                    .enqueue(callback)
-            } ?: close() // 만약 apiService가 null이면 flow를 종료합니다.
-        } else {
-            trySend(NULL_LOCATIONS).isSuccess
-        }
+
+                override fun onFailure(call: Call<ScheduleDetail>, t: Throwable) {
+                    Log.d("saveSchedule onFailure", "${t.message}")
+                    trySend(NETWORK_FAILED).isSuccess
+                }
+            }
+            apiService.updateSchedule(context.getString(R.string.bearer_token, accessToken), id, changeClassFromScheduleToSaveSchedule(context, schedule))
+                .enqueue(callback)
+        } ?: close()
 
         awaitClose()
     }
@@ -193,16 +175,6 @@ class ScheduleViewModel : ViewModel() {
             schedule.endDate,
             dailySchedules
         )
-    }
-
-    private fun checkLocations(schedule: Schedule) : Flow<Boolean> = flow {
-        for (i in schedule.dailySchedule.indices){
-            for (j in schedule.dailySchedule[i].indices){
-                if ((schedule.dailySchedule[i][j].longitude == null) || (schedule.dailySchedule[i][j].latitude == null))
-                    this.emit(false)
-            }
-        }
-        this.emit(true)
     }
 
     fun updateDailySchedule(schedule: Schedule, startDate: String, endDate: String) {

@@ -307,11 +307,6 @@ class CalendarEditActivity
 
         viewModel.saveSchedule(this, MemberViewModel.tokensLiveData.value!!.accessToken, data).collect{check ->
             when(check){
-                ScheduleViewModel.NULL_LOCATIONS ->{
-                    val message = listOf<String>(getString(R.string.some_schedule_lng_lat))
-                    val confirmDialog = ConfirmDialog(message)
-                    confirmDialog.show(supportFragmentManager, "ConfirmDialog")
-                }
                 ScheduleViewModel.NETWORK_FAILED ->{
                     Toast.makeText(this@CalendarEditActivity,
                         getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
@@ -326,11 +321,6 @@ class CalendarEditActivity
     private suspend fun saveEditSchedule(){
         viewModel.updateSchedule(this, MemberViewModel.tokensLiveData.value!!.accessToken, id, data).collect{check->
             when(check){
-                ScheduleViewModel.NULL_LOCATIONS ->{
-                    val message = listOf<String>(getString(R.string.some_schedule_lng_lat))
-                    val confirmDialog = ConfirmDialog(message)
-                    confirmDialog.show(supportFragmentManager, "ConfirmDialog")
-                }
                 ScheduleViewModel.NETWORK_FAILED ->{
                     Toast.makeText(this@CalendarEditActivity,
                         getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()

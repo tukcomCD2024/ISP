@@ -14,28 +14,32 @@ import com.project.how.interface_af.OnPurposeListener
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 
-class PurposeBottomSheetDialog(private val onPurposeListener : OnPurposeListener) : BottomSheetDialogFragment(), RadioButtonAdapter.OnItemClickListener  {
-    private var _binding: PurposeBottomSheetBinding? = null
-    private val binding: PurposeBottomSheetBinding
+class PurposeBottomSheetDialog(private val onPurposeListener : OnPurposeListener)
+    : BottomSheetDialogFragment(), RadioButtonAdapter.OnItemClickListener  {
+    private var _binding : PurposeBottomSheetBinding? = null
+    private val binding : PurposeBottomSheetBinding
         get() = _binding!!
     private val whoList = mutableListOf<String>()
     private val activityLevelList = mutableListOf<String>()
-    private val themeList = mutableListOf<String>()
+    private val purposeList = mutableListOf<String>()
+    private val transportationList = mutableListOf<String>()
     private lateinit var whoAdapter : RadioButtonAdapter
     private lateinit var activityLevelAdapter : RadioButtonAdapter
-    private lateinit var themeAdapter : RadioButtonAdapter
+    private lateinit var purposeAdapter : RadioButtonAdapter
+    private lateinit var transportationAdapter: RadioButtonAdapter
     private var who : String? = null
     private var activityLevel : String? = null
     private var theme : MutableList<String> = mutableListOf()
-    private var check = mutableListOf<Boolean>(false, false, false)
+    private var transportation : MutableList<String> = mutableListOf()
+    private var check = mutableListOf<Boolean>(false, false, false, false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch {
             whoList.add(resources.getString(R.string.single))
-            whoList.add(resources.getString(R.string.family))
             whoList.add(resources.getString(R.string.couple))
             whoList.add(resources.getString(R.string.friend))
+            whoList.add(resources.getString(R.string.family))
 
             whoAdapter = RadioButtonAdapter(whoList, false, this@PurposeBottomSheetDialog, RadioButtonAdapter.WHO)
         }
@@ -47,24 +51,35 @@ class PurposeBottomSheetDialog(private val onPurposeListener : OnPurposeListener
             activityLevelList.add(resources.getString(R.string.without_a_break))
 
             activityLevelAdapter = RadioButtonAdapter(activityLevelList, false, this@PurposeBottomSheetDialog, RadioButtonAdapter.ACTIVITY_LEVEL)
+
+            transportationList.addAll(mutableListOf<String>(getString(R.string.walk),
+                getString(R.string.bus), getString(R.string.subway),
+                getString(R.string.train), getString(R.string.yacht),
+                getString(R.string.boat), getString(R.string.airplane_text)))
+
+            transportationAdapter = RadioButtonAdapter(transportationList, true, this@PurposeBottomSheetDialog, RadioButtonAdapter.TRANSPORTATION)
         }
 
         lifecycleScope.launch {
-            themeList.add(resources.getString(R.string.atmospheric))
-            themeList.add(resources.getString(R.string.renowned))
-            themeList.add(resources.getString(R.string.seasonal))
-            themeList.add(resources.getString(R.string.vibrant))
-            themeList.add(resources.getString(R.string.historic))
-            themeList.add(resources.getString(R.string.artistic))
-            themeList.add(resources.getString(R.string.natural))
-            themeList.add(resources.getString(R.string.adventurous))
-            themeList.add(resources.getString(R.string.romantic))
-            themeList.add(resources.getString(R.string.stress_relieving))
-            themeList.add(resources.getString(R.string.cultural))
-            themeList.add(resources.getString(R.string.enjoying_local_cuisine))
 
-            themeAdapter = RadioButtonAdapter(themeList, true, this@PurposeBottomSheetDialog, RadioButtonAdapter.THEME)
+            purposeList.addAll(mutableListOf<String>(getString(R.string.vacation),
+                getString(R.string.holiday),
+                getString(R.string.business_trip),
+                getString(R.string.honeymoon),
+                getString(R.string.sightseeing),
+                getString(R.string.shopping),
+                getString(R.string.healing),
+                getString(R.string.activities),
+                getString(R.string.couple_date),
+                getString(R.string.filial_piety_trip), getString(R.string.graduation_trip),
+                getString(
+                    R.string.pilgrimage
+                )))
+
+            purposeAdapter = RadioButtonAdapter(purposeList, true, this@PurposeBottomSheetDialog, RadioButtonAdapter.THEME)
         }
+
+
     }
 
     override fun onCreateView(
@@ -77,7 +92,8 @@ class PurposeBottomSheetDialog(private val onPurposeListener : OnPurposeListener
         binding.lifecycleOwner = viewLifecycleOwner
         binding.whoList.adapter = whoAdapter
         binding.activityLevelList.adapter = activityLevelAdapter
-        binding.themeList.adapter = themeAdapter
+        binding.purposeList.adapter = purposeAdapter
+        binding.transportationList.adapter = transportationAdapter
         return binding.root
     }
 
@@ -96,8 +112,8 @@ class PurposeBottomSheetDialog(private val onPurposeListener : OnPurposeListener
             whoAdapter.notifyDataSetChanged()
             activityLevelAdapter.reset()
             activityLevelAdapter.notifyDataSetChanged()
-            themeAdapter.reset()
-            themeAdapter.notifyDataSetChanged()
+            purposeAdapter.reset()
+            purposeAdapter.notifyDataSetChanged()
         }
     }
 
@@ -106,6 +122,8 @@ class PurposeBottomSheetDialog(private val onPurposeListener : OnPurposeListener
             val themeJob = lifecycleScope.launch {
                 getPurposeTheme()
                 check[2] = theme.isNotEmpty()
+                getTransportation()
+                check[3] = transportation.isNotEmpty()
             }
             val whoAndActivityJob = lifecycleScope.launch {
                 check[0] = who != null
@@ -119,15 +137,22 @@ class PurposeBottomSheetDialog(private val onPurposeListener : OnPurposeListener
             if (check[1])
                 onPurposeListener.onActivityLevelListener(activityLevel!!)
             if (check[2])
-                onPurposeListener.onThemeListener(theme)
+                onPurposeListener.onPurposeListener(theme)
+            if (check[3])
+                onPurposeListener.onTransportationListener(transportation)
 
             dismiss()
         }
     }
 
     private fun getPurposeTheme(){
-        val t = themeAdapter.getDatas()
+        val t = purposeAdapter.getDatas()
         theme.addAll(t)
+    }
+
+    private fun getTransportation(){
+        val t = transportationAdapter.getDatas()
+        transportation.addAll(t)
     }
 
     override fun onDestroyView() {

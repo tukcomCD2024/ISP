@@ -66,11 +66,11 @@
             app:layout_constraintTop_toBottomOf="@+id/activity_level"/>
 
         <TextView
-            android:id="@+id/theme"
+            android:id="@+id/pur"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/bm_hanna"
-            android:text="@string/theme"
+            android:text="@string/purpose_text"
             android:layout_marginTop="20dp"
             android:textColor="@color/black"
             android:textSize="13sp"
@@ -78,15 +78,40 @@
             app:layout_constraintTop_toBottomOf="@+id/activity_level_list" />
 
         <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/theme_list"
+        android:id="@+id/purpose_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/simple_radiobutton_item"
         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
         android:orientation="horizontal"
         android:layout_marginTop="10dp"
-        app:spanCount="4"
-        app:layout_constraintTop_toBottomOf="@+id/theme"/>
+        app:spanCount="3"
+        app:layout_constraintTop_toBottomOf="@+id/pur"/>
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/bm_hanna"
+            android:text="@string/transportation"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/purpose_list" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/transportation_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/simple_radiobutton_item"
+            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            app:spanCount="2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/reset"
@@ -101,7 +126,7 @@
             android:textSize="13sp"
             app:layout_constraintBottom_toTopOf="@+id/guideline"
             app:layout_constraintEnd_toStartOf="@+id/confirm"
-            app:layout_constraintTop_toBottomOf="@+id/theme_list" />
+            app:layout_constraintTop_toBottomOf="@+id/transportation_list" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/confirm"
@@ -115,7 +140,7 @@
             android:textSize="13sp"
             app:layout_constraintBottom_toTopOf="@+id/guideline"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/theme_list" />
+            app:layout_constraintTop_toBottomOf="@+id/transportation_list" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"

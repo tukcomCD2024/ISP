@@ -51,7 +51,7 @@ interface ScheduleService {
         @Body updateScheduleRequest: ScheduleDetail
     ) : Call<ScheduleDetail>
 
-    @POST("countries/location")
+    @POST("countries/locations")
     fun getCountryLocation(
         @Body country : GetCountryLocationRequest
     ) : Call<GetCountryLocationResponse>

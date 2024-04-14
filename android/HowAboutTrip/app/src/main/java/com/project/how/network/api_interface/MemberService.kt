@@ -30,7 +30,7 @@ interface MemberService {
         @Body authRecreate : AuthRecreateRequest
     ) : Call<EmptyResponse>
 
-    @GET("members/info")
+    @GET("members/information")
     fun getInfo(
         @Header("Authorization") accessToken: String
     ) : Call<GetInfoResponse>

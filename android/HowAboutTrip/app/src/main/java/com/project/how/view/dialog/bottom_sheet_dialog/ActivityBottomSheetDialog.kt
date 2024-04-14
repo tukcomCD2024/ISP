@@ -1,11 +1,16 @@
 package com.project.how.view.dialog.bottom_sheet_dialog
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.project.how.R
 import com.project.how.adapter.recyclerview.RadioButtonAdapter
@@ -116,6 +121,10 @@ class ActivityBottomSheetDialog(private val onActivityListener: OnActivityListen
         binding.cityList.adapter = cityAdapter
         binding.mediaList.adapter = mediaAdapter
         binding.atmosphereList.adapter = atmosphereAdapter
+        dialog?.setOnShowListener {
+            val bottomSheetDialog = it as BottomSheetDialog
+            setRatio(bottomSheetDialog, requireContext())
+        }
         return binding.root
     }
 
@@ -179,5 +188,21 @@ class ActivityBottomSheetDialog(private val onActivityListener: OnActivityListen
     companion object{
         const val BASIC = 0
         const val EXCLUDING = -1
+
+        fun setRatio(bottomSheetDialog : BottomSheetDialog, context : Context){
+            val bottomSheet = bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as View
+            val behavior = BottomSheetBehavior.from<View>(bottomSheet)
+            val layoutParams = bottomSheet!!.layoutParams
+            layoutParams.height = getWindowHeight(context)
+            bottomSheet.layoutParams = layoutParams
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+
+        }
+
+        fun getWindowHeight(context : Context) : Int {
+            val displayMetrics = DisplayMetrics()
+            (context as Activity?)!!.windowManager.defaultDisplay.getMetrics(displayMetrics)
+            return displayMetrics.heightPixels
+        }
     }
 }

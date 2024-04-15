@@ -16,6 +16,7 @@ import com.project.how.R
 import com.project.how.adapter.recyclerview.RadioButtonAdapter
 import com.project.how.databinding.ThemeBottomSheetBinding
 import com.project.how.interface_af.OnActivityListener
+import com.project.how.view.dialog.bottom_sheet_dialog.ratio.BottomSheetRatioHeightManager
 import kotlinx.coroutines.launch
 
 class ActivityBottomSheetDialog(private val onActivityListener: OnActivityListener, private val type : Int)
@@ -123,7 +124,7 @@ class ActivityBottomSheetDialog(private val onActivityListener: OnActivityListen
         binding.atmosphereList.adapter = atmosphereAdapter
         dialog?.setOnShowListener {
             val bottomSheetDialog = it as BottomSheetDialog
-            setRatio(bottomSheetDialog, requireContext())
+            BottomSheetRatioHeightManager().setMaxRatio(bottomSheetDialog, requireContext())
         }
         return binding.root
     }
@@ -189,20 +190,5 @@ class ActivityBottomSheetDialog(private val onActivityListener: OnActivityListen
         const val BASIC = 0
         const val EXCLUDING = -1
 
-        fun setRatio(bottomSheetDialog : BottomSheetDialog, context : Context){
-            val bottomSheet = bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as View
-            val behavior = BottomSheetBehavior.from<View>(bottomSheet)
-            val layoutParams = bottomSheet!!.layoutParams
-            layoutParams.height = getWindowHeight(context)
-            bottomSheet.layoutParams = layoutParams
-            behavior.state = BottomSheetBehavior.STATE_EXPANDED
-
-        }
-
-        fun getWindowHeight(context : Context) : Int {
-            val displayMetrics = DisplayMetrics()
-            (context as Activity?)!!.windowManager.defaultDisplay.getMetrics(displayMetrics)
-            return displayMetrics.heightPixels
-        }
     }
 }

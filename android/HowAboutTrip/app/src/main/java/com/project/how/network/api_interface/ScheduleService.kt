@@ -16,18 +16,18 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ScheduleService {
-    @POST("gpt/create")
+    @POST("gpt/schedules")
     fun createSchedule(
         @Body createCondition : CreateScheduleRequest
     ) : Call<CreateScheduleResponse>
 
-    @POST("schedules/save")
+    @POST("schedules")
     fun saveSchedule(
         @Header("Authorization") accessToken : String,
         @Body saveScheduleRequest: ScheduleDetail
     ) : Call<String>
 
-    @GET("schedules/list")
+    @GET("schedules")
     fun getScheduleList(
         @Header("Authorization") accessToken : String
     ) : Call<GetScheduleListResponse>
@@ -44,7 +44,7 @@ interface ScheduleService {
         @Path("scheduleId", encoded = true) scheduleId : Long
     ) : Call<String>
 
-    @PUT("schedules/update/{scheduleId}")
+    @PUT("schedules/{scheduleId}")
     fun updateSchedule(
         @Header("Authorization") accessToken : String,
         @Path("scheduleId", encoded = true) scheduleId: Long,

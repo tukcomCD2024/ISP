@@ -306,13 +306,13 @@ class AddAICalendarActivity :
                 theme.forEachIndexed{ index, s ->
                     this@AddAICalendarActivity.activity?.add(s)
                     if (index == theme.lastIndex)
-                        binding.activityOutput.text = binding.themeOutput.text.toString() + s
+                        binding.activityOutput.text = binding.activityOutput.text.toString() + s
                     else
-                        binding.activityOutput.text = binding.themeOutput.text.toString() + s + ", "
+                        binding.activityOutput.text = binding.activityOutput.text.toString() + s + ", "
                 }
             }else{
                 theme.forEachIndexed{ index, s ->
-                    this@AddAICalendarActivity.activity?.add(s)
+                    this@AddAICalendarActivity.excludingActivity?.add(s)
                     if (index == theme.lastIndex)
                         binding.excludingActivityOutput.text = binding.excludingActivityOutput.text.toString() + s
                     else

@@ -19,7 +19,7 @@ interface MemberService {
         @Body login: LoginRequest
     ) : Call<String>
 
-    @PUT("members/signup")
+    @PUT("members/signUp")
     fun signUp(
         @Header("Authorization") accessToken : String,
         @Body signUp: SignUpRequest

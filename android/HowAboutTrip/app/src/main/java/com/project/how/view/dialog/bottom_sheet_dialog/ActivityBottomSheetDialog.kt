@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -152,6 +153,8 @@ class ActivityBottomSheetDialog(private val onActivityListener: OnActivityListen
             getCity()
             getMedia()
             getAtmosphere()
+
+            Log.d("ActivityBottomSheetDialog", "confirm\nactivity size : ${activity.size}")
 
             onActivityListener.onActivityListener(activity, type)
             dismiss()

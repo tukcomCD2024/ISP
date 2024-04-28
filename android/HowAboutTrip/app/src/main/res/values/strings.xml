@@ -277,4 +277,6 @@
     <string name="cultured">교양적인</string>
     <string name="want_activity">하고싶은 활동</string>
     <string name="date_text">%1$s ~ %2$s</string>
+    <string name="destination_change">목적지 변경</string>
+    <string name="date_change">날짜 변경</string>
 </resources>

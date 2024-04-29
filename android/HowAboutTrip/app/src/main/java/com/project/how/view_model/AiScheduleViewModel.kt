@@ -3,6 +3,7 @@ package com.project.how.view_model
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
 import com.project.how.data_class.recyclerview.AiDaysSchedule
 import com.project.how.data_class.recyclerview.AiSchedule
@@ -15,6 +16,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,11 +27,7 @@ class AiScheduleViewModel : ViewModel() {
     val aiScheduleLiveData : LiveData<AiSchedule>
         get() = _aiScheduleLiveData
 
-    fun getAiSchedule(aiScheduleInput : AiScheduleInput, test : Boolean) : Flow<Boolean> = callbackFlow {
-        if (test){
-            aiScheduleRepository.getAiSchedule(getTestAiSchedule())
-            close()
-        }
+    fun getAiSchedule(aiScheduleInput : AiScheduleInput) : Flow<Boolean> = callbackFlow {
         val createScheduleRequest = CreateScheduleRequest(
             aiScheduleInput.des,
             aiScheduleInput.purpose ?: listOf(),
@@ -69,6 +67,12 @@ class AiScheduleViewModel : ViewModel() {
         } ?: close()
 
         awaitClose()
+    }
+
+    fun getTestData(){
+        viewModelScope.launch {
+            aiScheduleRepository.getAiSchedule(getTestAiSchedule())
+        }
     }
 
     private fun getAiSchedule(createScheduleResponse : CreateScheduleResponse, createScheduleRequest: CreateScheduleRequest) : AiSchedule {

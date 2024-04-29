@@ -66,7 +66,7 @@
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/days_tab"
                 android:layout_width="0dp"
-                android:layout_height="20dp"
+                android:layout_height="22dp"
                 android:layout_marginTop="8dp"
                 android:background="@android:color/transparent"
                 android:orientation="horizontal"
@@ -98,7 +98,7 @@
                 app:layout_constraintBottom_toTopOf="@id/day_schedules"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/days_tap" />
+                app:layout_constraintTop_toBottomOf="@+id/days_tab" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/day_schedules"

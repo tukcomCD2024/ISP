@@ -136,7 +136,7 @@ class AddAICalendarActivity :
                 Log.d("aiScheduleLiveData", "start ${destination}, ${departureDate}, ${entranceDate}")
                 setUnEnabled()
                 load()
-                viewModel.getAiSchedule(AiScheduleInput(destination!!, purpose, departureDate!!, entranceDate!!), false).collect {check ->
+                viewModel.getAiSchedule(AiScheduleInput(destination!!, purpose, departureDate!!, entranceDate!!)).collect {check ->
                     if (!check){
                         stopLoaing()
                         setEnabled()

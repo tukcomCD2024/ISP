@@ -196,62 +196,10 @@ class AddAICalendarActivity :
         scheduleDialog.show(supportFragmentManager, "AiScheduleDialog")
     }
 
-//    private fun saveDepartureDate(date : String){
-//        departureDate = date
-//        binding.departureOutput.text = date
-//        binding.departureOutput.visibility = View.VISIBLE
-//    }
-
-//    private fun saveEntranceDate(date : String){
-//        entranceDate = date
-//        binding.entranceOutput.text = date
-//        binding.entranceOutput.visibility = View.VISIBLE
-//    }
-
     private fun showConfirmDialog(message : MutableList<String>){
         val confirm = ConfirmDialog(message)
         confirm.show(supportFragmentManager, "ConfirmDialog")
     }
-
-//    override fun onSaveDate(date: String, type: Int) {
-//        when(type){
-//            CalendarBottomSheetDialog.BASIC ->{
-//
-//            }
-//            CalendarBottomSheetDialog.DEPARTURE->{
-//                if (entranceDate == null){
-//                    saveDepartureDate(date)
-//                }else{
-//                    if(entranceDate!! >= date){
-//                        saveDepartureDate(date)
-//                    }else{
-//                        Toast.makeText(this, "출국 날짜($date)보다 입국 날짜($entranceDate)가 더 빠릅니다.", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//            }
-//            CalendarBottomSheetDialog.ENTRANCE->{
-//                if (departureDate == null){
-//                    saveEntranceDate(date)
-//                }else{
-//                    if (departureDate!! <= date){
-//                        saveEntranceDate(date)
-//                    }else{
-//                        Toast.makeText(this, "입국 날짜($date)보다 출국 날짜($departureDate)가 더 늦습니다.", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//            }
-//        }
-//    }
-
-//    override fun onSaveDateTime(dateTime: String, type: Int) {
-//        if(type == CalendarBottomSheetDialog.ENTRANCE){
-//            binding.entranceOutput.text = dateTime
-//            binding.entranceOutput.visibility = View.VISIBLE
-//        }else if(type == CalendarBottomSheetDialog.DEPARTURE){
-//            binding.departureOutput.text = dateTime
-//            binding.departureOutput.visibility = View.VISIBLE
-//        }
-//    }
 
     override fun onDesListener(des: String) {
         lifecycleScope.launch {

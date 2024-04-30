@@ -14,13 +14,14 @@ import com.project.how.BuildConfig
 import com.project.how.R
 import com.project.how.data_class.recyclerview.AiSchedule
 import com.project.how.databinding.AiScheduleItemBinding
+import com.project.how.generated.callback.OnClickListener
 import com.project.how.view.dialog.AiScheduleDialog
 import com.project.how.view.dp.DpPxChanger
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class AiScheduleAdapter(private val context: Context, data : List<AiSchedule>)
+class AiScheduleAdapter(private val context: Context, data : List<AiSchedule>, private val onClickListener: OnClickListener)
     : RecyclerView.Adapter<AiScheduleAdapter.ViewHolder>() {
         private val schedule = data
         private val drawerCheck = mutableListOf<Boolean>()
@@ -55,6 +56,10 @@ class AiScheduleAdapter(private val context: Context, data : List<AiSchedule>)
                 binding.drawer.setOnClickListener {
                     onDrawerListener(binding, position)
                     drawerCheck[position] = !drawerCheck[position]
+                }
+
+                binding.create.setOnClickListener{
+                    onClickListener.onCreateButtonClicker(data)
                 }
 
                 binding.daysTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -143,5 +148,9 @@ class AiScheduleAdapter(private val context: Context, data : List<AiSchedule>)
             tab.layoutParams = lp
         }
         binding.daysTab.requestLayout()
+    }
+
+    interface OnClickListener{
+        fun onCreateButtonClicker(data : AiSchedule)
     }
 }

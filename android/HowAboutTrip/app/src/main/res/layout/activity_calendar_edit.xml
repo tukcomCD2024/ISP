@@ -147,7 +147,7 @@
                         android:textSize="13sp"
                         android:layout_marginStart="8dp"
                         android:paddingHorizontal="8dp"
-                        android:onClick="@{() -> edit.showEditDeparture()}"
+                        android:onClick="@{() -> edit.showCalendar()}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/country_change" />
                 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.how.BuildConfig
 import com.project.how.R
@@ -38,9 +39,11 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.TimeZone
 import kotlin.concurrent.thread
 
-class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
+class CalendarFragment : Fragment(), OnDesListener {
     private var _binding : FragmentCalendarBinding? = null
     private val binding : FragmentCalendarBinding
         get() = _binding!!
@@ -190,60 +193,42 @@ class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
         showDesInput()
     }
 
-    private fun showDepartureInput(){
-        val calendar = CalendarBottomSheetDialog(CalendarBottomSheetDialog.DEPARTURE, this)
-        calendar.show(childFragmentManager, "CalendarBottomSheetDialog")
-    }
-
-    private fun showEntranceInput(){
-        val calendar = CalendarBottomSheetDialog(CalendarBottomSheetDialog.ENTRANCE, this)
-        calendar.show(childFragmentManager, "CalendarBottomSheetDialog")
-    }
-
     private fun showDesInput(){
         val des = DesBottomSheetDialog(this)
         des.show(childFragmentManager, "DesBottomSheetDialog")
     }
 
-    fun moveAddAICalendar(){
-        startActivity(Intent(activity, AddAICalendarActivity::class.java))
-    }
+    fun showCalendar(){
+        val calendar = MaterialDatePicker.Builder.dateRangePicker()
+            .setTheme(R.style.ThemeOverlay_App_DatePicker)
+            .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
+            .build()
+        calendar.show(childFragmentManager, "MaterialDatePicker")
 
-    fun moveCalendarList(){
-        startActivity(Intent(activity, CalendarListActivity::class.java))
-    }
-
-    override fun onSaveDate(date: String, type: Int) {
-        if(type == CalendarBottomSheetDialog.ENTRANCE){
-            if(date < departureDate!!){
-                Toast.makeText(activity, "입국 날짜($date)보다 출국 날짜($departureDate)가 더 늦습니다.", Toast.LENGTH_SHORT).show()
-                showEntranceInput()
-            }else{
-                entranceDate = date
-                val intent = Intent(activity, CalendarEditActivity::class.java)
-                val schedule = Schedule(
-                    destination!!,
-                    destination!!,
-                    departureDate!!,
-                    entranceDate!!,
-                    0,
-                    scheduleViewModel.getEmptyDaysSchedule(departureDate!!, entranceDate!!)
-                )
-                intent.putExtra(getString(R.string.type), CalendarEditActivity.NEW)
-                intent.putExtra(getString(R.string.schedule), schedule)
-                intent.putExtra(getString(R.string.server_calendar_latitude), latLng!!.lat)
-                intent.putExtra(getString(R.string.server_calendar_longitude), latLng!!.lng)
-                startActivity(intent)
-            }
-
-        }else if(type == CalendarBottomSheetDialog.DEPARTURE){
-            departureDate = date
-            showEntranceInput()
+        calendar.addOnPositiveButtonClickListener {
+            val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+            utc.timeInMillis = it.first
+            val format = SimpleDateFormat("yyyy-MM-dd")
+            val formatted = format.format(utc.time)
+            utc.timeInMillis = it.second
+            val formattedSecond = format.format(utc.time)
+            entranceDate = formattedSecond
+            departureDate = formatted
+            val intent = Intent(activity, CalendarEditActivity::class.java)
+            val schedule = Schedule(
+                destination!!,
+                destination!!,
+                departureDate!!,
+                entranceDate!!,
+                0,
+                scheduleViewModel.getEmptyDaysSchedule(departureDate!!, entranceDate!!)
+            )
+            intent.putExtra(getString(R.string.type), CalendarEditActivity.NEW)
+            intent.putExtra(getString(R.string.schedule), schedule)
+            intent.putExtra(getString(R.string.server_calendar_latitude), latLng!!.lat)
+            intent.putExtra(getString(R.string.server_calendar_longitude), latLng!!.lng)
+            startActivity(intent)
         }
-    }
-
-    override fun onSaveDateTime(dateTime: String, type: Int) {
-        TODO("Not yet implemented")
     }
 
     override fun onDesListener(des: String) {
@@ -252,13 +237,13 @@ class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
                 location?.let {
                     destination = des
                     latLng = location
-                    showDepartureInput()
+                    showCalendar()
                 } ?: run {
                     scheduleViewModel.getCountryLocation(des).collect { newLocation ->
                         newLocation?.let {
                             destination = des
                             latLng = newLocation
-                            showDepartureInput()
+                            showCalendar()
                         } ?: run {
                             Toast.makeText(activity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
                         }

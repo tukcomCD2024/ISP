@@ -21,6 +21,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout
 import com.project.how.R
 import com.project.how.adapter.recyclerview.DaysScheduleEditAdapter
@@ -47,13 +48,16 @@ import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.launch
 import java.io.Serializable
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 import java.util.Locale
+import java.util.TimeZone
 
 
 class CalendarEditActivity
-    : AppCompatActivity(), OnMapReadyCallback, DaysScheduleEditAdapter.OnDaysButtonClickListener, OnScheduleListener, OnDesListener, OnDateTimeListener {
+    : AppCompatActivity(), OnMapReadyCallback, DaysScheduleEditAdapter.OnDaysButtonClickListener, OnScheduleListener, OnDesListener {
     private lateinit var binding : ActivityCalendarEditBinding
     private val viewModel : ScheduleViewModel by viewModels()
     private lateinit var data : Schedule
@@ -295,14 +299,26 @@ class CalendarEditActivity
         des.show(supportFragmentManager, "DesBottomSheetDialog")
     }
 
-    fun showEditDeparture(){
-        val calendar = CalendarBottomSheetDialog(CalendarBottomSheetDialog.DEPARTURE, this)
-        calendar.show(supportFragmentManager, "CalendarBottomSheetDialog")
-    }
+    fun showCalendar(){
+        val calendar = MaterialDatePicker.Builder.dateRangePicker()
+            .setTheme(R.style.ThemeOverlay_App_DatePicker)
+            .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
+            .build()
+        calendar.show(supportFragmentManager, "MaterialDatePicker")
 
-    fun showEditEntrance(){
-        val calendar = CalendarBottomSheetDialog(CalendarBottomSheetDialog.ENTRANCE, this)
-        calendar.show(supportFragmentManager, "CalendarBottomSheetDialog")
+        calendar.addOnPositiveButtonClickListener {
+            val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+            utc.timeInMillis = it.first
+            val format = SimpleDateFormat("yyyy-MM-dd")
+            val formatted = format.format(utc.time)
+            utc.timeInMillis = it.second
+            val formattedSecond = format.format(utc.time)
+            data.startDate = formattedSecond
+            data.endDate = formatted
+            binding.date.text = getString(R.string.date_text, formatted, formattedSecond)
+            binding.date.text = "${data.startDate} - ${data.endDate}"
+            viewModel.updateDailySchedule(data, data.startDate, data.endDate)
+        }
     }
 
     private suspend fun saveNewSchedule(){
@@ -404,36 +420,6 @@ class CalendarEditActivity
                 }
             }
         }
-    }
-
-    override fun onSaveDate(date: String, type: Int) {
-        when(type){
-            CalendarBottomSheetDialog.BASIC ->{
-
-            }
-            CalendarBottomSheetDialog.DEPARTURE->{
-                if(data.endDate >= date){
-                    data.startDate = date
-                    binding.date.text = "${data.startDate} - ${data.endDate}"
-                    viewModel.updateDailySchedule(data, data.startDate, data.endDate)
-                }else{
-                    Toast.makeText(this, "출국 날짜($date)보다 입국 날짜(${data.endDate})가 더 빠릅니다.", Toast.LENGTH_SHORT).show()
-                }
-            }
-            CalendarBottomSheetDialog.ENTRANCE->{
-                if (data.startDate <= date){
-                    data.endDate = date
-                    binding.date.text = "${data.startDate} - ${data.endDate}"
-                    viewModel.updateDailySchedule(data, data.startDate, data.endDate)
-                }else{
-                    Toast.makeText(this, "입국 날짜($date)보다 출국 날짜(${data.startDate})가 더 늦습니다.", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
-    override fun onSaveDateTime(dateTime: String, type: Int) {
-
     }
 
     companion object{

@@ -128,6 +128,7 @@ class AddAICalendarActivity :
             departureDate = formatted
             binding.dateOutput.text = getString(R.string.date_text, formatted, formattedSecond)
         }
+
     }
 
     fun search(){

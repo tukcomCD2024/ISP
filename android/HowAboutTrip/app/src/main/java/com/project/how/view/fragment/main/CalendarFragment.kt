@@ -198,7 +198,15 @@ class CalendarFragment : Fragment(), OnDesListener {
         des.show(childFragmentManager, "DesBottomSheetDialog")
     }
 
-    fun showCalendar(){
+    fun moveAddAICalendar(){
+        startActivity(Intent(activity, AddAICalendarActivity::class.java))
+    }
+
+    fun moveCalendarList(){
+        startActivity(Intent(activity, CalendarListActivity::class.java))
+    }
+
+    private fun showCalendar(){
         val calendar = MaterialDatePicker.Builder.dateRangePicker()
             .setTheme(R.style.ThemeOverlay_App_DatePicker)
             .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)

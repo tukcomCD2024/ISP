@@ -31,13 +31,10 @@ import com.project.how.data_class.recyclerview.AiSchedule
 import com.project.how.data_class.recyclerview.DaysSchedule
 import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.databinding.ActivityCalendarEditBinding
-import com.project.how.interface_af.OnDateTimeListener
 import com.project.how.interface_af.OnDesListener
 import com.project.how.interface_af.OnScheduleListener
 import com.project.how.interface_af.interface_ada.ItemStartDragListener
 import com.project.how.view.dialog.AiScheduleDialog
-import com.project.how.view.dialog.ConfirmDialog
-import com.project.how.view.dialog.bottom_sheet_dialog.CalendarBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.EditScheduleBottomSheetDialog
 import com.project.how.view.dp.DpPxChanger
@@ -121,7 +118,7 @@ class CalendarEditActivity
                 .commit()
             supportMapFragment.getMapAsync {map ->
                 val location = LatLng(latitude, longitude)
-                val camera = CameraOptionProducer().makeScheduleCarmeraUpdate(location, 10f)
+                val camera = CameraOptionProducer().makeScheduleCameraUpdate(location, 10f)
                 map.moveCamera(camera)
             }
 
@@ -153,7 +150,6 @@ class CalendarEditActivity
                     initList: MutableList<DaysSchedule>,
                     changeList: MutableList<DaysSchedule>
                 ) {
-                    adapter.notifyDataSetChanged()
                     supportMapFragment.getMapAsync(this@CalendarEditActivity)
                 }
 
@@ -191,21 +187,24 @@ class CalendarEditActivity
 
     override fun onMapReady(map: GoogleMap) {
         map.clear()
-        var first = true
-        var polylineOptions = PolylineOptions()
+        val polylineOptions = PolylineOptions()
+        val latitudes = mutableListOf<Double>()
+        val longitudes = mutableListOf<Double>()
         data.dailySchedule[selectedDays].forEachIndexed {position, data->
             if((data.latitude != null && data.longitude != null) || (data.longitude == 0.0 && data.latitude == 0.0)){
                 val location = LatLng(data.latitude, data.longitude)
-                if (first){
-                    val camera = CameraOptionProducer().makeScheduleCarmeraUpdate(location, 15f)
-                    map.moveCamera(camera)
-                    first = false
-                }
+                latitudes.add(data.latitude)
+                longitudes.add(data.longitude)
                 polylineOptions.add(location)
                 val markerOptions = MarkerProducer().makeScheduleMarkerOptions(this, data.type, position, location, data.places)
                 map.addMarker(markerOptions)
             }
             map.addPolyline(polylineOptions)
+
+            val cop = CameraOptionProducer()
+            val locations = cop.makeLatLngBounds(latitudes, longitudes)
+            val camera = cop.makeScheduleBoundsCameraUpdate(locations[0], locations[1], 20)
+            map.moveCamera(camera)
         }
     }
 
@@ -313,8 +312,8 @@ class CalendarEditActivity
             val formatted = format.format(utc.time)
             utc.timeInMillis = it.second
             val formattedSecond = format.format(utc.time)
-            data.startDate = formattedSecond
-            data.endDate = formatted
+            data.startDate = formatted
+            data.endDate = formattedSecond
             binding.date.text = getString(R.string.date_text, formatted, formattedSecond)
             binding.date.text = "${data.startDate} - ${data.endDate}"
             viewModel.updateDailySchedule(data, data.startDate, data.endDate)
@@ -356,8 +355,8 @@ class CalendarEditActivity
     private fun moveCalendarList(){
         val intent = Intent(this, CalendarListActivity::class.java)
         startActivity(intent)
-        finish()
     }
+
 
     private fun moveCalendar(){
         val intent = Intent(this, CalendarActivity::class.java)

@@ -32,7 +32,7 @@ interface ScheduleService {
         @Header("Authorization") accessToken : String
     ) : Call<GetScheduleListResponse>
 
-    @GET("schedules/detail/{scheduleId}")
+    @GET("schedules/details/{scheduleId}")
     fun getScheduleDetail(
         @Header("Authorization") accessToken : String,
         @Path("scheduleId", encoded = true) scheduleId : Long

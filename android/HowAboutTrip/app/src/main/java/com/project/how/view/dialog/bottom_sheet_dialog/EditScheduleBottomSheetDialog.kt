@@ -1,27 +1,18 @@
 package com.project.how.view.dialog.bottom_sheet_dialog
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.common.api.Status
-import com.google.android.gms.maps.CameraUpdate
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.PlacesClient
@@ -34,9 +25,7 @@ import com.project.how.R
 import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
 import com.project.how.data_class.recyclerview.DaysSchedule
 import com.project.how.databinding.EditScheduleBottomSheetBinding
-import com.project.how.databinding.MapMarkerScheduleBinding
 import com.project.how.interface_af.OnScheduleListener
-import com.project.how.view.dialog.ConfirmDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.ratio.BottomSheetRatioHeightManager
 import com.project.how.view.map_helper.CameraOptionProducer
 import com.project.how.view.map_helper.MarkerProducer
@@ -72,7 +61,7 @@ class EditScheduleBottomSheetDialog(private val lat : Double, private val lng : 
         binding.lifecycleOwner = viewLifecycleOwner
         dialog?.setOnShowListener {
             val bottomSheetDialog = it as BottomSheetDialog
-            BottomSheetRatioHeightManager().setRatio(bottomSheetDialog, requireContext(), 75)
+            BottomSheetRatioHeightManager().setMaxRatio(bottomSheetDialog, requireContext())
         }
         return binding.root
     }
@@ -117,7 +106,7 @@ class EditScheduleBottomSheetDialog(private val lat : Double, private val lng : 
                     latitude = place.latLng.latitude
                     longitude = place.latLng.longitude
 
-                    val camera = CameraOptionProducer().makeScheduleCarmeraUpdate(placeLocation, 15f)
+                    val camera = CameraOptionProducer().makeScheduleCameraUpdate(placeLocation, 15f)
                     val markerOptions = MarkerProducer().makeScheduleMarkerOptions(requireContext(), type, position, placeLocation, place.name)
 
                     map.clear()
@@ -155,14 +144,14 @@ class EditScheduleBottomSheetDialog(private val lat : Double, private val lng : 
     override fun onMapReady(map: GoogleMap) {
         if ((schedule.latitude != null || schedule.longitude != null) || (schedule.latitude == 0.0 && schedule.longitude == 0.0)){
             val placeLocation = LatLng(schedule.latitude!!, schedule.longitude!!)
-            val camera = CameraOptionProducer().makeScheduleCarmeraUpdate(placeLocation, 15f)
+            val camera = CameraOptionProducer().makeScheduleCameraUpdate(placeLocation, 15f)
             val markerOptions = MarkerProducer().makeScheduleMarkerOptions(requireContext(), type, position, placeLocation, schedule.places)
 
             map.moveCamera(camera)
             map.addMarker(markerOptions)
         }else{
             val placeLocation = LatLng(lat, lng)
-            val camera = CameraOptionProducer().makeScheduleCarmeraUpdate(placeLocation, 10f)
+            val camera = CameraOptionProducer().makeScheduleCameraUpdate(placeLocation, 10f)
 
             map.moveCamera(camera)
         }

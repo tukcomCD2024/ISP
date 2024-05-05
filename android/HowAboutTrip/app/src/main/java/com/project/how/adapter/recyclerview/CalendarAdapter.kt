@@ -107,7 +107,5 @@ class CalendarAdapter(
     }
     companion object{
         private const val EMPTY = 99
-        private const val FIRST = 0
-        private const val SECOND = 1
     }
 }

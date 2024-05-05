@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/white_round_bottom_sheet_background"
         app:behavior_hideable="true"
-        app:behavior_draggable="false"
+        app:behavior_draggable="true"
         app:layout_behavior="com.google.android.material.bottom-sheet.BottomSheetBehavior">
 
         <androidx.constraintlayout.widget.Guideline

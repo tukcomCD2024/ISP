@@ -126,11 +126,11 @@
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/country_change"
-                        android:layout_width="60dp"
+                        android:layout_width="85dp"
                         android:layout_height="22dp"
                         android:background="@drawable/white_round_rectangle"
                         android:paddingHorizontal="8dp"
-                        android:text="@string/destination"
+                        android:text="@string/destination_change"
                         android:textColor="@color/black"
                         android:textSize="13sp"
                         android:onClick="@{() -> edit.showEditDes()}"
@@ -138,33 +138,18 @@
                         app:layout_constraintStart_toStartOf="parent" />
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/start_date_change"
+                        android:id="@+id/date_change"
                         android:layout_width="75dp"
                         android:layout_height="22dp"
                         android:background="@drawable/white_round_rectangle"
-                        android:text="@string/departure_date"
+                        android:text="@string/date_change"
                         android:textColor="@color/black"
                         android:textSize="13sp"
                         android:layout_marginStart="8dp"
                         android:paddingHorizontal="8dp"
-                        android:onClick="@{() -> edit.showEditDeparture()}"
+                        android:onClick="@{() -> edit.showCalendar()}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/country_change" />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/end_date_change"
-                        android:layout_width="75dp"
-                        android:layout_height="22dp"
-                        android:background="@drawable/white_round_rectangle"
-                        android:paddingHorizontal="8dp"
-                        android:text="@string/entrance_date"
-                        android:textColor="@color/black"
-                        android:textSize="13sp"
-                        android:layout_marginStart="8dp"
-                        android:onClick="@{() -> edit.showEditEntrance()}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/start_date_change" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.Guideline

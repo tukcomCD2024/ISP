@@ -4,6 +4,7 @@
         <item name="android:statusBarColor" tools:targetApi = "l">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowBackground">@color/white</item>
+        <item name="materialCalendarFullscreenTheme">@style/ThemeOverlay.App.DatePicker</item>
     </style>
 
     <style name="Theme.HowAboutTrip.BlackStatusBar" parent="Theme.Material3.DayNight.NoActionBar">
@@ -41,5 +42,22 @@
 
     <style name="FabRoundedCorner">
         <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.Material3.SmallComponent">
+        <item name="cornerFamily">cut</item>
+    </style>
+
+    <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="ThemeOverlay.App.DatePicker" parent="@style/ThemeOverlay.Material3.MaterialCalendar.Fullscreen">
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/white</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="rangeFillColor">@color/more_translucent_black</item>
     </style>
 </resources>

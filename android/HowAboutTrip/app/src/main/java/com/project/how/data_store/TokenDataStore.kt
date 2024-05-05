@@ -1,4 +1,4 @@
-package com.project.how.datastore
+package com.project.how.data_store
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -9,7 +9,6 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.project.how.data_class.Tokens
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 
 object TokenDataStore {
     val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "tokens")

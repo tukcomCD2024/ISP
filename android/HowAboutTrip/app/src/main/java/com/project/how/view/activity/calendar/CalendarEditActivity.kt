@@ -190,6 +190,7 @@ class CalendarEditActivity
         val polylineOptions = PolylineOptions()
         val latitudes = mutableListOf<Double>()
         val longitudes = mutableListOf<Double>()
+
         data.dailySchedule[selectedDays].forEachIndexed {position, data->
             if((data.latitude != null && data.longitude != null) || (data.longitude == 0.0 && data.latitude == 0.0)){
                 val location = LatLng(data.latitude, data.longitude)
@@ -199,11 +200,21 @@ class CalendarEditActivity
                 val markerOptions = MarkerProducer().makeScheduleMarkerOptions(this, data.type, position, location, data.places)
                 map.addMarker(markerOptions)
             }
-            map.addPolyline(polylineOptions)
+        }
+        map.addPolyline(polylineOptions)
 
+        if(latitudes.lastIndex == 0){
+            val cop = CameraOptionProducer()
+            val camera = cop.makeScheduleCameraUpdate(LatLng(latitudes[0], longitudes[0]), 12f)
+            map.moveCamera(camera)
+        }else if (latitudes.isNotEmpty()){
             val cop = CameraOptionProducer()
             val locations = cop.makeLatLngBounds(latitudes, longitudes)
-            val camera = cop.makeScheduleBoundsCameraUpdate(locations[0], locations[1], 20)
+            val camera = cop.makeScheduleBoundsCameraUpdate(locations[0], locations[1], 120)
+            map.moveCamera(camera)
+        }else{
+            val location = LatLng(latitude, longitude)
+            val camera = CameraOptionProducer().makeScheduleCameraUpdate(location, 10f)
             map.moveCamera(camera)
         }
     }

@@ -20,7 +20,7 @@ class RadioButtonAdapter(data: List<String>, private val multiple : Boolean, pri
 
     inner class ViewHolder(val binding : SimpleRadiobuttonItemBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(data: String, position: Int){
-            binding.radioBtn.text = data
+            binding.radioBtn.text = "#$data"
             binding.radioBtn.setOnClickListener {
                 if (!multiple){
                     reset()
@@ -74,10 +74,15 @@ class RadioButtonAdapter(data: List<String>, private val multiple : Boolean, pri
         const val JAPAN = 1
         const val EUROPE = 2
         const val AMERICA = 3
-        const val CANADA = 4
         const val SOUTHEAST_ASIA =5
         const val WHO = 101
         const val ACTIVITY_LEVEL = 102
         const val THEME = 103
+        const val TRANSPORTATION = 104
+        const val SPORT = 201
+        const val NATURE = 202
+        const val CITY = 203
+        const val MEDIA = 204
+        const val ATMOSPHERE = 205
     }
 }

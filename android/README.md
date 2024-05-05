@@ -4,7 +4,7 @@
 - Tool : Android Studio
 	- Version : Iguana
 	- Java : Java 8
-	- Android Gradle Plugin : 8.3
+	- Android Gradle Plugin : 8.3.2
 	- Gradle Version : 8.4
 - - -
 ### 사용된 오픈소스 라이브러리 목록

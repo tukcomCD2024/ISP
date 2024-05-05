@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.how.BuildConfig
-import com.project.how.data_class.RecentAddedCalendar
+import com.project.how.data_class.recyclerview.RecentAddedCalendar
 import com.project.how.databinding.RecentAddedCalendarsItemBinding
 
 class RecentAddedCalendarsAdapter(data : List<RecentAddedCalendar>) : RecyclerView.Adapter<RecentAddedCalendarsAdapter.ViewHolder>() {

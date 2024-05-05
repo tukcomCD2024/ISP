@@ -4,6 +4,7 @@
         <item name="android:statusBarColor" >@color/white</item>
         <item name="android:windowBackground">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="materialCalendarFullscreenTheme">@style/ThemeOverlay.App.DatePicker</item>
     </style>
 
     <style name="Theme.HowAboutTrip.BlackStatusBar" parent="Theme.Material3.DayNight.NoActionBar">
@@ -41,4 +42,30 @@
     <style name="FabRoundedCorner">
         <item name="cornerSize">50%</item>
     </style>
+
+    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.Material3.SmallComponent">
+        <item name="cornerFamily">cut</item>
+    </style>
+
+    <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="daySelected" parent="@style/Widget.Material3.MaterialCalendar.Day.Selected">
+        <item name="itemTextColor">@color/white</item>
+        <item name="itemStrokeColor">@android:color/transparent</item>
+        <item name="itemBackground">@color/red</item>
+    </style>
+
+    <style name="ThemeOverlay.App.DatePicker" parent="@style/ThemeOverlay.Material3.MaterialCalendar.Fullscreen">
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="background">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="rangeFillColor">@color/black</item>
+        <item name="daySelectedStyle">@style/daySelected</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent</item>
+    </style>
+    e>
 </resources>

@@ -8,4 +8,5 @@
     <color name="gradient_black">#FF0E0E0E</color>
     <color name="gradient_gray">#FF606060</color>
     <color name="translucent_black">#88000000</color>
+    <color name="more_translucent_black">#44000000</color>
 </resources>

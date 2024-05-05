@@ -25,14 +25,6 @@ class MypageFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if(memberViewModel.tokensSaveLiveData.value == true){
-            name = memberViewModel.memberInfoLiveData.value?.name ?:resources.getString(R.string.error)
-        }else{
-            context?.let { context->
-                memberViewModel.tokensLiveData.value?.let { tokens->
-                    memberViewModel.getInfo(context, tokens.accessToken) }
-            }
-        }
     }
 
     override fun onCreateView(
@@ -42,6 +34,11 @@ class MypageFragment : Fragment() {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_mypage, container, false)
         binding.mypage = this
         binding.lifecycleOwner = viewLifecycleOwner
+        memberViewModel.memberInfoLiveData.observe(viewLifecycleOwner){info ->
+            Log.d("memberInfo", "name : ${info.name}")
+            name = info.name
+            binding.name.text = name
+        }
         return binding.root
     }
 
@@ -72,6 +69,18 @@ class MypageFragment : Fragment() {
             }
         }
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if(memberViewModel.tokensSaveLiveData.value == true){
+            name = memberViewModel.memberInfoLiveData.value?.name ?:resources.getString(R.string.error)
+        }else{
+            context?.let { context->
+                memberViewModel.tokensLiveData.value?.let { tokens->
+                    memberViewModel.getInfo(context, tokens.accessToken) }
+            }
+        }
     }
 
     override fun onDestroyView() {

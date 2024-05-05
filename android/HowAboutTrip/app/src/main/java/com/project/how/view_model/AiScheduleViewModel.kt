@@ -5,13 +5,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
-import com.project.how.data_class.AiDaysSchedule
-import com.project.how.data_class.AiSchedule
+import com.project.how.data_class.recyclerview.AiDaysSchedule
+import com.project.how.data_class.recyclerview.AiSchedule
 import com.project.how.data_class.AiScheduleInput
 import com.project.how.data_class.dto.CreateScheduleRequest
 import com.project.how.data_class.dto.CreateScheduleResponse
 import com.project.how.model.AiScheduleRepository
 import com.project.how.network.client.ScheduleRetrofit
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,45 +27,55 @@ class AiScheduleViewModel : ViewModel() {
     val aiScheduleLiveData : LiveData<AiSchedule>
         get() = _aiScheduleLiveData
 
-    fun getAiSchedule(aiScheduleInput : AiScheduleInput, test : Boolean){
-        if (test){
-            aiScheduleRepository.getAiSchedule(getTestAiSchedule())
-            return
-        }
+    fun getAiSchedule(aiScheduleInput : AiScheduleInput) : Flow<Boolean> = callbackFlow {
         val createScheduleRequest = CreateScheduleRequest(
             aiScheduleInput.des,
             aiScheduleInput.purpose ?: listOf(),
             aiScheduleInput.startDate,
             aiScheduleInput.endDate
         )
-        ScheduleRetrofit.getApiService()!!
-            .createSchedule(createScheduleRequest)
-            .enqueue(object : Callback<CreateScheduleResponse>{
-                override fun onResponse(
-                    call: Call<CreateScheduleResponse>,
-                    response: Response<CreateScheduleResponse>
-                ) {
-                    if(response.isSuccessful){
-                        val result = response.body()
-                        if (result != null){
-                            Log.d("createSchedule is success", "startDate : ${result.schedules[0].date}")
-                            aiScheduleRepository.getAiSchedule(getAiSchedule(result, createScheduleRequest))
+
+        ScheduleRetrofit.getApiService()?.let { apiService ->
+            apiService.createSchedule(createScheduleRequest)
+                .enqueue(object : Callback<CreateScheduleResponse>{
+                    override fun onResponse(
+                        call: Call<CreateScheduleResponse>,
+                        response: Response<CreateScheduleResponse>
+                    ) {
+                        if(response.isSuccessful){
+                            val result = response.body()
+                            if (result != null){
+                                Log.d("createSchedule is success", "startDate : ${result.schedules[0].date}")
+                                aiScheduleRepository.getAiSchedule(getAiSchedule(result, createScheduleRequest))
+                                trySend(SUCCESS)
+                            }else{
+                                Log.d("createSchedule is success", "response.body is null\ncode : ${response.code()}")
+                                trySend(FAILD)
+                            }
                         }else{
-                            Log.d("createSchedule is success", "response.body is null\ncode : ${response.code()}")
+                            Log.d("createSchedule is not success", "code : ${response.code()}")
+                            trySend(FAILD)
                         }
-                    }else{
-                        Log.d("createSchedule is not success", "code : ${response.code()}")
                     }
-                }
 
-                override fun onFailure(call: Call<CreateScheduleResponse>, t: Throwable) {
-                    Log.d("createSchedule is failed", "${t.message}")
-                }
+                    override fun onFailure(call: Call<CreateScheduleResponse>, t: Throwable) {
+                        Log.d("createSchedule is failed", "${t.message}")
+                        trySend(FAILD)
+                    }
 
-            })
+                })
+        } ?: close()
+
+        awaitClose()
     }
 
-    private fun getAiSchedule(createScheduleResponse : CreateScheduleResponse, createScheduleRequest: CreateScheduleRequest) : AiSchedule{
+    fun getTestData(){
+        viewModelScope.launch {
+            aiScheduleRepository.getAiSchedule(getTestAiSchedule())
+        }
+    }
+
+    private fun getAiSchedule(createScheduleResponse : CreateScheduleResponse, createScheduleRequest: CreateScheduleRequest) : AiSchedule {
         val title = createScheduleRequest.destination
         val country = createScheduleRequest.destination
         val startDate = createScheduleRequest.departureDate
@@ -88,7 +102,7 @@ class AiScheduleViewModel : ViewModel() {
         )
     }
 
-    private fun getTestAiSchedule() : AiSchedule{
+    private fun getTestAiSchedule() : AiSchedule {
         val testAiDaysSchedule = mutableListOf<AiDaysSchedule>(AiDaysSchedule(AiDaysScheduleAdapter.PLACE, "test Todo", "test"))
         testAiDaysSchedule.add(AiDaysSchedule(AiDaysScheduleAdapter.AIRPLANE, "test airplane", "airplane"))
         testAiDaysSchedule.add(AiDaysSchedule(AiDaysScheduleAdapter.HOTEL, "test hotel", "hotel"))
@@ -111,5 +125,9 @@ class AiScheduleViewModel : ViewModel() {
             "2024-02-18",
             "2024-02-20",
             dailySchedule)
+    }
+    companion object{
+        const val FAILD = false
+        const val SUCCESS = true
     }
 }

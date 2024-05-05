@@ -21,38 +21,40 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout
 import com.project.how.R
 import com.project.how.adapter.recyclerview.DaysScheduleEditAdapter
 import com.project.how.adapter.item_touch_helper.RecyclerViewItemTouchHelperCallback
 import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
-import com.project.how.data_class.AiDaysSchedule
-import com.project.how.data_class.AiSchedule
-import com.project.how.data_class.DaysSchedule
-import com.project.how.data_class.Schedule
+import com.project.how.data_class.recyclerview.AiSchedule
+import com.project.how.data_class.recyclerview.DaysSchedule
+import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.databinding.ActivityCalendarEditBinding
-import com.project.how.interface_af.OnDateTimeListener
 import com.project.how.interface_af.OnDesListener
 import com.project.how.interface_af.OnScheduleListener
 import com.project.how.interface_af.interface_ada.ItemStartDragListener
 import com.project.how.view.dialog.AiScheduleDialog
-import com.project.how.view.dialog.ConfirmDialog
-import com.project.how.view.dialog.bottom_sheet_dialog.CalendarBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.EditScheduleBottomSheetDialog
 import com.project.how.view.dp.DpPxChanger
+import com.project.how.view.map_helper.CameraOptionProducer
+import com.project.how.view.map_helper.MarkerProducer
 import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.launch
 import java.io.Serializable
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 import java.util.Locale
+import java.util.TimeZone
 
 
 class CalendarEditActivity
-    : AppCompatActivity(), OnMapReadyCallback, DaysScheduleEditAdapter.OnDaysButtonClickListener, OnScheduleListener, OnDesListener, OnDateTimeListener {
+    : AppCompatActivity(), OnMapReadyCallback, DaysScheduleEditAdapter.OnDaysButtonClickListener, OnScheduleListener, OnDesListener {
     private lateinit var binding : ActivityCalendarEditBinding
     private val viewModel : ScheduleViewModel by viewModels()
     private lateinit var data : Schedule
@@ -116,9 +118,12 @@ class CalendarEditActivity
                 .commit()
             supportMapFragment.getMapAsync {map ->
                 val location = LatLng(latitude, longitude)
-                val camera = EditScheduleBottomSheetDialog.makeScheduleCarmeraUpdate(location, 10f)
+                val camera = CameraOptionProducer().makeScheduleCameraUpdate(location, 10f)
                 map.moveCamera(camera)
             }
+
+            supportMapFragment.getMapAsync(this@CalendarEditActivity)
+
             supportMapFragment.view?.setOnTouchListener { v, event ->
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
@@ -145,7 +150,6 @@ class CalendarEditActivity
                     initList: MutableList<DaysSchedule>,
                     changeList: MutableList<DaysSchedule>
                 ) {
-                    adapter.notifyDataSetChanged()
                     supportMapFragment.getMapAsync(this@CalendarEditActivity)
                 }
 
@@ -183,21 +187,35 @@ class CalendarEditActivity
 
     override fun onMapReady(map: GoogleMap) {
         map.clear()
-        var first = true
-        var polylineOptions = PolylineOptions()
+        val polylineOptions = PolylineOptions()
+        val latitudes = mutableListOf<Double>()
+        val longitudes = mutableListOf<Double>()
+
         data.dailySchedule[selectedDays].forEachIndexed {position, data->
-            if((data.latitude != null && data.longitude != null) || (data.longitude == 0.0 && data.latitude == 0.0)){
+            if((data.latitude != null && data.longitude != null) && (data.longitude != 0.0 && data.latitude != 0.0)){
                 val location = LatLng(data.latitude, data.longitude)
-                if (first){
-                    val camera = EditScheduleBottomSheetDialog.makeScheduleCarmeraUpdate(location, 10f)
-                    map.moveCamera(camera)
-                    first = false
-                }
+                latitudes.add(data.latitude)
+                longitudes.add(data.longitude)
                 polylineOptions.add(location)
-                val markerOptions = EditScheduleBottomSheetDialog.makeScheduleMarkerOptions(this, data.type, position, location, data.places)
+                val markerOptions = MarkerProducer().makeScheduleMarkerOptions(this, data.type, position, location, data.places)
                 map.addMarker(markerOptions)
             }
-            map.addPolyline(polylineOptions)
+        }
+        map.addPolyline(polylineOptions)
+
+        if(latitudes.lastIndex == 0){
+            val cop = CameraOptionProducer()
+            val camera = cop.makeScheduleCameraUpdate(LatLng(latitudes[0], longitudes[0]), 12f)
+            map.moveCamera(camera)
+        }else if (latitudes.isNotEmpty()){
+            val cop = CameraOptionProducer()
+            val locations = cop.makeLatLngBounds(latitudes, longitudes)
+            val camera = cop.makeScheduleBoundsCameraUpdate(locations[0], locations[1], 120)
+            map.moveCamera(camera)
+        }else{
+            val location = LatLng(latitude, longitude)
+            val camera = CameraOptionProducer().makeScheduleCameraUpdate(location, 10f)
+            map.moveCamera(camera)
         }
     }
 
@@ -259,7 +277,7 @@ class CalendarEditActivity
             null
         )
         data.dailySchedule[selectedDays].add(newData)
-        val editScheduleBottomSheet = EditScheduleBottomSheetDialog(newData , data.dailySchedule[selectedDays].lastIndex, this)
+        val editScheduleBottomSheet = EditScheduleBottomSheetDialog(latitude, longitude, newData , data.dailySchedule[selectedDays].lastIndex, this)
         editScheduleBottomSheet.show(supportFragmentManager, "EditScheduleBottomSheetDialog")
     }
 
@@ -291,25 +309,32 @@ class CalendarEditActivity
         des.show(supportFragmentManager, "DesBottomSheetDialog")
     }
 
-    fun showEditDeparture(){
-        val calendar = CalendarBottomSheetDialog(CalendarBottomSheetDialog.DEPARTURE, this)
-        calendar.show(supportFragmentManager, "CalendarBottomSheetDialog")
-    }
+    fun showCalendar(){
+        val calendar = MaterialDatePicker.Builder.dateRangePicker()
+            .setTheme(R.style.ThemeOverlay_App_DatePicker)
+            .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
+            .build()
+        calendar.show(supportFragmentManager, "MaterialDatePicker")
 
-    fun showEditEntrance(){
-        val calendar = CalendarBottomSheetDialog(CalendarBottomSheetDialog.ENTRANCE, this)
-        calendar.show(supportFragmentManager, "CalendarBottomSheetDialog")
+        calendar.addOnPositiveButtonClickListener {
+            val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+            utc.timeInMillis = it.first
+            val format = SimpleDateFormat("yyyy-MM-dd")
+            val formatted = format.format(utc.time)
+            utc.timeInMillis = it.second
+            val formattedSecond = format.format(utc.time)
+            data.startDate = formatted
+            data.endDate = formattedSecond
+            binding.date.text = getString(R.string.date_text, formatted, formattedSecond)
+            binding.date.text = "${data.startDate} - ${data.endDate}"
+            viewModel.updateDailySchedule(data, data.startDate, data.endDate)
+        }
     }
 
     private suspend fun saveNewSchedule(){
 
         viewModel.saveSchedule(this, MemberViewModel.tokensLiveData.value!!.accessToken, data).collect{check ->
             when(check){
-                ScheduleViewModel.NULL_LOCATIONS ->{
-                    val message = listOf<String>(getString(R.string.some_schedule_lng_lat))
-                    val confirmDialog = ConfirmDialog(message)
-                    confirmDialog.show(supportFragmentManager, "ConfirmDialog")
-                }
                 ScheduleViewModel.NETWORK_FAILED ->{
                     Toast.makeText(this@CalendarEditActivity,
                         getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
@@ -324,11 +349,6 @@ class CalendarEditActivity
     private suspend fun saveEditSchedule(){
         viewModel.updateSchedule(this, MemberViewModel.tokensLiveData.value!!.accessToken, id, data).collect{check->
             when(check){
-                ScheduleViewModel.NULL_LOCATIONS ->{
-                    val message = listOf<String>(getString(R.string.some_schedule_lng_lat))
-                    val confirmDialog = ConfirmDialog(message)
-                    confirmDialog.show(supportFragmentManager, "ConfirmDialog")
-                }
                 ScheduleViewModel.NETWORK_FAILED ->{
                     Toast.makeText(this@CalendarEditActivity,
                         getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
@@ -346,8 +366,8 @@ class CalendarEditActivity
     private fun moveCalendarList(){
         val intent = Intent(this, CalendarListActivity::class.java)
         startActivity(intent)
-        finish()
     }
+
 
     private fun moveCalendar(){
         val intent = Intent(this, CalendarActivity::class.java)
@@ -365,7 +385,7 @@ class CalendarEditActivity
     }
 
     override fun onEditButtonClickListener(data : DaysSchedule, position : Int) {
-        val editScheduleBottomSheet = EditScheduleBottomSheetDialog(data , position, this)
+        val editScheduleBottomSheet = EditScheduleBottomSheetDialog(latitude, longitude, data , position, this)
         editScheduleBottomSheet.show(supportFragmentManager, "EditScheduleBottomSheetDialog")
     }
 
@@ -376,6 +396,7 @@ class CalendarEditActivity
                 setBudgetText(it)
             }
         }
+        supportMapFragment.getMapAsync(this)
     }
 
     override fun onDaysScheduleListener(schedule: DaysSchedule, position: Int) {
@@ -390,37 +411,25 @@ class CalendarEditActivity
     }
 
     override fun onDesListener(des: String) {
-        data.country = des
-    }
-
-    override fun onSaveDate(date: String, type: Int) {
-        when(type){
-            CalendarBottomSheetDialog.BASIC ->{
-
-            }
-            CalendarBottomSheetDialog.DEPARTURE->{
-                if(data.endDate >= date){
-                    data.startDate = date
-                    binding.date.text = "${data.startDate} - ${data.endDate}"
-                    viewModel.updateDailySchedule(data, data.startDate, data.endDate)
-                }else{
-                    Toast.makeText(this, "출국 날짜($date)보다 입국 날짜(${data.endDate})가 더 빠릅니다.", Toast.LENGTH_SHORT).show()
-                }
-            }
-            CalendarBottomSheetDialog.ENTRANCE->{
-                if (data.startDate <= date){
-                    data.endDate = date
-                    binding.date.text = "${data.startDate} - ${data.endDate}"
-                    viewModel.updateDailySchedule(data, data.startDate, data.endDate)
-                }else{
-                    Toast.makeText(this, "입국 날짜($date)보다 출국 날짜(${data.startDate})가 더 늦습니다.", Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch {
+            viewModel.getCountryLocation(des).collect{ location ->
+                location?.let {
+                    data.country = des
+                    latitude = location.lat
+                    longitude = location.lng
+                } ?: run {
+                    viewModel.getCountryLocation(des).collect { newLocation ->
+                        newLocation?.let {
+                            data.country = des
+                            latitude = newLocation.lat
+                            longitude = newLocation.lng
+                        } ?: run {
+                            Toast.makeText(this@CalendarEditActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
             }
         }
-    }
-
-    override fun onSaveDateTime(dateTime: String, type: Int) {
-
     }
 
     companion object{

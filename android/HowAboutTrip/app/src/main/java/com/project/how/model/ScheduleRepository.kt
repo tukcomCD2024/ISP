@@ -6,14 +6,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.project.how.R
 import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
-import com.project.how.data_class.AiDaysSchedule
-import com.project.how.data_class.AiSchedule
-import com.project.how.data_class.DaysSchedule
-import com.project.how.data_class.Schedule
+import com.project.how.data_class.recyclerview.AiDaysSchedule
+import com.project.how.data_class.recyclerview.AiSchedule
+import com.project.how.data_class.recyclerview.DaysSchedule
+import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.data_class.dto.GetScheduleListResponse
 import com.project.how.data_class.dto.ScheduleDetail
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -58,14 +57,16 @@ class ScheduleRepository {
     }
 
     fun getSchedule(aiSchedule : AiSchedule) : Flow<Schedule> = flow{
-        this.emit(Schedule(
+        this.emit(
+            Schedule(
             aiSchedule.title,
             aiSchedule.country,
             aiSchedule.startDate,
             aiSchedule.endDate,
             0,
             getDailySchedule(aiSchedule.dailySchedule)
-        ))
+        )
+        )
     }
 
     fun getTotalCost(schedule: Schedule) :Flow<Long> = flow {

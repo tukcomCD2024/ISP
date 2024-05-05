@@ -9,7 +9,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.project.how.data_class.MemberInfo
 import com.project.how.data_class.Tokens
-import com.project.how.datastore.TokenDataStore
+import com.project.how.data_store.TokenDataStore
 
 object MemberRepository {
     private val firebaseAuth = FirebaseAuth.getInstance()

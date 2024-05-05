@@ -19,7 +19,7 @@ interface MemberService {
         @Body login: LoginRequest
     ) : Call<String>
 
-    @PUT("members/signup")
+    @PUT("members/signUp")
     fun signUp(
         @Header("Authorization") accessToken : String,
         @Body signUp: SignUpRequest
@@ -30,7 +30,7 @@ interface MemberService {
         @Body authRecreate : AuthRecreateRequest
     ) : Call<EmptyResponse>
 
-    @GET("members/info")
+    @GET("members/information")
     fun getInfo(
         @Header("Authorization") accessToken: String
     ) : Call<GetInfoResponse>

@@ -11,15 +11,18 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.how.BuildConfig
 import com.project.how.R
-import com.project.how.adapter.recyclerview.EventViewPagerAdapter
+import com.project.how.adapter.recyclerview.viewpager.EventViewPagerAdapter
 import com.project.how.adapter.recyclerview.RecentAddedCalendarsAdapter
-import com.project.how.data_class.EventViewPager
-import com.project.how.data_class.RecentAddedCalendar
-import com.project.how.data_class.Schedule
+import com.project.how.data_class.recyclerview.EventViewPager
+import com.project.how.data_class.recyclerview.RecentAddedCalendar
+import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.data_class.dto.GetCountryLocationResponse
 import com.project.how.databinding.FragmentCalendarBinding
 import com.project.how.interface_af.OnDateTimeListener
@@ -31,12 +34,16 @@ import com.project.how.view.dialog.bottom_sheet_dialog.CalendarBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
 import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.TimeZone
+import kotlin.concurrent.thread
 
-class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
+class CalendarFragment : Fragment(), OnDesListener {
     private var _binding : FragmentCalendarBinding? = null
     private val binding : FragmentCalendarBinding
         get() = _binding!!
@@ -53,6 +60,8 @@ class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
     private var entranceDate : String? = null
     private var latLng : GetCountryLocationResponse? = null
     private var dday : Long = -1
+    private lateinit var autoScrollJob : Job
+    private var viewPagerPosition = 0
     var dDay : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,11 +84,31 @@ class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_calendar, container, false)
         binding.calendar = this
         binding.lifecycleOwner = viewLifecycleOwner
+        autoScrollJobCreate()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.viewPager2.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
+        binding.viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                viewPagerPosition = position
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
+                when (state){
+                    ViewPager2.SCROLL_STATE_IDLE -> {if (!autoScrollJob.isActive) autoScrollJobCreate()}
+                    ViewPager2.SCROLL_STATE_DRAGGING -> {
+                        autoScrollJob.cancel()
+                    }
+                }
+            }
+        })
 
     }
 
@@ -154,18 +183,14 @@ class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
         _binding = null
     }
 
+    private fun autoScrollJobCreate() {
+        autoScrollJob = lifecycleScope.launch{
+
+        }
+    }
+
     fun add() {
         showDesInput()
-    }
-
-    private fun showDepartureInput(){
-        val calendar = CalendarBottomSheetDialog(CalendarBottomSheetDialog.DEPARTURE, this)
-        calendar.show(childFragmentManager, "CalendarBottomSheetDialog")
-    }
-
-    private fun showEntranceInput(){
-        val calendar = CalendarBottomSheetDialog(CalendarBottomSheetDialog.ENTRANCE, this)
-        calendar.show(childFragmentManager, "CalendarBottomSheetDialog")
     }
 
     private fun showDesInput(){
@@ -181,37 +206,37 @@ class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
         startActivity(Intent(activity, CalendarListActivity::class.java))
     }
 
-    override fun onSaveDate(date: String, type: Int) {
-        if(type == CalendarBottomSheetDialog.ENTRANCE){
-            if(date < departureDate!!){
-                Toast.makeText(activity, "입국 날짜($date)보다 출국 날짜($departureDate)가 더 늦습니다.", Toast.LENGTH_SHORT).show()
-                showEntranceInput()
-            }else{
-                entranceDate = date
-                val intent = Intent(activity, CalendarEditActivity::class.java)
-                val schedule = Schedule(
-                    destination!!,
-                    destination!!,
-                    departureDate!!,
-                    entranceDate!!,
-                    0,
-                    scheduleViewModel.getEmptyDaysSchedule(departureDate!!, entranceDate!!)
-                )
-                intent.putExtra(getString(R.string.type), CalendarEditActivity.NEW)
-                intent.putExtra(getString(R.string.schedule), schedule)
-                intent.putExtra(getString(R.string.server_calendar_latitude), latLng!!.lat)
-                intent.putExtra(getString(R.string.server_calendar_longitude), latLng!!.lng)
-                startActivity(intent)
-            }
+    private fun showCalendar(){
+        val calendar = MaterialDatePicker.Builder.dateRangePicker()
+            .setTheme(R.style.ThemeOverlay_App_DatePicker)
+            .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
+            .build()
+        calendar.show(childFragmentManager, "MaterialDatePicker")
 
-        }else if(type == CalendarBottomSheetDialog.DEPARTURE){
-            departureDate = date
-            showEntranceInput()
+        calendar.addOnPositiveButtonClickListener {
+            val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+            utc.timeInMillis = it.first
+            val format = SimpleDateFormat("yyyy-MM-dd")
+            val formatted = format.format(utc.time)
+            utc.timeInMillis = it.second
+            val formattedSecond = format.format(utc.time)
+            entranceDate = formattedSecond
+            departureDate = formatted
+            val intent = Intent(activity, CalendarEditActivity::class.java)
+            val schedule = Schedule(
+                destination!!,
+                destination!!,
+                departureDate!!,
+                entranceDate!!,
+                0,
+                scheduleViewModel.getEmptyDaysSchedule(departureDate!!, entranceDate!!)
+            )
+            intent.putExtra(getString(R.string.type), CalendarEditActivity.NEW)
+            intent.putExtra(getString(R.string.schedule), schedule)
+            intent.putExtra(getString(R.string.server_calendar_latitude), latLng!!.lat)
+            intent.putExtra(getString(R.string.server_calendar_longitude), latLng!!.lng)
+            startActivity(intent)
         }
-    }
-
-    override fun onSaveDateTime(dateTime: String, type: Int) {
-        TODO("Not yet implemented")
     }
 
     override fun onDesListener(des: String) {
@@ -220,13 +245,13 @@ class CalendarFragment : Fragment(), OnDateTimeListener, OnDesListener {
                 location?.let {
                     destination = des
                     latLng = location
-                    showDepartureInput()
+                    showCalendar()
                 } ?: run {
                     scheduleViewModel.getCountryLocation(des).collect { newLocation ->
                         newLocation?.let {
                             destination = des
                             latLng = newLocation
-                            showDepartureInput()
+                            showCalendar()
                         } ?: run {
                             Toast.makeText(activity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
                         }

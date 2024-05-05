@@ -1,4 +1,4 @@
-package com.project.how.data_class
+package com.project.how.data_class.recyclerview
 
 import java.io.Serializable
 

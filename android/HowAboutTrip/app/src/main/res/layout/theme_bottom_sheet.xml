@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="theme"
+            type="com.project.how.view.dialog.bottom_sheet_dialog.ActivityBottomSheetDialog" />
+    </data>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/white_round_bottom_sheet_background"
+            app:behavior_hideable="false"
+            app:behavior_draggable="false"
+            android:paddingHorizontal="29dp"
+            android:paddingTop="45dp"
+            android:paddingBottom="30dp"
+            app:layout_behavior="com.google.android.material.bottom-sheet.BottomSheetBehavior">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout4"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:layout_editor_absoluteX="29dp" />
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/nestedScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayout4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/sport"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/bm_hanna"
+                        android:text="@string/sport"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/sport_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                        app:layout_constraintTop_toBottomOf="@+id/sport"
+                        app:spanCount="3"
+                        tools:listitem="@layout/simple_radiobutton_item" />
+
+                    <TextView
+                        android:id="@+id/nature"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/bm_hanna"
+                        android:text="@string/nature"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sport_list" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/nature_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                        app:layout_constraintTop_toBottomOf="@+id/nature"
+                        app:spanCount="3"
+                        tools:layout_editor_absoluteX="29dp"
+                        tools:listitem="@layout/simple_radiobutton_item" />
+
+                    <TextView
+                        android:id="@+id/city"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/bm_hanna"
+                        android:text="@string/shopping_and_city"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/nature_list" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/city_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                        app:layout_constraintTop_toBottomOf="@+id/city"
+                        app:spanCount="6"
+                        tools:layout_editor_absoluteX="29dp"
+                        tools:listitem="@layout/simple_radiobutton_item" />
+
+                    <TextView
+                        android:id="@+id/media"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/bm_hanna"
+                        android:text="@string/media"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/city_list" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/media_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                        app:layout_constraintTop_toBottomOf="@+id/media"
+                        app:spanCount="3"
+                        tools:layout_editor_absoluteX="29dp"
+                        tools:listitem="@layout/simple_radiobutton_item" />
+
+                    <TextView
+                        android:id="@+id/atmosphere"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/bm_hanna"
+                        android:text="@string/atmosphere"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/media_list" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/atmosphere_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                        app:layout_constraintTop_toBottomOf="@+id/atmosphere"
+                        app:spanCount="5"
+                        tools:layout_editor_absoluteX="29dp"
+                        tools:listitem="@layout/simple_radiobutton_item" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/reset"
+                        style="@style/Button.GrayRound"
+                        android:layout_width="60dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="40dp"
+                        android:layout_marginEnd="10dp"
+                        android:onClick="@{()-> theme.reset()}"
+                        android:text="@string/reset"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toTopOf="@+id/guideline"
+                        app:layout_constraintEnd_toStartOf="@+id/confirm"
+                        app:layout_constraintTop_toBottomOf="@+id/atmosphere_list" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/confirm"
+                        style="@style/Button.BlackRound"
+                        android:layout_width="50dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="40dp"
+                        android:onClick="@{()-> theme.confirm()}"
+                        android:text="@string/confirm"
+                        android:textColor="@color/white"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toTopOf="@+id/guideline"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/atmosphere_list" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_end="15dp" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

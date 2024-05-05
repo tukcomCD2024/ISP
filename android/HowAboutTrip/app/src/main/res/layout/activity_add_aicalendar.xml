@@ -50,191 +50,246 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="24dp"
-            android:layout_marginTop="22dp"
-            android:background="@drawable/white_card_round_rectangle"
-            android:padding="40dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/adView"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" >
 
-            <TextView
-                android:id="@+id/des"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/destination"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/des_input"
-                style="@style/Button.BlackRound"
-                android:layout_width="50dp"
-                android:layout_height="22dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/input"
-                android:textColor="@color/white"
-                android:textSize="13sp"
-                android:onClick="@{()-> ai.showDesInput()}"
-                app:layout_constraintStart_toEndOf="@id/des_output"
-                app:layout_constraintTop_toBottomOf="@+id/des" />
-
-            <TextView
-                android:id="@+id/des_output"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                android:visibility="gone"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="12dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/des" />
-
-            <TextView
-                android:id="@+id/purpose"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@string/purpose"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/des_input" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/purpose_input"
-                style="@style/Button.BlackRound"
-                android:layout_width="50dp"
-                android:layout_height="22dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/input"
-                android:textColor="@color/white"
-                android:textSize="13sp"
-                android:onClick="@{()-> ai.showPurposeInput()}"
-                app:layout_constraintStart_toEndOf="@id/purpose_output"
-                app:layout_constraintTop_toBottomOf="@id/purpose"/>
-
-            <TextView
-                android:id="@+id/purpose_output"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                android:visibility="gone"
-                android:maxWidth="200dp"
-                android:maxLines="2"
-                android:maxLength="40"
-                android:ellipsize="end"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="12dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/purpose" />
-
-            <TextView
-                android:id="@+id/departure"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@string/departure_date"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/purpose_input" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/departure_input"
-                style="@style/Button.BlackRound"
-                android:layout_width="50dp"
-                android:layout_height="22dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/input"
-                android:textColor="@color/white"
-                android:textSize="13sp"
-                android:onClick="@{() -> ai.showDepartureInput()}"
-                app:layout_constraintStart_toEndOf="@id/departure_output"
-                app:layout_constraintTop_toBottomOf="@id/departure"/>
-
-            <TextView
-                android:id="@+id/departure_output"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                android:visibility="gone"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="12dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/departure" />
-
-            <TextView
-                android:id="@+id/entrance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@string/entrance_date"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/departure_input" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/entrance_input"
-                style="@style/Button.BlackRound"
-                android:layout_width="50dp"
-                android:layout_height="22dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/input"
-                android:textColor="@color/white"
-                android:textSize="13sp"
-                android:onClick="@{() -> ai.showEntranceInput()}"
-                app:layout_constraintStart_toEndOf="@id/entrance_output"
-                app:layout_constraintTop_toBottomOf="@+id/entrance" />
-
-            <TextView
-                android:id="@+id/entrance_output"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                android:visibility="gone"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="12dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/entrance" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/search"
-                style="@style/Button.BlackRound"
-                android:layout_width="75dp"
-                android:layout_height="22dp"
-                android:layout_marginTop="15dp"
-                android:drawableStart="@drawable/icon_search_size_fixed"
-                android:gravity="center"
-                android:paddingHorizontal="15dp"
-                android:text="@string/search"
-                android:textColor="@color/white"
-                android:textSize="13sp"
-                android:onClick="@{()-> ai.search()}"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="22dp"
+                android:background="@drawable/white_card_round_rectangle"
+                android:paddingVertical="40dp"
+                android:paddingStart="40dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/entrance_input" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="40dp"/>
+
+                <TextView
+                    android:id="@+id/des"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/destination"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/des_input"
+                    style="@style/Button.BlackRound"
+                    android:layout_width="50dp"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/input"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    android:onClick="@{()-> ai.showDesInput()}"
+                    app:layout_constraintStart_toEndOf="@id/des_output"
+                    app:layout_constraintTop_toBottomOf="@+id/des" />
+
+                <TextView
+                    android:id="@+id/des_output"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="12dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/des" />
+
+                <TextView
+                    android:id="@+id/theme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/trip_theme"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/des_output" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/theme_input"
+                    style="@style/Button.BlackRound"
+                    android:layout_width="50dp"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:onClick="@{()-> ai.showPurposeInput()}"
+                    android:text="@string/input"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintEnd_toEndOf="@id/guideline"
+                    app:layout_constraintStart_toEndOf="@id/theme_output"
+                    app:layout_constraintTop_toBottomOf="@id/theme" />
+
+                <TextView
+                    android:id="@+id/theme_output"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                    android:maxWidth="220dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="12dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/theme" />
+
+                <TextView
+                    android:id="@+id/activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/want_activity"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/theme_output" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/activity_input"
+                    style="@style/Button.BlackRound"
+                    android:layout_width="50dp"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:onClick="@{() -> ai.showActivityInput()}"
+                    android:text="@string/input"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintEnd_toEndOf="@id/guideline"
+                    app:layout_constraintStart_toEndOf="@id/activity_output"
+                    app:layout_constraintTop_toBottomOf="@id/activity" />
+
+                <TextView
+                    android:id="@+id/activity_output"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                    android:maxWidth="220dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="12dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/activity" />
+
+                <TextView
+                    android:id="@+id/excluding_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/except_theme"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/activity_output"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/excluding_activity_input"
+                    style="@style/Button.BlackRound"
+                    android:layout_width="50dp"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/input"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    android:onClick="@{ () -> ai.showExcludingActivityInput()}"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintEnd_toEndOf="@id/guideline"
+                    app:layout_constraintStart_toEndOf="@id/excluding_activity_output"
+                    app:layout_constraintTop_toBottomOf="@id/excluding_activity"/>
+
+                <TextView
+                    android:id="@+id/excluding_activity_output"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                    android:maxWidth="220dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="12dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/excluding_activity" />
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/trip_date"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/excluding_activity_output" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/date_input"
+                    style="@style/Button.BlackRound"
+                    android:layout_width="50dp"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/input"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    android:onClick="@{() -> ai.showCalendar()}"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintEnd_toEndOf="@id/guideline"
+                    app:layout_constraintStart_toEndOf="@id/date_output"
+                    app:layout_constraintTop_toBottomOf="@+id/date" />
+
+                <TextView
+                    android:id="@+id/date_output"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="12dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/date" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/search"
+                    style="@style/Button.BlackRound"
+                    android:layout_width="75dp"
+                    android:layout_height="22dp"
+                    android:layout_marginTop="15dp"
+                    android:drawableStart="@drawable/icon_search_size_fixed"
+                    android:gravity="center"
+                    android:paddingHorizontal="15dp"
+                    android:text="@string/search"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    android:onClick="@{()-> ai.search()}"
+                    app:layout_constraintEnd_toEndOf="@id/guideline"
+                    app:layout_constraintTop_toBottomOf="@+id/date_input" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 
         <ImageView
             android:id="@+id/loading_background"

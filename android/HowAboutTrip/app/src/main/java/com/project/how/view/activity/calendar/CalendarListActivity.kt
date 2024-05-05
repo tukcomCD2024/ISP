@@ -4,16 +4,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.maps.model.LatLng
 import com.project.how.R
 import com.project.how.adapter.recyclerview.CalendarListAdapter
-import com.project.how.data_class.Schedule
-import com.project.how.data_class.ScheduleIDAndLatLng
+import com.project.how.data_class.dto.GetCountryLocationResponse
+import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.data_class.dto.GetScheduleListResponseElement
 import com.project.how.databinding.ActivityCalendarListBinding
 import com.project.how.interface_af.OnDateTimeListener
@@ -34,6 +32,7 @@ class CalendarListActivity
     private var destination : String? = null
     private var departureDate : String? = null
     private var entranceDate : String? = null
+    private var latLng : GetCountryLocationResponse? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_calendar_list)
@@ -136,6 +135,8 @@ class CalendarListActivity
                 )
                 intent.putExtra(getString(R.string.type), CalendarEditActivity.NEW)
                 intent.putExtra(getString(R.string.schedule), schedule)
+                intent.putExtra(getString(R.string.server_calendar_latitude), latLng?.lat ?: 0.0)
+                intent.putExtra(getString(R.string.server_calendar_longitude), latLng?.lng ?: 0.0)
                 startActivity(intent)
                 finish()
             }
@@ -151,7 +152,24 @@ class CalendarListActivity
     }
 
     override fun onDesListener(des: String) {
-        destination = des
-        showDepartureInput()
+        lifecycleScope.launch {
+            viewModel.getCountryLocation(des).collect{ location ->
+                location?.let {
+                    destination = des
+                    latLng = location
+                    showDepartureInput()
+                } ?: run {
+                    viewModel.getCountryLocation(des).collect { newLocation ->
+                        newLocation?.let {
+                            destination = des
+                            latLng = newLocation
+                            showDepartureInput()
+                        } ?: run {
+                            Toast.makeText(this@CalendarListActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        }
     }
 }

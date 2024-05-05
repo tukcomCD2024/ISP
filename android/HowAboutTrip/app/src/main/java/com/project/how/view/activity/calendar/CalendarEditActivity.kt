@@ -192,7 +192,7 @@ class CalendarEditActivity
         val longitudes = mutableListOf<Double>()
 
         data.dailySchedule[selectedDays].forEachIndexed {position, data->
-            if((data.latitude != null && data.longitude != null) || (data.longitude == 0.0 && data.latitude == 0.0)){
+            if((data.latitude != null && data.longitude != null) && (data.longitude != 0.0 && data.latitude != 0.0)){
                 val location = LatLng(data.latitude, data.longitude)
                 latitudes.add(data.latitude)
                 longitudes.add(data.longitude)

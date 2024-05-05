@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.project.how.R
 import com.project.how.adapter.recyclerview.RadioButtonAdapter
 import com.project.how.databinding.DesBottomSheetBinding
 import com.project.how.interface_af.OnDesListener
 import com.project.how.view.dialog.ConfirmDialog
+import com.project.how.view.dialog.bottom_sheet_dialog.ratio.BottomSheetRatioHeightManager
 import kotlinx.coroutines.launch
 
 class DesBottomSheetDialog(private val onDesListener: OnDesListener) : BottomSheetDialogFragment(), RadioButtonAdapter.OnItemClickListener  {
@@ -106,6 +108,10 @@ class DesBottomSheetDialog(private val onDesListener: OnDesListener) : BottomShe
         binding.europePlaces.adapter = europeAdapter
         binding.americaPlaces.adapter = americaAdapter
         binding.southeastAsiaPlaces.adapter = southeastAsiaAdapter
+        dialog?.setOnShowListener {
+            val bottomSheetDialog = it as BottomSheetDialog
+            BottomSheetRatioHeightManager().setRatio(bottomSheetDialog, requireContext(), 75)
+        }
         return binding.root
     }
 

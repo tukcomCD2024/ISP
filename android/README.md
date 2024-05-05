@@ -20,7 +20,7 @@
 | 이름 | 설명 |
 |---|---|
 | Google Maps SDK for Android | 구글 지도를 활용하여 지도 기능을 구현 |
-| Google Place SDK for Android | 구글 지도에서 장소 검색 기능을 구현 |
+| Google Place SDK for Android (New) | 구글 지도에서 장소 검색 기능을 구현 |
 | Google AdMob - Mobile Ads SDK for Android | 구글 광고를 통한 유지비 확보를 목표로 광고 구현 |
 | Firebase | 구글 로그인 & 사용자 분석 및 구글 광고 |
 | 백엔드 API | 비즈니스 로직 구현을 위한 API |

@@ -80,7 +80,7 @@ class EditScheduleBottomSheetDialog(private val lat : Double, private val lng : 
                 return@launch
             }
 
-            Places.initialize(requireContext(), apiKey)
+            Places.initializeWithNewPlacesApiEnabled(requireContext(), apiKey)
 
             placesClient = Places.createClient(requireContext())
             val googleMapOptions = GoogleMapOptions()

@@ -21,6 +21,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout
 import com.project.how.R
@@ -310,8 +311,13 @@ class CalendarEditActivity
     }
 
     fun showCalendar(){
+        val constraints = CalendarConstraints.Builder()
+            .setStart(Calendar.getInstance().timeInMillis)
+            .build()
+
         val calendar = MaterialDatePicker.Builder.dateRangePicker()
             .setTheme(R.style.ThemeOverlay_App_DatePicker)
+            .setCalendarConstraints(constraints)
             .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
             .build()
         calendar.show(supportFragmentManager, "MaterialDatePicker")

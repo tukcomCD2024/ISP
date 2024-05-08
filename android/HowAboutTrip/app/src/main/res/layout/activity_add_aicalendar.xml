@@ -283,7 +283,7 @@
                     android:text="@string/search"
                     android:textColor="@color/white"
                     android:textSize="13sp"
-                    android:onClick="@{()-> ai.search()}"
+                    android:onClick="@{()-> ai.searchList()}"
                     app:layout_constraintEnd_toEndOf="@id/guideline"
                     app:layout_constraintTop_toBottomOf="@+id/date_input" />
 
@@ -337,6 +337,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <DatePicker
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.how.BuildConfig
@@ -207,8 +208,13 @@ class CalendarFragment : Fragment(), OnDesListener {
     }
 
     private fun showCalendar(){
+        val constraints = CalendarConstraints.Builder()
+            .setStart(Calendar.getInstance().timeInMillis)
+            .build()
+
         val calendar = MaterialDatePicker.Builder.dateRangePicker()
             .setTheme(R.style.ThemeOverlay_App_DatePicker)
+            .setCalendarConstraints(constraints)
             .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
             .build()
         calendar.show(childFragmentManager, "MaterialDatePicker")

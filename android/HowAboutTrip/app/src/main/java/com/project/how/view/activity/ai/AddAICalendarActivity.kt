@@ -12,11 +12,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.project.how.R
 import com.project.how.data_class.recyclerview.AiSchedule
 import com.project.how.data_class.AiScheduleInput
+import com.project.how.data_class.AiScheduleListInput
 import com.project.how.data_class.dto.GetCountryLocationResponse
+import com.project.how.data_class.recyclerview.AiScheduleList
 import com.project.how.databinding.ActivityAddAicalendarBinding
 import com.project.how.interface_af.OnAddListener
 import com.project.how.interface_af.OnDesListener
@@ -43,12 +46,13 @@ class AddAICalendarActivity :
     private val scheduleViewModel : ScheduleViewModel by viewModels()
     private var destination : String? = null
     private var purpose : MutableList<String>? = null
-    private var activity : MutableList<String>? = null
-    private var excludingActivity : MutableList<String>? = null
+    private var activities : MutableList<String>? = null
+    private var excludingActivities : MutableList<String>? = null
     private var departureDate : String? = null
     private var entranceDate : String? = null
     private var latLng : GetCountryLocationResponse? = null
     private lateinit var aiSchedule : AiSchedule
+    private lateinit var aiScheduleList : ArrayList<AiSchedule>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +74,14 @@ class AddAICalendarActivity :
                 aiSchedule = it
                 showAiSchedule(it)
             }
+        }
+
+        viewModel.aiScheduleListLiveData.observe(this){
+            Log.d("aiScheduleListLiveData", "${it[0].startDate} - ${it[0].endDate}")
+            setEnabled()
+            stopLoaing()
+            aiScheduleList = ArrayList(it)
+            moveAiScheduleList()
         }
 
     }
@@ -97,22 +109,27 @@ class AddAICalendarActivity :
     }
 
     fun showActivityInput(){
-        activity = mutableListOf()
+        activities = mutableListOf()
         binding.activityOutput.text = ""
         val activity = ActivityBottomSheetDialog(this, ActivityBottomSheetDialog.BASIC)
         activity.show(supportFragmentManager, "ActivityBottomSheetDialog")
     }
 
     fun showExcludingActivityInput(){
-        excludingActivity = mutableListOf()
+        excludingActivities = mutableListOf()
         binding.excludingActivityOutput.text = ""
         val activity = ActivityBottomSheetDialog(this, ActivityBottomSheetDialog.EXCLUDING)
         activity.show(supportFragmentManager, "ExcludingActivityBottomSheetDialog")
     }
 
     fun showCalendar(){
+        val constraints = CalendarConstraints.Builder()
+            .setStart(Calendar.getInstance().timeInMillis)
+            .build()
+
         val calendar = MaterialDatePicker.Builder.dateRangePicker()
             .setTheme(R.style.ThemeOverlay_App_DatePicker)
+            .setCalendarConstraints(constraints)
             .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
             .build()
         calendar.show(supportFragmentManager, "MaterialDatePicker")
@@ -128,7 +145,6 @@ class AddAICalendarActivity :
             departureDate = formatted
             binding.dateOutput.text = getString(R.string.date_text, formatted, formattedSecond)
         }
-
     }
 
     fun search(){
@@ -156,6 +172,34 @@ class AddAICalendarActivity :
                 showConfirmDialog(message)
             }
         }
+    }
+
+    fun searchList(){
+        lifecycleScope.launch {
+            if ((destination != null) && (departureDate != null) && (entranceDate != null)){
+                Log.d("aiScheduleLiveData", "start ${destination}, ${departureDate}, ${entranceDate}")
+                setUnEnabled()
+                load()
+                viewModel.getAiScheduleList(AiScheduleListInput(destination!!, purpose, activities, excludingActivities, departureDate!!, entranceDate!!)).collect { check ->
+                    if (!check){
+                        stopLoaing()
+                        setEnabled()
+                        Toast.makeText(this@AddAICalendarActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }else{
+                val message = mutableListOf<String>()
+                if (destination == null)
+                    message.add(resources.getString(R.string.destination))
+                if (departureDate == null)
+                    message.add(resources.getString(R.string.departure_date))
+                if (entranceDate == null)
+                    message.add(resources.getString(R.string.entrance_date))
+
+                showConfirmDialog(message)
+            }
+        }
+
     }
 
     private fun load(){
@@ -190,6 +234,7 @@ class AddAICalendarActivity :
 
     private fun moveAiScheduleList(){
         val intent = Intent(this, AiScheduleListActivity::class.java)
+        intent.putExtra(getString(R.string.aischedule), AiScheduleList(aiScheduleList))
         startActivity(intent)
     }
     private fun showAiSchedule(data : AiSchedule){
@@ -253,7 +298,7 @@ class AddAICalendarActivity :
         lifecycleScope.launch {
             if (type == ActivityBottomSheetDialog.BASIC){
                 theme.forEachIndexed{ index, s ->
-                    this@AddAICalendarActivity.activity?.add(s)
+                    this@AddAICalendarActivity.activities?.add(s)
                     if (index == theme.lastIndex)
                         binding.activityOutput.text = binding.activityOutput.text.toString() + s
                     else
@@ -261,7 +306,7 @@ class AddAICalendarActivity :
                 }
             }else{
                 theme.forEachIndexed{ index, s ->
-                    this@AddAICalendarActivity.excludingActivity?.add(s)
+                    this@AddAICalendarActivity.excludingActivities?.add(s)
                     if (index == theme.lastIndex)
                         binding.excludingActivityOutput.text = binding.excludingActivityOutput.text.toString() + s
                     else

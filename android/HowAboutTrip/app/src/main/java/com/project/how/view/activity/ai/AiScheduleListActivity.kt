@@ -14,6 +14,7 @@ import com.project.how.data_class.AiScheduleInput
 import com.project.how.data_class.dto.GetCountryLocationResponse
 import com.project.how.data_class.recyclerview.AiDaysSchedule
 import com.project.how.data_class.recyclerview.AiSchedule
+import com.project.how.data_class.recyclerview.AiScheduleList
 import com.project.how.databinding.ActivityAiScheduleListBinding
 import com.project.how.view.activity.calendar.CalendarEditActivity
 import com.project.how.view_model.AiScheduleViewModel
@@ -36,6 +37,7 @@ class AiScheduleListActivity : AppCompatActivity(), AiScheduleAdapter.OnClickLis
 
         lat = intent.getDoubleExtra(getString(R.string.server_calendar_latitude), 0.0)
         lng = intent.getDoubleExtra(getString(R.string.server_calendar_longitude), 0.0)
+        data = CalendarEditActivity.getSerializable(this, getString(R.string.aischedule), AiScheduleList::class.java).aiSchedules.toMutableList()
 
         aiScheduleViewModel.getTestData()
 

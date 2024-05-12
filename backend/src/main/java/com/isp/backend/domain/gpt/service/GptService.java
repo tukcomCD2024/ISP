@@ -3,9 +3,10 @@ package com.isp.backend.domain.gpt.service;
 import com.isp.backend.domain.gpt.config.GptConfig;
 import com.isp.backend.domain.gpt.constant.ParsingConstants;
 import com.isp.backend.domain.gpt.dto.request.GptRequest;
-import com.isp.backend.domain.gpt.dto.response.GptResponse;
 import com.isp.backend.domain.gpt.dto.request.GptScheduleRequest;
+import com.isp.backend.domain.gpt.dto.response.GptResponse;
 import com.isp.backend.domain.gpt.dto.response.GptScheduleResponse;
+import com.isp.backend.domain.gpt.dto.response.GptSchedulesResponse;
 import com.isp.backend.domain.gpt.entity.GptMessage;
 import com.isp.backend.domain.gpt.entity.GptSchedule;
 import com.isp.backend.domain.gpt.entity.GptScheduleParser;
@@ -21,6 +22,7 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,7 +44,7 @@ public class GptService {
         return new HttpEntity<>(gptRequest, httpHeaders);
     }
 
-    public GptScheduleResponse getResponse(String destination, HttpEntity<GptRequest> chatGptRequestHttpEntity) {
+    public GptScheduleResponse getResponse(HttpEntity<GptRequest> chatGptRequestHttpEntity) {
 
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(60000);
@@ -53,10 +55,9 @@ public class GptService {
                 GptConfig.CHAT_URL,
                 chatGptRequestHttpEntity,
                 GptResponse.class);
-        String countryImage = s3ImageService.get(destination);
         List<GptSchedule> gptSchedules = gptScheduleParser.parseScheduleText(getScheduleText(responseEntity));
 
-        return new GptScheduleResponse(countryImage, gptSchedules);
+        return new GptScheduleResponse(gptSchedules);
     }
 
     private String getScheduleText(ResponseEntity<GptResponse> responseEntity) {
@@ -67,7 +68,7 @@ public class GptService {
         return responseEntity.getBody().getChoices().get(0).getMessage();
     }
 
-    public GptScheduleResponse askQuestion(GptScheduleRequest questionRequestDTO) {
+    public GptSchedulesResponse askQuestion(GptScheduleRequest questionRequestDTO) {
         String question = makeQuestion(questionRequestDTO);
         List<GptMessage> messages = Collections.singletonList(
                 GptMessage.builder()
@@ -76,19 +77,27 @@ public class GptService {
                         .build()
         );
 
-
-        return this.getResponse(
-                questionRequestDTO.getDestination(),
-                this.buildHttpEntity(
-                        new GptRequest(
-                                GptConfig.CHAT_MODEL,
-                                GptConfig.MAX_TOKEN,
-                                GptConfig.TEMPERATURE,
-                                GptConfig.STREAM,
-                                messages
+        String countryImage = s3ImageService.get(questionRequestDTO.getDestination());
+        List<GptScheduleResponse> schedules = new ArrayList<>();
+        for(int i = 0; i < 3; i++) {
+            schedules.add(
+                    this.getResponse(
+                            this.buildHttpEntity(
+                                    new GptRequest(
+                                        GptConfig.CHAT_MODEL,
+                                        GptConfig.MAX_TOKEN,
+                                        GptConfig.TEMPERATURE,
+                                        GptConfig.STREAM,
+                                        messages
+                                )
                         )
-                )
-        );
+                ));
+        }
+
+
+
+
+        return new GptSchedulesResponse(countryImage, schedules);
     }
 
     private String makeQuestion(GptScheduleRequest questionRequestDTO) {

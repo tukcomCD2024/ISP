@@ -94,9 +94,12 @@ public class GptService {
     private String makeQuestion(GptScheduleRequest questionRequestDTO) {
         return String.format(GptConfig.PROMPT,
                 questionRequestDTO.getDestination(),
+                questionRequestDTO.getPurpose(),
+                questionRequestDTO.getIncludedActivities(),
+                questionRequestDTO.getExcludedActivities(),
                 questionRequestDTO.getDepartureDate(),
                 questionRequestDTO.getReturnDate(),
-                String.join(ParsingConstants.COMMA, questionRequestDTO.getPurpose())
+        String.join(ParsingConstants.COMMA, questionRequestDTO.getPurpose())
         );
     }
 }

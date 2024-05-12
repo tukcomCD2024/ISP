@@ -15,5 +15,4 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     @Query("SELECT s FROM Schedule s WHERE s.member = :member AND s.activated = true ORDER BY s.updatedAt DESC")
     List<Schedule> findSchedulesByMember(@Param("member") Member member);
 
-
 }

@@ -116,7 +116,6 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-
     /** 멤버 정보 조회 **/
     @Override
     public MemberDetailResponse getMemberInfo (String uid) {

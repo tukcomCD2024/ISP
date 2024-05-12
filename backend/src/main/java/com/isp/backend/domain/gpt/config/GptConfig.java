@@ -10,7 +10,7 @@ public class GptConfig {
     public static final Integer MAX_TOKEN = 4095;
     public static final Boolean STREAM = false;
     public static final String ROLE = "user";
-    public static final Double TEMPERATURE = 1.5;
+    public static final Double TEMPERATURE = 1.0;
     public static final String MEDIA_TYPE = "application/json; charset=UTF-8";
     public static final String CHAT_URL = "https://api.openai.com/v1/chat/completions";
     public static final String PROMPT = """

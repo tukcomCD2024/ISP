@@ -39,9 +39,6 @@ public class Schedule extends BaseEntity {
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
     private List<ScheduleDetail> scheduleDetails = new ArrayList<>();
 
-    // FK 연결 필요
-    private String bookingId;
-
     private String startDate;
 
     private String endDate;

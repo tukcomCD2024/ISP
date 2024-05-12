@@ -37,7 +37,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleMapper scheduleMapper;
 
     
-    /** 여행 일정 저장 API **/
+    /** 여행 일정 저장 **/
     @Transactional
     @Override
     public void saveSchedule(String uid, ScheduleSaveRequest scheduleSaveRequest) {
@@ -52,7 +52,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
 
-    /** 여행 일정 목록 조회 API **/
+    /** 여행 일정 목록 조회 **/
     @Override
     public List<ScheduleListResponse> getScheduleList(String uid) {
         Member findMember = validateUserCheck(uid);
@@ -65,7 +65,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
 
-    /** 여행 일정 상세 조회 API **/
+    /** 여행 일정 상세 조회 **/
     @Override
     public ScheduleSaveRequest getScheduleDetail(String uid, Long scheduleId) {
         Member findMember = validateUserCheck(uid);
@@ -75,27 +75,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
 
-    /** 여행 일정 삭제 API **/
-    @Transactional
-    @Override
-    public void deleteSchedule(String uid, Long scheduleId) {
-        Member findMember = validateUserCheck(uid);
-        Schedule findSchedule = validateSchedule(scheduleId);
-
-        // 자신의 여행 일정인지 확인
-        if (!findSchedule.getMember().equals(findMember)) {
-            throw new NotYourScheduleException();
-        }
-
-        // ScheduleDetail 테이블 데이터 삭제
-        scheduleDetailRepository.deleteBySchedule(findSchedule);
-        findSchedule.setActivated(false);
-
-        scheduleRepository.save(findSchedule);
-    }
-
-
-    /** 여행 일정 수정 API **/
+    /** 여행 일정 수정 **/
     @Transactional
     @Override
     public ScheduleSaveRequest updateSchedule(String uid, Long scheduleId, ScheduleSaveRequest updateRequestDTO) {
@@ -126,6 +106,25 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         // 수정된 일정을 반환 -- 없애도 됨 public void 로 추후 변경 가능
         return updateRequestDTO;
+    }
+
+
+    /** 여행 일정 삭제 **/
+    @Transactional
+    @Override
+    public void deleteSchedule(String uid, Long scheduleId) {
+        Member findMember = validateUserCheck(uid);
+        Schedule findSchedule = validateSchedule(scheduleId);
+        // 자신의 여행 일정인지 확인
+        if (!findSchedule.getMember().equals(findMember)) {
+            throw new NotYourScheduleException();
+        }
+
+        // ScheduleDetail 테이블 데이터 삭제
+        scheduleDetailRepository.deleteBySchedule(findSchedule);
+        findSchedule.setActivated(false);
+
+        scheduleRepository.save(findSchedule);
     }
 
 

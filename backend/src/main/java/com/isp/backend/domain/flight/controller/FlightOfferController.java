@@ -41,7 +41,7 @@ public class FlightOfferController {
 
 
     /** 항공권 선택시 스카이스캐너 사이트로 연결 API **/
-    @PostMapping("/skyscanner")
+    @PostMapping("/connect")
     public ResponseEntity<String> getFlightSearchUrl(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                                      @RequestBody SkyScannerRequest request) {
         String memberUid = customUserDetails.getUsername();

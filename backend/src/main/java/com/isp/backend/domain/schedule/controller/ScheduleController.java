@@ -18,19 +18,7 @@ public class ScheduleController {
 
     private final ScheduleServiceImpl scheduleServiceImpl;
 
-    /**
-     * 여행 일정 목록 조회 API
-     */
-    @GetMapping()
-    public ResponseEntity<List<ScheduleListResponse>> getScheduleList(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        String uid = userDetails.getUsername();
-        List<ScheduleListResponse> scheduleList = scheduleServiceImpl.getScheduleList(uid);
-        return ResponseEntity.ok(scheduleList);
-    }
-
-    /**
-     * 여행 일정 저장 API
-     */
+    /** 여행 일정 저장 API **/
     @PostMapping()
     public ResponseEntity<Void> saveSchedule(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                              @RequestBody ScheduleSaveRequest requestDTO) {
@@ -38,32 +26,27 @@ public class ScheduleController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * 여행 일정 상세 조회 API
-     */
+
+    /** 여행 일정 목록 조회 API **/
+    @GetMapping()
+    public ResponseEntity<List<ScheduleListResponse>> getScheduleList(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        String memberUid = userDetails.getUsername();
+        List<ScheduleListResponse> scheduleList = scheduleServiceImpl.getScheduleList(memberUid);
+        return ResponseEntity.ok(scheduleList);
+    }
+
+
+    /** 여행 일정 상세 조회 API **/
     @GetMapping("/details/{scheduleId}")
     public ResponseEntity<ScheduleSaveRequest> getScheduleDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                  @PathVariable Long scheduleId) {
-        String uid = userDetails.getUsername();
-        ScheduleSaveRequest scheduleDetail = scheduleServiceImpl.getScheduleDetail(uid, scheduleId);
+        String memberUid = userDetails.getUsername();
+        ScheduleSaveRequest scheduleDetail = scheduleServiceImpl.getScheduleDetail(memberUid, scheduleId);
         return ResponseEntity.ok(scheduleDetail);
     }
 
-    /**
-     * 여행 일정 삭제 API
-     */
-    @DeleteMapping("/{scheduleId}")
-    public ResponseEntity<Void> deleteSchedule(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                               @PathVariable Long scheduleId) {
-        String uid = userDetails.getUsername();
-        scheduleServiceImpl.deleteSchedule(uid, scheduleId);
-        return ResponseEntity.ok().build();
-    }
 
-
-    /**
-     * 여행 일정 수정 API
-     */
+    /** 여행 일정 수정 API **/
     @PutMapping("/{scheduleId}")
     public ResponseEntity<ScheduleSaveRequest> updateSchedule(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                               @PathVariable Long scheduleId,
@@ -71,5 +54,16 @@ public class ScheduleController {
         ScheduleSaveRequest updatedSchedule = scheduleServiceImpl.updateSchedule(userDetails.getUsername(), scheduleId, requestDTO);
         return ResponseEntity.ok(updatedSchedule);
     }
+
+
+    /** 여행 일정 삭제 API **/
+    @DeleteMapping("/{scheduleId}")
+    public ResponseEntity<Void> deleteSchedule(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                               @PathVariable Long scheduleId) {
+        String memberUid = userDetails.getUsername();
+        scheduleServiceImpl.deleteSchedule(memberUid, scheduleId);
+        return ResponseEntity.ok().build();
+    }
+
 
 }

@@ -8,6 +8,8 @@ import com.isp.backend.global.exception.schedule.CountryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 public class CountryService {
@@ -17,15 +19,14 @@ public class CountryService {
 
 
     /** 여행지 좌표 찾기 **/
-    public LocationResponse findLocationByCity(String city) {
-        Country country = countryRepository.findIdByCity(city);
-        if (country == null) {
-            throw new CountryNotFoundException();
-        }
-        LocationResponse locationDTO = new LocationResponse();
-        locationDTO.setLatitude(country.getLatitude());
-        locationDTO.setLongitude(country.getLongitude());
-        return locationDTO;
+    public Optional<LocationResponse> findLocationByCity(String city) {
+        Optional<Country> findCountry = countryRepository.findIdByCity(city);
+        return findCountry.map(country -> {
+            LocationResponse locationDTO = new LocationResponse();
+            locationDTO.setLatitude(country.getLatitude());
+            locationDTO.setLongitude(country.getLongitude());
+            return locationDTO;
+        });
     }
 
 

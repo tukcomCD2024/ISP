@@ -12,6 +12,8 @@ import java.util.List;
 public class GptScheduleRequest {
     private String destination;
     private List<String> purpose;
+    private List<String> includedActivities;
+    private List<String> excludedActivities;
     private String departureDate;
     private String returnDate;
 }

@@ -4,7 +4,7 @@ import com.amadeus.exceptions.ResponseException;
 import com.isp.backend.domain.flight.dto.request.FlightLikeRequest;
 import com.isp.backend.domain.flight.dto.request.SkyScannerRequest;
 import com.isp.backend.domain.flight.dto.response.FlightLikeResponse;
-import com.isp.backend.domain.flight.service.FlightOfferServiceImpl;
+import com.isp.backend.domain.flight.service.FlightOfferService;
 import com.isp.backend.domain.flight.dto.request.FlightSearchRequest;
 import com.isp.backend.global.exception.flight.FlightSearchFailedException;
 import com.isp.backend.global.exception.flight.SkyScannerGenerateFailedException;
@@ -24,7 +24,7 @@ import java.util.List;
 public class FlightOfferController {
 
     @Autowired
-    private FlightOfferServiceImpl flightOfferServiceImpl;
+    private FlightOfferService flightOfferService;
 
     /** 항공권 검색 API **/
     @GetMapping("/search")
@@ -32,20 +32,12 @@ public class FlightOfferController {
                                                   @RequestBody FlightSearchRequest request) {
         String memberUid = customUserDetails.getUsername();
         try {
-            String flightOffersJson = flightOfferServiceImpl.getFlightOffers(request);
+            String flightOffersJson = flightOfferService.getFlightOffers(request);
             return ResponseEntity.ok(flightOffersJson);
         } catch (ResponseException e) {
             throw new FlightSearchFailedException();
         }
     }
-
-    /** 항공권 다른 사이트로 연결 API **/
-
-
-    /** 항공권 좋아요 API **/
-
-
-    /** 항공권 좋아요 목록 불러오기 API **/
 
 
     /** 항공권 선택시 스카이스캐너 사이트로 연결 API **/
@@ -54,7 +46,7 @@ public class FlightOfferController {
                                                      @RequestBody SkyScannerRequest request) {
         String memberUid = customUserDetails.getUsername();
         try {
-            String skyscannerUrl = flightOfferServiceImpl.generateSkyscannerUrl(request);
+            String skyscannerUrl = flightOfferService.generateSkyscannerUrl(request);
             return ResponseEntity.ok("{\"skyscannerUrl\": \"" + skyscannerUrl + "\"}");
         } catch (Exception e) {
             throw new SkyScannerGenerateFailedException();
@@ -67,7 +59,7 @@ public class FlightOfferController {
     public ResponseEntity<Void> addLikeFlight(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                               @RequestBody FlightLikeRequest flightLikeRequest) {
         String memberUid = customUserDetails.getUsername();
-        flightOfferServiceImpl.addLikeFlight(memberUid, flightLikeRequest);
+        flightOfferService.addLikeFlight(memberUid, flightLikeRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -75,7 +67,7 @@ public class FlightOfferController {
     @GetMapping("/likes")
     public ResponseEntity<List<FlightLikeResponse>> getLikedFlights(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         String memberUid = customUserDetails.getUsername();
-        List<FlightLikeResponse> likedFlights = flightOfferServiceImpl.getLikedFlights(memberUid);
+        List<FlightLikeResponse> likedFlights = flightOfferService.getLikedFlights(memberUid);
         return ResponseEntity.ok(likedFlights);
     }
 
@@ -84,7 +76,7 @@ public class FlightOfferController {
     public ResponseEntity<Void> deleteLikeFlight(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                                  @PathVariable Long id) {
         String memberUid = customUserDetails.getUsername();
-        flightOfferServiceImpl.deleteLikeFlight(memberUid, id);
+        flightOfferService.deleteLikeFlight(memberUid, id);
         return ResponseEntity.ok().build();
     }
 

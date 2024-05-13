@@ -16,6 +16,9 @@ public enum ErrorCode {
     ACCESS_TOKEN_IS_INVALID(HttpStatus.UNAUTHORIZED, "U004", "엑세스 토큰이 유효하지 않습니다."),
     REFRESH_TOKEN_IS_INVALID(HttpStatus.UNAUTHORIZED, "U005", "리프레시 토큰이 유효하지 않습니다."),
 
+    // Image
+    DIRECTORY_NAME_NOTFOUND(HttpStatus.NOT_FOUND,"I001","S3에서 해당 디렉토리의 이름을 찾을 수 없습니다."),
+
     // Schedule
     COUNTRY_NOT_FOUND(HttpStatus.NOT_FOUND, "S001", "여행할 국가를 찾을 수 없습니다."),
     SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "S002", "여행 일정을 찾을 수 없습니다."),

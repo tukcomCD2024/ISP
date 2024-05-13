@@ -6,7 +6,7 @@ import com.isp.backend.domain.flight.dto.request.SkyScannerRequest;
 import com.isp.backend.domain.flight.dto.response.FlightLikeResponse;
 import com.isp.backend.domain.flight.service.FlightOfferService;
 import com.isp.backend.domain.flight.dto.request.FlightSearchRequest;
-import com.isp.backend.global.exception.flight.FlightSearchFailedException;
+import com.isp.backend.global.exception.flight.AmadeusSearchFailedException;
 import com.isp.backend.global.exception.flight.SkyScannerGenerateFailedException;
 import com.isp.backend.global.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class FlightOfferController {
     private FlightOfferService flightOfferService;
 
     /** 항공권 검색 API **/
-    @GetMapping("/search")
+    @PostMapping("/search")
     public ResponseEntity<String> getFlightOffers(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                                   @RequestBody FlightSearchRequest request) {
         String memberUid = customUserDetails.getUsername();
@@ -35,7 +35,7 @@ public class FlightOfferController {
             String flightOffersJson = flightOfferService.getFlightOffers(request);
             return ResponseEntity.ok(flightOffersJson);
         } catch (ResponseException e) {
-            throw new FlightSearchFailedException();
+            throw new AmadeusSearchFailedException();
         }
     }
 

@@ -26,8 +26,8 @@ public enum ErrorCode {
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "S004", "이미지를 찾을 수 없습니다."),
     IATA_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "S005", "해당 국가의 공항 코드를 찾을 수 없습니다."),
 
-    // Flight
-    FLIGHT_SEARCH_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"F001", "힝공편 조회를 가져오는 중 오류를 발생했습니다."),
+    // Flight & Hotel
+    AMADEUS_SEARCH_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"F001", "아마데우스 요청을 가져오는 중 오류를 발생했습니다."),
     SKY_SCANNER_GENERATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"F002", "스카이스캐너 URL을 생성할 수 없습니다."),
     FLIGHT_NOT_FOUND(HttpStatus.NOT_FOUND, "F003", "해당 id의 항공권을 찾을 수 없습니다."),
     NOT_YOUR_FLIGHT(HttpStatus.UNAUTHORIZED, "F004", "사용자의 항공권이 아닙니다");

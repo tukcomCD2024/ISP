@@ -12,7 +12,6 @@ import com.isp.backend.domain.gpt.entity.GptMessage;
 import com.isp.backend.domain.gpt.entity.GptSchedule;
 import com.isp.backend.domain.gpt.entity.GptScheduleParser;
 import com.isp.backend.domain.schedule.service.ScheduleService;
-import com.isp.backend.global.s3.service.S3ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

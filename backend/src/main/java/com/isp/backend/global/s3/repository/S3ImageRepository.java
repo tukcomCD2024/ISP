@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 @Repository
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -24,14 +25,15 @@ public class S3ImageRepository {
         this.bucketName = bucketName;
     }
 
-    public String save(MultipartFile file) {
-        String key = S3BucketDirectory.IMAGE.getDirectory() + file.getOriginalFilename();
+    public String save(MultipartFile file, String directory) {
+        String uniqueFileName =  UUID.randomUUID() + "-" + file.getOriginalFilename() ;
+        String key = directory + uniqueFileName;
         final S3Resource result = s3template.upload(bucketName, key, getInputStream(file));
         return getUrl(result);
     }
 
-    public String find(String filename) {
-        String key = S3BucketDirectory.IMAGE.getDirectory() + filename;
+    public String find(String directory, String filename) {
+        String key = directory + filename;
         final S3Resource result = s3template.download(bucketName, key);
         return getUrl(result);
     }

@@ -1,5 +1,6 @@
 package com.isp.backend.domain.gpt.service;
 
+import com.isp.backend.domain.country.entity.Country;
 import com.isp.backend.domain.gpt.config.GptConfig;
 import com.isp.backend.domain.gpt.constant.ParsingConstants;
 import com.isp.backend.domain.gpt.dto.request.GptRequest;
@@ -9,6 +10,7 @@ import com.isp.backend.domain.gpt.dto.response.GptScheduleResponse;
 import com.isp.backend.domain.gpt.entity.GptMessage;
 import com.isp.backend.domain.gpt.entity.GptSchedule;
 import com.isp.backend.domain.gpt.entity.GptScheduleParser;
+import com.isp.backend.domain.schedule.service.ScheduleService;
 import com.isp.backend.global.s3.service.S3ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +33,7 @@ public class GptService {
     private final RestTemplate restTemplate;
     private final GptScheduleParser gptScheduleParser;
     private final S3ImageService s3ImageService;
+    private final ScheduleService scheduleService;
 
     @Value("${api-key.chat-gpt}")
     private String apiKey;
@@ -53,7 +56,9 @@ public class GptService {
                 GptConfig.CHAT_URL,
                 chatGptRequestHttpEntity,
                 GptResponse.class);
-        String countryImage = s3ImageService.get(destination);
+
+        Country country = scheduleService.validateCountry(destination);
+        String countryImage = country.getImageUrl();
         List<GptSchedule> gptSchedules = gptScheduleParser.parseScheduleText(getScheduleText(responseEntity));
 
         return new GptScheduleResponse(countryImage, gptSchedules);

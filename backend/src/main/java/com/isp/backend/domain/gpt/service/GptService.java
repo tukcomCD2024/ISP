@@ -34,7 +34,6 @@ import java.util.List;
 public class GptService {
     private final RestTemplate restTemplate;
     private final GptScheduleParser gptScheduleParser;
-    private final S3ImageService s3ImageService;
     private final ScheduleService scheduleService;
 
     @Value("${api-key.chat-gpt}")
@@ -59,8 +58,6 @@ public class GptService {
                 chatGptRequestHttpEntity,
                 GptResponse.class);
 
-        Country country = scheduleService.validateCountry(destination);
-        String countryImage = country.getImageUrl();
         List<GptSchedule> gptSchedules = gptScheduleParser.parseScheduleText(getScheduleText(responseEntity));
 
         return new GptScheduleResponse(gptSchedules);
@@ -83,7 +80,8 @@ public class GptService {
                         .build()
         );
 
-        String countryImage = s3ImageService.get(questionRequestDTO.getDestination());
+        Country country = scheduleService.validateCountry(questionRequestDTO.getDestination());
+        String countryImage = country.getImageUrl();
         List<GptScheduleResponse> schedules = new ArrayList<>();
         for(int i = 0; i < 3; i++) {
             schedules.add(

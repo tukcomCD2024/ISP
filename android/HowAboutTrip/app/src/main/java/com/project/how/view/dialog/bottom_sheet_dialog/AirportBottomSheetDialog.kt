@@ -6,34 +6,39 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.project.how.R
 import com.project.how.adapter.recyclerview.RadioButtonAdapter
-import com.project.how.databinding.DesBottomSheetBinding
-import com.project.how.interface_af.OnDesListener
+import com.project.how.databinding.AirportBottomSheetBinding
+import com.project.how.interface_af.interface_ff.OnAirportListener
 import com.project.how.view.dialog.ConfirmDialog
-import com.project.how.view.dialog.bottom_sheet_dialog.ratio.BottomSheetRatioHeightManager
 import kotlinx.coroutines.launch
 
-class DesBottomSheetDialog(private val onDesListener: OnDesListener) : BottomSheetDialogFragment(), RadioButtonAdapter.OnItemClickListener  {
-    private var _binding: DesBottomSheetBinding? = null
-    private val binding: DesBottomSheetBinding
+class AirportBottomSheetDialog(private val type: Int, private val onAirportListener: OnAirportListener) : BottomSheetDialogFragment(), RadioButtonAdapter.OnItemClickListener {
+    private var _binding : AirportBottomSheetBinding? = null
+    private val binding : AirportBottomSheetBinding
         get() = _binding!!
-    private lateinit var japanPlaces : MutableList<String>
-    private lateinit var europePlaces : MutableList<String>
-    private lateinit var americaPlaces : MutableList<String>
-    private lateinit var southeastAsiaPlaces : MutableList<String>
+    private lateinit var koreaAirports : MutableList<String>
+    private lateinit var japanAirports : MutableList<String>
+    private lateinit var europeAirports : MutableList<String>
+    private lateinit var americaAirports : MutableList<String>
+    private lateinit var southeastAsiaAirports : MutableList<String>
+    private lateinit var koreaAdapter: RadioButtonAdapter
     private lateinit var japanAdapter : RadioButtonAdapter
     private lateinit var europeAdapter : RadioButtonAdapter
     private lateinit var americaAdapter : RadioButtonAdapter
     private lateinit var southeastAsiaAdapter: RadioButtonAdapter
-    private var des : String? = null
+    private var airport : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch {
-            japanPlaces = mutableListOf(
+            koreaAirports = mutableListOf(
+                "인천",
+                "김포"
+            )
+
+            japanAirports = mutableListOf(
                 getString(R.string.tokyo),
                 getString(R.string.osaka),
                 getString(R.string.fukuoka),
@@ -42,9 +47,7 @@ class DesBottomSheetDialog(private val onDesListener: OnDesListener) : BottomShe
                 getString(R.string.kyoto),
                 getString(R.string.kyushu))
 
-            japanAdapter = RadioButtonAdapter(japanPlaces, false,this@DesBottomSheetDialog, RadioButtonAdapter.JAPAN)
-
-            europePlaces = mutableListOf(
+            europeAirports = mutableListOf(
                 getString(R.string.england),
                 getString(R.string.france),
                 getString(R.string.germany),
@@ -54,9 +57,8 @@ class DesBottomSheetDialog(private val onDesListener: OnDesListener) : BottomShe
                 getString(R.string.austria),
                 getString(R.string.czech)
             )
-            europeAdapter = RadioButtonAdapter(europePlaces, false, this@DesBottomSheetDialog, RadioButtonAdapter.EUROPE)
 
-            americaPlaces = mutableListOf(
+            americaAirports = mutableListOf(
                 getString(R.string.newyork),
                 getString(R.string.washington),
                 getString(R.string.hawaii),
@@ -66,9 +68,7 @@ class DesBottomSheetDialog(private val onDesListener: OnDesListener) : BottomShe
                 getString(R.string.guam)
             )
 
-            americaAdapter = RadioButtonAdapter(americaPlaces, false,this@DesBottomSheetDialog, RadioButtonAdapter.AMERICA)
-
-            southeastAsiaPlaces = mutableListOf(
+            southeastAsiaAirports = mutableListOf(
                 getString(R.string.singapore),
                 getString(R.string.taiwan),
                 getString(R.string.laos),
@@ -84,7 +84,8 @@ class DesBottomSheetDialog(private val onDesListener: OnDesListener) : BottomShe
                 getString(R.string.borikai)
             )
 
-            southeastAsiaAdapter = RadioButtonAdapter(southeastAsiaPlaces, false,this@DesBottomSheetDialog, RadioButtonAdapter.SOUTHEAST_ASIA)
+            koreaAdapter = RadioButtonAdapter(koreaAirports, false, this@AirportBottomSheetDialog, RadioButtonAdapter.KOREA)
+
         }
     }
 
@@ -93,46 +94,30 @@ class DesBottomSheetDialog(private val onDesListener: OnDesListener) : BottomShe
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = DataBindingUtil.inflate(inflater, R.layout.des_bottom_sheet, container, false)
-        binding.des = this
+        _binding = DataBindingUtil.inflate(inflater, R.layout.airport_bottom_sheet, container, false)
+        binding.airport = this
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.japanPlaces.adapter = japanAdapter
-        binding.europePlaces.adapter = europeAdapter
-        binding.americaPlaces.adapter = americaAdapter
-        binding.southeastAsiaPlaces.adapter = southeastAsiaAdapter
-        dialog?.setOnShowListener {
-            val bottomSheetDialog = it as BottomSheetDialog
-            BottomSheetRatioHeightManager().setRatio(bottomSheetDialog, requireContext(), 75)
-        }
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     fun confirm(){
-        if (des == null){
+        if (airport == null){
             val message = listOf<String>(resources.getString(R.string.destination))
             val confirm = ConfirmDialog(message)
             confirm.show(childFragmentManager, "ConfirmDialog")
         }else{
-            onDesListener.onDesListener(des!!)
+            onAirportListener.onAirportListener(type, airport!!)
             dismiss()
         }
     }
 
     override fun onItemClickListener(data: String, type: Int) {
-        when(type){
-            RadioButtonAdapter.JAPAN->{
-                lifecycleScope.launch {
-                    des = data
+        lifecycleScope.launch {
+            when(type){
+                RadioButtonAdapter.KOREA->{
+                    airport = data
+                    japanAdapter.reset()
+                    japanAdapter.notifyDataSetChanged()
                     europeAdapter.reset()
                     europeAdapter.notifyDataSetChanged()
                     americaAdapter.reset()
@@ -140,10 +125,21 @@ class DesBottomSheetDialog(private val onDesListener: OnDesListener) : BottomShe
                     southeastAsiaAdapter.reset()
                     southeastAsiaAdapter.notifyDataSetChanged()
                 }
-            }
-            RadioButtonAdapter.EUROPE->{
-                lifecycleScope.launch {
-                    des = data
+                RadioButtonAdapter.JAPAN->{
+                    airport = data
+                    koreaAdapter.reset()
+                    koreaAdapter.notifyDataSetChanged()
+                    europeAdapter.reset()
+                    europeAdapter.notifyDataSetChanged()
+                    americaAdapter.reset()
+                    americaAdapter.notifyDataSetChanged()
+                    southeastAsiaAdapter.reset()
+                    southeastAsiaAdapter.notifyDataSetChanged()
+                }
+                RadioButtonAdapter.EUROPE->{
+                    airport = data
+                    koreaAdapter.reset()
+                    koreaAdapter.notifyDataSetChanged()
                     japanAdapter.reset()
                     japanAdapter.notifyDataSetChanged()
                     americaAdapter.reset()
@@ -151,10 +147,10 @@ class DesBottomSheetDialog(private val onDesListener: OnDesListener) : BottomShe
                     southeastAsiaAdapter.reset()
                     southeastAsiaAdapter.notifyDataSetChanged()
                 }
-            }
-            RadioButtonAdapter.AMERICA->{
-                lifecycleScope.launch {
-                    des = data
+                RadioButtonAdapter.AMERICA->{
+                    airport = data
+                    koreaAdapter.reset()
+                    koreaAdapter.notifyDataSetChanged()
                     japanAdapter.reset()
                     japanAdapter.notifyDataSetChanged()
                     europeAdapter.reset()
@@ -162,10 +158,10 @@ class DesBottomSheetDialog(private val onDesListener: OnDesListener) : BottomShe
                     southeastAsiaAdapter.reset()
                     southeastAsiaAdapter.notifyDataSetChanged()
                 }
-            }
-            RadioButtonAdapter.SOUTHEAST_ASIA->{
-                lifecycleScope.launch {
-                    des = data
+                RadioButtonAdapter.SOUTHEAST_ASIA->{
+                    airport = data
+                    koreaAdapter.reset()
+                    koreaAdapter.notifyDataSetChanged()
                     japanAdapter.reset()
                     japanAdapter.notifyDataSetChanged()
                     europeAdapter.reset()
@@ -175,5 +171,10 @@ class DesBottomSheetDialog(private val onDesListener: OnDesListener) : BottomShe
                 }
             }
         }
+    }
+
+    companion object{
+        const val DEPARTURE = 1
+        const val DESTINATION = 2
     }
 }

@@ -3,6 +3,7 @@ package com.project.how.view.activity.ai
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
@@ -37,16 +38,12 @@ class AiScheduleListActivity : AppCompatActivity(), AiScheduleAdapter.OnClickLis
 
         lat = intent.getDoubleExtra(getString(R.string.server_calendar_latitude), 0.0)
         lng = intent.getDoubleExtra(getString(R.string.server_calendar_longitude), 0.0)
+        Log.d("AiScheduleListActivity", "lat : $lat\tlng : $lng\ndata size : ${data.size}")
         data = CalendarEditActivity.getSerializable(this, getString(R.string.aischedule), AiScheduleList::class.java).aiSchedules.toMutableList()
 
-        aiScheduleViewModel.getTestData()
+        binding.scheduleList.adapter = AiScheduleAdapter(this, data, this)
 
-        aiScheduleViewModel.aiScheduleLiveData.observe(this){
-            data.add(it)
-            data.add(it)
-            adapter = AiScheduleAdapter(this@AiScheduleListActivity, data, this)
-            binding.scheduleList.adapter = adapter
-        }
+
     }
 
     override fun onCreateButtonClicker(data: AiSchedule) {

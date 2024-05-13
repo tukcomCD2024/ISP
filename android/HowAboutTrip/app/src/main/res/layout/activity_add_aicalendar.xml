@@ -116,7 +116,7 @@
                     android:id="@+id/theme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="20dp"
                     android:text="@string/trip_theme"
                     android:textColor="@color/black"
                     android:textSize="16sp"
@@ -156,7 +156,7 @@
                     android:id="@+id/activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="20dp"
                     android:text="@string/want_activity"
                     android:textSize="16sp"
                     android:textColor="@color/black"
@@ -196,7 +196,7 @@
                     android:id="@+id/excluding_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="20dp"
                     android:text="@string/except_theme"
                     android:textSize="16sp"
                     android:textColor="@color/black"
@@ -236,7 +236,7 @@
                     android:id="@+id/date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="20dp"
                     android:text="@string/trip_date"
                     android:textSize="16sp"
                     android:textColor="@color/black"
@@ -254,7 +254,7 @@
                     android:text="@string/input"
                     android:textColor="@color/white"
                     android:textSize="13sp"
-                    android:onClick="@{() -> ai.showCalendar()}"
+                    android:onClick="@{() -> ai.showWarningDialog()}"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintEnd_toEndOf="@id/guideline"
                     app:layout_constraintStart_toEndOf="@id/date_output"
@@ -276,7 +276,7 @@
                     style="@style/Button.BlackRound"
                     android:layout_width="75dp"
                     android:layout_height="22dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="30dp"
                     android:drawableStart="@drawable/icon_search_size_fixed"
                     android:gravity="center"
                     android:paddingHorizontal="15dp"
@@ -337,11 +337,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
-        <DatePicker
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

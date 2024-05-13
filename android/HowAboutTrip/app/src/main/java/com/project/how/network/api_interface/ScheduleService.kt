@@ -20,7 +20,7 @@ import retrofit2.http.Path
 interface ScheduleService {
     @POST("gpt/schedules")
     fun createSchedule(
-        @Body createCondition : CreateScheduleRequest
+        @Body createCondition : CreateScheduleListRequest
     ) : Call<CreateScheduleResponse>
 
     @POST("gpt/schedules")

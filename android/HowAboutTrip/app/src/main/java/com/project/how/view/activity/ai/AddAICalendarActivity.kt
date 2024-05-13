@@ -25,9 +25,11 @@ import com.project.how.interface_af.OnAddListener
 import com.project.how.interface_af.OnDesListener
 import com.project.how.interface_af.OnPurposeListener
 import com.project.how.interface_af.OnActivityListener
+import com.project.how.interface_af.OnDialogListener
 import com.project.how.view.activity.calendar.CalendarEditActivity
 import com.project.how.view.dialog.AiScheduleDialog
 import com.project.how.view.dialog.ConfirmDialog
+import com.project.how.view.dialog.WarningDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.PurposeBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.ActivityBottomSheetDialog
@@ -40,7 +42,7 @@ import java.util.Calendar
 import java.util.TimeZone
 
 class AddAICalendarActivity :
-    AppCompatActivity(), OnDesListener, OnPurposeListener, OnAddListener, OnActivityListener {
+    AppCompatActivity(), OnDesListener, OnPurposeListener, OnAddListener, OnActivityListener, OnDialogListener {
     private lateinit var binding : ActivityAddAicalendarBinding
     private val viewModel : AiScheduleViewModel by viewModels()
     private val scheduleViewModel : ScheduleViewModel by viewModels()
@@ -122,7 +124,7 @@ class AddAICalendarActivity :
         activity.show(supportFragmentManager, "ExcludingActivityBottomSheetDialog")
     }
 
-    fun showCalendar(){
+    private fun showCalendar(){
         val constraints = CalendarConstraints.Builder()
             .setStart(Calendar.getInstance().timeInMillis)
             .build()
@@ -144,33 +146,6 @@ class AddAICalendarActivity :
             entranceDate = formattedSecond
             departureDate = formatted
             binding.dateOutput.text = getString(R.string.date_text, formatted, formattedSecond)
-        }
-    }
-
-    fun search(){
-        lifecycleScope.launch {
-            if ((destination != null) && (departureDate != null) && (entranceDate != null)){
-                Log.d("aiScheduleLiveData", "start ${destination}, ${departureDate}, ${entranceDate}")
-                setUnEnabled()
-                load()
-                viewModel.getAiSchedule(AiScheduleInput(destination!!, purpose, departureDate!!, entranceDate!!)).collect {check ->
-                    if (!check){
-                        stopLoaing()
-                        setEnabled()
-                        Toast.makeText(this@AddAICalendarActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }else{
-                val message = mutableListOf<String>()
-                if (destination == null)
-                    message.add(resources.getString(R.string.destination))
-                if (departureDate == null)
-                    message.add(resources.getString(R.string.departure_date))
-                if (entranceDate == null)
-                    message.add(resources.getString(R.string.entrance_date))
-
-                showConfirmDialog(message)
-            }
         }
     }
 
@@ -235,6 +210,8 @@ class AddAICalendarActivity :
     private fun moveAiScheduleList(){
         val intent = Intent(this, AiScheduleListActivity::class.java)
         intent.putExtra(getString(R.string.aischedule), AiScheduleList(aiScheduleList))
+        intent.putExtra(getString(R.string.server_calendar_latitude), latLng?.lat)
+        intent.putExtra(getString(R.string.server_calendar_longitude), latLng?.lng)
         startActivity(intent)
     }
     private fun showAiSchedule(data : AiSchedule){
@@ -245,6 +222,11 @@ class AddAICalendarActivity :
     private fun showConfirmDialog(message : MutableList<String>){
         val confirm = ConfirmDialog(message)
         confirm.show(supportFragmentManager, "ConfirmDialog")
+    }
+
+    fun showWarningDialog(){
+        val warning = WarningDialog(getString(R.string.ai_date_range_warning), this)
+        warning.show(supportFragmentManager, "WarningDialog")
     }
 
     override fun onDesListener(des: String) {
@@ -335,5 +317,9 @@ class AddAICalendarActivity :
         intent.putExtra(getString(R.string.server_calendar_longitude), latLng!!.lng)
         startActivity(intent)
         finish()
+    }
+
+    override fun onDismissListener() {
+        showCalendar()
     }
 }

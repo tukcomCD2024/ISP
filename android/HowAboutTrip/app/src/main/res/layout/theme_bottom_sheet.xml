@@ -85,7 +85,7 @@
                         android:orientation="horizontal"
                         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
                         app:layout_constraintTop_toBottomOf="@+id/sport"
-                        app:spanCount="3"
+                        app:spanCount="4"
                         tools:listitem="@layout/simple_radiobutton_item" />
 
                     <TextView
@@ -108,7 +108,7 @@
                         android:orientation="horizontal"
                         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
                         app:layout_constraintTop_toBottomOf="@+id/nature"
-                        app:spanCount="3"
+                        app:spanCount="4"
                         tools:layout_editor_absoluteX="29dp"
                         tools:listitem="@layout/simple_radiobutton_item" />
 

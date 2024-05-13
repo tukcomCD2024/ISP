@@ -71,6 +71,7 @@ class RadioButtonAdapter(data: List<String>, private val multiple : Boolean, pri
     interface OnItemClickListener{
         fun onItemClickListener(data: String, type : Int)
     }companion object{
+        const val KOREA = 0
         const val JAPAN = 1
         const val EUROPE = 2
         const val AMERICA = 3

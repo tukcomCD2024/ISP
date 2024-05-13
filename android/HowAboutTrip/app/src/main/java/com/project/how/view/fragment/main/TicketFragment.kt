@@ -1,5 +1,6 @@
 package com.project.how.view.fragment.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import com.project.how.data_class.recyclerview.EventViewPager
 import com.project.how.data_class.recyclerview.RecentAirplane
 import com.project.how.data_class.recyclerview.RecentHotel
 import com.project.how.databinding.FragmentTicketBinding
+import com.project.how.view.activity.ticket.AirplaneSearchActivity
 
 class TicketFragment : Fragment(), RecentHotelAdapter.OnItemClickListener {
     private var _binding : FragmentTicketBinding? = null
@@ -66,5 +68,9 @@ class TicketFragment : Fragment(), RecentHotelAdapter.OnItemClickListener {
     }
 
     override fun onItemClickListener(id: Long) {
+    }
+
+    fun moveAirplaneSearch(){
+        startActivity(Intent(activity, AirplaneSearchActivity::class.java))
     }
 }

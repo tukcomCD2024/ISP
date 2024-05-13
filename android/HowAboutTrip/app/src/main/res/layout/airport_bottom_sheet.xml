@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="airport"
+            type="com.project.how.view.dialog.bottom_sheet_dialog.AirportBottomSheetDialog" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/white_round_bottom_sheet_background"
+        app:behavior_hideable="true"
+        app:behavior_draggable="true"
+        android:paddingHorizontal="29dp"
+        android:paddingTop="45dp"
+        android:paddingBottom="30dp"
+        app:layout_behavior="com.google.android.material.bottom-sheet.BottomSheetBehavior">
+
+        <TextView
+            android:id="@+id/korea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/korea"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/korea_places"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/simple_radiobutton_item"
+            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            app:spanCount="1"
+            app:layout_constraintTop_toBottomOf="@+id/korea" />
+
+        <TextView
+            android:id="@+id/japan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/bm_hanna"
+            android:text="@string/japan"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/korea_places" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/japan_places"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/simple_radiobutton_item"
+            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            app:spanCount="2"
+            app:layout_constraintTop_toBottomOf="@+id/japan" />
+
+        <TextView
+            android:id="@+id/europe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/bm_hanna"
+            android:text="@string/europe"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/japan_places" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/europe_places"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/simple_radiobutton_item"
+            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            app:spanCount="2"
+            app:layout_constraintTop_toBottomOf="@+id/europe" />
+
+        <TextView
+            android:id="@+id/america"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/bm_hanna"
+            android:text="@string/america"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/europe_places" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/america_places"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/simple_radiobutton_item"
+            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            app:spanCount="2"
+            app:layout_constraintTop_toBottomOf="@+id/america" />
+
+        <TextView
+            android:id="@+id/southeast_asia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/bm_hanna"
+            android:text="@string/southeast_asia"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/america_places" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/southeast_asia_places"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/simple_radiobutton_item"
+            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            app:spanCount="4"
+            app:layout_constraintTop_toBottomOf="@+id/southeast_asia" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/Button.BlackRound"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="40dp"
+            android:onClick="@{()->airport.confirm()}"
+            android:text="@string/confirm"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/southeast_asia_places" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="15dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

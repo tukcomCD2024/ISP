@@ -98,7 +98,7 @@ class EditScheduleBottomSheetDialog(private val lat : Double, private val lng : 
 
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
-                Log.i("onPlaceSelected", "Place: ${place.name}, ${place.id}\nlatitude:${place.latLng.latitude}\tlongitude:${place.latLng.longitude}")
+                Log.i("onPlaceSelected", "Place: ${place.name}, ${place.id}\nlatitude:${place.latLng?.latitude}\tlongitude:${place.latLng?.longitude}")
                 supportMapFragment.getMapAsync { map ->
 
                     val placeLocation = LatLng(place.latLng.latitude, place.latLng.longitude)

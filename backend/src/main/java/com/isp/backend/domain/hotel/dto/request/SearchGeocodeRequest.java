@@ -13,5 +13,8 @@ public class SearchGeocodeRequest {
 
     private String longitude;
 
+    private int radius ;
+
+    private String ratings ; // 호텔 등급
 
 }

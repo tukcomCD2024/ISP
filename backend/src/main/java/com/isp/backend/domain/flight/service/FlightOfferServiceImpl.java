@@ -47,17 +47,21 @@ public class FlightOfferServiceImpl implements FlightOfferService {
         String originLocationCode = findAirportCode(request.getOriginCity());
         String destinationLocationCode = findAirportCode(request.getDestinationCity());
 
-        FlightOfferSearch[] flightOffers = amadeus.shopping.flightOffersSearch.get(
-                Params.with("originLocationCode", originLocationCode)
-                        .and("destinationLocationCode", destinationLocationCode)
-                        .and("departureDate", request.getDepartureDate())
-                        .and("returnDate", request.getReturnDate())
-                        .and("adults", request.getAdults())
-                        .and("children", request.getChildren())
-                        .and("max", request.getMax())
-                        .and("nonStop", request.isNonStop())
-                        .and("currencyCode","KRW")  // 원화 설정 -> 추후 유저에게 입력받을 수 있게 남겨둠
-        );
+        Params params = Params.with("originLocationCode", originLocationCode)
+                .and("destinationLocationCode", destinationLocationCode)
+                .and("departureDate", request.getDepartureDate())
+                .and("adults", request.getAdults())
+                .and("children", request.getChildren())
+                .and("max", request.getMax())
+                .and("nonStop", request.isNonStop())
+                .and("currencyCode", "KRW");  // 원화 설정 -> 추후 유저에게 입력받을 수 있게 남겨둠
+
+        // returnDate가 빈 문자열이 아닌 경우에만 파라미터 추가
+        if (request.getReturnDate() != null && !request.getReturnDate().isEmpty()) {
+            params.and("returnDate", request.getReturnDate());
+        }
+
+        FlightOfferSearch[] flightOffers = amadeus.shopping.flightOffersSearch.get(params);
 
         Gson gson = new Gson();
         String flightOffersJson = gson.toJson(flightOffers);

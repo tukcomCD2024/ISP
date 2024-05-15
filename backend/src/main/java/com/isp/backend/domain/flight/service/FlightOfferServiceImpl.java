@@ -82,7 +82,7 @@ public class FlightOfferServiceImpl implements FlightOfferService {
                 request.getArrivalIataCode().toLowerCase() + "/" +
                 departureDate + "/" +
                 returnDate + "/?adultsv2=" + request.getAdults() +
-                "&cabinclass=economy&childrenv2=" + request.getChildren() + "%7C" + request.getChildren() +
+//                "&cabinclass=economy&childrenv2=" + request.getChildren() + "%7C" + request.getChildren() +
                 "&departure-times=" + departureTimeMinutes +
                 "&inboundaltsenabled=false&outboundaltsenabled=false&ref=home&rtn=" + (returnDate.isEmpty() ? "0" : "1");
 

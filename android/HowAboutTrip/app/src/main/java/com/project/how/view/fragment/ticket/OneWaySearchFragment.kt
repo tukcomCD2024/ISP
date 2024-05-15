@@ -10,11 +10,13 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.project.how.R
+import com.project.how.data_class.dto.GetFlightOffersRequest
 import com.project.how.databinding.FragmentOneWaySearchBinding
 import com.project.how.interface_af.OnDesListener
 import com.project.how.interface_af.interface_ff.OnAirportListener
 import com.project.how.view.dialog.bottom_sheet_dialog.AirportBottomSheetDialog
 import com.project.how.view_model.BookingViewModel
+import com.project.how.view_model.MemberViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.TimeZone
@@ -26,8 +28,8 @@ class OneWaySearchFragment : Fragment(), OnAirportListener {
     private val bookingViewModel : BookingViewModel by viewModels()
     private var date : String? = null
     private var connectingFlightCheck = true
-    private lateinit var destination : String
-    private lateinit var departure : String
+    private var destination : String? = null
+    private var departure : String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,6 +71,15 @@ class OneWaySearchFragment : Fragment(), OnAirportListener {
 
     fun search(){
 
+    }
+
+    fun swap(){
+        val temp = departure
+        departure = destination
+        destination = temp
+
+        binding.departure.text = departure
+        binding.destination.text = destination
     }
 
     override fun onAirportListener(type: Int, airport: String) {

@@ -77,6 +77,8 @@
                 android:src="@drawable/icon_swap"
                 android:scaleType="fitXY"
                 android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="20dp"
+                android:onClick="@{()->one_way.swap()}"
                 app:layout_constraintStart_toEndOf="@+id/departure"
                 app:layout_constraintTop_toTopOf="@+id/guideline_top"
                 app:layout_constraintEnd_toStartOf="@+id/destination"/>

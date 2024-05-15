@@ -15,7 +15,7 @@ import retrofit2.http.Header
 import retrofit2.http.Path
 
 interface BookingService {
-    @GET("bookings/flights/search")
+    @POST("bookings/flights/search")
     fun getFlightOffers(
         @Header("Authorization") accessToken : String,
         @Body getFlightOffersRequest: GetFlightOffersRequest

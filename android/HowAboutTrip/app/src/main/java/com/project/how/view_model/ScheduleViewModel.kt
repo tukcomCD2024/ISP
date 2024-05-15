@@ -20,8 +20,6 @@ import com.project.how.network.client.ScheduleRetrofit
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback

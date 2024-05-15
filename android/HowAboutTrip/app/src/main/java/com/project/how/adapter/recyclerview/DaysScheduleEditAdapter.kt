@@ -1,6 +1,7 @@
 package com.project.how.adapter.recyclerview
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -122,13 +123,25 @@ class DaysScheduleEditAdapter (
     fun getData() = dailySchedule
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
-        Collections.swap(dailySchedule, fromPosition, toPosition)
+        Log.d("addOnItemTouchListener", "onItemMove start\nfrom : $fromPosition\tto : $toPosition")
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(dailySchedule, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(dailySchedule, i, i - 1)
+            }
+        }
+        Log.d("addOnItemTouchListener", "onItemMove if for end")
         notifyItemMoved(fromPosition, toPosition)
+        Log.d("addOnItemTouchListener", "onItemMove notifyItemMoved end")
         return true
     }
 
-    override fun onDropAdapter() {
+    override fun onDropAdapter(fromPosition: Int, toPosition: Int) : Boolean {
         onItemDragListener?.onDropActivity(initList, dailySchedule)
+        return true
     }
 
     interface OnDaysButtonClickListener{

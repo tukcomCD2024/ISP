@@ -25,9 +25,6 @@ import kotlinx.coroutines.launch
 class AiScheduleListActivity : AppCompatActivity(), AiScheduleAdapter.OnClickListener {
     private lateinit var binding : ActivityAiScheduleListBinding
     private var data = mutableListOf<AiSchedule>()
-    private lateinit var adapter : AiScheduleAdapter
-    private val scheduleViewModel : ScheduleViewModel by viewModels()
-    private val aiScheduleViewModel : AiScheduleViewModel by viewModels() //임시 테스트
     private var lat = 0.0
     private var lng = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {

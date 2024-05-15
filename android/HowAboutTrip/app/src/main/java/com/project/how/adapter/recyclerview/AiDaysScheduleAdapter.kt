@@ -15,13 +15,13 @@ class AiDaysScheduleAdapter(data: List<AiDaysSchedule>)
         inner class ViewHolder(val binding: AiDaysScheduleItemBinding) : RecyclerView.ViewHolder(binding.root){
             fun bind(data : AiDaysSchedule, position: Int){
                 binding.scheduleTitle.text = data.places
-                if (position == 0)
-                    binding.topDottedLine.visibility = View.GONE
-                else if(position == dailySchedule.lastIndex)
-                    binding.bottomDottedLine.visibility = View.GONE
-                else{
-                    binding.topDottedLine.visibility = View.VISIBLE
-                    binding.bottomDottedLine.visibility = View.VISIBLE
+                when (position) {
+                    0 -> binding.topDottedLine.visibility = View.GONE
+                    dailySchedule.lastIndex -> binding.bottomDottedLine.visibility = View.GONE
+                    else -> {
+                        binding.topDottedLine.visibility = View.VISIBLE
+                        binding.bottomDottedLine.visibility = View.VISIBLE
+                    }
                 }
 
                 when(data.type){

@@ -8,13 +8,16 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup
+import android.view.ViewParent
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.NestedScrollView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -140,7 +143,7 @@ class CalendarEditActivity
             binding.scrollView.setOnTouchListener { v, event ->
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
-                        v.parent.requestDisallowInterceptTouchEvent(false)
+                        v.parent.parent.requestDisallowInterceptTouchEvent(false)
                     }
                 }
                 false
@@ -151,11 +154,35 @@ class CalendarEditActivity
                     initList: MutableList<DaysSchedule>,
                     changeList: MutableList<DaysSchedule>
                 ) {
+                    Log.d("addOnItemTouchListener", "itemDragListener\ndrop and getMapAsync")
                     supportMapFragment.getMapAsync(this@CalendarEditActivity)
                 }
 
             })
         }
+
+        binding.daySchedules.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                if (e.action == MotionEvent.ACTION_DOWN && rv.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
+                    var parent: ViewParent? = rv
+                    while (parent != null) {
+                        if (parent is NestedScrollView) {
+                            Log.d("addOnItemTouchListener", "parent.parent is NestedScrollView")
+                            parent.requestDisallowInterceptTouchEvent(true)
+                        }
+                        parent = parent.parent
+                    }
+                }
+
+                return false
+            }
+
+            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+        })
+
+
 
         binding.daysTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {

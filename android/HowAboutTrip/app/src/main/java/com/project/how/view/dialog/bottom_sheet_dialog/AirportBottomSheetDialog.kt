@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.project.how.R
 import com.project.how.adapter.recyclerview.RadioButtonAdapter
 import com.project.how.databinding.AirportBottomSheetBinding
 import com.project.how.interface_af.interface_ff.OnAirportListener
 import com.project.how.view.dialog.ConfirmDialog
+import com.project.how.view.dialog.bottom_sheet_dialog.ratio.BottomSheetRatioHeightManager
 import kotlinx.coroutines.launch
 
 class AirportBottomSheetDialog(private val type: Int, private val onAirportListener: OnAirportListener) : BottomSheetDialogFragment(), RadioButtonAdapter.OnItemClickListener {
@@ -85,6 +87,10 @@ class AirportBottomSheetDialog(private val type: Int, private val onAirportListe
             )
 
             koreaAdapter = RadioButtonAdapter(koreaAirports, false, this@AirportBottomSheetDialog, RadioButtonAdapter.KOREA)
+            japanAdapter = RadioButtonAdapter(japanAirports, false, this@AirportBottomSheetDialog, RadioButtonAdapter.JAPAN)
+            europeAdapter = RadioButtonAdapter(europeAirports, false, this@AirportBottomSheetDialog, RadioButtonAdapter.EUROPE)
+            americaAdapter = RadioButtonAdapter(americaAirports, false, this@AirportBottomSheetDialog, RadioButtonAdapter.AMERICA)
+            southeastAsiaAdapter = RadioButtonAdapter(southeastAsiaAirports, false, this@AirportBottomSheetDialog, RadioButtonAdapter.SOUTHEAST_ASIA)
 
         }
     }
@@ -97,6 +103,15 @@ class AirportBottomSheetDialog(private val type: Int, private val onAirportListe
         _binding = DataBindingUtil.inflate(inflater, R.layout.airport_bottom_sheet, container, false)
         binding.airport = this
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.koreaAirports.adapter = koreaAdapter
+        binding.japanAirports.adapter = japanAdapter
+        binding.europeAirports.adapter = europeAdapter
+        binding.americaAirports.adapter = americaAdapter
+        binding.southeastAsiaAirports.adapter = southeastAsiaAdapter
+        dialog?.setOnShowListener {
+            val bottomSheetDialog = it as BottomSheetDialog
+            BottomSheetRatioHeightManager().setRatio(bottomSheetDialog, requireContext(), 90)
+        }
         return binding.root
     }
 

@@ -24,6 +24,7 @@
             android:id="@+id/korea"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/bm_hanna"
             android:text="@string/korea"
             android:textColor="@color/black"
             android:textSize="13sp"
@@ -31,7 +32,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/korea_places"
+            android:id="@+id/korea_airports"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/simple_radiobutton_item"
@@ -51,10 +52,10 @@
             android:textSize="13sp"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/korea_places" />
+            app:layout_constraintTop_toBottomOf="@id/korea_airports" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/japan_places"
+            android:id="@+id/japan_airports"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/simple_radiobutton_item"
@@ -74,10 +75,10 @@
             android:textColor="@color/black"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/japan_places" />
+            app:layout_constraintTop_toBottomOf="@+id/japan_airports" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/europe_places"
+            android:id="@+id/europe_airports"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/simple_radiobutton_item"
@@ -97,10 +98,10 @@
             android:textColor="@color/black"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/europe_places" />
+            app:layout_constraintTop_toBottomOf="@+id/europe_airports" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/america_places"
+            android:id="@+id/america_airports"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/simple_radiobutton_item"
@@ -120,10 +121,10 @@
             android:textSize="13sp"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/america_places" />
+            app:layout_constraintTop_toBottomOf="@+id/america_airports" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/southeast_asia_places"
+            android:id="@+id/southeast_asia_airports"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/simple_radiobutton_item"
@@ -144,7 +145,7 @@
             android:textSize="13sp"
             app:layout_constraintBottom_toTopOf="@+id/guideline"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/southeast_asia_places" />
+            app:layout_constraintTop_toBottomOf="@+id/southeast_asia_airports" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"

@@ -142,7 +142,7 @@ class EditScheduleBottomSheetDialog(private val lat : Double, private val lng : 
     }
 
     override fun onMapReady(map: GoogleMap) {
-        if ((schedule.latitude != null || schedule.longitude != null) || (schedule.latitude == 0.0 && schedule.longitude == 0.0)){
+        if ((schedule.latitude != null || schedule.longitude != null) && (schedule.latitude != 0.0 && schedule.longitude != 0.0)){
             val placeLocation = LatLng(schedule.latitude!!, schedule.longitude!!)
             val camera = CameraOptionProducer().makeScheduleCameraUpdate(placeLocation, 15f)
             val markerOptions = MarkerProducer().makeScheduleMarkerOptions(requireContext(), type, position, placeLocation, schedule.places)

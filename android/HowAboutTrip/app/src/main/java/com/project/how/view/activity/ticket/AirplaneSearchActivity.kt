@@ -3,13 +3,17 @@ package com.project.how.view.activity.ticket
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.ViewPager
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.how.R
 import com.project.how.adapter.viewpager.ViewPagerAdapter
 import com.project.how.databinding.ActivityAirplaneSearchBinding
 import com.project.how.view.fragment.ticket.OneWaySearchFragment
 import com.project.how.view.fragment.ticket.RoundTripSearchFragment
+import kotlinx.coroutines.launch
 
 class AirplaneSearchActivity : AppCompatActivity() {
     private lateinit var binding : ActivityAirplaneSearchBinding
@@ -28,6 +32,12 @@ class AirplaneSearchActivity : AppCompatActivity() {
                 1 -> tab.text = getString(R.string.round_trip)
             }
         }.attach()
+
+        lifecycleScope.launch {
+            MobileAds.initialize(this@AirplaneSearchActivity)
+            val adRequest = AdRequest.Builder().build()
+            binding.adView.loadAd(adRequest)
+        }
 
     }
 }

@@ -20,3 +20,20 @@ data class GenerateSkyscannerUrlRequest(
     @SerializedName("transferCount")
     val transferCount : Long
 )
+
+data class GenerateOneWaySkyscannerUrlRequest(
+    @SerializedName("departureIataCode")
+    val departureiataCode : String,
+    @SerializedName("arrivalIataCode")
+    val arrivalIataCode : String,
+    @SerializedName("departureDate")
+    val departureDate : String,
+    @SerializedName("adults")
+    val adults : Long,
+    @SerializedName("children")
+    val children : Long,
+    @SerializedName("departureTime")
+    val departureTime: String,
+    @SerializedName("transferCount")
+    val transferCount : Long
+)

@@ -161,29 +161,6 @@ class CalendarEditActivity
             })
         }
 
-        binding.daySchedules.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
-            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-                if (e.action == MotionEvent.ACTION_DOWN && rv.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
-                    var parent: ViewParent? = rv
-                    while (parent != null) {
-                        if (parent is NestedScrollView) {
-                            Log.d("addOnItemTouchListener", "parent.parent is NestedScrollView")
-                            parent.requestDisallowInterceptTouchEvent(true)
-                        }
-                        parent = parent.parent
-                    }
-                }
-
-                return false
-            }
-
-            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
-
-            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
-        })
-
-
-
         binding.daysTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val selectedTabPosition = binding.daysTab.selectedTabPosition

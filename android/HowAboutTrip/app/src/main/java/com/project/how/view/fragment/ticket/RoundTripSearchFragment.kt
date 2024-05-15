@@ -14,9 +14,13 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.project.how.R
 import com.project.how.data_class.dto.GetFlightOffersRequest
+import com.project.how.data_class.dto.GetFlightOffersResponse
+import com.project.how.data_class.dto.GetOneWayFlightOffersRequest
+import com.project.how.data_class.dto.RoundTripFlightOffers
 import com.project.how.databinding.FragmentRoundTripSearchBinding
+import com.project.how.interface_af.OnLoadListener
 import com.project.how.interface_af.interface_ff.OnAirportListener
-import com.project.how.view.activity.ticket.AirplaneListActivity
+import com.project.how.view.activity.ticket.RoundTripAirplaneListActivity
 import com.project.how.view.dialog.ConfirmDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.AirportBottomSheetDialog
 import com.project.how.view_model.BookingViewModel
@@ -26,16 +30,17 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.TimeZone
 
-class RoundTripSearchFragment : Fragment(), OnAirportListener {
+class RoundTripSearchFragment(private val onLoadListener: OnLoadListener) : Fragment(), OnAirportListener {
     private var _binding : FragmentRoundTripSearchBinding? = null
     private val binding : FragmentRoundTripSearchBinding
         get() = _binding!!
     private val bookingViewModel : BookingViewModel by viewModels()
     private var departureDate : String? = null
     private var desnationDate : String? = null
-    private var connectingFlightCheck = true
+    private var nonStop = true
     private var destination : String? = null
     private var departure : String? = null
+    private lateinit var input : GetFlightOffersRequest
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +56,7 @@ class RoundTripSearchFragment : Fragment(), OnAirportListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bookingViewModel.flightOffersLiveData.observe(viewLifecycleOwner){
-
+            moveAirportList(it)
         }
     }
 
@@ -81,15 +86,20 @@ class RoundTripSearchFragment : Fragment(), OnAirportListener {
             val formattedSecond = format.format(utc.time)
             binding.dateOutput.text = getString(R.string.date_text, formatted, formattedSecond)
             departureDate = formatted
+            desnationDate = formattedSecond
         }
     }
 
     fun search(){
         lifecycleScope.launch {
-            if ((departure != null) || (destination != null) || (departureDate != null)){
-                val adults = binding.adultNumber.text.toString().toLong()
-                val children = binding.childNumber.text.toString().toLong()
-                val input = GetFlightOffersRequest(
+            val adults = binding.adultNumber.text.toString().toLongOrNull() ?: 0L
+            val children = binding.childNumber.text.toString().toLongOrNull() ?: 0L
+            if ((departure != null) && (destination != null) && (departureDate != null) && (adults != 0L || children != 0L)){
+                setUnEnabled()
+                onLoadListener.onLoadStartListener()
+                binding.search.isEnabled = false
+                nonStop = if (binding.radioGroup.checkedRadioButtonId == R.id.non_inclusive) true else false
+                input = GetFlightOffersRequest(
                     departure!!,
                     destination!!,
                     departureDate!!,
@@ -97,11 +107,17 @@ class RoundTripSearchFragment : Fragment(), OnAirportListener {
                     adults,
                     children,
                     50,
-                    connectingFlightCheck
+                    nonStop
                 )
                 bookingViewModel.getFlightOffers(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken, input).collect{check->
-                    if (!check){
-                        Toast.makeText(requireContext(), getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
+                    setEnabled()
+                    onLoadListener.onLoadFinishListener()
+                    when(check){
+                        BookingViewModel.NETWORK_FAILED->{Toast.makeText(requireContext(), getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()}
+                        BookingViewModel.NOT_EXIST->{
+                            Toast.makeText(requireContext(),
+                                getString(R.string.not_exist_flight_offers), Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }else{
@@ -112,6 +128,8 @@ class RoundTripSearchFragment : Fragment(), OnAirportListener {
                     message.add(getString(R.string.destination))
                 if (departureDate == null)
                     message.add(getString(R.string.date))
+                if (adults == 0L && children == 0L)
+                    message.add(getString(R.string.people_num))
                 val confirm = ConfirmDialog(message)
                 confirm.show(childFragmentManager, "ConfirmDialog")
             }
@@ -119,16 +137,42 @@ class RoundTripSearchFragment : Fragment(), OnAirportListener {
     }
 
     fun swap(){
-        val temp = departure
-        departure = destination
-        destination = temp
-        binding.departure.text = departure
-        binding.destination.text = destination
+        if((destination == null) && (departure == null)){
+            return
+        }else{
+            val temp = departure
+            departure = destination
+            destination = temp
+            binding.departure.text = departure ?: getString(R.string.departure)
+            binding.destination.text = destination ?: getString(R.string.destination)
+        }
     }
 
-    private fun moveAirportList(){
-        val intent = Intent(activity, AirplaneListActivity::class.java)
+    private fun setUnEnabled(){
+        binding.search.isEnabled = false
+        binding.dateInput.isEnabled = false
+        binding.departure.isEnabled = false
+        binding.destination.isEnabled = false
+        binding.adultNumber.isEnabled = false
+        binding.childNumber.isEnabled = false
+    }
 
+    private fun setEnabled(){
+        binding.search.isEnabled = true
+        binding.dateInput.isEnabled = true
+        binding.departure.isEnabled = true
+        binding.destination.isEnabled = true
+        binding.adultNumber.isEnabled = true
+        binding.childNumber.isEnabled = true
+    }
+
+    private fun moveAirportList(flightOffers : GetFlightOffersResponse){
+        val fo = ArrayList(flightOffers)
+        val f = RoundTripFlightOffers(fo)
+        val intent = Intent(activity, RoundTripAirplaneListActivity::class.java)
+        intent.putExtra(getString(R.string.round_trip_flight_offers), f)
+        intent.putExtra(getString(R.string.get_flight_offers_request), input)
+        startActivity(intent)
     }
 
     override fun onAirportListener(type: Int, airport: String) {

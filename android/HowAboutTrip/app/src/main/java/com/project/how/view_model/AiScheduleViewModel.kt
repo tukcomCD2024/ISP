@@ -53,8 +53,8 @@ class AiScheduleViewModel : ViewModel() {
                             if (result != null){
                                 Log.d("createSchedule is success", "startDate : ${result.schedules[0].schedules[0].date}")
                                 val data = mutableListOf<AiSchedule>()
-                                for (d in result.schedules){
-                                    data.add(getAiSchedule(d, createScheduleListRequest, result.countryImage))
+                                for (i in result.schedules.indices){
+                                    data.add(getAiSchedule(result.schedules[i], createScheduleListRequest, result.countryImage, i))
                                 }
                                 aiScheduleRepository.getAiScheduleList(data.toList())
                                 trySend(SUCCESS)
@@ -85,8 +85,8 @@ class AiScheduleViewModel : ViewModel() {
         }
     }
 
-    private fun getAiSchedule(createScheduleResponse : CreateScheduleResponse, createScheduleListRequest: CreateScheduleListRequest, countryImage : String) : AiSchedule {
-        val title = createScheduleListRequest.destination
+    private fun getAiSchedule(createScheduleResponse : CreateScheduleResponse, createScheduleListRequest: CreateScheduleListRequest, countryImage : String, position : Int) : AiSchedule {
+        val title = "${createScheduleListRequest.destination} AI 일정 생성${position+1}"
         val country = createScheduleListRequest.destination
         val startDate = createScheduleListRequest.departureDate
         val endDate = createScheduleListRequest.returnDate

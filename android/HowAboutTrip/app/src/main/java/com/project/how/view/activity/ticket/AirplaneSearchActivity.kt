@@ -1,6 +1,7 @@
 package com.project.how.view.activity.ticket
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
@@ -11,11 +12,12 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.project.how.R
 import com.project.how.adapter.viewpager.ViewPagerAdapter
 import com.project.how.databinding.ActivityAirplaneSearchBinding
+import com.project.how.interface_af.OnLoadListener
 import com.project.how.view.fragment.ticket.OneWaySearchFragment
 import com.project.how.view.fragment.ticket.RoundTripSearchFragment
 import kotlinx.coroutines.launch
 
-class AirplaneSearchActivity : AppCompatActivity() {
+class AirplaneSearchActivity : AppCompatActivity(), OnLoadListener {
     private lateinit var binding : ActivityAirplaneSearchBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +26,7 @@ class AirplaneSearchActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
 
         binding.viewPager.isUserInputEnabled = false
-        binding.viewPager.adapter = ViewPagerAdapter(listOf(OneWaySearchFragment(), RoundTripSearchFragment()), this)
+        binding.viewPager.adapter = ViewPagerAdapter(listOf(OneWaySearchFragment(this), RoundTripSearchFragment(this)), this)
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             when (position) {
@@ -39,5 +41,27 @@ class AirplaneSearchActivity : AppCompatActivity() {
             binding.adView.loadAd(adRequest)
         }
 
+    }
+
+    private fun load(){
+        binding.loadingBackground.visibility = View.VISIBLE
+        binding.loadingInfo.visibility = View.VISIBLE
+        binding.loadingLottie.visibility = View.VISIBLE
+        binding.loadingLottie.playAnimation()
+    }
+
+    private fun stopLoaing(){
+        binding.loadingBackground.visibility = View.GONE
+        binding.loadingInfo.visibility = View.GONE
+        binding.loadingLottie.visibility = View.GONE
+        binding.loadingLottie.pauseAnimation()
+    }
+
+    override fun onLoadStartListener() {
+        load()
+    }
+
+    override fun onLoadFinishListener() {
+        stopLoaing()
     }
 }

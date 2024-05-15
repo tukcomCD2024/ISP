@@ -288,4 +288,16 @@
     <string name="inclusive">포함</string>
     <string name="non_inclusive">미포함</string>
     <string name="korea">한국</string>
+    <string name="not_exist_flight_offers">해당 조건에 맞는 항공권이 존재하지 않습니다.</string>
+    <string name="round_trip_flight_offers">RoundTripFlightOffers</string>
+    <string name="non_stop">직항</string>
+    <string name="flights_time">%1$s-%2$s</string>
+    <string name="fligths_airport">%1$s → %2$s</string>
+    <string name="stop">경유%1$s회</string>
+    <string name="fligths_duration">%1$s시간 %2$s분</string>
+    <string name="price">예상가격 : %1$s 원</string>
+    <string name="one_way_flight_offers">OneWayFlightOffers</string>
+    <string name="get_one_way_flight_offers_request">GetOneWayFlightOffersRequest</string>
+    <string name="flight_search_load">최저가 순으로 항공권을 검색 중입니다.\n조금만 기다려주세요!</string>
+    <string name="get_flight_offers_request">GetFlightOffersRequest</string>
 </resources>

@@ -5,6 +5,7 @@ import com.isp.backend.domain.country.repository.CountryRepository;
 import com.isp.backend.domain.member.dto.response.MemberDetailResponse;
 import com.isp.backend.domain.member.entity.Member;
 import com.isp.backend.domain.member.repository.MemberRepository;
+import com.isp.backend.domain.schedule.dto.response.FastestScheduleResponse;
 import com.isp.backend.domain.schedule.dto.response.ScheduleListResponse;
 import com.isp.backend.domain.schedule.dto.request.ScheduleSaveRequest;
 import com.isp.backend.domain.schedule.entity.Schedule;
@@ -21,7 +22,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -125,6 +130,31 @@ public class ScheduleServiceImpl implements ScheduleService {
         findSchedule.setActivated(false);
 
         scheduleRepository.save(findSchedule);
+    }
+
+    /** 나의 여행 D-day 출력 **/
+    public FastestScheduleResponse getFastestSchedule(String uid) {
+        Member findMember = validateUserCheck(uid);
+        List<Schedule> schedules = scheduleRepository.findSchedulesByMember(findMember);
+
+        // 가장 가까운 여행 일정 찾기
+        LocalDate today = LocalDate.now();
+        Optional<Schedule> closestScheduleOptional = findClosestSchedule(schedules, today);
+
+        if (closestScheduleOptional.isPresent()) {
+            Schedule closestSchedule = closestScheduleOptional.get();
+            return scheduleMapper.toFastestScheduleDTO(closestSchedule);
+        } else {
+            throw new ScheduleNotFoundException();
+        }
+    }
+
+
+    /**  가장 가까운 일정 찾기 **/
+    private Optional<Schedule> findClosestSchedule(List<Schedule> schedules, LocalDate today) {
+        return schedules.stream()
+                .filter(schedule -> LocalDate.parse(schedule.getStartDate()).isAfter(today)) // 오늘 이후의 일정
+                .min(Comparator.comparing(s -> LocalDate.parse(s.getStartDate())));          // 시작일이 가장 빠른 순으로 정렬
     }
 
 

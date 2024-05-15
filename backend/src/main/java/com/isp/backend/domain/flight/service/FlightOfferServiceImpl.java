@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -76,29 +77,38 @@ public class FlightOfferServiceImpl implements FlightOfferService {
         String departureDate = request.getDepartureDate().replace("-", "").substring(2);
         String returnDate = (request.getReturnDate() != null) ? request.getReturnDate().replace("-", "").substring(2) : "";
         int departureTimeMinutes = convertToMinutes(request.getDepartureTime());
+        String childrenParam = buildChildrenParam(request.getChildren());
 
         String url = "https://www.skyscanner.co.kr/transport/flights/" +
                 request.getDepartureIataCode().toLowerCase() + "/" +
                 request.getArrivalIataCode().toLowerCase() + "/" +
                 departureDate + "/" +
-                returnDate + "/?adultsv2=" + request.getAdults() +
-//                "&cabinclass=economy&childrenv2=" + request.getChildren() + "%7C" + request.getChildren() +
+                returnDate + "/?adultsv2=" + request.getAdults() + childrenParam +
                 "&departure-times=" + departureTimeMinutes +
                 "&inboundaltsenabled=false&outboundaltsenabled=false&ref=home&rtn=" + (returnDate.isEmpty() ? "0" : "1");
 
         // 직항인 경우
         if (request.getTransferCount() == 0) {
-            url += "&stops=!oneStop,!twoPlusStops";
+            url += "&preferdirects=true";
+        } else if (request.getTransferCount() == 1) {
+            url += "&preferdirects=false&stops=!direct";  
         } else {
-            // 직항이 아닌 경우, 경유 횟수에 따라 다른 URL을 생성
-            url += "&stops=!direct";  // 첫 번째 항공편은 직항이어야 함
-            for (int i = 0; i < request.getTransferCount(); i++) {
-                url += ",!oneStop";  // 1회 경유 추가
-            }
+            url += "&preferdirects=false&stops=!direct,!oneStop,!oneStop";
         }
         return url;
     }
 
+    /** childern 계산 **/
+    private String buildChildrenParam(int count) {
+        if (count <= 0) { return ""; }
+        StringBuilder childrenBuilder = new StringBuilder("&children=");
+        childrenBuilder.append(count);
+        if (count > 1) {
+            childrenBuilder.append("&childrenv2=");
+            childrenBuilder.append(String.join("%7c", Collections.nCopies(count, "8")));
+        }
+        return childrenBuilder.toString();
+    }
 
     /** 항공권 좋아요 저장 **/
     @Override

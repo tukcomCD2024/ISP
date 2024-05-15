@@ -1,8 +1,9 @@
 package com.isp.backend.domain.schedule.controller;
 
+import com.isp.backend.domain.schedule.dto.response.FastestScheduleResponse;
 import com.isp.backend.domain.schedule.dto.response.ScheduleListResponse;
 import com.isp.backend.domain.schedule.dto.request.ScheduleSaveRequest;
-import com.isp.backend.domain.schedule.service.ScheduleServiceImpl;
+import com.isp.backend.domain.schedule.service.ScheduleService;
 import com.isp.backend.global.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +17,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ScheduleController {
 
-    private final ScheduleServiceImpl scheduleServiceImpl;
+    private final ScheduleService scheduleService;
 
     /** 여행 일정 저장 API **/
     @PostMapping()
     public ResponseEntity<Void> saveSchedule(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                              @RequestBody ScheduleSaveRequest requestDTO) {
-        scheduleServiceImpl.saveSchedule(customUserDetails.getUsername(), requestDTO);
+        scheduleService.saveSchedule(customUserDetails.getUsername(), requestDTO);
         return ResponseEntity.ok().build();
     }
 
@@ -31,7 +32,7 @@ public class ScheduleController {
     @GetMapping()
     public ResponseEntity<List<ScheduleListResponse>> getScheduleList(@AuthenticationPrincipal CustomUserDetails userDetails) {
         String memberUid = userDetails.getUsername();
-        List<ScheduleListResponse> scheduleList = scheduleServiceImpl.getScheduleList(memberUid);
+        List<ScheduleListResponse> scheduleList = scheduleService.getScheduleList(memberUid);
         return ResponseEntity.ok(scheduleList);
     }
 
@@ -41,7 +42,7 @@ public class ScheduleController {
     public ResponseEntity<ScheduleSaveRequest> getScheduleDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                  @PathVariable Long scheduleId) {
         String memberUid = userDetails.getUsername();
-        ScheduleSaveRequest scheduleDetail = scheduleServiceImpl.getScheduleDetail(memberUid, scheduleId);
+        ScheduleSaveRequest scheduleDetail = scheduleService.getScheduleDetail(memberUid, scheduleId);
         return ResponseEntity.ok(scheduleDetail);
     }
 
@@ -51,7 +52,7 @@ public class ScheduleController {
     public ResponseEntity<ScheduleSaveRequest> updateSchedule(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                               @PathVariable Long scheduleId,
                                                               @RequestBody ScheduleSaveRequest requestDTO) {
-        ScheduleSaveRequest updatedSchedule = scheduleServiceImpl.updateSchedule(userDetails.getUsername(), scheduleId, requestDTO);
+        ScheduleSaveRequest updatedSchedule = scheduleService.updateSchedule(userDetails.getUsername(), scheduleId, requestDTO);
         return ResponseEntity.ok(updatedSchedule);
     }
 
@@ -61,9 +62,22 @@ public class ScheduleController {
     public ResponseEntity<Void> deleteSchedule(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                @PathVariable Long scheduleId) {
         String memberUid = userDetails.getUsername();
-        scheduleServiceImpl.deleteSchedule(memberUid, scheduleId);
+        scheduleService.deleteSchedule(memberUid, scheduleId);
         return ResponseEntity.ok().build();
     }
+
+
+    /** 나의 가까운 일정 조회 API **/
+    @GetMapping("/dday")
+    public ResponseEntity<FastestScheduleResponse> getFastestSchedule(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        String memberUid = userDetails.getUsername();
+        FastestScheduleResponse fastestScheduleResponse = scheduleService.getFastestSchedule(memberUid);
+        return ResponseEntity.ok(fastestScheduleResponse);
+    }
+
+
+    /** 내가 최근 생성한 5개 일정 조회 API **/
+    public ResponseEntity<>
 
 
 }

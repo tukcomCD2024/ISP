@@ -2,6 +2,7 @@ package com.isp.backend.domain.schedule.service;
 
 import com.isp.backend.domain.country.entity.Country;
 import com.isp.backend.domain.member.entity.Member;
+import com.isp.backend.domain.schedule.dto.response.FastestScheduleResponse;
 import com.isp.backend.domain.schedule.dto.response.ScheduleListResponse;
 import com.isp.backend.domain.schedule.dto.request.ScheduleSaveRequest;
 import com.isp.backend.domain.schedule.entity.Schedule;
@@ -17,6 +18,8 @@ public interface ScheduleService {
     ScheduleSaveRequest getScheduleDetail(String uid, Long scheduleId);
 
     void deleteSchedule(String uid, Long scheduleId);
+
+    FastestScheduleResponse getFastestSchedule(String uid);
 
     ScheduleSaveRequest updateSchedule(String uid, Long scheduleId, ScheduleSaveRequest updateRequestDTO);
 

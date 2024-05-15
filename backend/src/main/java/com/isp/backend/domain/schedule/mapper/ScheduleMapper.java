@@ -4,12 +4,15 @@ import com.isp.backend.domain.country.entity.Country;
 import com.isp.backend.domain.member.entity.Member;
 import com.isp.backend.domain.schedule.dto.request.DailySchedule;
 import com.isp.backend.domain.schedule.dto.request.ScheduleDetail;
+import com.isp.backend.domain.schedule.dto.response.FastestScheduleResponse;
 import com.isp.backend.domain.schedule.dto.response.ScheduleListResponse;
 import com.isp.backend.domain.schedule.dto.request.ScheduleSaveRequest;
 import com.isp.backend.domain.schedule.entity.Schedule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -141,6 +144,33 @@ public class ScheduleMapper {
                 })
                 .collect(Collectors.toList());
     }
+
+
+    /**
+     *  D-day
+     **/
+    public FastestScheduleResponse toFastestScheduleDTO(Schedule schedule) {
+        FastestScheduleResponse response = new FastestScheduleResponse();
+        response.setId(schedule.getId());
+        response.setScheduleName(schedule.getScheduleName());
+        response.setDday(calculateDday(schedule.getStartDate()));
+        String imageUrl = schedule.getCountry().getImageUrl();
+        response.setImageUrl(imageUrl);
+
+        return response;
+    }
+
+
+    /**
+     * D-day 계산 메서드
+     **/
+    private String calculateDday(String startDateString) {
+        LocalDate today = LocalDate.now();
+        LocalDate startDate = LocalDate.parse(startDateString);
+        long dday = ChronoUnit.DAYS.between(today, startDate) + 1; // 오늘-시작일까지의 날짜 수 계산
+        return Long.toString(dday);
+    }
+
 
 
 }

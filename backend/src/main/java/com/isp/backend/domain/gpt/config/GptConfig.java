@@ -67,5 +67,5 @@ public class GptConfig {
                         Do not add any information I haven't provided to you.
                         Under no circumstances should you include any activities other than traveling. Absolutely not.
                         우리는 매일 점심과 저녁은 항상 식당에 가서 먹을거야. 반드시 실제로 존재하는 맛있고 유명한 식당으로 추천해줘
-                        우리가 방문할 명소나 식당의 예상 비용을 일정마다 옆에 한화로 알려줘""";
+                        금액 정보는 알려주지마. 대신 다양한 경험을 할 수 있게 일정을 만들어줘""";
 }

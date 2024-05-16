@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 public class GptConfig {
     public static final String AUTHORIZATION = "Authorization";
     public static final String BEARER = "Bearer ";
-    public static final String CHAT_MODEL = "gpt-4-turbo";
+    public static final String CHAT_MODEL = "gpt-4o";
     public static final Integer MAX_TOKEN = 4095;
     public static final Boolean STREAM = false;
     public static final String ROLE = "user";
@@ -65,5 +65,7 @@ public class GptConfig {
                         Please create the result in Korean.
                         And only include schedule-related content in the schedule you're creating.
                         Do not add any information I haven't provided to you.
-                        Under no circumstances should you include any activities other than traveling. Absolutely not.""";
+                        Under no circumstances should you include any activities other than traveling. Absolutely not.
+                        우리는 매일 점심과 저녁은 항상 식당에 가서 먹을거야. 반드시 실제로 존재하는 맛있고 유명한 식당으로 추천해줘
+                        우리가 방문할 명소나 식당의 예상 비용을 일정마다 옆에 한화로 알려줘""";
 }

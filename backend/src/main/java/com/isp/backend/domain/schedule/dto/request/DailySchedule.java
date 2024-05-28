@@ -15,6 +15,6 @@ public class DailySchedule {
 
     private String date; // 일정 날짜
 
-    private List<ScheduleDetail> schedules; // 해당 날짜의 일정 목록
+    private List<ScheduleDetailRequest> schedules; // 해당 날짜의 일정 목록
 
 }

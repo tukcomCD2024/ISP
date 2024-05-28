@@ -91,7 +91,7 @@ public class FlightOfferServiceImpl implements FlightOfferService {
         if (request.getTransferCount() == 0) {
             url += "&preferdirects=true";
         } else if (request.getTransferCount() == 1) {
-            url += "&preferdirects=false&stops=!direct";  
+            url += "&preferdirects=false&stops=!direct";
         } else {
             url += "&preferdirects=false&stops=!direct,!oneStop,!oneStop";
         }

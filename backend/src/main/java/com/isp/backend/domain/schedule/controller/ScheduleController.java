@@ -1,6 +1,7 @@
 package com.isp.backend.domain.schedule.controller;
 
 import com.isp.backend.domain.schedule.dto.response.FastestScheduleResponse;
+import com.isp.backend.domain.schedule.dto.response.LatestCreateResponse;
 import com.isp.backend.domain.schedule.dto.response.ScheduleListResponse;
 import com.isp.backend.domain.schedule.dto.request.ScheduleSaveRequest;
 import com.isp.backend.domain.schedule.service.ScheduleService;
@@ -77,7 +78,14 @@ public class ScheduleController {
 
 
     /** 내가 최근 생성한 5개 일정 조회 API **/
-//    public ResponseEntity<>
+    @GetMapping("/latest")
+    public ResponseEntity<List<LatestCreateResponse>> getLatestCreatedSchedules(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam(value = "limit", defaultValue = "6") int limit) {       // 출력할 세부 일정 개수 조절
+        String memberUid = userDetails.getUsername();
+        List<LatestCreateResponse> responses = scheduleService.getLatestCreatedSchedules(memberUid, limit);
+        return ResponseEntity.ok(responses);
+    }
 
 
 }

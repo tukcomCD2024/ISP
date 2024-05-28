@@ -2,10 +2,10 @@ package com.isp.backend.domain.schedule.service;
 
 import com.isp.backend.domain.country.entity.Country;
 import com.isp.backend.domain.country.repository.CountryRepository;
-import com.isp.backend.domain.member.dto.response.MemberDetailResponse;
 import com.isp.backend.domain.member.entity.Member;
 import com.isp.backend.domain.member.repository.MemberRepository;
 import com.isp.backend.domain.schedule.dto.response.FastestScheduleResponse;
+import com.isp.backend.domain.schedule.dto.response.LatestCreateResponse;
 import com.isp.backend.domain.schedule.dto.response.ScheduleListResponse;
 import com.isp.backend.domain.schedule.dto.request.ScheduleSaveRequest;
 import com.isp.backend.domain.schedule.entity.Schedule;
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -133,6 +133,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     /** 나의 여행 D-day 출력 **/
+    @Override
     public FastestScheduleResponse getFastestSchedule(String uid) {
         Member findMember = validateUserCheck(uid);
         List<Schedule> schedules = scheduleRepository.findSchedulesByMember(findMember);
@@ -151,7 +152,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 
     /**  가장 가까운 일정 찾기 **/
-    private Optional<Schedule> findClosestSchedule(List<Schedule> schedules, LocalDate today) {
+    @Override
+    public Optional<Schedule> findClosestSchedule(List<Schedule> schedules, LocalDate today) {
         return schedules.stream()
                 .filter(schedule -> LocalDate.parse(schedule.getStartDate()).isAfter(today)) // 오늘 이후의 일정
                 .min(Comparator.comparing(s -> LocalDate.parse(s.getStartDate())));          // 시작일이 가장 빠른 순으로 정렬
@@ -196,6 +198,18 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
 
+    /** 최근에 생성한 여행 일정 top 5**/
+    @Override
+    public List<LatestCreateResponse> getLatestCreatedSchedules(String uid, int limit) {
+        Member findMember = validateUserCheck(uid);
+        List<Schedule> topSchedules = scheduleRepository.findTop5ByMemberOrderByIdDesc(findMember);
 
+        List<LatestCreateResponse> responses = new ArrayList<>();
+        for (Schedule schedule : topSchedules) {
+            LatestCreateResponse response = scheduleMapper.toLatestCreateResponse(schedule, limit);
+            responses.add(response);
+        }
+        return responses;
+    }
 
 }

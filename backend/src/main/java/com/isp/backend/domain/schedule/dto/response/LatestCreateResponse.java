@@ -5,18 +5,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FastestScheduleResponse {
+public class LatestCreateResponse {
 
     private Long id;
 
-    private String scheduleName; // 여행지 이름
+    private String scheduleName;
 
-    private String dday;
+    private String city; // 여행지 장소
 
-    private String imageUrl;
+    private String imageUrl; // 이미지 url
+
+    private List<String> plan ; // 여행 일정 리스트
 
 }

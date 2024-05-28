@@ -4,11 +4,11 @@ import com.isp.backend.domain.schedule.entity.Schedule;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
 @AllArgsConstructor
 @Entity
 @Setter
 @Builder
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "schedule_detail")
 public class ScheduleDetail {

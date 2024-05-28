@@ -23,10 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -202,7 +199,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public List<LatestCreateResponse> getLatestCreatedSchedules(String uid, int limit) {
         Member findMember = validateUserCheck(uid);
-        List<Schedule> topSchedules = scheduleRepository.findTop5ByMemberOrderByIdDesc(findMember);
+        List<Schedule> topSchedules = scheduleRepository.findTop5ByMemberOrderByIdDescWithDetails(findMember);
+
+        if (topSchedules.isEmpty()) {
+            throw new ScheduleNotFoundException();
+        }
 
         List<LatestCreateResponse> responses = new ArrayList<>();
         for (Schedule schedule : topSchedules) {

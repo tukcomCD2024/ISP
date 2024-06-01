@@ -37,7 +37,8 @@ class RoundTripAirplaneListAdapter(private val context: Context, private val dat
             binding.abroadAirport.text = context.getString(
                 R.string.fligths_airport,
                 data.departureIataCode,
-                data.arrivalIataCode
+                data.arrivalIataCode,
+                data.carrierCode
             )
             binding.abroadNonStop.text = if (data.nonstop) context.getString(R.string.non_stop) else context.getString(R.string.stop, data.transferCount.toString())
             binding.abroadDuration.text = abroadDuration
@@ -51,7 +52,8 @@ class RoundTripAirplaneListAdapter(private val context: Context, private val dat
             binding.homeAirport.text = context.getString(
                 R.string.fligths_airport,
                 data.arrivalIataCode,
-                data.departureIataCode
+                data.departureIataCode,
+                data.carrierCode
             )
             binding.homeNonStop.text = if (data.nonstop) context.getString(R.string.non_stop) else context.getString(R.string.stop, data.transferCount.toString())
             binding.homeDuration.text = homeDuration

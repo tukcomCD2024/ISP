@@ -35,7 +35,8 @@ class OneWayAirplaneListAdapter(private val context: Context, private val data :
             binding.abroadAirport.text = context.getString(
                 R.string.fligths_airport,
                 data.departureIataCode,
-                data.arrivalIataCode
+                data.arrivalIataCode,
+                data.carrierCode
             )
             binding.abroadNonStop.text = if (data.nonstop) context.getString(R.string.non_stop) else context.getString(R.string.stop, data.transferCount.toString())
             binding.abroadDuration.text = abroadDuration

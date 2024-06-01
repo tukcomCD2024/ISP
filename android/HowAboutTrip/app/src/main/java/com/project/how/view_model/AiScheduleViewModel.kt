@@ -90,7 +90,7 @@ class AiScheduleViewModel : ViewModel() {
         val country = createScheduleListRequest.destination
         val startDate = createScheduleListRequest.departureDate
         val endDate = createScheduleListRequest.returnDate
-        val place = createScheduleResponse.schedules[0].scheduleDetail
+        val place = createScheduleResponse.schedules[0].scheduleDetail + createScheduleResponse.schedules[1].scheduleDetail
         val dailySchedule = mutableListOf<MutableList<AiDaysSchedule>>()
         for (i in createScheduleResponse.schedules.indices){
             val oneDaySchedule = mutableListOf<AiDaysSchedule>()

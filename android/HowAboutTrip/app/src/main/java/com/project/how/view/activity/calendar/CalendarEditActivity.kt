@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
 import android.view.ViewParent
 import android.widget.LinearLayout
@@ -128,26 +129,26 @@ class CalendarEditActivity
 
             supportMapFragment.getMapAsync(this@CalendarEditActivity)
 
-            supportMapFragment.view?.setOnTouchListener { v, event ->
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        v.parent.requestDisallowInterceptTouchEvent(false)
-                    }
-                    MotionEvent.ACTION_UP -> {
-                        v.parent.requestDisallowInterceptTouchEvent(true)
-                    }
-                }
-                false
-            }
-
-            binding.scrollView.setOnTouchListener { v, event ->
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        v.parent.parent.requestDisallowInterceptTouchEvent(false)
-                    }
-                }
-                false
-            }
+//            supportMapFragment.view?.setOnTouchListener { v, event ->
+//                var parent : ViewParent? = v.parent
+//                while(v != null){
+//                    if (parent is NestedScrollView){
+//                        Log.d("CalendarEditActivity", "parent is NestedScrollView")
+//                        when (event.action) {
+//                            MotionEvent.ACTION_DOWN -> {
+//                                parent.requestDisallowInterceptTouchEvent(true)
+//                                Log.d("CalendarEditActivity", "MotionEvent.ACTION_DOWN\nparent.requestDisallowInterceptTouchEvent(true)")
+//                            }
+//                            MotionEvent.ACTION_UP -> {
+//                                parent.requestDisallowInterceptTouchEvent(false)
+//                                Log.d("CalendarEditActivity", "MotionEvent.ACTION_UP\nparent.requestDisallowInterceptTouchEvent(false)")
+//                            }
+//                        }
+//                    }
+//                    parent = parent?.parent
+//                }
+//                false
+//            }
 
             adapter.itemDragListener(object : ItemStartDragListener {
                 override fun onDropActivity(

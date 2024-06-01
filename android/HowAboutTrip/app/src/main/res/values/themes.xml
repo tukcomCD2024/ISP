@@ -4,13 +4,16 @@
         <item name="android:statusBarColor" tools:targetApi = "l">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowBackground">@color/white</item>
+        <item name="android:fontFamily">@font/pretendard</item>
         <item name="materialCalendarFullscreenTheme">@style/ThemeOverlay.App.DatePicker</item>
     </style>
 
     <style name="Theme.HowAboutTrip.BlackStatusBar" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>
         <item name="android:windowBackground">@color/white</item>
+        <item name="android:fontFamily">@font/pretendard</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="materialCalendarFullscreenTheme">@style/ThemeOverlay.App.DatePicker</item>
     </style>
     <style name="Button.BlackRound" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/black_round_rectangle</item>
@@ -63,6 +66,7 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/white</item>
         <item name="android:colorBackground">@color/white</item>
+        <item name="colorSurface">@color/white</item>
         <item name="android:textColor">@color/black</item>
         <item name="rangeFillColor">@color/more_translucent_black</item>
     </style>

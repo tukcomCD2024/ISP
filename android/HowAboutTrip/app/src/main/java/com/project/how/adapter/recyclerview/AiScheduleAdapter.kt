@@ -82,7 +82,7 @@ class AiScheduleAdapter(private val context: Context, data : List<AiSchedule>, p
 
     private fun getDaysTitle(data : AiSchedule, tabNum: Int): Any? {
         val startDate = LocalDate.parse(data.startDate, DateTimeFormatter.ISO_DATE)
-        val formatter = DateTimeFormatter.ofPattern("MM.dd")
+        val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd")
         return startDate.plusDays(tabNum.toLong()).format(formatter)
     }
 

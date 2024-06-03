@@ -87,17 +87,17 @@
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/loading_lottie"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="400dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/view_pager"
+            app:layout_constraintStart_toStartOf="@+id/view_pager"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.35"
             app:lottie_autoPlay="false"
             app:lottie_loop="true"
-            android:visibility="gone"
-            app:layout_constraintVertical_bias="0.35"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:lottie_rawRes="@raw/loading_airplane_animation" />
+            app:lottie_rawRes="@raw/loading_airplane_ticket_animation" />
 
         <TextView
             android:id="@+id/loading_info"
@@ -109,7 +109,7 @@
             android:text="@string/flight_search_load"
             android:textColor="@color/white"
             android:visibility="gone"
-            app:layout_constraintVertical_bias="0.6"
+            app:layout_constraintVertical_bias="0.53"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

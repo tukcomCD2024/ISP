@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:backgroundTint="@color/black"
-                app:cardCornerRadius="24dp"
+                app:cardCornerRadius="14dp"
                 app:cardElevation="0dp"
                 android:layout_marginTop="13dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -158,7 +158,8 @@
                 android:layout_marginTop="5dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ai"
-                app:layout_constraintEnd_toStartOf="@id/textView2"/>
+                app:layout_constraintEnd_toStartOf="@id/textView2"
+                android:onClick="@{() -> calendar.moveAddAICalendar()}"/>
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="0dp"
@@ -171,7 +172,8 @@
                 android:layout_marginTop="5dp"
                 app:layout_constraintStart_toEndOf="@id/textView1"
                 app:layout_constraintTop_toBottomOf="@+id/add"
-                app:layout_constraintEnd_toStartOf="@id/textView3"/>
+                app:layout_constraintEnd_toStartOf="@id/textView3"
+                android:onClick="@{() -> calendar.add()}"/>
 
             <TextView
                 android:id="@+id/textView3"
@@ -183,6 +185,7 @@
                 android:textColor="@color/black"
                 android:textSize="13sp"
                 android:layout_marginTop="5dp"
+                android:onClick="@{() -> calendar.moveCalendarList()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/textView2"
                 app:layout_constraintTop_toBottomOf="@+id/search" />

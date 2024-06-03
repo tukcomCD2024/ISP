@@ -75,9 +75,9 @@
                     style="@style/WhiteBottomNavigationView"
                     app:labelVisibilityMode="labeled"
                     app:itemIconSize="28dp"
-                    app:itemIconTint="@color/black"
-                    app:itemTextColor="@color/black"
-                    app:itemRippleColor="@color/white"
+                    app:itemIconTint="@color/main_menu"
+                    app:itemTextColor="@color/main_menu"
+                    app:itemRippleColor="@android:color/transparent"
                     app:itemActiveIndicatorStyle="@android:color/transparent"
                     app:menu="@menu/main_bottom_navigation_menu" />
             </com.google.android.material.bottomappbar.BottomAppBar>
@@ -91,7 +91,7 @@
                 android:clickable="true"
                 app:borderWidth="0dp"
                 app:fabCustomSize="70dp"
-                app:maxImageSize="30dp"
+                app:maxImageSize="35dp"
                 android:src="@drawable/icon_ai_calendar_size_fixed"
                 android:backgroundTint="@color/black"
                 app:tint="@color/white"

@@ -72,15 +72,19 @@ class LoginActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val loginRequest = LoginRequest(uid)
             val code = viewModel.getTokens(this@LoginActivity, loginRequest)
-            if(code == EXISTING_MEMBER){
-                Log.d("sendUid", "Existing member")
-                moveMain()
-            }else if(code == NEW_MEMBER){
-                Log.d("sendUid", "New member")
-                moveSignUp()
-            }else{
-                Log.e("sendUid", "Login failed")
-                Toast.makeText(this@LoginActivity, "[로그인 실패] HowAboutTrip 로그인에 실패했습니다.\n해당 오류가 지속될 경우 문의하시기를 바랍니다.", Toast.LENGTH_SHORT).show()
+            when (code) {
+                EXISTING_MEMBER -> {
+                    Log.d("sendUid", "Existing member")
+                    moveMain()
+                }
+                NEW_MEMBER -> {
+                    Log.d("sendUid", "New member")
+                    moveSignUp()
+                }
+                else -> {
+                    Log.e("sendUid", "Login failed")
+                    Toast.makeText(this@LoginActivity, "[로그인 실패] HowAboutTrip 로그인에 실패했습니다.\n해당 오류가 지속될 경우 문의하시기를 바랍니다.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

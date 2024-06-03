@@ -21,6 +21,11 @@ class SplashActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
         binding.splash = this
 
+        memberViewModel.memberInfoLiveData.observe(this){
+            Log.d("tokenSaveLiveData observe", "memberInfoLiveData\nname : ${it.name}\nphone : ${it.phone}\nbirth : ${it.birth}")
+            moveMain()
+        }
+
         lifecycleScope.launch {
             memberViewModel.init(this@SplashActivity)
         }
@@ -29,10 +34,6 @@ class SplashActivity : AppCompatActivity() {
             Log.d("tokensSaveLiveData observe", "start\nsaveCheck : $saveCheck")
             if (saveCheck){
                 getMemberInfo()
-                memberViewModel.memberInfoLiveData.observe(this){
-                    Log.d("tokenSaveLiveData observe", "memberInfoLiveData\nname : ${it.name}\nphone : ${it.phone}\nbirth : ${it.birth}")
-                    moveMain()
-                }
             }else{
                 moveLogin()
             }
@@ -40,7 +41,17 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun getMemberInfo() {
-        memberViewModel.tokensLiveData.value?.let { memberViewModel.getInfo(this, it.accessToken) }
+        memberViewModel.tokensLiveData.value?.let {
+            lifecycleScope.launch {
+                memberViewModel.getInfo(this@SplashActivity, it.accessToken).collect{ check->
+                    if (check == MemberViewModel.SUCCESS){
+                        moveMain()
+                    }else{
+                        moveLogin()
+                    }
+                }
+            }
+        }
     }
 
     private fun moveLogin(){

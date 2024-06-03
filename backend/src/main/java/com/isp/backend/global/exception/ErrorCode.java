@@ -25,6 +25,7 @@ public enum ErrorCode {
     NOT_YOUR_SCHEDULE(HttpStatus.UNAUTHORIZED, "S003", "사용자의 여행 일정이 아닙니다."),
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "S004", "이미지를 찾을 수 없습니다."),
     IATA_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "S005", "해당 국가의 공항 코드를 찾을 수 없습니다."),
+    CHECK_LIST_NOT_FOUND(HttpStatus.NOT_FOUND, "S006", "체크리스트를 찾을 수 없습니다"),
 
     // Flight & Hotel
     AMADEUS_SEARCH_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"F001", "아마데우스 요청을 가져오는 중 오류를 발생했습니다."),

@@ -183,9 +183,10 @@ public class CountryService {
     private String parseDayOfWeek(String dateString) {
         LocalDate localDate = LocalDate.parse(dateString);
         DayOfWeek dayOfWeek = localDate.getDayOfWeek();
-        String weekDay = dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault());
-        return (dateString + ", " +  weekDay);
+        String weekDay = dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN);
+        return (dateString + "," +  weekDay);
     }
+
 
 
     /** 도시이름으로 나라 찾기 **/

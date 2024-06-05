@@ -5,7 +5,9 @@ import lombok.Getter;
 @Getter
 public enum S3BucketDirectory {
     IMAGE("HowAboutTrip-Backend-Image/"),         // 상품 사진
-    PHOTO("HowAboutTrip-Backend-Photo/"), ;        // 여행 중 포토
+    PHOTO("HowAboutTrip-Backend-Photo/"),         // 여행 중 포토
+
+    WEATHER("HowAboutTrip-Backend-Weather/"), ;   // 날씨 아이콘
 
     private final String directory;
 

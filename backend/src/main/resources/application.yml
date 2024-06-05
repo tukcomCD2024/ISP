@@ -38,3 +38,4 @@ api-key:
   amadeus:
     accessKey: ${AMADEUS_ACCESS_KEY}
     secretKey: ${AMADEUS_SECRET_KEY}
+  open-weather: ${OPEN_WEATHER_API_KEY}

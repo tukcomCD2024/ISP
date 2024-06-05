@@ -27,11 +27,12 @@ public enum ErrorCode {
     IATA_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "S005", "해당 국가의 공항 코드를 찾을 수 없습니다."),
     CHECK_LIST_NOT_FOUND(HttpStatus.NOT_FOUND, "S006", "체크리스트를 찾을 수 없습니다"),
 
-    // Flight & Hotel
+    // Open API
     AMADEUS_SEARCH_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"F001", "아마데우스 요청을 가져오는 중 오류를 발생했습니다."),
     SKY_SCANNER_GENERATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"F002", "스카이스캐너 URL을 생성할 수 없습니다."),
     FLIGHT_NOT_FOUND(HttpStatus.NOT_FOUND, "F003", "해당 id의 항공권을 찾을 수 없습니다."),
-    NOT_YOUR_FLIGHT(HttpStatus.UNAUTHORIZED, "F004", "사용자의 항공권이 아닙니다");
+    NOT_YOUR_FLIGHT(HttpStatus.UNAUTHORIZED, "F004", "사용자의 항공권이 아닙니다"),
+    OPEN_WEATHER_SEARCH_FAILED(HttpStatus.NOT_FOUND,"F005", "날씨 정보 파싱에 실패하였습니다");
 
 
     private HttpStatus status;

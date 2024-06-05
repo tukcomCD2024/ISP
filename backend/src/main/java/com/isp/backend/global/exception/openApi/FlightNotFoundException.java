@@ -1,4 +1,4 @@
-package com.isp.backend.global.exception.flight;
+package com.isp.backend.global.exception.openApi;
 
 import com.isp.backend.global.exception.CustomException;
 import com.isp.backend.global.exception.ErrorCode;

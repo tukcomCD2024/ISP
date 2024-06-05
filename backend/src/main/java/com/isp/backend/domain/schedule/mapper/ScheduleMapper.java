@@ -157,8 +157,8 @@ public class ScheduleMapper {
         response.setId(schedule.getId());
         response.setScheduleName(schedule.getScheduleName());
         response.setDday(calculateDday(schedule.getStartDate()));
-        String imageUrl = schedule.getCountry().getImageUrl();
-        response.setImageUrl(imageUrl);
+        response.setCountry(schedule.getCountry().getCity());
+        response.setImageUrl(schedule.getCountry().getImageUrl());
 
         return response;
     }

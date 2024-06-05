@@ -17,6 +17,8 @@ public class FastestScheduleResponse {
 
     private String dday;
 
+    private String country ;
+
     private String imageUrl;
 
 }

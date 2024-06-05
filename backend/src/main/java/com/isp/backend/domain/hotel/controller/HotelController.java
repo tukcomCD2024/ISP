@@ -3,7 +3,7 @@ package com.isp.backend.domain.hotel.controller;
 import com.amadeus.exceptions.ResponseException;
 import com.isp.backend.domain.hotel.dto.request.SearchGeocodeRequest;
 import com.isp.backend.domain.hotel.service.HotelService;
-import com.isp.backend.global.exception.flight.AmadeusSearchFailedException;
+import com.isp.backend.global.exception.openApi.AmadeusSearchFailedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -30,6 +30,8 @@
 - MySQL & JPA
 - AWS EC2, CodeDeploy for deploy
 - AWS S3
+- GPT-4o API
+- Amadeus API
 
 <br>
 

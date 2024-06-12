@@ -1,7 +1,8 @@
 <p align="left"><img src="https://github.com/tukcomCD2024/ISP/assets/77226122/e6c1dec3-8203-4f64-8981-d4e7ee14ed56" height=110></p>
 
+
 # 여행어때
-<p align="center"><img src="https://github.com/tukcomCD2024/ISP/assets/77226122/281eebd6-e235-479d-ad16-5fd11e0a5e20"></p>
+<p align="center"><img src="https://github.com/tukcomCD2024/ISP/assets/77226122/5bc49674-fbb5-40dd-a9df-3c21d43bd1a9"></p>
 
 ```
 여행 일정이 필요해? 우리가 만들어줄게!

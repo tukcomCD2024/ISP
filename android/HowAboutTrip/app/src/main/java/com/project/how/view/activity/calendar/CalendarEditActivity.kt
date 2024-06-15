@@ -33,11 +33,13 @@ import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.databinding.ActivityCalendarEditBinding
 import com.project.how.interface_af.OnDateTimeListener
 import com.project.how.interface_af.OnDesListener
+import com.project.how.interface_af.OnOrderChangeListener
 import com.project.how.interface_af.OnScheduleListener
 import com.project.how.interface_af.interface_ada.ItemStartDragListener
 import com.project.how.view.activity.MainActivity
 import com.project.how.view.dialog.AiScheduleDialog
 import com.project.how.view.dialog.DatePickerDialog
+import com.project.how.view.dialog.OrderChangeDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.EditScheduleBottomSheetDialog
 import com.project.how.view.dp.DpPxChanger
@@ -53,14 +55,13 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 import kotlin.math.abs
 
 
 class CalendarEditActivity
-    : AppCompatActivity(), OnMapReadyCallback, DaysScheduleEditAdapter.OnDaysButtonClickListener, OnScheduleListener, OnDesListener, OnDateTimeListener {
+    : AppCompatActivity(), OnMapReadyCallback, DaysScheduleEditAdapter.OnDaysButtonClickListener, OnScheduleListener, OnDesListener, OnDateTimeListener, OnOrderChangeListener {
     private lateinit var binding : ActivityCalendarEditBinding
     private val viewModel : ScheduleViewModel by viewModels()
     private val calendarViewModel : CalendarViewModel by viewModels()
@@ -344,6 +345,11 @@ class CalendarEditActivity
         }
     }
 
+    private fun showOrderChange(position: Int){
+        val order = OrderChangeDialog(data.dailySchedule[selectedDays], position, this)
+        order.show(supportFragmentManager, "OrderChangeDialog")
+    }
+
     private suspend fun saveNewSchedule(){
 
         viewModel.saveSchedule(this, MemberViewModel.tokensLiveData.value!!.accessToken, data).collect{check ->
@@ -416,11 +422,11 @@ class CalendarEditActivity
     }
 
     override fun onMoreMenuOrderChangeClickListener(position: Int) {
-
+        showOrderChange(position)
     }
 
     override fun onMoreMenuDeleteClickListener(position: Int) {
-        adapter.remove(position)
+        adapter.remove(position, true)
         data.dailySchedule[selectedDays]= adapter.getData()
         lifecycleScope.launch {
             viewModel.getTotalCost(data).collect{
@@ -470,9 +476,16 @@ class CalendarEditActivity
         val diffMillies = abs(sd.time - ssd.time)
         val diff = (diffMillies / (24 * 60 * 60 * 1000)).toInt()
         data.dailySchedule[selectedDays+diff].add(d)
-        adapter.remove(position)
+        adapter.remove(position, true)
         supportMapFragment.getMapAsync(this)
 
+    }
+
+    override fun onOrderChangeListener(changedPosition: Int, previousPosition: Int) {
+        val temp = adapter.getData(previousPosition)
+        adapter.remove(previousPosition, false)
+        adapter.add(changedPosition,  temp, true)
+        supportMapFragment.getMapAsync(this)
     }
 
     companion object{

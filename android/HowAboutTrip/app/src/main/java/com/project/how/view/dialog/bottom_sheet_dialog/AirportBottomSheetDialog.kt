@@ -126,7 +126,7 @@ class AirportBottomSheetDialog(private val type: Int, private val onAirportListe
         }
     }
 
-    override fun onItemClickListener(data: String, type: Int) {
+    override fun onItemClickListener(data: String, type: Int, position: Int) {
         lifecycleScope.launch {
             when(type){
                 RadioButtonAdapter.KOREA->{

@@ -1,16 +1,12 @@
 package com.project.how.view.dialog.bottom_sheet_dialog
 
-import android.app.Activity
-import android.content.Context
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.project.how.R
@@ -186,7 +182,7 @@ class ActivityBottomSheetDialog(private val onActivityListener: OnActivityListen
         _binding = null
     }
 
-    override fun onItemClickListener(data: String, type: Int) {
+    override fun onItemClickListener(data: String, type: Int, position: Int) {
     }
 
     companion object{

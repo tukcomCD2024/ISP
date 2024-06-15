@@ -160,7 +160,7 @@ class PurposeBottomSheetDialog(private val onPurposeListener : OnPurposeListener
         _binding = null
     }
 
-    override fun onItemClickListener(data: String, type: Int) {
+    override fun onItemClickListener(data: String, type: Int, position: Int) {
         if (type == RadioButtonAdapter.WHO){
             who = data
         }else if(type == RadioButtonAdapter.ACTIVITY_LEVEL){

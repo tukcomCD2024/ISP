@@ -128,7 +128,7 @@ class DesBottomSheetDialog(private val onDesListener: OnDesListener) : BottomShe
         }
     }
 
-    override fun onItemClickListener(data: String, type: Int) {
+    override fun onItemClickListener(data: String, type: Int, position: Int) {
         when(type){
             RadioButtonAdapter.JAPAN->{
                 lifecycleScope.launch {

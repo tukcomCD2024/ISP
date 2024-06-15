@@ -138,9 +138,10 @@ class DaysScheduleEditAdapter (
         notifyItemChanged(dailySchedule.lastIndex)
     }
 
-    fun remove(position: Int){
+    fun remove(position: Int, notify: Boolean){
         dailySchedule.removeAt(position)
-        notifyDataSetChanged()
+        if (notify)
+            notifyDataSetChanged()
     }
 
     fun edit(data : DaysSchedule, position: Int){
@@ -156,6 +157,16 @@ class DaysScheduleEditAdapter (
     }
 
     fun getData() = dailySchedule
+
+    fun getData(position: Int) = dailySchedule[position]
+
+    fun add(position: Int, data: DaysSchedule, notify : Boolean){
+        dailySchedule.add(position, data)
+        if (notify)
+            notifyDataSetChanged()
+    }
+
+
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         Log.d("addOnItemTouchListener", "onItemMove start\nfrom : $fromPosition\tto : $toPosition")

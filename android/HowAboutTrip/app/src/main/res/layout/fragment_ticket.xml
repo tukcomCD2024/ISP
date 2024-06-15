@@ -59,6 +59,7 @@
                 android:background="@android:color/transparent"
                 android:scaleType="fitCenter"
                 android:src="@drawable/icon_ticket_linear"
+                android:onClick="@{()->ticket.moveAirplaneSearch()}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/event"
                 app:layout_constraintEnd_toStartOf="@id/hotel"/>

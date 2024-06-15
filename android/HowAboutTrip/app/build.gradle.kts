@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.project.how"
-        minSdk = 29
+        minSdk = 30
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -91,6 +91,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.libraries.places:places:3.4.0")
     implementation("androidx.activity:activity-ktx:1.8.2")
+    implementation("androidx.activity:activity:1.9.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

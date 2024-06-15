@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">HowAboutTrip</string>
-    <string name="login_under_text">HowAboutTrip에서\n여행 계획을 세우는 건 어떤가요?</string>
+    <string name="login_under_text">HowAboutTrip에서 여행 계획을\n세우는 건 어떤가요?</string>
     <string name="google_login_content_desciption">google login</string>
     <string name="how_about_trip">How About Trip</string>
     <string name="input_complete">입력 완료</string>
@@ -11,7 +11,7 @@
     <string name="sign_up_info_phone">전화번호</string>
     <string name="sign_up_info_phone_hint">010-1234-5678</string>
     <string name="sign_up_info_birth">생년 월일</string>
-    <string name="input">선택</string>
+    <string name="input">입력</string>
     <string name="not_entered">미입력</string>
     <string name="calendar_init_year">2024</string>
     <string name="calendar_init_month">01</string>
@@ -279,4 +279,25 @@
     <string name="date_text">%1$s ~ %2$s</string>
     <string name="destination_change">목적지 변경</string>
     <string name="date_change">날짜 변경</string>
+    <string name="warning_basic">위의 내용을 확인하셨습니까?\n해당 문제는 추후 업데이트를 통해 해결될 수도 있습니다.</string>
+    <string name="ai_date_range_warning">AI 일정 생성에서는 최대 10일 정도의 일정을 생성해야 합니다.\n10일을 초과하는 일정을 생성할 시 로딩이 매우 길어질 수 있습니다.</string>
+    <string name="one_way">편도</string>
+    <string name="round_trip">왕복</string>
+    <string name="departure">출발지</string>
+    <string name="connecting_flight_check">경유 포함 유무</string>
+    <string name="inclusive">포함</string>
+    <string name="non_inclusive">미포함</string>
+    <string name="korea">한국</string>
+    <string name="not_exist_flight_offers">해당 조건에 맞는 항공권이 존재하지 않습니다.</string>
+    <string name="round_trip_flight_offers">RoundTripFlightOffers</string>
+    <string name="non_stop">직항</string>
+    <string name="flights_time">%1$s-%2$s</string>
+    <string name="fligths_airport">%1$s → %2$s,    %3$s</string>
+    <string name="stop">경유%1$s회</string>
+    <string name="fligths_duration">%1$s시간 %2$s분</string>
+    <string name="price">예상가격 : %1$s 원</string>
+    <string name="one_way_flight_offers">OneWayFlightOffers</string>
+    <string name="get_one_way_flight_offers_request">GetOneWayFlightOffersRequest</string>
+    <string name="flight_search_load">최저가 순으로 항공권을 검색 중입니다.\n조금만 기다려주세요!</string>
+    <string name="get_flight_offers_request">GetFlightOffersRequest</string>
 </resources>

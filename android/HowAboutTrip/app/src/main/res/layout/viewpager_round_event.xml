@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:backgroundTint="@color/gray"
             android:outlineAmbientShadowColor="@android:color/transparent"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="14dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

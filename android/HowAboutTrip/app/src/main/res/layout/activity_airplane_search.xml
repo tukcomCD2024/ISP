@@ -13,13 +13,117 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="18dp">
+
+                <ImageButton
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/icon_previous"
+                    android:scaleType="fitCenter"
+                    android:onClick="@{()-> search.finish()}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/alarm"
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_alarm_none"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.Toolbar>
+
         <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
             android:layout_width="0dp"
             android:layout_height="54dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/black_nonangle_rectangle"
+            android:backgroundTint="@color/light_gray"
             app:layout_constraintEnd_toStartOf="@+id/guideline10"
             app:layout_constraintStart_toStartOf="@+id/guideline11"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:tabIndicator="@drawable/black_nonangle_rectangle"
+            app:tabIndicatorColor="@color/black"
+            app:tabIndicatorFullWidth="true"
+            app:tabIndicatorGravity="stretch"
+            app:tabRippleColor="@android:color/transparent"
+            app:tabTextAppearance="@style/AirplaneTabItemText"
+            app:tabTextColor="@color/tab_text"/>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/adView"
+            app:layout_constraintEnd_toStartOf="@+id/guideline10"
+            app:layout_constraintStart_toStartOf="@+id/guideline11"
+            app:layout_constraintTop_toBottomOf="@+id/tab_layout" />
+
+        <ImageView
+            android:id="@+id/loading_background"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/translucent_black"/>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/loading_lottie"
+            android:layout_width="0dp"
+            android:layout_height="400dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/view_pager"
+            app:layout_constraintStart_toStartOf="@+id/view_pager"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.35"
+            app:lottie_autoPlay="false"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/loading_airplane_ticket_animation" />
+
+        <TextView
+            android:id="@+id/loading_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/bm_hanna"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="@string/flight_search_load"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            app:layout_constraintVertical_bias="0.53"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:adSize="BANNER"
+            app:adUnitId="@string/GOOGLE_AD_MOB_BANNER_TEST"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline11"

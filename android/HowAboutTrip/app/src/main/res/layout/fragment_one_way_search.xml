@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="one_way"
+            type="com.project.how.view.fragment.ticket.OneWaySearchFragment" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="34dp"
+            android:background="@drawable/white_card_round_rectangle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="40dp"/>
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="40dp"/>
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="40dp"/>
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_end="40dp"/>
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/departure"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:background="@drawable/black_round_rectangle"
+                android:gravity="center"
+                android:text="@string/departure"
+                android:padding="10dp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="11sp"
+                android:autoSizeMaxTextSize="17sp"
+                android:textColor="@color/white"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:onClick="@{()->one_way.showAirportInput(1)}"
+                app:layout_constraintStart_toStartOf="@+id/guideline_start"
+                app:layout_constraintTop_toBottomOf="@id/guideline_top"
+                app:layout_constraintEnd_toStartOf="@+id/swap"/>
+
+            <ImageButton
+                android:id="@+id/swap"
+                android:layout_width="19dp"
+                android:layout_height="19dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/icon_swap"
+                android:scaleType="fitXY"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="20dp"
+                android:onClick="@{()->one_way.swap()}"
+                app:layout_constraintStart_toEndOf="@+id/departure"
+                app:layout_constraintTop_toTopOf="@+id/guideline_top"
+                app:layout_constraintEnd_toStartOf="@+id/destination"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/destination"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:background="@drawable/black_round_rectangle"
+                android:gravity="center"
+                android:text="@string/destination"
+                android:padding="10dp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="11sp"
+                android:autoSizeMaxTextSize="17sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:onClick="@{()->one_way.showAirportInput(2)}"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_end"
+                app:layout_constraintStart_toEndOf="@+id/swap"
+                app:layout_constraintTop_toBottomOf="@id/guideline_top" />
+
+            <TextView
+                android:id="@+id/number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/people_num"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="@+id/guideline_start"
+                app:layout_constraintTop_toBottomOf="@+id/departure" />
+
+            <TextView
+                android:id="@+id/adult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/adult"
+                android:textSize="13sp"
+                android:textColor="@color/black"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="@+id/guideline_start"
+                app:layout_constraintTop_toBottomOf="@+id/number" />
+
+            <EditText
+                android:id="@+id/adult_number"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textSize="13sp"
+                android:textColor="@color/black"
+                android:layout_marginStart="8dp"
+                android:hint="0"
+                android:maxLength="2"
+                android:gravity="end"
+                android:maxLines="1"
+                android:textColorHint="@color/black"
+                app:layout_constraintStart_toEndOf="@+id/adult"
+                app:layout_constraintTop_toBottomOf="@+id/number" />
+
+            <TextView
+                android:id="@+id/adult_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/people_unit"
+                android:textSize="13sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toEndOf="@+id/adult_number"
+                app:layout_constraintTop_toBottomOf="@+id/number" />
+
+            <TextView
+                android:id="@+id/child"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/child"
+                android:textSize="13sp"
+                android:textColor="@color/black"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toEndOf="@+id/adult_unit"
+                app:layout_constraintTop_toBottomOf="@+id/number"/>
+
+            <EditText
+                android:id="@+id/child_number"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textSize="13sp"
+                android:textColor="@color/black"
+                android:layout_marginStart="8dp"
+                android:hint="0"
+                android:gravity="end"
+                android:maxLines="1"
+                android:maxLength="2"
+                android:textColorHint="@color/black"
+                app:layout_constraintStart_toEndOf="@+id/child"
+                app:layout_constraintTop_toBottomOf="@+id/number"/>
+
+            <TextView
+                android:id="@+id/child_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/people_unit"
+                android:textSize="13sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toEndOf="@+id/child_number"
+                app:layout_constraintTop_toBottomOf="@+id/number"/>
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/date"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="@+id/guideline_start"
+                app:layout_constraintTop_toBottomOf="@+id/adult" />
+
+            <TextView
+                android:id="@+id/date_output"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintStart_toStartOf="@+id/guideline_start"
+                app:layout_constraintTop_toBottomOf="@+id/date" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/date_input"
+                style="@style/Button.BlackRound"
+                android:layout_width="50dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/input"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:onClick="@{()->one_way.showCalendar()}"
+                app:layout_constraintStart_toEndOf="@id/date_output"
+                app:layout_constraintTop_toBottomOf="@+id/date" />
+
+            <TextView
+                android:id="@+id/connecting_flight_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/connecting_flight_check"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="@+id/guideline_start"
+                app:layout_constraintTop_toBottomOf="@+id/date_output"/>
+
+            <RadioGroup
+                android:id="@+id/radio_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkedButton="@id/inclusive"
+                android:orientation="horizontal"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="@+id/guideline_start"
+                app:layout_constraintTop_toBottomOf="@+id/connecting_flight_check">
+
+                <RadioButton
+                    android:id="@+id/inclusive"
+                    android:layout_width="50dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/radio_btn_round_rectangle"
+                    android:button="@android:color/transparent"
+                    android:gravity="center"
+                    android:textSize="13sp"
+                    android:text="@string/inclusive"
+                    android:textColor="@color/radio_text" />
+
+                <RadioButton
+                    android:id="@+id/non_inclusive"
+                    android:layout_width="65dp"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/radio_btn_round_rectangle"
+                    android:button="@android:color/transparent"
+                    android:gravity="center"
+                    android:textSize="13sp"
+                    android:text="@string/non_inclusive"
+                    android:textColor="@color/radio_text"/>
+            </RadioGroup>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/search"
+                style="@style/Button.BlackRound"
+                android:layout_width="75dp"
+                android:layout_height="22dp"
+                android:layout_marginTop="30dp"
+                android:drawableStart="@drawable/icon_search_size_fixed"
+                android:gravity="center"
+                android:paddingHorizontal="15dp"
+                android:text="@string/search"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:onClick="@{()->one_way.search()}"
+                app:layout_constraintBottom_toTopOf="@+id/guideline_bottom"
+                app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                app:layout_constraintTop_toBottomOf="@+id/radio_group" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

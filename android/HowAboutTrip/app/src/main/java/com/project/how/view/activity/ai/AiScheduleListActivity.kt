@@ -3,6 +3,7 @@ package com.project.how.view.activity.ai
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
@@ -14,6 +15,7 @@ import com.project.how.data_class.AiScheduleInput
 import com.project.how.data_class.dto.GetCountryLocationResponse
 import com.project.how.data_class.recyclerview.AiDaysSchedule
 import com.project.how.data_class.recyclerview.AiSchedule
+import com.project.how.data_class.recyclerview.AiScheduleList
 import com.project.how.databinding.ActivityAiScheduleListBinding
 import com.project.how.view.activity.calendar.CalendarEditActivity
 import com.project.how.view_model.AiScheduleViewModel
@@ -23,9 +25,6 @@ import kotlinx.coroutines.launch
 class AiScheduleListActivity : AppCompatActivity(), AiScheduleAdapter.OnClickListener {
     private lateinit var binding : ActivityAiScheduleListBinding
     private var data = mutableListOf<AiSchedule>()
-    private lateinit var adapter : AiScheduleAdapter
-    private val scheduleViewModel : ScheduleViewModel by viewModels()
-    private val aiScheduleViewModel : AiScheduleViewModel by viewModels() //임시 테스트
     private var lat = 0.0
     private var lng = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,15 +35,12 @@ class AiScheduleListActivity : AppCompatActivity(), AiScheduleAdapter.OnClickLis
 
         lat = intent.getDoubleExtra(getString(R.string.server_calendar_latitude), 0.0)
         lng = intent.getDoubleExtra(getString(R.string.server_calendar_longitude), 0.0)
+        Log.d("AiScheduleListActivity", "lat : $lat\tlng : $lng\ndata size : ${data.size}")
+        data = CalendarEditActivity.getSerializable(this, getString(R.string.aischedule), AiScheduleList::class.java).aiSchedules.toMutableList()
 
-        aiScheduleViewModel.getTestData()
+        binding.scheduleList.adapter = AiScheduleAdapter(this, data, this)
 
-        aiScheduleViewModel.aiScheduleLiveData.observe(this){
-            data.add(it)
-            data.add(it)
-            adapter = AiScheduleAdapter(this@AiScheduleListActivity, data, this)
-            binding.scheduleList.adapter = adapter
-        }
+
     }
 
     override fun onCreateButtonClicker(data: AiSchedule) {

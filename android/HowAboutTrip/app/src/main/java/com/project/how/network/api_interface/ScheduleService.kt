@@ -1,5 +1,7 @@
 package com.project.how.network.api_interface
 
+import com.project.how.data_class.dto.CreateScheduleListRequest
+import com.project.how.data_class.dto.CreateScheduleListResponse
 import com.project.how.data_class.dto.CreateScheduleRequest
 import com.project.how.data_class.dto.CreateScheduleResponse
 import com.project.how.data_class.dto.GetCountryLocationRequest
@@ -18,8 +20,13 @@ import retrofit2.http.Path
 interface ScheduleService {
     @POST("gpt/schedules")
     fun createSchedule(
-        @Body createCondition : CreateScheduleRequest
+        @Body createCondition : CreateScheduleListRequest
     ) : Call<CreateScheduleResponse>
+
+    @POST("gpt/schedules")
+    fun createScheduleList(
+        @Body createCondition: CreateScheduleListRequest
+    ) : Call<CreateScheduleListResponse>
 
     @POST("schedules")
     fun saveSchedule(

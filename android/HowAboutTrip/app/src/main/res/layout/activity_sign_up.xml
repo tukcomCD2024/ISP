@@ -49,7 +49,6 @@
             android:text="@string/sign_up_info_context"
             android:textSize="13sp"
             android:textColor="@color/black"
-            android:fontFamily="@font/noto_sans_kr_regular"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/info_title" />
@@ -80,7 +79,6 @@
             android:inputType="text"
             android:textColor="@color/black"
             android:hint="@string/sign_up_name_hint"
-            android:fontFamily="@font/noto_sans_kr_regular"
             android:background="@android:color/transparent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/info_name" />
@@ -110,7 +108,6 @@
             android:hint="@string/sign_up_info_phone_hint"
             android:textColor="@color/black"
             android:maxLength="13"
-            android:fontFamily="@font/noto_sans_kr_regular"
             android:background="@android:color/transparent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/info_phone" />
@@ -145,7 +142,6 @@
             android:id="@+id/birth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/noto_sans_kr_regular"
             android:hint="YYYYMMDD"
             android:maxLength="8"
             android:background="@android:color/transparent"

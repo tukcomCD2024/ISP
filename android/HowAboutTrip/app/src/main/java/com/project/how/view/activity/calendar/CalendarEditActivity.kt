@@ -7,20 +7,25 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
+import android.view.ViewParent
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.NestedScrollView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout
 import com.project.how.R
@@ -124,32 +129,33 @@ class CalendarEditActivity
 
             supportMapFragment.getMapAsync(this@CalendarEditActivity)
 
-            supportMapFragment.view?.setOnTouchListener { v, event ->
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        v.parent.requestDisallowInterceptTouchEvent(false)
-                    }
-                    MotionEvent.ACTION_UP -> {
-                        v.parent.requestDisallowInterceptTouchEvent(true)
-                    }
-                }
-                false
-            }
-
-            binding.scrollView.setOnTouchListener { v, event ->
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        v.parent.requestDisallowInterceptTouchEvent(false)
-                    }
-                }
-                false
-            }
+//            supportMapFragment.view?.setOnTouchListener { v, event ->
+//                var parent : ViewParent? = v.parent
+//                while(v != null){
+//                    if (parent is NestedScrollView){
+//                        Log.d("CalendarEditActivity", "parent is NestedScrollView")
+//                        when (event.action) {
+//                            MotionEvent.ACTION_DOWN -> {
+//                                parent.requestDisallowInterceptTouchEvent(true)
+//                                Log.d("CalendarEditActivity", "MotionEvent.ACTION_DOWN\nparent.requestDisallowInterceptTouchEvent(true)")
+//                            }
+//                            MotionEvent.ACTION_UP -> {
+//                                parent.requestDisallowInterceptTouchEvent(false)
+//                                Log.d("CalendarEditActivity", "MotionEvent.ACTION_UP\nparent.requestDisallowInterceptTouchEvent(false)")
+//                            }
+//                        }
+//                    }
+//                    parent = parent?.parent
+//                }
+//                false
+//            }
 
             adapter.itemDragListener(object : ItemStartDragListener {
                 override fun onDropActivity(
                     initList: MutableList<DaysSchedule>,
                     changeList: MutableList<DaysSchedule>
                 ) {
+                    Log.d("addOnItemTouchListener", "itemDragListener\ndrop and getMapAsync")
                     supportMapFragment.getMapAsync(this@CalendarEditActivity)
                 }
 
@@ -310,8 +316,13 @@ class CalendarEditActivity
     }
 
     fun showCalendar(){
+        val constraints = CalendarConstraints.Builder()
+            .setStart(Calendar.getInstance().timeInMillis)
+            .build()
+
         val calendar = MaterialDatePicker.Builder.dateRangePicker()
             .setTheme(R.style.ThemeOverlay_App_DatePicker)
+            .setCalendarConstraints(constraints)
             .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
             .build()
         calendar.show(supportFragmentManager, "MaterialDatePicker")

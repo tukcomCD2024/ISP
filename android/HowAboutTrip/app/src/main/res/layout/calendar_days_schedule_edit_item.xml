@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="edit"
+            name="edit_item"
             type="com.project.how.adapter.recyclerview.DaysScheduleEditAdapter" />
     </data>
 
@@ -113,7 +113,7 @@
                 style="@style/Button.BlackRound"
                 android:layout_width="70dp"
                 android:layout_height="20dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="7dp"
                 android:drawableStart="@drawable/icon_edit_size_fixed"
                 android:gravity="center"
                 android:paddingHorizontal="15dp"

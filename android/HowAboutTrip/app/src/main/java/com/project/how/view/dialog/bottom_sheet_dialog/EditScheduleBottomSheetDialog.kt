@@ -98,7 +98,7 @@ class EditScheduleBottomSheetDialog(private val lat : Double, private val lng : 
 
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
-                Log.i("onPlaceSelected", "Place: ${place.name}, ${place.id}\nlatitude:${place.latLng.latitude}\tlongitude:${place.latLng.longitude}")
+                Log.i("onPlaceSelected", "Place: ${place.name}, ${place.id}\nlatitude:${place.latLng?.latitude}\tlongitude:${place.latLng?.longitude}")
                 supportMapFragment.getMapAsync { map ->
 
                     val placeLocation = LatLng(place.latLng.latitude, place.latLng.longitude)
@@ -142,7 +142,7 @@ class EditScheduleBottomSheetDialog(private val lat : Double, private val lng : 
     }
 
     override fun onMapReady(map: GoogleMap) {
-        if ((schedule.latitude != null || schedule.longitude != null) || (schedule.latitude == 0.0 && schedule.longitude == 0.0)){
+        if ((schedule.latitude != null || schedule.longitude != null) && (schedule.latitude != 0.0 && schedule.longitude != 0.0)){
             val placeLocation = LatLng(schedule.latitude!!, schedule.longitude!!)
             val camera = CameraOptionProducer().makeScheduleCameraUpdate(placeLocation, 15f)
             val markerOptions = MarkerProducer().makeScheduleMarkerOptions(requireContext(), type, position, placeLocation, schedule.places)

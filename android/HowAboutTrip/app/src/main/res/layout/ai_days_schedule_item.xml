@@ -11,13 +11,13 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="90dp"
         android:paddingStart="10dp">
 
         <ImageView
             android:id="@+id/top_dotted_line"
             android:layout_width="2dp"
-            android:layout_height="45dp"
+            android:layout_height="0dp"
             android:src="@drawable/white_dotted_line"
             android:layerType="software"
             android:layout_marginStart="8.5dp"
@@ -51,20 +51,21 @@
         <ImageView
             android:id="@+id/bottom_dotted_line"
             android:layout_width="2dp"
-            android:layout_height="45dp"
-            android:src="@drawable/white_dotted_line"
-            android:layerType="software"
+            android:layout_height="0dp"
             android:layout_marginStart="8.5dp"
+            android:layerType="software"
+            android:src="@drawable/white_dotted_line"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/number_background" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
-            android:layout_height="80dp"
+            android:layout_height="70dp"
             android:layout_marginStart="20dp"
-            android:paddingVertical="10dp"
+            android:paddingVertical="5dp"
             android:paddingHorizontal="20dp"
-            android:background="@drawable/white_nonangle_round_rectangle"
+            android:background="@drawable/white_round_rectangle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/number_background"
@@ -74,18 +75,33 @@
                 android:id="@+id/schedule_title"
                 android:layout_width="230dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="13dp"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:text="인천 → 오사카행"
                 android:textColor="@color/black"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMaxTextSize="13sp"
+                android:autoSizeMinTextSize="11sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/budget"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:text="@string/budget"
+                android:textSize="13sp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMaxTextSize="13sp"
+                android:autoSizeMinTextSize="11sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/schedule_title" />
+
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/buy"
+                android:id="@+id/search"
                 android:layout_width="75dp"
                 android:layout_height="20dp"
                 android:layout_marginBottom="10dp"

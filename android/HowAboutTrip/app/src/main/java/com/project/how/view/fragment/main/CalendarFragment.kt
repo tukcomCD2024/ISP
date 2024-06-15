@@ -26,12 +26,10 @@ import com.project.how.data_class.recyclerview.RecentAddedCalendar
 import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.data_class.dto.GetCountryLocationResponse
 import com.project.how.databinding.FragmentCalendarBinding
-import com.project.how.interface_af.OnDateTimeListener
 import com.project.how.interface_af.OnDesListener
 import com.project.how.view.activity.ai.AddAICalendarActivity
 import com.project.how.view.activity.calendar.CalendarEditActivity
 import com.project.how.view.activity.calendar.CalendarListActivity
-import com.project.how.view.dialog.bottom_sheet_dialog.CalendarBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
 import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
@@ -42,7 +40,6 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.TimeZone
-import kotlin.concurrent.thread
 
 class CalendarFragment : Fragment(), OnDesListener {
     private var _binding : FragmentCalendarBinding? = null

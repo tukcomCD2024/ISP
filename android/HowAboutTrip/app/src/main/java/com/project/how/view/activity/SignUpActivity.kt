@@ -9,27 +9,20 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.project.how.R
-import com.project.how.adapter.recyclerview.CalendarAdapter
 import com.project.how.databinding.ActivitySignUpBinding
-import com.project.how.databinding.CalendarBottomSheetBinding
-import com.project.how.view_model.CalendarViewModel
 import com.project.how.view_model.MemberViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding : ActivitySignUpBinding
-    private lateinit var calendarBinding : CalendarBottomSheetBinding
-    private val calenderViewModel : CalendarViewModel by viewModels()
     private val memberViewModel : MemberViewModel by viewModels()
     private lateinit var days : List<Int>
-    private lateinit var adapter : CalendarAdapter
     private var selectedDay : LocalDate? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up)
-        calendarBinding = CalendarBottomSheetBinding.inflate(layoutInflater)
         binding.signUp = this
         binding.lifecycleOwner = this
 

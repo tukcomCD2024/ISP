@@ -6,19 +6,14 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup
-import android.view.ViewParent
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.NestedScrollView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -36,15 +31,19 @@ import com.project.how.data_class.recyclerview.AiSchedule
 import com.project.how.data_class.recyclerview.DaysSchedule
 import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.databinding.ActivityCalendarEditBinding
+import com.project.how.interface_af.OnDateTimeListener
 import com.project.how.interface_af.OnDesListener
 import com.project.how.interface_af.OnScheduleListener
 import com.project.how.interface_af.interface_ada.ItemStartDragListener
+import com.project.how.view.activity.MainActivity
 import com.project.how.view.dialog.AiScheduleDialog
+import com.project.how.view.dialog.DatePickerDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.EditScheduleBottomSheetDialog
 import com.project.how.view.dp.DpPxChanger
 import com.project.how.view.map_helper.CameraOptionProducer
 import com.project.how.view.map_helper.MarkerProducer
+import com.project.how.view_model.CalendarViewModel
 import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.launch
@@ -54,14 +53,17 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
+import kotlin.math.abs
 
 
 class CalendarEditActivity
-    : AppCompatActivity(), OnMapReadyCallback, DaysScheduleEditAdapter.OnDaysButtonClickListener, OnScheduleListener, OnDesListener {
+    : AppCompatActivity(), OnMapReadyCallback, DaysScheduleEditAdapter.OnDaysButtonClickListener, OnScheduleListener, OnDesListener, OnDateTimeListener {
     private lateinit var binding : ActivityCalendarEditBinding
     private val viewModel : ScheduleViewModel by viewModels()
+    private val calendarViewModel : CalendarViewModel by viewModels()
     private lateinit var data : Schedule
     private var type: Int = FAILURE
     private lateinit var adapter : DaysScheduleEditAdapter
@@ -315,7 +317,7 @@ class CalendarEditActivity
         des.show(supportFragmentManager, "DesBottomSheetDialog")
     }
 
-    fun showCalendar(){
+    fun showRangeCalendar(){
         val constraints = CalendarConstraints.Builder()
             .setStart(Calendar.getInstance().timeInMillis)
             .build()
@@ -351,7 +353,7 @@ class CalendarEditActivity
                         getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
                 }
                 ScheduleViewModel.SUCCESS ->{
-                    moveCalendarList()
+                    moveCalendarFragment()
                 }
             }
         }
@@ -374,9 +376,12 @@ class CalendarEditActivity
         }
     }
 
-    private fun moveCalendarList(){
-        val intent = Intent(this, CalendarListActivity::class.java)
+    private fun moveCalendarFragment(){
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra(getString(R.string.menu_intent), MainActivity.CALENDAR)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
+
     }
 
 
@@ -400,7 +405,22 @@ class CalendarEditActivity
         editScheduleBottomSheet.show(supportFragmentManager, "EditScheduleBottomSheetDialog")
     }
 
-    override fun onDeleteButtonClickListener(position: Int) {
+    override fun onMoreMenuDateChangeClickListener(data: DaysSchedule, position: Int) {
+        lifecycleScope.launch {
+            calendarViewModel.getDateList(this@CalendarEditActivity.data.startDate, this@CalendarEditActivity.data.dailySchedule.lastIndex).collect{dates->
+                val datepicker = DatePickerDialog(data, dates, position, selectedDays, this@CalendarEditActivity)
+                datepicker.show(supportFragmentManager, "DatePickerDialog")
+            }
+        }
+
+    }
+
+    override fun onMoreMenuOrderChangeClickListener(position: Int) {
+
+    }
+
+    override fun onMoreMenuDeleteClickListener(position: Int) {
+        adapter.remove(position)
         data.dailySchedule[selectedDays]= adapter.getData()
         lifecycleScope.launch {
             viewModel.getTotalCost(data).collect{
@@ -441,6 +461,18 @@ class CalendarEditActivity
                 }
             }
         }
+    }
+
+    override fun onSaveDate(d: DaysSchedule, date: String, position: Int) {
+        val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val sd = format.parse(data.startDate)
+        val ssd = format.parse(date)
+        val diffMillies = abs(sd.time - ssd.time)
+        val diff = (diffMillies / (24 * 60 * 60 * 1000)).toInt()
+        data.dailySchedule[selectedDays+diff].add(d)
+        adapter.remove(position)
+        supportMapFragment.getMapAsync(this)
+
     }
 
     companion object{

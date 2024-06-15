@@ -26,21 +26,21 @@ class AiDaysScheduleAdapter(data: List<AiDaysSchedule>)
 
                 when(data.type){
                     AIRPLANE ->{
-                        binding.buy.visibility = View.VISIBLE
+                        binding.search.visibility = View.VISIBLE
                         binding.number.visibility = View.GONE
                         binding.numberBackground.setImageResource(R.drawable.icon_airplane)
                     }
                     HOTEL ->{
                         binding.number.text = "${position+1}"
                         binding.number.visibility = View.VISIBLE
-                        binding.buy.visibility = View.VISIBLE
+                        binding.search.visibility = View.VISIBLE
                         binding.numberBackground.setImageResource(R.drawable.white_oval)
 
                     }
                     PLACE ->{
                         binding.number.text = "${position+1}"
                         binding.number.visibility = View.VISIBLE
-                        binding.buy.visibility = View.GONE
+                        binding.search.visibility = View.GONE
                         binding.numberBackground.setImageResource(R.drawable.white_oval)
                     }
                 }

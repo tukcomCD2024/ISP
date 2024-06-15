@@ -10,7 +10,7 @@
     <RadioButton
         android:id="@+id/radio_btn"
         android:layout_width="wrap_content"
-        android:layout_height="27dp"
+        android:layout_height="28dp"
         android:background="@drawable/radio_btn_round_rectangle"
         android:paddingHorizontal="13dp"
         android:textSize="13sp"

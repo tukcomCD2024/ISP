@@ -8,24 +8,27 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.project.how.R
 import com.project.how.adapter.recyclerview.CalendarListAdapter
 import com.project.how.data_class.dto.GetCountryLocationResponse
 import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.data_class.dto.GetScheduleListResponseElement
 import com.project.how.databinding.ActivityCalendarListBinding
-import com.project.how.interface_af.OnDateTimeListener
 import com.project.how.interface_af.OnDesListener
 import com.project.how.interface_af.OnYesOrNoListener
 import com.project.how.view.dialog.YesOrNoDialog
-import com.project.how.view.dialog.bottom_sheet_dialog.CalendarBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
 import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.TimeZone
 
 class CalendarListActivity
-    : AppCompatActivity(), CalendarListAdapter.OnCalendarListButtonClickListener, OnYesOrNoListener, OnDateTimeListener, OnDesListener {
+    : AppCompatActivity(), CalendarListAdapter.OnCalendarListButtonClickListener, OnYesOrNoListener, OnDesListener {
     private lateinit var binding : ActivityCalendarListBinding
     private lateinit var adapter : CalendarListAdapter
     private val viewModel : ScheduleViewModel by viewModels()
@@ -57,19 +60,52 @@ class CalendarListActivity
         showDesInput()
     }
 
-    private fun showDepartureInput(){
-        val calendar = CalendarBottomSheetDialog(CalendarBottomSheetDialog.DEPARTURE, this)
-        calendar.show(supportFragmentManager, "CalendarBottomSheetDialog")
-    }
-
-    private fun showEntranceInput(){
-        val calendar = CalendarBottomSheetDialog(CalendarBottomSheetDialog.ENTRANCE, this)
-        calendar.show(supportFragmentManager, "CalendarBottomSheetDialog")
-    }
-
     private fun showDesInput(){
         val des = DesBottomSheetDialog(this)
         des.show(supportFragmentManager, "DesBottomSheetDialog")
+    }
+
+    private fun showCalendar(){
+        val constraints = CalendarConstraints.Builder()
+            .setStart(Calendar.getInstance().timeInMillis)
+            .build()
+
+        val calendar = MaterialDatePicker.Builder.dateRangePicker()
+            .setTheme(R.style.ThemeOverlay_App_DatePicker)
+            .setCalendarConstraints(constraints)
+            .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
+            .build()
+        calendar.show(supportFragmentManager, "MaterialDatePicker")
+
+        calendar.addOnPositiveButtonClickListener {
+            val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+            utc.timeInMillis = it.first
+            val format = SimpleDateFormat("yyyy-MM-dd")
+            val formatted = format.format(utc.time)
+            utc.timeInMillis = it.second
+            val formattedSecond = format.format(utc.time)
+            entranceDate = formattedSecond
+            departureDate = formatted
+            moveCalendarEdit()
+        }
+    }
+
+    private fun moveCalendarEdit(){
+        val intent = Intent(this, CalendarEditActivity::class.java)
+        val schedule = Schedule(
+            destination!!,
+            destination!!,
+            departureDate!!,
+            entranceDate!!,
+            0,
+            viewModel.getEmptyDaysSchedule(departureDate!!, entranceDate!!)
+        )
+        intent.putExtra(getString(R.string.type), CalendarEditActivity.NEW)
+        intent.putExtra(getString(R.string.schedule), schedule)
+        intent.putExtra(getString(R.string.server_calendar_latitude), latLng?.lat ?: 0.0)
+        intent.putExtra(getString(R.string.server_calendar_longitude), latLng?.lng ?: 0.0)
+        startActivity(intent)
+        finish()
     }
 
     override fun onDeleteButtonClickListener(data : GetScheduleListResponseElement, position : Int) {
@@ -117,53 +153,19 @@ class CalendarListActivity
         TODO("Not yet implemented")
     }
 
-    override fun onSaveDate(date: String, type: Int) {
-        if(type == CalendarBottomSheetDialog.ENTRANCE){
-            if(date < departureDate!!){
-                Toast.makeText(this, "입국 날짜($date)보다 출국 날짜($departureDate)가 더 늦습니다.", Toast.LENGTH_SHORT).show()
-                showEntranceInput()
-            }else{
-                entranceDate = date
-                val intent = Intent(this, CalendarEditActivity::class.java)
-                val schedule = Schedule(
-                    destination!!,
-                    destination!!,
-                    departureDate!!,
-                    entranceDate!!,
-                    0,
-                    viewModel.getEmptyDaysSchedule(departureDate!!, entranceDate!!)
-                )
-                intent.putExtra(getString(R.string.type), CalendarEditActivity.NEW)
-                intent.putExtra(getString(R.string.schedule), schedule)
-                intent.putExtra(getString(R.string.server_calendar_latitude), latLng?.lat ?: 0.0)
-                intent.putExtra(getString(R.string.server_calendar_longitude), latLng?.lng ?: 0.0)
-                startActivity(intent)
-                finish()
-            }
-
-        }else if(type == CalendarBottomSheetDialog.DEPARTURE){
-            departureDate = date
-            showEntranceInput()
-        }
-    }
-
-    override fun onSaveDateTime(dateTime: String, type: Int) {
-        TODO("Not yet implemented")
-    }
-
     override fun onDesListener(des: String) {
         lifecycleScope.launch {
             viewModel.getCountryLocation(des).collect{ location ->
                 location?.let {
                     destination = des
                     latLng = location
-                    showDepartureInput()
+                    showCalendar()
                 } ?: run {
                     viewModel.getCountryLocation(des).collect { newLocation ->
                         newLocation?.let {
                             destination = des
                             latLng = newLocation
-                            showDepartureInput()
+                            showCalendar()
                         } ?: run {
                             Toast.makeText(this@CalendarListActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
                         }

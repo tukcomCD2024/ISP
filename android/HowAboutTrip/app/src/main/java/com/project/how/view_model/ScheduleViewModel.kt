@@ -13,6 +13,7 @@ import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.data_class.dto.DailySchedule
 import com.project.how.data_class.dto.GetCountryLocationRequest
 import com.project.how.data_class.dto.GetCountryLocationResponse
+import com.project.how.data_class.dto.GetFastestSchedulesResponse
 import com.project.how.data_class.dto.GetScheduleListResponse
 import com.project.how.data_class.dto.ScheduleDetail
 import com.project.how.model.ScheduleRepository
@@ -33,18 +34,12 @@ class ScheduleViewModel : ViewModel() {
     private val _nearScheduleDayLiveData = scheduleRepository.nearScheduleDayLiveData
     private val _scheduleLiveData = scheduleRepository.scheduleLiveData
     private val _scheduleListLiveData = scheduleRepository.scheduleListLiveData
-    val nearScheduleDayLiveData : LiveData<Long>
+    val nearScheduleDayLiveData : LiveData<GetFastestSchedulesResponse>
         get() = _nearScheduleDayLiveData
     val scheduleLiveData : LiveData<Schedule>
         get() = _scheduleLiveData
     val scheduleListLiveData : LiveData<GetScheduleListResponse>
         get() = _scheduleListLiveData
-
-    fun getDday() : Flow<Long> = scheduleRepository.getDday()
-
-    fun getNearScheduleDay(day : Long){
-        scheduleRepository.getNearScheduleDay(day)
-    }
 
     fun getSchedule(schedule : Schedule){
         viewModelScope.launch {
@@ -301,6 +296,34 @@ class ScheduleViewModel : ViewModel() {
         } ?: close()
 
         awaitClose()
+    }
+
+    fun getFastestSchedules(context: Context, accessToken: String){
+        ScheduleRetrofit.getApiService()!!
+            .getFastestSchedule(context.getString(R.string.bearer_token, accessToken))
+            .enqueue(object : Callback<GetFastestSchedulesResponse>{
+                override fun onResponse(
+                    p0: Call<GetFastestSchedulesResponse>,
+                    p1: Response<GetFastestSchedulesResponse>
+                ) {
+                    if (p1.isSuccessful){
+                        val result = p1.body()
+                        if (result != null){
+                            scheduleRepository.getNearScheduleDay(result)
+                            Log.d("getFastSchedule", "id : ${result.id}\ndday : ${result.dday}\nname : ${result.scheduleName}")
+                        }else{
+                            Log.d("getFastestSchedule", "result is null\ncode : ${p1.code()}")
+                        }
+                    }else{
+                        Log.d("getFastestSchedule", "response is failed\ncode : ${p1.code()}")
+                    }
+                }
+
+                override fun onFailure(p0: Call<GetFastestSchedulesResponse>, p1: Throwable) {
+                    Log.d("getFastestSchedule", "getFastestSchedule is failed\n${p1.message}")
+                }
+
+            })
     }
 
     fun getCountryLocation(country : String) : Flow<GetCountryLocationResponse?> = callbackFlow {

@@ -6,6 +6,7 @@ import com.project.how.data_class.dto.CreateScheduleRequest
 import com.project.how.data_class.dto.CreateScheduleResponse
 import com.project.how.data_class.dto.GetCountryLocationRequest
 import com.project.how.data_class.dto.GetCountryLocationResponse
+import com.project.how.data_class.dto.GetFastestSchedulesResponse
 import com.project.how.data_class.dto.GetScheduleListResponse
 import com.project.how.data_class.dto.ScheduleDetail
 import retrofit2.Call
@@ -62,4 +63,9 @@ interface ScheduleService {
     fun getCountryLocation(
         @Body country : GetCountryLocationRequest
     ) : Call<GetCountryLocationResponse>
+
+    @GET("schedules/dday")
+    fun getFastestSchedule(
+        @Header("Authorization") accessToken : String
+    ) : Call<GetFastestSchedulesResponse>
 }

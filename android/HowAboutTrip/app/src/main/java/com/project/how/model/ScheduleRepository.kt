@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.project.how.R
 import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
+import com.project.how.data_class.dto.GetFastestSchedulesResponse
 import com.project.how.data_class.recyclerview.AiDaysSchedule
 import com.project.how.data_class.recyclerview.AiSchedule
 import com.project.how.data_class.recyclerview.DaysSchedule
@@ -26,23 +27,18 @@ class ScheduleRepository {
         set(Calendar.SECOND, 0)
         set(Calendar.MILLISECOND, 0)
     }.time.time
-    private val _nearScheduleDayLiveData : MutableLiveData<Long> = MutableLiveData()
+    private val _nearScheduleDayLiveData : MutableLiveData<GetFastestSchedulesResponse> = MutableLiveData()
     private val _scheduleLiveData : MutableLiveData<Schedule> = MutableLiveData()
     private val _scheduleListLiveData : MutableLiveData<GetScheduleListResponse> = MutableLiveData()
-    val nearScheduleDayLiveData : LiveData<Long>
+    val nearScheduleDayLiveData : LiveData<GetFastestSchedulesResponse>
         get() = _nearScheduleDayLiveData
     val scheduleLiveData : LiveData<Schedule>
         get() = _scheduleLiveData
     val scheduleListLiveData : LiveData<GetScheduleListResponse>
         get() = _scheduleListLiveData
 
-
-    fun getDday() : Flow<Long> = flow {
-        this.emit(((nearScheduleDayLiveData.value?.minus(today))?.div((24 * 60 * 60 * 1000)) ?: ERROR) as Long)
-    }
-
-    fun getNearScheduleDay(day : Long){
-        _nearScheduleDayLiveData.postValue(day)
+    fun getNearScheduleDay(data : GetFastestSchedulesResponse){
+        _nearScheduleDayLiveData.postValue(data)
     }
 
     suspend fun getSchedule(schedule : Schedule) {

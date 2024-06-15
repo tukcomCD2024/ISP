@@ -14,8 +14,6 @@ class CalendarViewModel : ViewModel() {
     val selectedDate : LiveData<LocalDate>
         get() = _selectedDate
 
-    fun init() : Flow<List<Int>> = calendarRepository.init()
-
     fun plusSelectedDate() : Flow<List<Int>> = calendarRepository.plusSelectedDate()
 
     fun minusSelectedDate() : Flow<List<Int>> = calendarRepository.minusSelectedDate()

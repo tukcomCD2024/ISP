@@ -64,7 +64,7 @@ class DatePickerDialog(private val data : DaysSchedule, private val dates : List
                 text = d
                 id = View.generateViewId()
                 if (d == dates[selectedDays])
-                    check(true)
+                    isChecked = true
             }
             binding.radio.addView(rdbtn)
         }

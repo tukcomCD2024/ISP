@@ -22,29 +22,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <RadioGroup
-                android:id="@+id/radio"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <RadioButton
-                    android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <RadioGroup
+                    android:id="@+id/radio"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checked="true"
-                    style="@style/DateRadioButton"
-                    android:text="2024.02.23" />
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/DateRadioButton"
-                    android:text="2024.02.24" />
-
-            </RadioGroup>
+                </RadioGroup>
+            </ScrollView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

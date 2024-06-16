@@ -15,62 +15,57 @@ import com.isp.backend.domain.schedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class GptService {
-    private final RestTemplate restTemplate;
     private final GptScheduleParser gptScheduleParser;
     private final ScheduleService scheduleService;
+    private final WebClient webClient;
 
-    @Value("${api-key.chat-gpt}")
+    @Value("${api-key.gpt-trip}")
     private String apiKey;
 
-    public HttpEntity<GptRequest> buildHttpEntity(GptRequest gptRequest) {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.parseMediaType(GptConfig.MEDIA_TYPE));
-        httpHeaders.add(GptConfig.AUTHORIZATION, GptConfig.BEARER + apiKey);
-        return new HttpEntity<>(gptRequest, httpHeaders);
-    }
+    public GptScheduleResponse getResponse(HttpHeaders headers, GptRequest gptRequest) {
 
-    public GptScheduleResponse getResponse(HttpEntity<GptRequest> chatGptRequestHttpEntity) {
+        GptResponse response = webClient.post()
+                .uri(GptConfig.CHAT_URL)
+                .headers(h -> h.addAll(headers))
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(gptRequest))
+                .retrieve()
+                .bodyToMono(GptResponse.class)
+                .block();
 
-        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-        requestFactory.setConnectTimeout(60000);
-        requestFactory.setReadTimeout(60 * 1000);
-        restTemplate.setRequestFactory(requestFactory);
-
-        ResponseEntity<GptResponse> responseEntity = restTemplate.postForEntity(
-                GptConfig.CHAT_URL,
-                chatGptRequestHttpEntity,
-                GptResponse.class);
-
-        List<GptSchedule> gptSchedules = gptScheduleParser.parseScheduleText(getScheduleText(responseEntity));
-
+        List<GptSchedule> gptSchedules = gptScheduleParser.parseScheduleText(getScheduleText(response));
         return new GptScheduleResponse(gptSchedules);
     }
 
-    private String getScheduleText(ResponseEntity<GptResponse> responseEntity) {
-        return getGptMessage(responseEntity).toString();
+    private String getScheduleText(GptResponse gptResponse) {
+        return getGptMessage(gptResponse).toString();
     }
 
-    private GptMessage getGptMessage(ResponseEntity<GptResponse> responseEntity) {
-        return responseEntity.getBody().getChoices().get(0).getMessage();
+    private GptMessage getGptMessage(GptResponse gptResponse) {
+        return gptResponse.getChoices().get(0).getMessage();
     }
 
-    public GptSchedulesResponse askQuestion(GptScheduleRequest questionRequestDTO) {
+    @Async
+    public CompletableFuture<GptSchedulesResponse> askQuestion(GptScheduleRequest questionRequestDTO) {
         String question = makeQuestion(questionRequestDTO);
         List<GptMessage> messages = Collections.singletonList(
                 GptMessage.builder()
@@ -81,26 +76,43 @@ public class GptService {
 
         Country country = scheduleService.validateCountry(questionRequestDTO.getDestination());
         String countryImage = country.getImageUrl();
-        List<GptScheduleResponse> schedules = new ArrayList<>();
-        for(int i = 0; i < 3; i++) {
-            schedules.add(
-                    this.getResponse(
-                            this.buildHttpEntity(
-                                    new GptRequest(
-                                        GptConfig.CHAT_MODEL,
-                                        GptConfig.MAX_TOKEN,
-                                        GptConfig.TEMPERATURE,
-                                        GptConfig.STREAM,
-                                        messages
-                                )
-                        )
-                ));
-        }
 
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
+        List<CompletableFuture<GptScheduleResponse>> futures = Arrays.asList(
+                sendRequestAsync(apiKey, messages, executorService),
+                sendRequestAsync(apiKey, messages, executorService),
+                sendRequestAsync(apiKey, messages, executorService)
+        );
 
+        CompletableFuture<List<GptScheduleResponse>> combinedFuture = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
+                .thenApply(v -> futures.stream()
+                        .map(CompletableFuture::join)
+                        .collect(Collectors.toList()));
 
+        return combinedFuture.thenApply(schedules -> new GptSchedulesResponse(countryImage, schedules));
+    }
 
-        return new GptSchedulesResponse(countryImage, schedules);
+    private CompletableFuture<GptScheduleResponse> sendRequestAsync(String apiKey, List<GptMessage> messages, ExecutorService executor) {
+        HttpHeaders headers = buildHttpHeaders(apiKey);
+        GptRequest request = getGptRequest(messages);
+        return CompletableFuture.supplyAsync(() -> getResponse(headers, request), executor);
+    }
+
+    private GptRequest getGptRequest(List<GptMessage> messages) {
+        return new GptRequest(
+                GptConfig.CHAT_MODEL,
+                GptConfig.MAX_TOKEN,
+                GptConfig.TEMPERATURE,
+                GptConfig.STREAM,
+                messages
+        );
+    }
+
+    private HttpHeaders buildHttpHeaders(String key) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.add(GptConfig.AUTHORIZATION, GptConfig.BEARER + key);
+        return httpHeaders;
     }
 
     private String makeQuestion(GptScheduleRequest questionRequestDTO) {
@@ -111,7 +123,7 @@ public class GptService {
                 questionRequestDTO.getExcludedActivities(),
                 questionRequestDTO.getDepartureDate(),
                 questionRequestDTO.getReturnDate(),
-        String.join(ParsingConstants.COMMA, questionRequestDTO.getPurpose())
+                String.join(ParsingConstants.COMMA, questionRequestDTO.getPurpose())
         );
     }
 }

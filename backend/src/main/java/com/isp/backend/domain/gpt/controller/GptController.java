@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.concurrent.CompletableFuture;
+
 @RequiredArgsConstructor
 @RequestMapping("/gpt")
 @RestController
@@ -15,7 +17,7 @@ public class GptController {
     private final GptService gptService;
 
     @PostMapping("/schedules")
-    public GptSchedulesResponse sendQuestion(@RequestBody GptScheduleRequest gptScheduleRequest) {
+    public CompletableFuture<GptSchedulesResponse> sendQuestion(@RequestBody GptScheduleRequest gptScheduleRequest) {
         return gptService.askQuestion(gptScheduleRequest);
     }
 }

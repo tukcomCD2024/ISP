@@ -56,11 +56,11 @@ public class FlightOfferController {
 
     /** 항공권 좋아요 저장 API **/
     @PostMapping("/like")
-    public ResponseEntity<Void> addLikeFlight(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+    public ResponseEntity<Long> addLikeFlight(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                               @RequestBody FlightLikeRequest flightLikeRequest) {
         String memberUid = customUserDetails.getUsername();
-        flightOfferService.addLikeFlight(memberUid, flightLikeRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        Long flightId = flightOfferService.addLikeFlight(memberUid, flightLikeRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(flightId);
     }
 
     /** 항공권 나의 좋아요 목록 불러오기 API **/

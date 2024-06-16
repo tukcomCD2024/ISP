@@ -110,10 +110,13 @@ public class FlightOfferServiceImpl implements FlightOfferService {
         return childrenBuilder.toString();
     }
 
-    /** 항공권 좋아요 저장 **/
+    /**
+     * 항공권 좋아요 저장
+     *
+     **/
     @Override
     @Transactional
-    public void addLikeFlight(String uid, FlightLikeRequest flightLikeRequest) {
+    public Long addLikeFlight(String uid, FlightLikeRequest flightLikeRequest) {
         // 유저 정보 확인
         Member findMember = scheduleService.validateUserCheck(uid);
 
@@ -126,6 +129,7 @@ public class FlightOfferServiceImpl implements FlightOfferService {
         // 데이터 변환 및 저장
         Flight flight = flightMapper.toEntity(flightLikeRequest, findMember, departureIataCode, arrivalIataCode);
         flightRepository.save(flight);
+        return flight.getId();
     }
 
 

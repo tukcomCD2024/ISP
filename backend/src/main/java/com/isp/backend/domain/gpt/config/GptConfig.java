@@ -11,7 +11,6 @@ public class GptConfig {
     public static final Boolean STREAM = false;
     public static final String ROLE = "user";
     public static final Double TEMPERATURE = 1.0;
-    public static final String MEDIA_TYPE = "application/json; charset=UTF-8";
     public static final String CHAT_URL = "https://api.openai.com/v1/chat/completions";
     public static final String PROMPT = """
                         You're a great travel agency staff member.
@@ -27,31 +26,31 @@ public class GptConfig {
                         For example
                         ---
                         2024-02-06
-                        1. Go to location
-                        2. See the place
-                        3. Eat the Lunch
-                        4. Go to location
-                        5. See the place
-                        6. Eat the dinner
-                        7. shopping
+                        1. Go to location 26.69549000, 127.87642000
+                        2. See the place 26.69549000, 127.87642000
+                        3. Eat the Lunch 26.69549000, 127.87642000
+                        4. Go to location 26.69549000, 127.87642000
+                        5. See the place 26.69549000, 127.87642000
+                        6. Eat the dinner 26.69549000, 127.87642000
+                        7. shopping 26.69549000, 127.87642000
                         
                         2024-02-07
-                        1. Go to location
-                        2. See the place
-                        3. Eat the Lunch
-                        4. Go to location
-                        5. See the place
-                        6. Eat the dinner
-                        7. shopping
+                        1. Go to location 26.69549000, 127.87642000
+                        2. See the place 26.69549000, 127.87642000
+                        3. Eat the Lunch 26.69549000, 127.87642000
+                        4. Go to location 26.69549000, 127.87642000
+                        5. See the place 26.69549000, 127.87642000
+                        6. Eat the dinner 26.69549000, 127.87642000
+                        7. shopping 26.69549000, 127.87642000
                         
                         2024-02-08
-                        1. Go to location
-                        2. See the place
-                        3. Eat the Lunch
-                        4. Go to location
-                        5. See the place
-                        6. Eat the dinner
-                        7. shopping
+                        1. Go to location 26.69549000, 127.87642000
+                        2. See the place 26.69549000, 127.87642000
+                        3. Eat the Lunch 26.69549000, 127.87642000
+                        4. Go to location 26.69549000, 127.87642000
+                        5. See the place 26.69549000, 127.87642000
+                        6. Eat the dinner 26.69549000, 127.87642000
+                        7. shopping 26.69549000, 127.87642000
                         ---
                         
                         여행지: %s
@@ -67,5 +66,6 @@ public class GptConfig {
                         Do not add any information I haven't provided to you.
                         Under no circumstances should you include any activities other than traveling. Absolutely not.
                         우리는 매일 점심과 저녁은 항상 식당에 가서 먹을거야. 반드시 실제로 존재하는 맛있고 유명한 식당으로 추천해줘
-                        금액 정보는 알려주지마. 대신 다양한 경험을 할 수 있게 일정을 만들어줘""";
+                        금액 정보는 알려주지마. 대신 다양한 경험을 할 수 있게 일정을 만들어줘.
+                        그리고 일정 옆에 장소의 위도 경도 좌표값 소수점 여덟자리까지 함께 작성해줘.""";
 }

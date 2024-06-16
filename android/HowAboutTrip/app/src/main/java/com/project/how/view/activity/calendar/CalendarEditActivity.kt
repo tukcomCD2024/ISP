@@ -61,7 +61,7 @@ import kotlin.math.abs
 
 
 class CalendarEditActivity
-    : AppCompatActivity(), OnMapReadyCallback, DaysScheduleEditAdapter.OnDaysButtonClickListener, OnScheduleListener, OnDesListener, OnDateTimeListener, OnOrderChangeListener {
+    : AppCompatActivity(), OnMapReadyCallback, DaysScheduleEditAdapter.OnItemClickListener, OnScheduleListener, OnDesListener, OnDateTimeListener, OnOrderChangeListener {
     private lateinit var binding : ActivityCalendarEditBinding
     private val viewModel : ScheduleViewModel by viewModels()
     private val calendarViewModel : CalendarViewModel by viewModels()

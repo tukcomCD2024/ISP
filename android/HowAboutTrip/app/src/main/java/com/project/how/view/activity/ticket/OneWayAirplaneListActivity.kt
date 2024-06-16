@@ -18,6 +18,7 @@ import com.project.how.data_class.dto.GetOneWayFlightOffersResponseElement
 import com.project.how.data_class.dto.OneWayFlightOffers
 import com.project.how.databinding.ActivityOneWayAirplaneListBinding
 import com.project.how.view.activity.calendar.CalendarEditActivity
+import com.project.how.view.dialog.bottom_sheet_dialog.WebViewBottomSheetDialog
 import com.project.how.view_model.BookingViewModel
 import com.project.how.view_model.MemberViewModel
 import kotlinx.coroutines.launch
@@ -44,9 +45,8 @@ class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapte
         binding.airplaneList.adapter = adapter
 
         bookingViewModel.skyscannerUrlLiveData.observe(this){url->
-            binding.webview.visibility = View.VISIBLE
-            binding.webview.settings.javaScriptEnabled = true
-            binding.webview.loadUrl(url)
+            val web = WebViewBottomSheetDialog(url)
+            web.show(supportFragmentManager, "WebViewBottomSheetDialog")
         }
 
         lifecycleScope.launch {

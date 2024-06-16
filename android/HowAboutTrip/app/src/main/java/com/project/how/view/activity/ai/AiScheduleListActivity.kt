@@ -4,26 +4,15 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.lifecycleScope
 import com.project.how.R
-import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
 import com.project.how.adapter.recyclerview.AiScheduleAdapter
-import com.project.how.data_class.AiScheduleInput
-import com.project.how.data_class.dto.GetCountryLocationResponse
-import com.project.how.data_class.recyclerview.AiDaysSchedule
 import com.project.how.data_class.recyclerview.AiSchedule
 import com.project.how.data_class.recyclerview.AiScheduleList
 import com.project.how.databinding.ActivityAiScheduleListBinding
 import com.project.how.view.activity.calendar.CalendarEditActivity
-import com.project.how.view_model.AiScheduleViewModel
-import com.project.how.view_model.ScheduleViewModel
-import kotlinx.coroutines.launch
 
-class AiScheduleListActivity : AppCompatActivity(), AiScheduleAdapter.OnClickListener {
+class AiScheduleListActivity : AppCompatActivity(), AiScheduleAdapter.OnItemClickListener {
     private lateinit var binding : ActivityAiScheduleListBinding
     private var data = mutableListOf<AiSchedule>()
     private var lat = 0.0

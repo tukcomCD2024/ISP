@@ -2,7 +2,6 @@ package com.project.how.view.fragment.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,10 +21,11 @@ import com.project.how.R
 import com.project.how.adapter.recyclerview.viewpager.EventViewPagerAdapter
 import com.project.how.adapter.recyclerview.RecentAddedCalendarsAdapter
 import com.project.how.data_class.recyclerview.EventViewPager
-import com.project.how.data_class.recyclerview.RecentAddedCalendar
 import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.data_class.dto.GetCountryLocationResponse
 import com.project.how.data_class.dto.GetFastestSchedulesResponse
+import com.project.how.data_class.dto.GetLatestSchedulesResponse
+import com.project.how.data_class.dto.GetLatestSchedulesResponseElement
 import com.project.how.databinding.FragmentCalendarBinding
 import com.project.how.interface_af.OnDesListener
 import com.project.how.view.activity.ai.AddAICalendarActivity
@@ -38,19 +38,17 @@ import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.TimeZone
 
-class CalendarFragment : Fragment(), OnDesListener {
+class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.OnItemClickListener {
     private var _binding : FragmentCalendarBinding? = null
     private val binding : FragmentCalendarBinding
         get() = _binding!!
     private val scheduleViewModel : ScheduleViewModel by viewModels()
     private var nearSchedule : GetFastestSchedulesResponse? = null
     private val event = mutableListOf<EventViewPager>()
-    private val recentAddedCalendar = mutableListOf<RecentAddedCalendar>()
+    private lateinit var recentAddedCalendar : GetLatestSchedulesResponse
     private lateinit var eventAdapter : EventViewPagerAdapter
     private lateinit var recentAddedCalendarAdapter: RecentAddedCalendarsAdapter
     private var destination : String? = null
@@ -62,7 +60,6 @@ class CalendarFragment : Fragment(), OnDesListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        recentAddedCalendarAdapter = RecentAddedCalendarsAdapter(recentAddedCalendar)
         for(i in 0..5){
             event.add(EventViewPager("test", "일정 생성을\n해보세요$i", null))
         }
@@ -85,6 +82,20 @@ class CalendarFragment : Fragment(), OnDesListener {
                 .into(binding.scheduleImage)
             binding.dDay.text = dDay
             binding.scheduleTitle.text = nearSchedule!!.scheduleName
+        }
+        scheduleViewModel.latestScheduleLiveData.observe(viewLifecycleOwner){latests->
+            recentAddedCalendar = latests
+            recentAddedCalendarAdapter = RecentAddedCalendarsAdapter(recentAddedCalendar, this@CalendarFragment)
+            binding.recentAddedCalendar.adapter = recentAddedCalendarAdapter
+        }
+        lifecycleScope.launch {
+            scheduleViewModel.getLatestSchedules(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken).collect{check->
+                if (check != ScheduleViewModel.SUCCESS){
+                    recentAddedCalendar = listOf(GetLatestSchedulesResponseElement(-1, "일정을 생성해보세요!", "없음", BuildConfig.TEMPORARY_IMAGE_URL, listOf<String>("AI 일정 생성", "일반 일정 생성", "편리한 기능들을 체험해보세요.")))
+                    recentAddedCalendarAdapter = RecentAddedCalendarsAdapter(recentAddedCalendar, this@CalendarFragment)
+                    binding.recentAddedCalendar.adapter = recentAddedCalendarAdapter
+                }
+            }
         }
         autoScrollJobCreate()
         return binding.root
@@ -117,7 +128,6 @@ class CalendarFragment : Fragment(), OnDesListener {
 
     override fun onStart() {
         super.onStart()
-        binding.recentAddedCalendar.adapter = recentAddedCalendarAdapter
         binding.viewPager2.adapter = eventAdapter
         TabLayoutMediator(binding.indicator, binding.viewPager2) { _, _ -> }.attach()
     }
@@ -156,6 +166,12 @@ class CalendarFragment : Fragment(), OnDesListener {
 
     fun moveCalendarList(){
         startActivity(Intent(activity, CalendarListActivity::class.java))
+    }
+
+    fun moveLatestCalendar(id: Long){
+        val intent = Intent(requireContext(), CalendarActivity::class.java)
+        intent.putExtra(getString(R.string.server_calendar_id), id)
+        startActivity(intent)
     }
 
     private fun showCalendar(){
@@ -215,6 +231,12 @@ class CalendarFragment : Fragment(), OnDesListener {
                     }
                 }
             }
+        }
+    }
+
+    override fun onItemClickListener(id: Long) {
+        if (id >0){
+            moveLatestCalendar(id)
         }
     }
 }

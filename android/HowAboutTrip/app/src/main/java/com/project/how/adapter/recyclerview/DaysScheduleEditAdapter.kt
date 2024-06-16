@@ -21,7 +21,7 @@ import java.util.Locale
 class DaysScheduleEditAdapter (
     data: MutableList<DaysSchedule>,
     private val context: Context,
-    private val onButtonClickListener: OnDaysButtonClickListener
+    private val onItemClickListener: OnItemClickListener
 )
     : RecyclerView.Adapter<DaysScheduleEditAdapter.ViewHolder>(), ItemMoveListener, PopupMenu.OnMenuItemClickListener {
     private var dailySchedule = data
@@ -84,7 +84,7 @@ class DaysScheduleEditAdapter (
             }
 
             binding.edit.setOnClickListener {
-                onButtonClickListener.onEditButtonClickListener(data, position)
+                onItemClickListener.onEditButtonClickListener(data, position)
             }
         }
     }
@@ -92,13 +92,13 @@ class DaysScheduleEditAdapter (
     override fun onMenuItemClick(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.menu_sch_order_change -> {
-                onButtonClickListener.onMoreMenuOrderChangeClickListener(currentPosition)
+                onItemClickListener.onMoreMenuOrderChangeClickListener(currentPosition)
             }
             R.id.menu_sch_date_change -> {
-                onButtonClickListener.onMoreMenuDateChangeClickListener(currentData!!, currentPosition)
+                onItemClickListener.onMoreMenuDateChangeClickListener(currentData!!, currentPosition)
             }
             R.id.menu_sch_delete -> {
-                onButtonClickListener.onMoreMenuDeleteClickListener(currentPosition)
+                onItemClickListener.onMoreMenuDeleteClickListener(currentPosition)
             }
             else ->{
                 Toast.makeText(context, context.getString(R.string.non_exist_menu_warning), Toast.LENGTH_SHORT).show()
@@ -190,7 +190,7 @@ class DaysScheduleEditAdapter (
         return true
     }
 
-    interface OnDaysButtonClickListener{
+    interface OnItemClickListener{
         fun onEditButtonClickListener(data : DaysSchedule, position: Int)
         fun onMoreMenuDateChangeClickListener(data : DaysSchedule, position: Int)
         fun onMoreMenuOrderChangeClickListener(position: Int)

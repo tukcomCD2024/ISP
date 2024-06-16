@@ -2,11 +2,11 @@ package com.project.how.network.api_interface
 
 import com.project.how.data_class.dto.CreateScheduleListRequest
 import com.project.how.data_class.dto.CreateScheduleListResponse
-import com.project.how.data_class.dto.CreateScheduleRequest
 import com.project.how.data_class.dto.CreateScheduleResponse
 import com.project.how.data_class.dto.GetCountryLocationRequest
 import com.project.how.data_class.dto.GetCountryLocationResponse
 import com.project.how.data_class.dto.GetFastestSchedulesResponse
+import com.project.how.data_class.dto.GetLatestSchedulesResponse
 import com.project.how.data_class.dto.GetScheduleListResponse
 import com.project.how.data_class.dto.ScheduleDetail
 import retrofit2.Call
@@ -17,6 +17,7 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ScheduleService {
     @POST("gpt/schedules")
@@ -68,4 +69,10 @@ interface ScheduleService {
     fun getFastestSchedule(
         @Header("Authorization") accessToken : String
     ) : Call<GetFastestSchedulesResponse>
+
+    @GET("schedules/latest")
+    fun getLatestSchedules(
+        @Header("Authorization") accessToken: String,
+        @Query("limit") limit: Long
+    ) : Call<GetLatestSchedulesResponse>
 }

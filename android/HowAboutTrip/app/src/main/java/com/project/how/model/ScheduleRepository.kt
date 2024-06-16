@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.project.how.R
 import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
 import com.project.how.data_class.dto.GetFastestSchedulesResponse
+import com.project.how.data_class.dto.GetLatestSchedulesResponse
 import com.project.how.data_class.recyclerview.AiDaysSchedule
 import com.project.how.data_class.recyclerview.AiSchedule
 import com.project.how.data_class.recyclerview.DaysSchedule
@@ -30,12 +31,15 @@ class ScheduleRepository {
     private val _nearScheduleDayLiveData : MutableLiveData<GetFastestSchedulesResponse> = MutableLiveData()
     private val _scheduleLiveData : MutableLiveData<Schedule> = MutableLiveData()
     private val _scheduleListLiveData : MutableLiveData<GetScheduleListResponse> = MutableLiveData()
+    private val _latestScheduleLiveData : MutableLiveData<GetLatestSchedulesResponse> = MutableLiveData()
     val nearScheduleDayLiveData : LiveData<GetFastestSchedulesResponse>
         get() = _nearScheduleDayLiveData
     val scheduleLiveData : LiveData<Schedule>
         get() = _scheduleLiveData
     val scheduleListLiveData : LiveData<GetScheduleListResponse>
         get() = _scheduleListLiveData
+    val latestScheduleLiveData : LiveData<GetLatestSchedulesResponse>
+        get() = _latestScheduleLiveData
 
     fun getNearScheduleDay(data : GetFastestSchedulesResponse){
         _nearScheduleDayLiveData.postValue(data)
@@ -73,6 +77,10 @@ class ScheduleRepository {
             }
         }
         this.emit(totalCost)
+    }
+
+    fun getLatestSchedule(data : GetLatestSchedulesResponse){
+        _latestScheduleLiveData.postValue(data)
     }
 
     private fun getDailySchedule(aiDailySchedule : List<List<AiDaysSchedule>>): MutableList<MutableList<DaysSchedule>> {

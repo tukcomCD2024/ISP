@@ -40,6 +40,8 @@ dependencies {
     implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.2")
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3'
 
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
 
     // Open API
 	implementation "com.amadeus:amadeus-java:8.0.0"

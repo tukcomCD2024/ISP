@@ -34,7 +34,7 @@ jwt:
   secret: ${JWT_SECRET_KEY}
 
 api-key:
-  chat-gpt: ${GPT_API_KEY}
+  gpt-trip: ${GPT_API_KEY}
   amadeus:
     accessKey: ${AMADEUS_ACCESS_KEY}
     secretKey: ${AMADEUS_SECRET_KEY}

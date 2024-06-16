@@ -2,7 +2,6 @@ package com.isp.backend.domain.schedule.entity;
 
 import com.isp.backend.domain.country.entity.Country;
 import com.isp.backend.domain.member.entity.Member;
-import com.isp.backend.domain.scheduleDetail.entity.CheckList;
 import com.isp.backend.domain.scheduleDetail.entity.ScheduleDetail;
 import com.isp.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
@@ -49,9 +48,6 @@ public class Schedule extends BaseEntity {
     @Builder.Default
     @Column(nullable = false)
     private boolean activated = true;
-
-    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CheckList> checkLists = new ArrayList<>();
 
 
 }

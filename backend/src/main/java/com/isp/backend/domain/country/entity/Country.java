@@ -33,6 +33,8 @@ public class Country {
 
     private double longitude ;  // 경도
 
+    private String currencyCode ;
+
     @OneToMany (mappedBy = "country")
     private List<Schedule> schedules;
 

@@ -1,11 +1,11 @@
 package com.project.how.adapter.recyclerview
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.how.R
-import com.project.how.data_class.dto.GetFlightOffersResponseElement
 import com.project.how.data_class.dto.GetOneWayFlightOffersResponseElement
 import com.project.how.databinding.OneWayAirplaneListItemBinding
 import java.text.NumberFormat
@@ -43,9 +43,13 @@ class OneWayAirplaneListAdapter(private val context: Context, private val data :
 
             binding.heart.setOnClickListener {
                 if (hearts[position]){
+                    Log.d("heart", "like")
+                    onItemClickListener.onHeartClickerListener(hearts[position], data)
                     hearts[position] = !hearts[position]
                     unLike(binding)
                 }else{
+                    Log.d("heart", "unlike")
+                    onItemClickListener.onHeartClickerListener(hearts[position], data)
                     hearts[position] = !hearts[position]
                     like(binding)
                 }
@@ -77,7 +81,7 @@ class OneWayAirplaneListAdapter(private val context: Context, private val data :
     }
 
     private fun unLike(binding : OneWayAirplaneListItemBinding){
-        binding.heart.setImageResource(R.drawable.icon_heart_red_fill_white_line)
+        binding.heart.setImageResource(R.drawable.icon_heart_white_line)
     }
 
     private fun getDateTime(timeDate : String) : List<String>{
@@ -98,6 +102,6 @@ class OneWayAirplaneListAdapter(private val context: Context, private val data :
 
     interface OnItemClickListener{
         fun onItemClickerListener(data : GetOneWayFlightOffersResponseElement)
-        fun onHeartClickerListener()
+        fun onHeartClickerListener(check: Boolean, data: GetOneWayFlightOffersResponseElement)
     }
 }

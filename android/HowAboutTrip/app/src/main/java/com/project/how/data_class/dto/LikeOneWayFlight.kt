@@ -1,18 +1,15 @@
 package com.project.how.data_class.dto
 
-typealias LikeFlight = List<LikeFlightElement>
+typealias LikeOneWayFlight = List<LikeOneWayFlightElement>
 
-data class LikeFlightElement (
+data class LikeOneWayFlightElement (
     val carrierCode: String,
     val totalPrice: Long,
+    val departureIataCode: String,
+    val arrivalIataCode: String,
     val abroadDuration: String,
     val abroadDepartureTime: String,
     val abroadArrivalTime: String,
-    val homeDuration: String,
-    val homeDepartureTime: String,
-    val homeArrivalTime: String,
-    val departureIataCode: String,
-    val arrivalIataCode: String,
     val nonstop: Boolean,
     val transferCount: Long
 )

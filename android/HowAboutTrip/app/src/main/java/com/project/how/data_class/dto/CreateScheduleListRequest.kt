@@ -7,9 +7,9 @@ data class CreateScheduleListRequest(
     val destination : String,
     @SerializedName("purpose")
     val purpose : List<String>,
-    @SerializedName("activities")
+    @SerializedName("includedActivities")
     val activities : List<String>,
-    @SerializedName("excludingActivity")
+    @SerializedName("excludedActivities")
     val excludingActivity : List<String>,
     @SerializedName("departureDate")
     val departureDate : String,

@@ -1,5 +1,6 @@
 package com.project.how.view.fragment.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,6 +15,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.project.how.R
 import com.project.how.databinding.FragmentMypageBinding
+import com.project.how.view.activity.mypage.LikeActivity
 import com.project.how.view_model.MemberViewModel
 
 class MypageFragment : Fragment() {
@@ -87,5 +89,9 @@ class MypageFragment : Fragment() {
         super.onDestroyView()
         name = null
         _binding = null
+    }
+
+    fun moveLike(){
+        startActivity(Intent(requireContext(), LikeActivity::class.java))
     }
 }

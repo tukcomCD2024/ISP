@@ -22,6 +22,7 @@ import com.project.how.data_class.dto.GetOneWayFlightOffersRequest
 import com.project.how.data_class.dto.RoundTripFlightOffers
 import com.project.how.databinding.ActivityRoundTripAirplaneListBinding
 import com.project.how.view.activity.calendar.CalendarEditActivity
+import com.project.how.view.dialog.bottom_sheet_dialog.WebViewBottomSheetDialog
 import com.project.how.view_model.BookingViewModel
 import com.project.how.view_model.MemberViewModel
 import kotlinx.coroutines.launch
@@ -48,9 +49,8 @@ class RoundTripAirplaneListActivity : AppCompatActivity(), RoundTripAirplaneList
             getString(R.string.get_flight_offers_request), GetFlightOffersRequest::class.java)
 
         bookingViewModel.skyscannerUrlLiveData.observe(this){url->
-            binding.webview.visibility = View.VISIBLE
-            binding.webview.settings.javaScriptEnabled = true
-            binding.webview.loadUrl(url)
+            val web = WebViewBottomSheetDialog(url)
+            web.show(supportFragmentManager, "WebViewBottomSheetDialog")
         }
 
         lifecycleScope.launch {
@@ -67,8 +67,8 @@ class RoundTripAirplaneListActivity : AppCompatActivity(), RoundTripAirplaneList
                 data.arrivalIataCode,
                 input.departureDate,
                 input.returnDate,
-                input.adults + input.children,
-                0,
+                input.adults,
+                input.children,
                 data.abroadDuration,
                 data.transferCount
             )
@@ -87,16 +87,5 @@ class RoundTripAirplaneListActivity : AppCompatActivity(), RoundTripAirplaneList
 
     override fun onHeartClickerListener() {
 
-    }
-
-    @SuppressLint("MissingSuperCall")
-    override fun onBackPressed() {
-        if (binding.webview.canGoBack()) {
-            binding.webview.goBack()
-        } else {
-            binding.webview.visibility = View.GONE
-            binding.webview.loadUrl("about:blank")
-            binding.webview.clearHistory()
-        }
     }
 }

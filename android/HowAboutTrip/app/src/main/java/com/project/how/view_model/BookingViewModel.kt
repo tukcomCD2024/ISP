@@ -5,13 +5,17 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.project.how.R
+import com.project.how.data_class.dto.EmptyResponse
 import com.project.how.data_class.dto.GenerateOneWaySkyscannerUrlRequest
 import com.project.how.data_class.dto.GenerateSkyscannerUrlRequest
 import com.project.how.data_class.dto.GenerateSkyscannerUrlResponse
 import com.project.how.data_class.dto.GetFlightOffersRequest
 import com.project.how.data_class.dto.GetFlightOffersResponse
+import com.project.how.data_class.dto.GetLikeFlightResponse
 import com.project.how.data_class.dto.GetOneWayFlightOffersRequest
 import com.project.how.data_class.dto.GetOneWayFlightOffersResponse
+import com.project.how.data_class.dto.LikeFlightElement
+import com.project.how.data_class.dto.LikeOneWayFlightElement
 import com.project.how.model.BookingRepository
 import com.project.how.network.client.BookingRetrofit
 import kotlinx.coroutines.channels.awaitClose
@@ -26,12 +30,15 @@ class BookingViewModel : ViewModel() {
     private val _flightOffersLiveData = bookingRepository.flightOffersLiveData
     private val _oneWayFlightOffersLiveData = bookingRepository.oneWayFlightOffersLiveData
     private val _skyscannerUrlLiveData = bookingRepository.skyscannerUrlLiveData
+    private val _likeFlightLiveData = bookingRepository.likeFlightLiveData
     val flightOffersLiveData : LiveData<GetFlightOffersResponse>
         get() = _flightOffersLiveData
     val oneWayFlightOffersLiveData : LiveData<GetOneWayFlightOffersResponse>
         get() = _oneWayFlightOffersLiveData
     val skyscannerUrlLiveData : LiveData<String>
         get() = _skyscannerUrlLiveData
+    val likeFlightLiveData : LiveData<GetLikeFlightResponse>
+        get() = _likeFlightLiveData
 
 
     fun getFlightOffers(context : Context, accessToken : String, getFlightOffersRequest: GetFlightOffersRequest) : Flow<Int> = callbackFlow{
@@ -184,9 +191,96 @@ class BookingViewModel : ViewModel() {
         awaitClose()
     }
 
+    fun like(context: Context, accessToken: String, likeFlightElement: LikeFlightElement) : Flow<Int> = callbackFlow{
+        BookingRetrofit.getApiService()?.let { apiService->
+            apiService.addLikeFlight(context.getString(R.string.bearer_token, accessToken), likeFlightElement)
+                .enqueue(object : Callback<EmptyResponse>{
+                    override fun onResponse(p0: Call<EmptyResponse>, p1: Response<EmptyResponse>) {
+                        if (p1.code() == SUCCESS){
+                            Log.d("addLikeFlight", "success 200 \n${likeFlightElement.totalPrice}\t${likeFlightElement.arrivalIataCode}")
+                            trySend(SUCCESS)
+                        }else{
+                            Log.d("addLikeFlight", "response is failed\ncode : ${p1.code()}")
+                            trySend(NOT_EXIST)
+                        }
+                    }
+
+                    override fun onFailure(p0: Call<EmptyResponse>, p1: Throwable) {
+                        Log.d("addLikeFlight", "onFailure\ncode : ${p1.message}")
+                        trySend(NETWORK_FAILED)
+                    }
+
+                })
+
+        } ?: close()
+
+        awaitClose()
+    }
+
+    fun like(context: Context, accessToken: String, likeOneWayFlightElement: LikeOneWayFlightElement) : Flow<Int> = callbackFlow {
+        BookingRetrofit.getApiService()?.let { apiService->
+            apiService.addLikeOneWayFlight(context.getString(R.string.bearer_token, accessToken), likeOneWayFlightElement)
+                .enqueue(object : Callback<EmptyResponse>{
+                    override fun onResponse(p0: Call<EmptyResponse>, p1: Response<EmptyResponse>) {
+                        if (p1.code() == SUCCESS){
+                            Log.d("addLikeFlight", "success 200 \n${likeOneWayFlightElement.totalPrice}\t${likeOneWayFlightElement.arrivalIataCode}")
+                            trySend(SUCCESS)
+                        }else{
+                            Log.d("addLikeFlight", "response is failed\ncode : ${p1.code()}")
+                            trySend(NOT_EXIST)
+                        }
+                    }
+
+                    override fun onFailure(p0: Call<EmptyResponse>, p1: Throwable) {
+                        Log.d("addLikeFlight", "on Failure\n${p1.message}")
+                        trySend(NETWORK_FAILED)
+                    }
+
+                })
+
+        } ?: close()
+
+        awaitClose()
+    }
+
+    fun getLikeFlight(context: Context, accessToken: String) : Flow<Int> = callbackFlow {
+        BookingRetrofit.getApiService()?.let { apiService->
+            apiService.getLikeFlight(context.getString(R.string.bearer_token, accessToken))
+                .enqueue(object : Callback<GetLikeFlightResponse>{
+                    override fun onResponse(
+                        p0: Call<GetLikeFlightResponse>,
+                        p1: Response<GetLikeFlightResponse>
+                    ) {
+                        if (p1.isSuccessful){
+                            val result = p1.body()
+                            if (result != null){
+                                Log.d("getLikeFlight", "size : ${result.size}")
+                                bookingRepository.getLikeFlight(result)
+                                trySend(SUCCESS)
+                            }else{
+                                Log.d("getLikeFlight", "result is null\ncode : ${p1.code()}")
+                                trySend(NOT_EXIST)
+                            }
+                        }else{
+                            Log.d("getLikeFlight", "response is failed\ncode : ${p1.code()}")
+                            trySend(NOT_EXIST)
+                        }
+                    }
+
+                    override fun onFailure(p0: Call<GetLikeFlightResponse>, p1: Throwable) {
+                        Log.d("getLikeFlight", "onFailure\ncode : ${p1.message}")
+                        trySend(NETWORK_FAILED)
+                    }
+
+                })
+        } ?: close()
+
+        awaitClose()
+    }
+
     companion object{
         const val NETWORK_FAILED = -1
         const val NOT_EXIST = -2
-        const val SUCCESS = 0
+        const val SUCCESS = 200
     }
 }

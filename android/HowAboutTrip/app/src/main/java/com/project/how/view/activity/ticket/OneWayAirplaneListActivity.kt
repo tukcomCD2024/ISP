@@ -1,8 +1,7 @@
 package com.project.how.view.activity.ticket
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -15,13 +14,16 @@ import com.project.how.adapter.recyclerview.OneWayAirplaneListAdapter
 import com.project.how.data_class.dto.GenerateOneWaySkyscannerUrlRequest
 import com.project.how.data_class.dto.GetOneWayFlightOffersRequest
 import com.project.how.data_class.dto.GetOneWayFlightOffersResponseElement
+import com.project.how.data_class.dto.LikeOneWayFlightElement
 import com.project.how.data_class.dto.OneWayFlightOffers
 import com.project.how.databinding.ActivityOneWayAirplaneListBinding
 import com.project.how.view.activity.calendar.CalendarEditActivity
 import com.project.how.view.dialog.bottom_sheet_dialog.WebViewBottomSheetDialog
 import com.project.how.view_model.BookingViewModel
 import com.project.how.view_model.MemberViewModel
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlin.concurrent.thread
 
 class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapter.OnItemClickListener {
     private lateinit var binding : ActivityOneWayAirplaneListBinding
@@ -63,8 +65,8 @@ class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapte
                 data.departureIataCode,
                 data.arrivalIataCode,
                 input.departureDate,
-                input.adults + input.children,
-                0,
+                input.adults,
+                input.children,
                 data.abroadDuration,
                 data.transferCount
             )
@@ -81,19 +83,30 @@ class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapte
         }
     }
 
-    override fun onHeartClickerListener() {
+    override fun onHeartClickerListener(check: Boolean, data: GetOneWayFlightOffersResponseElement){
+        lifecycleScope.launch{
+            if (check){
 
-    }
+            }else{
+                val lowf = LikeOneWayFlightElement(
+                    data.carrierCode,
+                    data.totalPrice,
+                    data.departureIataCode,
+                    data.arrivalIataCode,
+                    data.abroadDuration,
+                    data.abroadDepartureTime,
+                    data.abroadArrivalTime,
+                    data.nonstop,
+                    data.transferCount
+                )
+                bookingViewModel.like(this@OneWayAirplaneListActivity, MemberViewModel.tokensLiveData.value!!.accessToken, lowf).collect{c->
+                    if (c == BookingViewModel.SUCCESS){
+                    }else{
+                        Toast.makeText(this@OneWayAirplaneListActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
+                    }
 
-    @SuppressLint("MissingSuperCall")
-    override fun onBackPressed() {
-        if (binding.webview.canGoBack()) {
-            binding.webview.goBack()
-        } else {
-            binding.webview.visibility = View.GONE
-            binding.webview.loadUrl("about:blank")
-            binding.webview.clearCache(true)
-            binding.webview.clearHistory()
+                }
+            }
         }
     }
 }

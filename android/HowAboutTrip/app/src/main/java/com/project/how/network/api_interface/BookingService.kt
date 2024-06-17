@@ -1,14 +1,17 @@
 package com.project.how.network.api_interface
 
+import com.project.how.data_class.dto.EmptyResponse
 import com.project.how.data_class.dto.GenerateOneWaySkyscannerUrlRequest
 import com.project.how.data_class.dto.GenerateSkyscannerUrlRequest
 import com.project.how.data_class.dto.GenerateSkyscannerUrlResponse
 import com.project.how.data_class.dto.GetFlightOffersRequest
 import com.project.how.data_class.dto.GetFlightOffersResponse
+import com.project.how.data_class.dto.GetLikeFlightResponse
 import com.project.how.data_class.dto.GetOneWayFlightOffersRequest
 import com.project.how.data_class.dto.GetOneWayFlightOffersResponse
 import com.project.how.data_class.dto.LikeFlightElement
-import com.project.how.data_class.dto.LikeFlightList
+import com.project.how.data_class.dto.LikeFlight
+import com.project.how.data_class.dto.LikeOneWayFlightElement
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -42,18 +45,24 @@ interface BookingService {
         @Body generateOneWaySkyscannerUrlRequest: GenerateOneWaySkyscannerUrlRequest
     ) : Call<GenerateSkyscannerUrlResponse>
 
-    @POST("bookings/flight/like")
+    @POST("bookings/flights/like")
     fun addLikeFlight(
         @Header("Authorization") accessToken : String,
         @Body addLikeFlightRequest: LikeFlightElement
-    )
+    ) : Call<EmptyResponse>
 
-    @GET("bookings/flight/likes")
+    @POST("bookings/flights/like")
+    fun addLikeOneWayFlight(
+        @Header("Authorization") accessToken : String,
+        @Body addLikeFlightRequest: LikeOneWayFlightElement
+    ) : Call<EmptyResponse>
+
+    @GET("bookings/flights/likes")
     fun getLikeFlight(
         @Header("Authorization") accessToken : String
-    ) : Call<LikeFlightList>
+    ) : Call<GetLikeFlightResponse>
 
-    @DELETE("bookings/flight/likes/{id}")
+    @DELETE("bookings/flights/likes/{id}")
     fun deleteLikeFlight(
         @Header("Authorization") accessToken : String,
         @Path("id", encoded = true) id : Long

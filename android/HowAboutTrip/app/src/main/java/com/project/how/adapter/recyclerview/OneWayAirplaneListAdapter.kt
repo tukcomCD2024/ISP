@@ -13,8 +13,10 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-class OneWayAirplaneListAdapter(private val context: Context, private val data : ArrayList<GetOneWayFlightOffersResponseElement>, private val onItemClickListener : OnItemClickListener) : RecyclerView.Adapter<OneWayAirplaneListAdapter.ViewHolder>(){
-    private val hearts = MutableList<Boolean>(data.size) { false }
+class OneWayAirplaneListAdapter(private val context: Context, private val data : ArrayList<GetOneWayFlightOffersResponseElement>, lid : MutableList<Long>, private val onItemClickListener : OnItemClickListener) : RecyclerView.Adapter<OneWayAirplaneListAdapter.ViewHolder>(){
+    private val hearts = lid.map { it > 0 }.toMutableList()
+    private var likeId = lid
+    private var heartClickable = false
 
     inner class ViewHolder(val binding : OneWayAirplaneListItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(data : GetOneWayFlightOffersResponseElement, position: Int){
@@ -41,17 +43,21 @@ class OneWayAirplaneListAdapter(private val context: Context, private val data :
             binding.abroadNonStop.text = if (data.nonstop) context.getString(R.string.non_stop) else context.getString(R.string.stop, data.transferCount.toString())
             binding.abroadDuration.text = abroadDuration
 
-            binding.heart.setOnClickListener {
-                if (hearts[position]){
-                    Log.d("heart", "like")
-                    onItemClickListener.onHeartClickerListener(hearts[position], data)
-                    hearts[position] = !hearts[position]
-                    unLike(binding)
-                }else{
-                    Log.d("heart", "unlike")
-                    onItemClickListener.onHeartClickerListener(hearts[position], data)
-                    hearts[position] = !hearts[position]
-                    like(binding)
+            if(hearts[position]) like(binding) else unLike(binding)
+
+            if (heartClickable){
+                binding.heart.setOnClickListener {
+                    if (hearts[position]){
+                        Log.d("heart", "unlike")
+                        onItemClickListener.onHeartClickerListener(hearts[position], data, position, likeId[position])
+                        hearts[position] = !hearts[position]
+                        unLike(binding)
+                    }else{
+                        Log.d("heart", "like")
+                        onItemClickListener.onHeartClickerListener(hearts[position], data, position,likeId[position])
+                        hearts[position] = !hearts[position]
+                        like(binding)
+                    }
                 }
             }
         }
@@ -84,6 +90,27 @@ class OneWayAirplaneListAdapter(private val context: Context, private val data :
         binding.heart.setImageResource(R.drawable.icon_heart_white_line)
     }
 
+    fun updateLike(ids : MutableList<Long>){
+        likeId = ids
+    }
+
+    fun remove(position: Int){
+        data.removeAt(position)
+        likeId.removeAt(position)
+        hearts.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    fun lock(){
+        heartClickable = false
+        notifyDataSetChanged()
+    }
+
+    fun unlock(){
+        heartClickable = true
+        notifyDataSetChanged()
+    }
+
     private fun getDateTime(timeDate : String) : List<String>{
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val localDateTime = LocalDateTime.parse(timeDate, formatter)
@@ -102,6 +129,11 @@ class OneWayAirplaneListAdapter(private val context: Context, private val data :
 
     interface OnItemClickListener{
         fun onItemClickerListener(data : GetOneWayFlightOffersResponseElement)
-        fun onHeartClickerListener(check: Boolean, data: GetOneWayFlightOffersResponseElement)
+        fun onHeartClickerListener(
+            check: Boolean,
+            data: GetOneWayFlightOffersResponseElement,
+            position: Int,
+            id: Long
+        )
     }
 }

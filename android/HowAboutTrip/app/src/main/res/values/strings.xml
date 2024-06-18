@@ -305,4 +305,6 @@
     <string name="menu_sch_date_change">날짜 변경</string>
     <string name="non_exist_menu_warning">존재하지 않는 메뉴입니다.</string>
     <string name="like_tab_airplane">항공권</string>
+    <string name="not_exist_flight">존재하지 않는 항공권입니다.</string>
+    <string name="not_mine_like">해당 계정에 저장된 관심상품이 아닙니다.</string>
 </resources>

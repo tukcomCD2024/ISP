@@ -1,6 +1,7 @@
 package com.project.how.adapter.recyclerview
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,13 +9,14 @@ import com.project.how.R
 import com.project.how.data_class.dto.GetFlightOffersResponseElement
 import com.project.how.databinding.RoundTripAirplaneListItemBinding
 import java.text.NumberFormat
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-class RoundTripAirplaneListAdapter(private val context: Context, private val data : ArrayList<GetFlightOffersResponseElement>, private val onItemClickListener : OnItemClickListener) : RecyclerView.Adapter<RoundTripAirplaneListAdapter.ViewHolder>(){
-    private val hearts = MutableList<Boolean>(data.size) { false }
+class RoundTripAirplaneListAdapter(private val context: Context, private val data : ArrayList<GetFlightOffersResponseElement>, lid : MutableList<Long>, private val onItemClickListener : OnItemClickListener) : RecyclerView.Adapter<RoundTripAirplaneListAdapter.ViewHolder>(){
+    private val hearts = lid.map { it > 0 }.toMutableList()
+    private var likeId = lid
+    private var heartClickable = false
 
     inner class ViewHolder(val binding : RoundTripAirplaneListItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(data : GetFlightOffersResponseElement, position: Int){
@@ -58,13 +60,21 @@ class RoundTripAirplaneListAdapter(private val context: Context, private val dat
             binding.homeNonStop.text = if (data.nonstop) context.getString(R.string.non_stop) else context.getString(R.string.stop, data.transferCount.toString())
             binding.homeDuration.text = homeDuration
 
-            binding.heart.setOnClickListener {
-                if (hearts[position]){
-                    hearts[position] = !hearts[position]
-                    unLike(binding)
-                }else{
-                    hearts[position] = !hearts[position]
-                    like(binding)
+            if(hearts[position]) like(binding) else unLike(binding)
+
+            if (heartClickable){
+                binding.heart.setOnClickListener {
+                    if (hearts[position]){
+                        Log.d("heart", "unlike")
+                        onItemClickListener.onHeartClickerListener(hearts[position], data, position, likeId[position])
+                        hearts[position] = !hearts[position]
+                        unLike(binding)
+                    }else{
+                        Log.d("heart", "like")
+                        onItemClickListener.onHeartClickerListener(hearts[position], data, position,likeId[position])
+                        hearts[position] = !hearts[position]
+                        like(binding)
+                    }
                 }
             }
         }
@@ -94,7 +104,28 @@ class RoundTripAirplaneListAdapter(private val context: Context, private val dat
     }
 
     private fun unLike(binding : RoundTripAirplaneListItemBinding){
-        binding.heart.setImageResource(R.drawable.icon_heart_red_fill_white_line)
+        binding.heart.setImageResource(R.drawable.icon_heart_white_line)
+    }
+
+    fun updateLike(ids : MutableList<Long>){
+        likeId = ids
+    }
+
+    fun remove(position: Int){
+        data.removeAt(position)
+        likeId.removeAt(position)
+        hearts.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    fun lock(){
+        heartClickable = false
+        notifyDataSetChanged()
+    }
+
+    fun unlock(){
+        heartClickable = true
+        notifyDataSetChanged()
     }
 
     private fun getDateTime(timeDate : String) : List<String>{
@@ -115,6 +146,11 @@ class RoundTripAirplaneListAdapter(private val context: Context, private val dat
 
     interface OnItemClickListener{
         fun onItemClickerListener(data : GetFlightOffersResponseElement)
-        fun onHeartClickerListener()
+        fun onHeartClickerListener(
+            check: Boolean,
+            data: GetFlightOffersResponseElement,
+            position: Int,
+            id: Long
+        )
     }
 }

@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.LinkedList
 
 class BookingViewModel : ViewModel() {
     private val bookingRepository = BookingRepository()
@@ -31,6 +32,7 @@ class BookingViewModel : ViewModel() {
     private val _oneWayFlightOffersLiveData = bookingRepository.oneWayFlightOffersLiveData
     private val _skyscannerUrlLiveData = bookingRepository.skyscannerUrlLiveData
     private val _likeFlightLiveData = bookingRepository.likeFlightLiveData
+    private val _likeFlightListLiveData = bookingRepository.likeFlightListLiveData
     val flightOffersLiveData : LiveData<GetFlightOffersResponse>
         get() = _flightOffersLiveData
     val oneWayFlightOffersLiveData : LiveData<GetOneWayFlightOffersResponse>
@@ -39,6 +41,8 @@ class BookingViewModel : ViewModel() {
         get() = _skyscannerUrlLiveData
     val likeFlightLiveData : LiveData<GetLikeFlightResponse>
         get() = _likeFlightLiveData
+    val likeFlightListLiveData : LiveData<MutableList<Long>>
+        get() = _likeFlightListLiveData
 
 
     fun getFlightOffers(context : Context, accessToken : String, getFlightOffersRequest: GetFlightOffersRequest) : Flow<Int> = callbackFlow{
@@ -191,21 +195,28 @@ class BookingViewModel : ViewModel() {
         awaitClose()
     }
 
-    fun like(context: Context, accessToken: String, likeFlightElement: LikeFlightElement) : Flow<Int> = callbackFlow{
+    fun like(context: Context, accessToken: String, likeFlightElement: LikeFlightElement, position: Int) : Flow<Int> = callbackFlow{
         BookingRetrofit.getApiService()?.let { apiService->
             apiService.addLikeFlight(context.getString(R.string.bearer_token, accessToken), likeFlightElement)
-                .enqueue(object : Callback<EmptyResponse>{
-                    override fun onResponse(p0: Call<EmptyResponse>, p1: Response<EmptyResponse>) {
-                        if (p1.code() == SUCCESS){
-                            Log.d("addLikeFlight", "success 200 \n${likeFlightElement.totalPrice}\t${likeFlightElement.arrivalIataCode}")
-                            trySend(SUCCESS)
+                .enqueue(object : Callback<String>{
+                    override fun onResponse(p0: Call<String>, p1: Response<String>) {
+                        if (p1.isSuccessful){
+                            val result = p1.body()
+                            if (result != null) {
+                                bookingRepository.addLikeFlightList(result.toLong(), position)
+                                Log.d("addLikeFlight", "success ${p1.code()}\nid : $result\n${likeFlightElement.totalPrice}\t${likeFlightElement.arrivalIataCode}")
+                                trySend(SUCCESS)
+                            }else{
+                                Log.d("addLikeFlight", "response is failed\ncode : ${p1.code()}")
+                                trySend(NOT_EXIST)
+                            }
                         }else{
                             Log.d("addLikeFlight", "response is failed\ncode : ${p1.code()}")
                             trySend(NOT_EXIST)
                         }
                     }
 
-                    override fun onFailure(p0: Call<EmptyResponse>, p1: Throwable) {
+                    override fun onFailure(p0: Call<String>, p1: Throwable) {
                         Log.d("addLikeFlight", "onFailure\ncode : ${p1.message}")
                         trySend(NETWORK_FAILED)
                     }
@@ -217,21 +228,28 @@ class BookingViewModel : ViewModel() {
         awaitClose()
     }
 
-    fun like(context: Context, accessToken: String, likeOneWayFlightElement: LikeOneWayFlightElement) : Flow<Int> = callbackFlow {
+    fun like(context: Context, accessToken: String, likeOneWayFlightElement: LikeOneWayFlightElement, position: Int) : Flow<Int> = callbackFlow {
         BookingRetrofit.getApiService()?.let { apiService->
             apiService.addLikeOneWayFlight(context.getString(R.string.bearer_token, accessToken), likeOneWayFlightElement)
-                .enqueue(object : Callback<EmptyResponse>{
-                    override fun onResponse(p0: Call<EmptyResponse>, p1: Response<EmptyResponse>) {
-                        if (p1.code() == SUCCESS){
-                            Log.d("addLikeFlight", "success 200 \n${likeOneWayFlightElement.totalPrice}\t${likeOneWayFlightElement.arrivalIataCode}")
-                            trySend(SUCCESS)
+                .enqueue(object : Callback<String>{
+                    override fun onResponse(p0: Call<String>, p1: Response<String>) {
+                        if (p1.isSuccessful){
+                            val result = p1.body()
+                            if (result != null) {
+                                bookingRepository.addLikeFlightList(result.toLong(), position)
+                                Log.d("addLikeFlight", "success ${p1.code()}\nid : $result\n${likeOneWayFlightElement.totalPrice}\t${likeOneWayFlightElement.arrivalIataCode}")
+                                trySend(SUCCESS)
+                            }else{
+                                Log.d("addLikeFlight", "response is failed\ncode : ${p1.code()}")
+                                trySend(NOT_EXIST)
+                            }
                         }else{
                             Log.d("addLikeFlight", "response is failed\ncode : ${p1.code()}")
                             trySend(NOT_EXIST)
                         }
                     }
 
-                    override fun onFailure(p0: Call<EmptyResponse>, p1: Throwable) {
+                    override fun onFailure(p0: Call<String>, p1: Throwable) {
                         Log.d("addLikeFlight", "on Failure\n${p1.message}")
                         trySend(NETWORK_FAILED)
                     }
@@ -278,9 +296,46 @@ class BookingViewModel : ViewModel() {
         awaitClose()
     }
 
+    fun unlike(context: Context, accessToken: String, id: Long, position: Int) : Flow<Int> = callbackFlow{
+        BookingRetrofit.getApiService()?.let {apiService->
+            apiService.deleteLikeFlight(context.getString(R.string.bearer_token, accessToken), id)
+                .enqueue(object : Callback<EmptyResponse>{
+                    override fun onResponse(p0: Call<EmptyResponse>, p1: Response<EmptyResponse>) {
+                        if (p1.isSuccessful){
+                            when(p1.code()){
+                                SUCCESS->{
+                                    bookingRepository.deleteLikeFlightList(position)
+                                    trySend(SUCCESS)
+                                }
+                                NOT_EXIST->{trySend(NOT_EXIST)}
+                                NOT_MINE->{trySend(NOT_MINE)}
+                            }
+                        }else{
+                            Log.d("deleteLikeFlight", "response is failed\ncode : ${p1.code()}")
+                            trySend(NETWORK_FAILED)
+                        }
+                    }
+
+                    override fun onFailure(p0: Call<EmptyResponse>, p1: Throwable) {
+                        Log.d("deleteLikeFlight", "onFailure\ncode : ${p1.message}")
+                        trySend(NETWORK_FAILED)
+                    }
+
+                })
+
+        } ?: close()
+
+        awaitClose()
+    }
+
+    fun getLikeFlightList(data : MutableList<Long>){
+        bookingRepository.getLikeFlightList(data)
+    }
+
     companion object{
         const val NETWORK_FAILED = -1
-        const val NOT_EXIST = -2
+        const val NOT_EXIST = 404
+        const val NOT_MINE = 401
         const val SUCCESS = 200
     }
 }

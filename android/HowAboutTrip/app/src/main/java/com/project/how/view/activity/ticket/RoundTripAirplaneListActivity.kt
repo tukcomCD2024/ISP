@@ -1,24 +1,21 @@
 package com.project.how.view.activity.ticket
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.project.how.R
 import com.project.how.adapter.recyclerview.RoundTripAirplaneListAdapter
-import com.project.how.data_class.dto.GenerateOneWaySkyscannerUrlRequest
 import com.project.how.data_class.dto.GenerateSkyscannerUrlRequest
 import com.project.how.data_class.dto.GetFlightOffersRequest
 import com.project.how.data_class.dto.GetFlightOffersResponseElement
-import com.project.how.data_class.dto.GetOneWayFlightOffersRequest
+import com.project.how.data_class.dto.LikeFlightElement
+import com.project.how.data_class.dto.LikeOneWayFlightElement
 import com.project.how.data_class.dto.RoundTripFlightOffers
 import com.project.how.databinding.ActivityRoundTripAirplaneListBinding
 import com.project.how.view.activity.calendar.CalendarEditActivity
@@ -33,6 +30,8 @@ class RoundTripAirplaneListActivity : AppCompatActivity(), RoundTripAirplaneList
     private lateinit var adapter : RoundTripAirplaneListAdapter
     private lateinit var data : ArrayList<GetFlightOffersResponseElement>
     private lateinit var input : GetFlightOffersRequest
+    private lateinit var lid : MutableList<Long>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_round_trip_airplane_list)
@@ -40,9 +39,11 @@ class RoundTripAirplaneListActivity : AppCompatActivity(), RoundTripAirplaneList
         binding.lifecycleOwner = this
 
         data = CalendarEditActivity.getSerializable(this, getString(R.string.round_trip_flight_offers), RoundTripFlightOffers::class.java).data
+        lid = MutableList<Long>(data.size) {-1L}
+        bookingViewModel.getLikeFlightList(lid)
         Log.d("RoundTripAirplaneListActivity", "data.size = ${data.size}\ndata[0] : ${data[0].id}")
 
-        adapter = RoundTripAirplaneListAdapter(this, data, this)
+        adapter = RoundTripAirplaneListAdapter(this, data, lid,this)
         binding.airplaneList.adapter = adapter
 
         input = CalendarEditActivity.getSerializable(this,
@@ -51,6 +52,13 @@ class RoundTripAirplaneListActivity : AppCompatActivity(), RoundTripAirplaneList
         bookingViewModel.skyscannerUrlLiveData.observe(this){url->
             val web = WebViewBottomSheetDialog(url)
             web.show(supportFragmentManager, "WebViewBottomSheetDialog")
+        }
+
+        bookingViewModel.likeFlightListLiveData.observe(this){
+            lid = it
+            adapter.unlock()
+            adapter.updateLike(lid)
+
         }
 
         lifecycleScope.launch {
@@ -85,7 +93,50 @@ class RoundTripAirplaneListActivity : AppCompatActivity(), RoundTripAirplaneList
         }
     }
 
-    override fun onHeartClickerListener() {
-
+    override fun onHeartClickerListener(
+        check: Boolean,
+        data: GetFlightOffersResponseElement,
+        position: Int,
+        id: Long
+    ) {
+        lifecycleScope.launch{
+            if (check){
+                bookingViewModel.unlike(this@RoundTripAirplaneListActivity, MemberViewModel.tokensLiveData.value!!.accessToken, id, position).collect{c->
+                    when(c){
+                        BookingViewModel.NOT_EXIST->{
+                            Toast.makeText(this@RoundTripAirplaneListActivity,
+                                getString(R.string.not_exist_flight), Toast.LENGTH_SHORT).show()
+                        }
+                        BookingViewModel.NOT_MINE->{
+                            Toast.makeText(this@RoundTripAirplaneListActivity,
+                                getString(R.string.not_mine_like), Toast.LENGTH_SHORT).show()
+                        }
+                        BookingViewModel.NETWORK_FAILED->{
+                            Toast.makeText(this@RoundTripAirplaneListActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }else{
+                val lowf = LikeFlightElement(
+                    data.carrierCode,
+                    data.totalPrice,
+                    data.abroadDuration,
+                    data.abroadDepartureTime,
+                    data.abroadArrivalTime,
+                    data.homeDuration,
+                    data.homeDepartureTime,
+                    data.homeArrivalTime,
+                    data.departureIataCode,
+                    data.arrivalIataCode,
+                    data.nonstop,
+                    data.transferCount
+                )
+                bookingViewModel.like(this@RoundTripAirplaneListActivity, MemberViewModel.tokensLiveData.value!!.accessToken, lowf, position).collect{c->
+                    if (c != BookingViewModel.SUCCESS){
+                        Toast.makeText(this@RoundTripAirplaneListActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
     }
 }

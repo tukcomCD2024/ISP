@@ -39,7 +39,6 @@ class DesBottomSheetDialog(private val onDesListener: OnDesListener) : BottomShe
                 getString(R.string.fukuoka),
                 getString(R.string.sapporo),
                 getString(R.string.okinawa),
-                getString(R.string.kyoto),
                 getString(R.string.kyushu))
 
             japanAdapter = RadioButtonAdapter(japanPlaces, false,this@DesBottomSheetDialog, RadioButtonAdapter.JAPAN)

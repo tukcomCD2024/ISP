@@ -9,9 +9,9 @@ data class GetLikeFlightResponseElement(
     val abroadDuration: String,
     val abroadDepartureTime: String,
     val abroadArrivalTime: String,
-    val homeDuration: Any? = null,
-    val homeDepartureTime: Any? = null,
-    val homeArrivalTime: Any? = null,
+    val homeDuration: String? = null,
+    val homeDepartureTime: String? = null,
+    val homeArrivalTime: String? = null,
     val departureIataCode: String,
     val arrivalIataCode: String,
     val transferCount: String

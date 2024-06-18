@@ -46,7 +46,6 @@ class AirportBottomSheetDialog(private val type: Int, private val onAirportListe
                 getString(R.string.fukuoka),
                 getString(R.string.sapporo),
                 getString(R.string.okinawa),
-                getString(R.string.kyoto),
                 getString(R.string.kyushu))
 
             europeAirports = mutableListOf(

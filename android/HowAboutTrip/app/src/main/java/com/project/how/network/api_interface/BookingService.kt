@@ -49,22 +49,22 @@ interface BookingService {
     fun addLikeFlight(
         @Header("Authorization") accessToken : String,
         @Body addLikeFlightRequest: LikeFlightElement
-    ) : Call<EmptyResponse>
+    ) : Call<String>
 
     @POST("bookings/flights/like")
     fun addLikeOneWayFlight(
         @Header("Authorization") accessToken : String,
         @Body addLikeFlightRequest: LikeOneWayFlightElement
-    ) : Call<EmptyResponse>
+    ) : Call<String>
 
     @GET("bookings/flights/likes")
     fun getLikeFlight(
         @Header("Authorization") accessToken : String
     ) : Call<GetLikeFlightResponse>
 
-    @DELETE("bookings/flights/likes/{id}")
+    @DELETE("bookings/flights/like/{id}")
     fun deleteLikeFlight(
         @Header("Authorization") accessToken : String,
         @Path("id", encoded = true) id : Long
-    )
+    ) : Call<EmptyResponse>
 }

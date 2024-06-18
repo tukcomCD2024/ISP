@@ -7,8 +7,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.project.how.R
 import com.project.how.adapter.viewpager.ViewPagerAdapter
 import com.project.how.databinding.ActivityLikeBinding
-import com.project.how.view.fragment.mypage.AirPlaneLikeFragment
+import com.project.how.view.fragment.mypage.OneWayLikeFragment
 import com.project.how.view.fragment.mypage.HotelLikeFragment
+import com.project.how.view.fragment.mypage.RoundTripLikeFragment
 
 class LikeActivity : AppCompatActivity() {
     private lateinit var binding : ActivityLikeBinding
@@ -19,12 +20,13 @@ class LikeActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
 
         binding.viewPager.isUserInputEnabled = false
-        binding.viewPager.adapter = ViewPagerAdapter(listOf(AirPlaneLikeFragment(), HotelLikeFragment()), this)
+        binding.viewPager.adapter = ViewPagerAdapter(listOf(OneWayLikeFragment(), RoundTripLikeFragment(), HotelLikeFragment()), this)
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             when (position) {
-                0 -> tab.text = getString(R.string.like_tab_airplane)
-                1 -> tab.text = getString(R.string.hotel)
+                0 -> tab.text = getString(R.string.one_way)
+                1 -> tab.text = getString(R.string.round_trip)
+                2 -> tab.text = getString(R.string.hotel)
             }
         }.attach()
     }

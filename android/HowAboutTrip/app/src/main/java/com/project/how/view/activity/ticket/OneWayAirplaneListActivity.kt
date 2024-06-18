@@ -1,7 +1,6 @@
 package com.project.how.view.activity.ticket
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -21,9 +20,7 @@ import com.project.how.view.activity.calendar.CalendarEditActivity
 import com.project.how.view.dialog.bottom_sheet_dialog.WebViewBottomSheetDialog
 import com.project.how.view_model.BookingViewModel
 import com.project.how.view_model.MemberViewModel
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import kotlin.concurrent.thread
 
 class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapter.OnItemClickListener {
     private lateinit var binding : ActivityOneWayAirplaneListBinding
@@ -31,6 +28,7 @@ class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapte
     private lateinit var adapter : OneWayAirplaneListAdapter
     private lateinit var data : ArrayList<GetOneWayFlightOffersResponseElement>
     private lateinit var input : GetOneWayFlightOffersRequest
+    private lateinit var lid : MutableList<Long>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +38,9 @@ class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapte
 
         data = CalendarEditActivity.getSerializable(this,
             getString(R.string.one_way_flight_offers), OneWayFlightOffers::class.java).data
-        adapter = OneWayAirplaneListAdapter(this, data, this)
+        lid = MutableList<Long>(data.size) { -1L }
+        bookingViewModel.getLikeFlightList(lid)
+        adapter = OneWayAirplaneListAdapter(this, data, lid,this)
 
         input = CalendarEditActivity.getSerializable(this, getString(R.string.get_one_way_flight_offers_request), GetOneWayFlightOffersRequest::class.java)
 
@@ -49,6 +49,13 @@ class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapte
         bookingViewModel.skyscannerUrlLiveData.observe(this){url->
             val web = WebViewBottomSheetDialog(url)
             web.show(supportFragmentManager, "WebViewBottomSheetDialog")
+        }
+
+        bookingViewModel.likeFlightListLiveData.observe(this){
+            lid = it
+            adapter.unlock()
+            adapter.updateLike(lid)
+
         }
 
         lifecycleScope.launch {
@@ -83,10 +90,29 @@ class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapte
         }
     }
 
-    override fun onHeartClickerListener(check: Boolean, data: GetOneWayFlightOffersResponseElement){
+    override fun onHeartClickerListener(
+        check: Boolean,
+        data: GetOneWayFlightOffersResponseElement,
+        position: Int,
+        id: Long
+    ){
         lifecycleScope.launch{
             if (check){
-
+                bookingViewModel.unlike(this@OneWayAirplaneListActivity, MemberViewModel.tokensLiveData.value!!.accessToken, id, position).collect{c->
+                    when(c){
+                        BookingViewModel.NOT_EXIST->{
+                            Toast.makeText(this@OneWayAirplaneListActivity,
+                                getString(R.string.not_exist_flight), Toast.LENGTH_SHORT).show()
+                        }
+                        BookingViewModel.NOT_MINE->{
+                            Toast.makeText(this@OneWayAirplaneListActivity,
+                                getString(R.string.not_mine_like), Toast.LENGTH_SHORT).show()
+                        }
+                        BookingViewModel.NETWORK_FAILED->{
+                            Toast.makeText(this@OneWayAirplaneListActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
             }else{
                 val lowf = LikeOneWayFlightElement(
                     data.carrierCode,
@@ -99,12 +125,10 @@ class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapte
                     data.nonstop,
                     data.transferCount
                 )
-                bookingViewModel.like(this@OneWayAirplaneListActivity, MemberViewModel.tokensLiveData.value!!.accessToken, lowf).collect{c->
-                    if (c == BookingViewModel.SUCCESS){
-                    }else{
+                bookingViewModel.like(this@OneWayAirplaneListActivity, MemberViewModel.tokensLiveData.value!!.accessToken, lowf, position).collect{c->
+                    if (c != BookingViewModel.SUCCESS){
                         Toast.makeText(this@OneWayAirplaneListActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
                     }
-
                 }
             }
         }

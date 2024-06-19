@@ -13,7 +13,6 @@ import com.isp.backend.domain.gpt.entity.GptSchedule;
 import com.isp.backend.domain.gpt.entity.GptScheduleParser;
 import com.isp.backend.domain.schedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -30,10 +29,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-@Slf4j
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class GptService {
+
     private final GptScheduleParser gptScheduleParser;
     private final ScheduleService scheduleService;
     private final WebClient webClient;
@@ -42,7 +41,6 @@ public class GptService {
     private String apiKey;
 
     public GptScheduleResponse getResponse(HttpHeaders headers, GptRequest gptRequest) {
-
         GptResponse response = webClient.post()
                 .uri(GptConfig.CHAT_URL)
                 .headers(h -> h.addAll(headers))
@@ -52,78 +50,67 @@ public class GptService {
                 .bodyToMono(GptResponse.class)
                 .block();
 
-        List<GptSchedule> gptSchedules = gptScheduleParser.parseScheduleText(getScheduleText(response));
+        List<GptSchedule> gptSchedules = gptScheduleParser.parseScheduleText(extractScheduleText(response));
         return new GptScheduleResponse(gptSchedules);
     }
 
-    private String getScheduleText(GptResponse gptResponse) {
-        return getGptMessage(gptResponse).toString();
-    }
-
-    private GptMessage getGptMessage(GptResponse gptResponse) {
-        return gptResponse.getChoices().get(0).getMessage();
+    private String extractScheduleText(GptResponse gptResponse) {
+        return gptResponse.getChoices().get(0).getMessage().getContent();
     }
 
     @Async
-    public CompletableFuture<GptSchedulesResponse> askQuestion(GptScheduleRequest questionRequestDTO) {
-        String question = makeQuestion(questionRequestDTO);
-        List<GptMessage> messages = Collections.singletonList(
-                GptMessage.builder()
-                        .role(GptConfig.ROLE)
-                        .content(question)
-                        .build()
-        );
-
-        Country country = scheduleService.validateCountry(questionRequestDTO.getDestination());
+    public CompletableFuture<GptSchedulesResponse> askQuestion(GptScheduleRequest questionRequest) {
+        String question = formatQuestion(questionRequest);
+        List<GptMessage> messages = Collections.singletonList(createMessage(question));
+        Country country = scheduleService.validateCountry(questionRequest.getDestination());
         String countryImage = country.getImageUrl();
 
         ExecutorService executorService = Executors.newFixedThreadPool(5);
         List<CompletableFuture<GptScheduleResponse>> futures = Arrays.asList(
-                sendRequestAsync(apiKey, messages, executorService),
-                sendRequestAsync(apiKey, messages, executorService),
-                sendRequestAsync(apiKey, messages, executorService)
+                sendRequestAsync(messages, executorService),
+                sendRequestAsync(messages, executorService),
+                sendRequestAsync(messages, executorService)
         );
 
         CompletableFuture<List<GptScheduleResponse>> combinedFuture = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
-                .thenApply(v -> futures.stream()
-                        .map(CompletableFuture::join)
-                        .collect(Collectors.toList()));
+                .thenApply(v -> futures.stream().map(CompletableFuture::join).collect(Collectors.toList()));
 
         return combinedFuture.thenApply(schedules -> new GptSchedulesResponse(countryImage, schedules));
     }
 
-    private CompletableFuture<GptScheduleResponse> sendRequestAsync(String apiKey, List<GptMessage> messages, ExecutorService executor) {
+    private CompletableFuture<GptScheduleResponse> sendRequestAsync(List<GptMessage> messages, ExecutorService executor) {
         HttpHeaders headers = buildHttpHeaders(apiKey);
-        GptRequest request = getGptRequest(messages);
+        GptRequest request = createGptRequest(messages);
         return CompletableFuture.supplyAsync(() -> getResponse(headers, request), executor);
     }
 
-    private GptRequest getGptRequest(List<GptMessage> messages) {
-        return new GptRequest(
-                GptConfig.CHAT_MODEL,
-                GptConfig.MAX_TOKEN,
-                GptConfig.TEMPERATURE,
-                GptConfig.STREAM,
-                messages
-        );
+    private GptRequest createGptRequest(List<GptMessage> messages) {
+        return new GptRequest(GptConfig.CHAT_MODEL, GptConfig.MAX_TOKEN, GptConfig.TEMPERATURE, GptConfig.STREAM, messages);
     }
 
     private HttpHeaders buildHttpHeaders(String key) {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        httpHeaders.add(GptConfig.AUTHORIZATION, GptConfig.BEARER + key);
-        return httpHeaders;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add(HttpHeaders.AUTHORIZATION, GptConfig.BEARER + key);
+        return headers;
     }
 
-    private String makeQuestion(GptScheduleRequest questionRequestDTO) {
+    private String formatQuestion(GptScheduleRequest questionRequest) {
         return String.format(GptConfig.PROMPT,
-                questionRequestDTO.getDestination(),
-                questionRequestDTO.getPurpose(),
-                questionRequestDTO.getIncludedActivities(),
-                questionRequestDTO.getExcludedActivities(),
-                questionRequestDTO.getDepartureDate(),
-                questionRequestDTO.getReturnDate(),
-                String.join(ParsingConstants.COMMA, questionRequestDTO.getPurpose())
+                questionRequest.getDestination(),
+                questionRequest.getPurpose(),
+                questionRequest.getIncludedActivities(),
+                questionRequest.getExcludedActivities(),
+                questionRequest.getDepartureDate(),
+                questionRequest.getReturnDate(),
+                String.join(ParsingConstants.COMMA, questionRequest.getPurpose())
         );
+    }
+
+    private GptMessage createMessage(String content) {
+        return GptMessage.builder()
+                .role(GptConfig.ROLE)
+                .content(content)
+                .build();
     }
 }

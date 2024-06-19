@@ -17,8 +17,8 @@ public class WebClientConfig {
         HttpClient httpClient = HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 30000)
                 .doOnConnected(conn -> conn
-                        .addHandlerLast(new ReadTimeoutHandler(10))
-                        .addHandlerLast(new WriteTimeoutHandler(10)));
+                        .addHandlerLast(new ReadTimeoutHandler(30))
+                        .addHandlerLast(new WriteTimeoutHandler(30)));
         return WebClient.builder()
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();

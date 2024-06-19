@@ -23,36 +23,36 @@ public class GptConfig {
                         Please write the itinerary without using any special characters, only in plain text.
                         
                         I would like the format to be as follows:
-                        For example
-                        ---
-                        2024-02-06
-                        1. Go to location 26.69549000, 127.87642000
-                        2. See the place 26.69549000, 127.87642000
-                        3. Eat the Lunch 26.69549000, 127.87642000
-                        4. Go to location 26.69549000, 127.87642000
-                        5. See the place 26.69549000, 127.87642000
-                        6. Eat the dinner 26.69549000, 127.87642000
-                        7. shopping 26.69549000, 127.87642000
+                        아래는 예시니까 참고만 해줘.
+                        
+                        2024.02.06
+                        - Go to location 26.69549000, 127.87642000
+                        - See the place 26.69549000, 127.87642000
+                        - Eat the Lunch 26.69549000, 127.87642000
+                        - Go to location 26.69549000, 127.87642000
+                        - See the place 26.69549000, 127.87642000
+                        - Eat the dinner 26.69549000, 127.87642000
+                        - shopping 26.69549000, 127.87642000
                         
                         2024-02-07
-                        1. Go to location 26.69549000, 127.87642000
-                        2. See the place 26.69549000, 127.87642000
-                        3. Eat the Lunch 26.69549000, 127.87642000
-                        4. Go to location 26.69549000, 127.87642000
-                        5. See the place 26.69549000, 127.87642000
-                        6. Eat the dinner 26.69549000, 127.87642000
-                        7. shopping 26.69549000, 127.87642000
+                        - Go to location 26.69549000, 127.87642000
+                        - See the place 26.69549000, 127.87642000
+                        - Eat the Lunch 26.69549000, 127.87642000
+                        - Go to location 26.69549000, 127.87642000
+                        - See the place 26.69549000, 127.87642000
+                        - Eat the dinner 26.69549000, 127.87642000
+                        - shopping 26.69549000, 127.87642000
                         
                         2024-02-08
-                        1. Go to location 26.69549000, 127.87642000
-                        2. See the place 26.69549000, 127.87642000
-                        3. Eat the Lunch 26.69549000, 127.87642000
-                        4. Go to location 26.69549000, 127.87642000
-                        5. See the place 26.69549000, 127.87642000
-                        6. Eat the dinner 26.69549000, 127.87642000
-                        7. shopping 26.69549000, 127.87642000
-                        ---
+                        - Go to location 26.69549000, 127.87642000
+                        - See the place 26.69549000, 127.87642000
+                        - Eat the Lunch 26.69549000, 127.87642000
+                        - Go to location 26.69549000, 127.87642000
+                        - See the place 26.69549000, 127.87642000
+                        - Eat the dinner 26.69549000, 127.87642000
+                        - shopping 26.69549000, 127.87642000
                         
+                        너가 여행 일정을 만들 때 필요한 정보는 아래와 같아.
                         여행지: %s
                         이번 여행의 목적: %s
                         여행에서 꼭 하고 싶은 활동: %s
@@ -61,11 +61,14 @@ public class GptConfig {
                         한국에 귀국하는 날짜: %s
                         
                         No need to say anything else, just plan your schedule right away.
-                        Please create the result in Korean.
+                        날짜 형식은 반드시 0000.00.00 을 지켜줘
                         And only include schedule-related content in the schedule you're creating.
-                        Do not add any information I haven't provided to you.
-                        Under no circumstances should you include any activities other than traveling. Absolutely not.
-                        우리는 매일 점심과 저녁은 항상 식당에 가서 먹을거야. 반드시 실제로 존재하는 맛있고 유명한 식당으로 추천해줘
-                        금액 정보는 알려주지마. 대신 다양한 경험을 할 수 있게 일정을 만들어줘.
-                        그리고 일정 옆에 장소의 위도 경도 좌표값 소수점 여덟자리까지 함께 작성해줘.""";
+                        We will have lunch and dinner at restaurants every day.
+                        Be sure to recommend real, delicious, and famous restaurants.
+                        Instead, create an itinerary that allows for a variety of experiences.
+                        Include the latitude and longitude coordinates of each place with eight decimal places next to the itinerary item.
+                        위에 예시로 적어둔 영어 문구는 "절대" 포함하지마.
+                        시간은 안적어줘도돼.
+                        Please create the result in Korean.""";
+
 }

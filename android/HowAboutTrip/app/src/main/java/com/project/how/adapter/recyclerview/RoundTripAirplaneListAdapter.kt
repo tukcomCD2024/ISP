@@ -102,6 +102,9 @@ class RoundTripAirplaneListAdapter(private val context: Context, private val dat
     override fun getItemViewType(position: Int): Int = position
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if (position < 0 || position >= data.size) {
+            return
+        }
         val d = data[position]
         holder.bind(d, position)
         holder.itemView.setOnClickListener {

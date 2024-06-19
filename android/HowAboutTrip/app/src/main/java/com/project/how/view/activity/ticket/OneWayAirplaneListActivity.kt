@@ -15,6 +15,7 @@ import com.project.how.data_class.dto.GetOneWayFlightOffersRequest
 import com.project.how.data_class.dto.GetOneWayFlightOffersResponseElement
 import com.project.how.data_class.dto.LikeOneWayFlightElement
 import com.project.how.data_class.dto.OneWayFlightOffers
+import com.project.how.data_class.roomdb.RecentAirplane
 import com.project.how.databinding.ActivityOneWayAirplaneListBinding
 import com.project.how.view.activity.calendar.CalendarEditActivity
 import com.project.how.view.dialog.bottom_sheet_dialog.WebViewBottomSheetDialog
@@ -31,6 +32,7 @@ class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapte
     private lateinit var data : ArrayList<GetOneWayFlightOffersResponseElement>
     private lateinit var input : GetOneWayFlightOffersRequest
     private lateinit var lid : MutableList<Long>
+    private var clicked : GetOneWayFlightOffersResponseElement? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +53,15 @@ class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapte
         bookingViewModel.skyscannerUrlLiveData.observe(this){url->
             val web = WebViewBottomSheetDialog(url)
             web.show(supportFragmentManager, "WebViewBottomSheetDialog")
+            val recent = RecentAirplane(
+                name = getString(R.string.recent_one_way_name, input.departure, input.destination),
+                image = null,
+                des = input.departure,
+                time1 = getString(R.string.date_text, clicked!!.abroadDepartureTime, clicked!!.abroadArrivalTime),
+                time2 = null,
+                skyscannerUrl = url
+            )
+            bookingViewModel.addRecentAirplane(recent)
         }
 
         bookingViewModel.likeFlightListLiveData.observe(this){
@@ -70,6 +81,7 @@ class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapte
 
     override fun onItemClickerListener(data: GetOneWayFlightOffersResponseElement) {
         lifecycleScope.launch {
+            clicked = data
             val request = GenerateOneWaySkyscannerUrlRequest(
                 data.departureIataCode,
                 data.arrivalIataCode,

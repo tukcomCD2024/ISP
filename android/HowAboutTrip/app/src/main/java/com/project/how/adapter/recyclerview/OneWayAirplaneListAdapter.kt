@@ -18,6 +18,16 @@ class OneWayAirplaneListAdapter(private val context: Context, private val data :
     private var likeId = lid
     private var heartClickable = false
 
+    init {
+        Log.d("RoundTripAirplaneList", "Actually it's OneWayAirplaneListAdapter\n\ninit\nhearts.size : ${hearts.size}\nlikeId.size : ${likeId.size}\ndata.size : ${data.size}\nlid.size = ${lid.size}")
+        for (i in data.indices){
+            if (i <= likeId.lastIndex){
+                Log.d("OneWayAirplaneListAdapter", "likeId[$i] : ${likeId[i]}")
+            }
+            Log.d("OneWayAirplaneListAdapter", "data[$i] : ${data[i]}")
+        }
+    }
+
     inner class ViewHolder(val binding : OneWayAirplaneListItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(data : GetOneWayFlightOffersResponseElement, position: Int){
             val abroadDepartureDateTime = getDateTime(data.abroadDepartureTime)
@@ -42,6 +52,8 @@ class OneWayAirplaneListAdapter(private val context: Context, private val data :
             )
             binding.abroadNonStop.text = if (data.nonstop) context.getString(R.string.non_stop) else context.getString(R.string.stop, data.transferCount.toString())
             binding.abroadDuration.text = abroadDuration
+
+            if(hearts[position]) like(binding) else unLike(binding)
 
             if (heartClickable){
                 binding.heart.setOnClickListener {
@@ -73,6 +85,9 @@ class OneWayAirplaneListAdapter(private val context: Context, private val data :
     override fun getItemViewType(position: Int): Int = position
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if (position < 0 || position >= data.size) {
+            return
+        }
         val d = data[position]
         holder.bind(d, position)
         holder.itemView.setOnClickListener {

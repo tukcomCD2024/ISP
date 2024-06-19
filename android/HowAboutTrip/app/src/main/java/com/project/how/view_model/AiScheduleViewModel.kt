@@ -90,12 +90,18 @@ class AiScheduleViewModel : ViewModel() {
         val country = createScheduleListRequest.destination
         val startDate = createScheduleListRequest.departureDate
         val endDate = createScheduleListRequest.returnDate
-        val place = createScheduleResponse.schedules[0].scheduleDetail + createScheduleResponse.schedules[1].scheduleDetail
+        var place = mutableListOf<String>()
         val dailySchedule = mutableListOf<MutableList<AiDaysSchedule>>()
         for (i in createScheduleResponse.schedules.indices){
             val oneDaySchedule = mutableListOf<AiDaysSchedule>()
             for(j in createScheduleResponse.schedules[i].scheduleDetail.indices){
-                oneDaySchedule.add(AiDaysSchedule(AiDaysScheduleAdapter.PLACE, createScheduleResponse.schedules[i].scheduleDetail[j], createScheduleResponse.schedules[i].scheduleDetail[j]))
+                oneDaySchedule.add(AiDaysSchedule(
+                    AiDaysScheduleAdapter.PLACE,
+                    createScheduleResponse.schedules[i].scheduleDetail[j].detail,
+                    createScheduleResponse.schedules[i].scheduleDetail[j].detail,
+                    createScheduleResponse.schedules[i].scheduleDetail[j].coordinate.latitude,
+                    createScheduleResponse.schedules[i].scheduleDetail[j].coordinate.longitude))
+                place.add(createScheduleResponse.schedules[i].scheduleDetail[j].detail)
             }
             dailySchedule.add(oneDaySchedule)
         }
@@ -112,12 +118,12 @@ class AiScheduleViewModel : ViewModel() {
     }
 
     private fun getTestAiSchedule() : AiSchedule {
-        val testAiDaysSchedule = mutableListOf<AiDaysSchedule>(AiDaysSchedule(AiDaysScheduleAdapter.PLACE, "test Todo", "test"))
-        testAiDaysSchedule.add(AiDaysSchedule(AiDaysScheduleAdapter.AIRPLANE, "test airplane", "airplane"))
-        testAiDaysSchedule.add(AiDaysSchedule(AiDaysScheduleAdapter.HOTEL, "test hotel", "hotel"))
-        val testAiDaysSchedule2 = mutableListOf<AiDaysSchedule>(AiDaysSchedule(AiDaysScheduleAdapter.AIRPLANE, "test airplane", "airplane"))
-        testAiDaysSchedule2.add(AiDaysSchedule(AiDaysScheduleAdapter.PLACE, "test Todo", "test"))
-        testAiDaysSchedule2.add(AiDaysSchedule(AiDaysScheduleAdapter.HOTEL, "test hotel", "hotel"))
+        val testAiDaysSchedule = mutableListOf<AiDaysSchedule>(AiDaysSchedule(AiDaysScheduleAdapter.PLACE, "test Todo", "test", 0.0, 0.0))
+        testAiDaysSchedule.add(AiDaysSchedule(AiDaysScheduleAdapter.AIRPLANE, "test airplane", "airplane", 0.0, 0.0))
+        testAiDaysSchedule.add(AiDaysSchedule(AiDaysScheduleAdapter.HOTEL, "test hotel", "hotel", 0.0, 0.0))
+        val testAiDaysSchedule2 = mutableListOf<AiDaysSchedule>(AiDaysSchedule(AiDaysScheduleAdapter.AIRPLANE, "test airplane", "airplane", 0.0, 0.0))
+        testAiDaysSchedule2.add(AiDaysSchedule(AiDaysScheduleAdapter.PLACE, "test Todo", "test", 0.0, 0.0))
+        testAiDaysSchedule2.add(AiDaysSchedule(AiDaysScheduleAdapter.HOTEL, "test hotel", "hotel", 0.0, 0.0))
         val dailySchedule = mutableListOf<MutableList<AiDaysSchedule>>()
         for (i in 0..2){
             if (i % 2== 0){

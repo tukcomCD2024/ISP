@@ -2,6 +2,7 @@ package com.project.how.view.fragment.ticket
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,6 +66,10 @@ class OneWaySearchFragment(private val onLoadListener: OnLoadListener) : Fragmen
     }
 
     private fun moveAirportList(flightOffers : GetOneWayFlightOffersResponse){
+        if (!::input.isInitialized) {
+            Log.e("OneWaySearchFragment", "input is not initialized")
+            return
+        }
         val fo = ArrayList(flightOffers)
         val f = OneWayFlightOffers(fo)
         val intent = Intent(activity, OneWayAirplaneListActivity::class.java)

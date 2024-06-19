@@ -41,6 +41,7 @@ class BookingViewModel @Inject constructor(
     private val _skyscannerUrlLiveData = bookingRepository.skyscannerUrlLiveData
     private val _likeFlightLiveData = bookingRepository.likeFlightLiveData
     private val _likeFlightListLiveData = bookingRepository.likeFlightListLiveData
+    private val _recentAirplaneLiveData = bookingRepository.recentAirplaneLiveData
     val flightOffersLiveData : LiveData<GetFlightOffersResponse>
         get() = _flightOffersLiveData
     val oneWayFlightOffersLiveData : LiveData<GetOneWayFlightOffersResponse>
@@ -51,10 +52,13 @@ class BookingViewModel @Inject constructor(
         get() = _likeFlightLiveData
     val likeFlightListLiveData : LiveData<MutableList<Long>>
         get() = _likeFlightListLiveData
+    val recentAirplaneLiveData : LiveData<List<RecentAirplane>>
+        get() = _recentAirplaneLiveData
 
     fun fetchRecentAirplanes() {
         viewModelScope.launch(Dispatchers.IO) {
             val recentAirplanes = bookingRepository.fetchRecentAirplanes()
+            Log.d("RoomDB", "fetchRecentAirplanes()\nrecentAirplanes.size : ${recentAirplanes.size}")
             bookingRepository.getRecentAirplane(recentAirplanes)
         }
     }
@@ -62,7 +66,12 @@ class BookingViewModel @Inject constructor(
     fun addRecentAirplane(recentAirplane: RecentAirplane) {
         viewModelScope.launch(Dispatchers.IO) {
             bookingRepository.addRecentAirplane(recentAirplane)
-            fetchRecentAirplanes()
+        }
+    }
+
+    fun deleteAllRecentAirplanes(){
+        viewModelScope.launch(Dispatchers.IO){
+            bookingRepository.deleteAllRecentAirplane()
         }
     }
 

@@ -93,8 +93,8 @@ class ScheduleRepository {
                         aiDailySchedule[i][j].type,
                         aiDailySchedule[i][j].todo,
                         aiDailySchedule[i][j].places,
-                        null,
-                        null,
+                        aiDailySchedule[i][j].lat,
+                        aiDailySchedule[i][j].lng,
                         0,
                         false,
                         null

@@ -2,6 +2,7 @@ package com.project.how.view.fragment.ticket
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -169,6 +170,10 @@ class RoundTripSearchFragment(private val onLoadListener: OnLoadListener) : Frag
     }
 
     private fun moveAirportList(flightOffers : GetFlightOffersResponse){
+        if (!::input.isInitialized) {
+            Log.e("RoundTripSearchFragment", "input is not initialized")
+            return
+        }
         val fo = ArrayList(flightOffers)
         val f = RoundTripFlightOffers(fo)
         val intent = Intent(activity, RoundTripAirplaneListActivity::class.java)

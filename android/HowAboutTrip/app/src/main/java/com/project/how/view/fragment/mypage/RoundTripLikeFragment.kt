@@ -38,13 +38,6 @@ class RoundTripLikeFragment : Fragment(), RoundTripAirplaneListAdapter.OnItemCli
         savedInstanceState: Bundle?
     ): View? {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_round_trip_like, container, false)
-        lifecycleScope.launch {
-            bookingViewModel.getLikeFlight(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken).collect{ check->
-                if (check != BookingViewModel.SUCCESS){
-                    Toast.makeText(requireContext(), getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
         bookingViewModel.likeFlightLiveData.observe(viewLifecycleOwner){likes->
             lid = mutableListOf<Long>()
             data.clear()
@@ -79,6 +72,23 @@ class RoundTripLikeFragment : Fragment(), RoundTripAirplaneListAdapter.OnItemCli
             lid = it
         }
         return binding.root
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.airplaneList.adapter = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            bookingViewModel.getLikeFlight(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken).collect{ check->
+                if (check != BookingViewModel.SUCCESS){
+                    Toast.makeText(requireContext(), getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 
     }
 

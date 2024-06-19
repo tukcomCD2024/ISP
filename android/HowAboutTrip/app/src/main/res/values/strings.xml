@@ -307,4 +307,6 @@
     <string name="like_tab_airplane">항공권</string>
     <string name="not_exist_flight">존재하지 않는 항공권입니다.</string>
     <string name="not_mine_like">해당 계정에 저장된 관심상품이 아닙니다.</string>
+    <string name="recent_one_way_name">%1$s → %2$s</string>
+    <string name="recent_round_trip_name">%1$s ↔ %2$s</string>
 </resources>

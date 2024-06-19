@@ -19,5 +19,7 @@ data class AiSchedule(
 data class AiDaysSchedule(
     val type : Int,
     val todo: String,
-    val places: String
+    val places: String,
+    val lat : Double,
+    val lng : Double
 ) : Serializable

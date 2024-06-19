@@ -13,5 +13,16 @@ data class CreateScheduleResponse (
 
 data class AiSimpleSchedule (
     @SerializedName("date") val date: String,
-    @SerializedName("scheduleDetail") val scheduleDetail: List<String>
+    @SerializedName("scheduleDetail") val scheduleDetail: List<AiScheduleDetail>
 )
+
+data class AiScheduleDetail (
+    @SerializedName("detail") val detail: String,
+    @SerializedName("coordinate") val coordinate: Coordinate
+)
+
+data class Coordinate (
+    @SerializedName("latitude") val latitude: Double,
+    @SerializedName("longitude") val longitude: Double
+)
+

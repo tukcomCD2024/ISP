@@ -17,6 +17,7 @@ import com.project.how.data_class.dto.GetFlightOffersResponseElement
 import com.project.how.data_class.dto.LikeFlightElement
 import com.project.how.data_class.dto.LikeOneWayFlightElement
 import com.project.how.data_class.dto.RoundTripFlightOffers
+import com.project.how.data_class.roomdb.RecentAirplane
 import com.project.how.databinding.ActivityRoundTripAirplaneListBinding
 import com.project.how.view.activity.calendar.CalendarEditActivity
 import com.project.how.view.dialog.bottom_sheet_dialog.WebViewBottomSheetDialog
@@ -33,6 +34,7 @@ class RoundTripAirplaneListActivity : AppCompatActivity(), RoundTripAirplaneList
     private lateinit var data : ArrayList<GetFlightOffersResponseElement>
     private lateinit var input : GetFlightOffersRequest
     private lateinit var lid : MutableList<Long>
+    private var clicked : GetFlightOffersResponseElement? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +56,15 @@ class RoundTripAirplaneListActivity : AppCompatActivity(), RoundTripAirplaneList
         bookingViewModel.skyscannerUrlLiveData.observe(this){url->
             val web = WebViewBottomSheetDialog(url)
             web.show(supportFragmentManager, "WebViewBottomSheetDialog")
+            val recent = RecentAirplane(
+                name = getString(R.string.recent_round_trip_name, input.departure, input.destination),
+                image = null,
+                des = input.departure,
+                time1 = getString(R.string.date_text, clicked!!.abroadDepartureTime, clicked!!.abroadArrivalTime),
+                time2 = getString(R.string.date_text, clicked!!.homeDepartureTime, clicked!!.homeArrivalTime),
+                skyscannerUrl = url
+            )
+            bookingViewModel.addRecentAirplane(recent)
         }
 
         bookingViewModel.likeFlightListLiveData.observe(this){
@@ -72,6 +83,7 @@ class RoundTripAirplaneListActivity : AppCompatActivity(), RoundTripAirplaneList
 
     override fun onItemClickerListener(data: GetFlightOffersResponseElement) {
         lifecycleScope.launch {
+            clicked = data
             val request = GenerateSkyscannerUrlRequest(
                 data.departureIataCode,
                 data.arrivalIataCode,

@@ -37,15 +37,10 @@ class OneWayLikeFragment : Fragment(), OneWayAirplaneListAdapter.OnItemClickList
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_one_way_like, container, false)
         binding.like = this
         binding.lifecycleOwner = viewLifecycleOwner
-        lifecycleScope.launch {
-            bookingViewModel.getLikeFlight(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken).collect{check->
-                if (check != BookingViewModel.SUCCESS){
-                    Toast.makeText(requireContext(), getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
         bookingViewModel.likeFlightLiveData.observe(viewLifecycleOwner){likes->
             lid = mutableListOf<Long>()
+            data.clear()
+            
             likes.forEachIndexed { index, d ->
                 if (d.homeDuration == null){
                     lid.add(d.id)
@@ -71,6 +66,23 @@ class OneWayLikeFragment : Fragment(), OneWayAirplaneListAdapter.OnItemClickList
             lid = it
         }
         return binding.root
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.airplaneList.adapter = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            bookingViewModel.getLikeFlight(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken).collect{ check->
+                if (check != BookingViewModel.SUCCESS){
+                    Toast.makeText(requireContext(), getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
     }
 
     override fun onItemClickerListener(data: GetOneWayFlightOffersResponseElement) {

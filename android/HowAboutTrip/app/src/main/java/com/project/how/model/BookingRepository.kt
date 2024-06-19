@@ -1,5 +1,6 @@
 package com.project.how.model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.project.how.data_class.dto.GetFlightOffersResponse
@@ -35,13 +36,22 @@ class BookingRepository @Inject constructor(
     val recentAirplaneLiveData : LiveData<List<RecentAirplane>>
         get() = _recentAirplaneLiveData
 
+    init {
+        getLikeFlightList(mutableListOf<Long>())
+    }
+
 
     suspend fun fetchRecentAirplanes(): List<RecentAirplane> {
         return recentAirplaneDao.getRecentAirplanes()
     }
 
     suspend fun addRecentAirplane(recentAirplane: RecentAirplane) {
+        Log.d("RoomDB", "addRecentAirplane()\nid : ${recentAirplane.id}\nname : ${recentAirplane.name}\ntime1 : ${recentAirplane.time1}\ncreateAt : ${recentAirplane.createdAt}\nurl : ${recentAirplane.skyscannerUrl}")
         recentAirplaneDao.insert(recentAirplane)
+    }
+
+    suspend fun deleteAllRecentAirplane(){
+        recentAirplaneDao.deleteAll()
     }
 
     fun getRecentAirplane(data : List<RecentAirplane>){

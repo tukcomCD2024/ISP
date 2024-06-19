@@ -144,7 +144,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recent_airplane"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 tools:listitem="@layout/recent_airplane_item"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -168,7 +168,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recent_hotel"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 tools:listitem="@layout/recent_hotel_item"
                 android:orientation="horizontal"

@@ -24,7 +24,7 @@ class RadioButtonAdapter(data: List<String>, private val multiple : Boolean, pri
             binding.radioBtn.setOnClickListener {
                 if (!multiple){
                     reset()
-                    onItemClickListener.onItemClickListener(data, type)
+                    onItemClickListener.onItemClickListener(data, type, position)
                 }
                 check[position] = !check[position]
                 notifyDataSetChanged()
@@ -64,13 +64,18 @@ class RadioButtonAdapter(data: List<String>, private val multiple : Boolean, pri
         return datas
     }
 
+    fun setCheck(position: Int){
+        check[position] = true
+    }
+
     private fun changeColor(binding: SimpleRadiobuttonItemBinding, position: Int){
         binding.radioBtn.isChecked = check[position]
     }
 
     interface OnItemClickListener{
-        fun onItemClickListener(data: String, type : Int)
+        fun onItemClickListener(data: String, type: Int, position: Int)
     }companion object{
+        const val KOREA = 0
         const val JAPAN = 1
         const val EUROPE = 2
         const val AMERICA = 3
@@ -84,5 +89,6 @@ class RadioButtonAdapter(data: List<String>, private val multiple : Boolean, pri
         const val CITY = 203
         const val MEDIA = 204
         const val ATMOSPHERE = 205
+        const val ORDER = 301
     }
 }

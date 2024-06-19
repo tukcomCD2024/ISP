@@ -2,7 +2,6 @@ package com.project.how.view.fragment.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.how.BuildConfig
@@ -21,59 +21,48 @@ import com.project.how.R
 import com.project.how.adapter.recyclerview.viewpager.EventViewPagerAdapter
 import com.project.how.adapter.recyclerview.RecentAddedCalendarsAdapter
 import com.project.how.data_class.recyclerview.EventViewPager
-import com.project.how.data_class.recyclerview.RecentAddedCalendar
 import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.data_class.dto.GetCountryLocationResponse
+import com.project.how.data_class.dto.GetFastestSchedulesResponse
+import com.project.how.data_class.dto.GetLatestSchedulesResponse
+import com.project.how.data_class.dto.GetLatestSchedulesResponseElement
 import com.project.how.databinding.FragmentCalendarBinding
-import com.project.how.interface_af.OnDateTimeListener
 import com.project.how.interface_af.OnDesListener
 import com.project.how.view.activity.ai.AddAICalendarActivity
+import com.project.how.view.activity.calendar.CalendarActivity
 import com.project.how.view.activity.calendar.CalendarEditActivity
 import com.project.how.view.activity.calendar.CalendarListActivity
-import com.project.how.view.dialog.bottom_sheet_dialog.CalendarBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
 import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.TimeZone
-import kotlin.concurrent.thread
 
-class CalendarFragment : Fragment(), OnDesListener {
+class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.OnItemClickListener {
     private var _binding : FragmentCalendarBinding? = null
     private val binding : FragmentCalendarBinding
         get() = _binding!!
     private val scheduleViewModel : ScheduleViewModel by viewModels()
-    private lateinit var nowDate : LocalDate
-    private lateinit var nowDateString : String
-    private var nearScheduleDate: Long = -1
+    private var nearSchedule : GetFastestSchedulesResponse? = null
     private val event = mutableListOf<EventViewPager>()
-    private val recentAddedCalendar = mutableListOf<RecentAddedCalendar>()
+    private lateinit var recentAddedCalendar : GetLatestSchedulesResponse
     private lateinit var eventAdapter : EventViewPagerAdapter
     private lateinit var recentAddedCalendarAdapter: RecentAddedCalendarsAdapter
     private var destination : String? = null
     private var departureDate : String? = null
     private var entranceDate : String? = null
     private var latLng : GetCountryLocationResponse? = null
-    private var dday : Long = -1
     private lateinit var autoScrollJob : Job
     private var viewPagerPosition = 0
-    var dDay : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        nowDate = LocalDate.now()
-        val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        nowDateString = nowDate.format(dateFormat)
         for(i in 0..5){
             event.add(EventViewPager("test", "일정 생성을\n해보세요$i", null))
-            recentAddedCalendar.add(RecentAddedCalendar(-1, "test용 목적지$i", mutableListOf<String>("test1", "test2", "test3", "test4", "test5", "test6", "tteeesss7", "test8"), "https://img.freepik.com/free-photo/vertical-shot-beautiful-eiffel-tower-captured-paris-france_181624-45445.jpg?w=740&t=st=1708260600~exp=1708261200~hmac=01d8abec61f555d0edb040d41ce8ea39904853aea6df7c37ce0b5a35e07c1954"))
         }
-        recentAddedCalendarAdapter = RecentAddedCalendarsAdapter(recentAddedCalendar)
         eventAdapter = EventViewPagerAdapter(event)
     }
 
@@ -84,6 +73,30 @@ class CalendarFragment : Fragment(), OnDesListener {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_calendar, container, false)
         binding.calendar = this
         binding.lifecycleOwner = viewLifecycleOwner
+        scheduleViewModel.nearScheduleDayLiveData.observe(viewLifecycleOwner){near->
+            nearSchedule = near
+            val dDay = resources.getString(R.string.d_day) + if (nearSchedule!!.dday.toInt() == 0) getString(R.string.d_day_zero) else nearSchedule!!.dday.toString()
+            Glide.with(binding.root)
+                .load(nearSchedule!!.imageUrl)
+                .error(BuildConfig.ERROR_IMAGE_URl)
+                .into(binding.scheduleImage)
+            binding.dDay.text = dDay
+            binding.scheduleTitle.text = nearSchedule!!.scheduleName
+        }
+        scheduleViewModel.latestScheduleLiveData.observe(viewLifecycleOwner){latests->
+            recentAddedCalendar = latests
+            recentAddedCalendarAdapter = RecentAddedCalendarsAdapter(recentAddedCalendar, this@CalendarFragment)
+            binding.recentAddedCalendar.adapter = recentAddedCalendarAdapter
+        }
+        lifecycleScope.launch {
+            scheduleViewModel.getLatestSchedules(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken).collect{check->
+                if (check != ScheduleViewModel.SUCCESS){
+                    recentAddedCalendar = listOf(GetLatestSchedulesResponseElement(-1, "일정을 생성해보세요!", "없음", BuildConfig.TEMPORARY_IMAGE_URL, listOf<String>("AI 일정 생성", "일반 일정 생성", "편리한 기능들을 체험해보세요.")))
+                    recentAddedCalendarAdapter = RecentAddedCalendarsAdapter(recentAddedCalendar, this@CalendarFragment)
+                    binding.recentAddedCalendar.adapter = recentAddedCalendarAdapter
+                }
+            }
+        }
         autoScrollJobCreate()
         return binding.root
     }
@@ -91,6 +104,7 @@ class CalendarFragment : Fragment(), OnDesListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        scheduleViewModel.getFastestSchedules(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken)
         binding.viewPager2.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
         binding.viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
@@ -114,66 +128,6 @@ class CalendarFragment : Fragment(), OnDesListener {
 
     override fun onStart() {
         super.onStart()
-
-        scheduleViewModel.getScheduleList(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken)
-        scheduleViewModel.scheduleListLiveData.observe(viewLifecycleOwner){list->
-            if(list.isNotEmpty()){
-                var near = -1
-                var nearDateString = "2050-12-31"
-                list.forEachIndexed { index, getScheduleListResponseElement ->
-                    if (nearDateString > getScheduleListResponseElement.startDate && getScheduleListResponseElement.startDate >= nowDateString){
-                        near = index
-                        nearDateString = getScheduleListResponseElement.startDate
-                    }
-                }
-
-                if (near == -1){
-                    Glide.with(binding.root)
-                        .load(R.drawable.event_viewpager_test)
-                        .error(BuildConfig.ERROR_IMAGE_URl)
-                        .into(binding.scheduleImage)
-                }else{
-                    val nearDate = LocalDate.parse(nearDateString, DateTimeFormatter.ISO_DATE)
-                    val dateFormat = SimpleDateFormat("yyyyMMdd")
-                    nearScheduleDate = dateFormat.parse(nearDate.format(DateTimeFormatter.ofPattern("yyyyMMdd")))?.time ?: -1
-                    scheduleViewModel.getNearScheduleDay(nearScheduleDate)
-
-                    binding.scheduleTitle.text = list[near].scheduleName
-                    Glide.with(binding.root)
-                        .load(list[near].imageUrl)
-                        .error(BuildConfig.ERROR_IMAGE_URl)
-                        .into(binding.scheduleImage)
-                }
-
-            }else{
-                Glide.with(binding.root)
-                    .load(R.drawable.event_viewpager_test)
-                    .error(BuildConfig.ERROR_IMAGE_URl)
-                    .into(binding.scheduleImage)
-            }
-        }
-
-        scheduleViewModel.nearScheduleDayLiveData.observe(viewLifecycleOwner){
-            lifecycleScope.launch {
-                scheduleViewModel.getDday().collect{
-                    dday = it
-                    dDay = resources.getString(R.string.d_day) + if (dday.toInt() == 0) getString(R.string.d_day_zero) else dday.toString()
-
-                    Log.d("nearScheduleDayLiveData observe", "dday : $dday\ndDay : $dDay")
-
-                    if(dday.toInt() == -1){
-                        Log.d("nearScheduleDayLiveData observe", "dDay is INVISIBLE")
-                        binding.dDay.visibility = View.INVISIBLE
-                    }else{
-                        Log.d("nearScheduleDayLiveData observe", "dDay is VISIBLE")
-                        binding.dDay.visibility = View.VISIBLE
-                        binding.dDay.text = dDay
-                    }
-                }
-            }
-        }
-
-        binding.recentAddedCalendar.adapter = recentAddedCalendarAdapter
         binding.viewPager2.adapter = eventAdapter
         TabLayoutMediator(binding.indicator, binding.viewPager2) { _, _ -> }.attach()
     }
@@ -186,6 +140,14 @@ class CalendarFragment : Fragment(), OnDesListener {
     private fun autoScrollJobCreate() {
         autoScrollJob = lifecycleScope.launch{
 
+        }
+    }
+
+    fun moveNearScheduleCalendar(){
+        if (nearSchedule != null){
+            val intent = Intent(requireContext(), CalendarActivity::class.java)
+            intent.putExtra(getString(R.string.server_calendar_id), nearSchedule!!.id)
+            startActivity(intent)
         }
     }
 
@@ -206,9 +168,20 @@ class CalendarFragment : Fragment(), OnDesListener {
         startActivity(Intent(activity, CalendarListActivity::class.java))
     }
 
+    fun moveLatestCalendar(id: Long){
+        val intent = Intent(requireContext(), CalendarActivity::class.java)
+        intent.putExtra(getString(R.string.server_calendar_id), id)
+        startActivity(intent)
+    }
+
     private fun showCalendar(){
+        val constraints = CalendarConstraints.Builder()
+            .setStart(Calendar.getInstance().timeInMillis)
+            .build()
+
         val calendar = MaterialDatePicker.Builder.dateRangePicker()
             .setTheme(R.style.ThemeOverlay_App_DatePicker)
+            .setCalendarConstraints(constraints)
             .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
             .build()
         calendar.show(childFragmentManager, "MaterialDatePicker")
@@ -258,6 +231,12 @@ class CalendarFragment : Fragment(), OnDesListener {
                     }
                 }
             }
+        }
+    }
+
+    override fun onItemClickListener(id: Long) {
+        if (id >0){
+            moveLatestCalendar(id)
         }
     }
 }

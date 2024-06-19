@@ -4,6 +4,7 @@ data class RecentAirplane(
     val id : Long,
     val image : String?,
     val des : String,
-    val date : String,
-    val time : String
+    val time1 : String,
+    val time2 : String?,
+    val skyscannerUrl : String
 )

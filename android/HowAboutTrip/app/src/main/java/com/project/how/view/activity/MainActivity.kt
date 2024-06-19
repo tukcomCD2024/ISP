@@ -11,7 +11,9 @@ import com.project.how.view.fragment.main.CalendarFragment
 import com.project.how.view.fragment.main.MypageFragment
 import com.project.how.view.fragment.main.PictureFragment
 import com.project.how.view.fragment.main.TicketFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,8 +22,10 @@ class MainActivity : AppCompatActivity() {
         binding.main = this
         binding.lifecycleOwner = this
 
+        val menu = intent.getIntExtra(getString(R.string.menu_intent), 2)
+
         supportFragmentManager.beginTransaction().add(R.id.fragment, CalendarFragment()).commitAllowingStateLoss()
-        binding.menu.menu.getItem(2).isEnabled = false
+        binding.menu.menu.getItem(menu).isEnabled = false
         binding.menu.selectedItemId = R.id.menu_calendar
         binding.menu.setOnItemSelectedListener {
             when(it.itemId){
@@ -48,5 +52,10 @@ class MainActivity : AppCompatActivity() {
 
     fun moveAddAICalendar(){
         startActivity(Intent(this, AddAICalendarActivity::class.java))
+    }companion object{
+        const val TICKET = 1
+        const val CALENDAR = 2
+        const val PICTURE = 3
+        const val MY_PAGE = 4
     }
 }

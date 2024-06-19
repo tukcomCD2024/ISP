@@ -6,20 +6,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.how.BuildConfig
 import com.project.how.R
-import com.project.how.data_class.recyclerview.RecentAirplane
+import com.project.how.data_class.roomdb.RecentAirplane
 import com.project.how.databinding.RecentAirplaneItemBinding
 
-class RecentAirplaneAdapter(recentAirplane: List<RecentAirplane>)
+class RecentAirplaneAdapter(recentAirplane: List<RecentAirplane>, private val onItemClickListener: OnItemClickListener)
     : RecyclerView.Adapter<RecentAirplaneAdapter.ViewHolder>(){
         private val data = recentAirplane
     inner class ViewHolder(val binding : RecentAirplaneItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(data : RecentAirplane){
-            binding.des.text = data.des
-            binding.date.text = data.date
-            binding.time.text = data.time
+            binding.des.text = data.name
+            binding.time1.text = data.time1
+            binding.time2.text = data.time2?: ""
             if(data.image == null){
                 Glide.with(binding.root)
-                    .load("https://mblogthumb-phinf.pstatic.net/20160614_300/ppanppane_1465870299257eqV77_PNG/%B4%EB%C7%D1%C7%D7%B0%F8_%B7%CE%B0%ED_%282%29.png?type=w800")
+                    .load(R.drawable.image_null)
                     .error(BuildConfig.ERROR_IMAGE_URl)
                     .into(binding.image)
             }else{
@@ -45,5 +45,14 @@ class RecentAirplaneAdapter(recentAirplane: List<RecentAirplane>)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = data[position]
         holder.bind(data)
+        holder.itemView.setOnClickListener {
+            if (data.skyscannerUrl != null){
+                onItemClickListener.onItemClickListener(data.skyscannerUrl)
+            }
+        }
+    }
+
+    interface  OnItemClickListener {
+        fun onItemClickListener(url : String)
     }
 }

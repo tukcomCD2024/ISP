@@ -21,8 +21,8 @@ object ScheduleRetrofit {
         val gson = GsonBuilder().setLenient().create()
 
         val httpClient = OkHttpClient.Builder()
-            .connectTimeout(3, TimeUnit.MINUTES)
-            .readTimeout(2, TimeUnit.MINUTES)
+            .connectTimeout(4, TimeUnit.MINUTES)
+            .readTimeout(3, TimeUnit.MINUTES)
             .writeTimeout(1, TimeUnit.MINUTES)
 
         val loggingInterceptor =  HttpLoggingInterceptor().apply {

@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginEnd="20dp"
-            app:cardCornerRadius="24dp">
+            app:cardCornerRadius="14dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/des"
+                    android:id="@+id/name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
@@ -46,14 +46,27 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/des"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/bm_hanna"
+                    android:paddingHorizontal="15dp"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/image"
+                    app:layout_constraintTop_toBottomOf="@id/name" />
+
+                <TextView
                     android:id="@+id/places"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:gravity="start"
                     android:paddingHorizontal="15dp"
+                    android:layout_marginTop="10dp"
                     android:textColor="@color/white"
-                    android:textSize="13sp"
-                    android:maxLines="6"
+                    android:textSize="11sp"
+                    android:maxLines="3"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/image"

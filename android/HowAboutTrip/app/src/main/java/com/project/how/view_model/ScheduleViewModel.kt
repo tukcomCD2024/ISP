@@ -13,6 +13,8 @@ import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.data_class.dto.DailySchedule
 import com.project.how.data_class.dto.GetCountryLocationRequest
 import com.project.how.data_class.dto.GetCountryLocationResponse
+import com.project.how.data_class.dto.GetFastestSchedulesResponse
+import com.project.how.data_class.dto.GetLatestSchedulesResponse
 import com.project.how.data_class.dto.GetScheduleListResponse
 import com.project.how.data_class.dto.ScheduleDetail
 import com.project.how.model.ScheduleRepository
@@ -20,8 +22,6 @@ import com.project.how.network.client.ScheduleRetrofit
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -35,18 +35,15 @@ class ScheduleViewModel : ViewModel() {
     private val _nearScheduleDayLiveData = scheduleRepository.nearScheduleDayLiveData
     private val _scheduleLiveData = scheduleRepository.scheduleLiveData
     private val _scheduleListLiveData = scheduleRepository.scheduleListLiveData
-    val nearScheduleDayLiveData : LiveData<Long>
+    private val _latestScheduleLiveData = scheduleRepository.latestScheduleLiveData
+    val nearScheduleDayLiveData : LiveData<GetFastestSchedulesResponse>
         get() = _nearScheduleDayLiveData
     val scheduleLiveData : LiveData<Schedule>
         get() = _scheduleLiveData
     val scheduleListLiveData : LiveData<GetScheduleListResponse>
         get() = _scheduleListLiveData
-
-    fun getDday() : Flow<Long> = scheduleRepository.getDday()
-
-    fun getNearScheduleDay(day : Long){
-        scheduleRepository.getNearScheduleDay(day)
-    }
+    val latestScheduleLiveData : LiveData<GetLatestSchedulesResponse>
+        get() = _latestScheduleLiveData
 
     fun getSchedule(schedule : Schedule){
         viewModelScope.launch {
@@ -305,6 +302,70 @@ class ScheduleViewModel : ViewModel() {
         awaitClose()
     }
 
+    fun getFastestSchedules(context: Context, accessToken: String){
+        ScheduleRetrofit.getApiService()!!
+            .getFastestSchedule(context.getString(R.string.bearer_token, accessToken))
+            .enqueue(object : Callback<GetFastestSchedulesResponse>{
+                override fun onResponse(
+                    p0: Call<GetFastestSchedulesResponse>,
+                    p1: Response<GetFastestSchedulesResponse>
+                ) {
+                    if (p1.isSuccessful){
+                        val result = p1.body()
+                        if (result != null){
+                            scheduleRepository.getNearScheduleDay(result)
+                            Log.d("getFastSchedule", "id : ${result.id}\ndday : ${result.dday}\nname : ${result.scheduleName}")
+                        }else{
+                            Log.d("getFastestSchedule", "result is null\ncode : ${p1.code()}")
+                        }
+                    }else{
+                        Log.d("getFastestSchedule", "response is failed\ncode : ${p1.code()}")
+                    }
+                }
+
+                override fun onFailure(p0: Call<GetFastestSchedulesResponse>, p1: Throwable) {
+                    Log.d("getFastestSchedule", "getFastestSchedule is failed\n${p1.message}")
+                }
+
+            })
+    }
+
+    fun getLatestSchedules(context: Context, accessToken: String) : Flow<Int> = callbackFlow {
+        ScheduleRetrofit.getApiService()?.let { apiService ->
+            apiService.getLatestSchedules(context.getString(R.string.bearer_token, accessToken), LATEST_COUNT)
+                .enqueue(object : Callback<GetLatestSchedulesResponse>{
+                    override fun onResponse(
+                        p0: Call<GetLatestSchedulesResponse>,
+                        p1: Response<GetLatestSchedulesResponse>
+                    ) {
+                        if (p1.isSuccessful){
+                            val result = p1.body()
+                            if (result != null){
+                                Log.d("getLatestSchedule", "result.size : ${result.size}")
+                                scheduleRepository.getLatestSchedule(result)
+                                trySend(SUCCESS)
+                            }else{
+                                Log.d("getLatestSchedule", "result is null\ncode :${p1.code()}")
+                                trySend(EMPTY_SCHEDULE)
+                            }
+                        }else{
+                            Log.d("getLatestSchedule", "response is failed\ncode : ${p1.code()}")
+                            trySend(EMPTY_SCHEDULE)
+                        }
+                    }
+
+                    override fun onFailure(p0: Call<GetLatestSchedulesResponse>, p1: Throwable) {
+                        Log.d("getLatestSchedule", "getLatestSchedule is failed\n${p1.message}")
+                        trySend(NETWORK_FAILED)
+                    }
+
+                })
+
+        } ?: close()
+
+        awaitClose()
+    }
+
     fun getCountryLocation(country : String) : Flow<GetCountryLocationResponse?> = callbackFlow {
         ScheduleRetrofit.getApiService()?.let {apiService ->
             apiService.getCountryLocation(GetCountryLocationRequest(country))
@@ -347,5 +408,6 @@ class ScheduleViewModel : ViewModel() {
         const val OTHER_USER_SCHEDULE = -4
         const val EMPTY_SCHEDULE = -5
         const val SUCCESS = 0
+        const val LATEST_COUNT : Long = 7
     }
 }

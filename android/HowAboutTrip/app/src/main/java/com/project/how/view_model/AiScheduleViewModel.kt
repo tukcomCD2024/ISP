@@ -7,7 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
 import com.project.how.data_class.recyclerview.AiDaysSchedule
 import com.project.how.data_class.recyclerview.AiSchedule
-import com.project.how.data_class.AiScheduleInput
+import com.project.how.data_class.AiScheduleListInput
+import com.project.how.data_class.dto.CreateScheduleListRequest
+import com.project.how.data_class.dto.CreateScheduleListResponse
 import com.project.how.data_class.dto.CreateScheduleRequest
 import com.project.how.data_class.dto.CreateScheduleResponse
 import com.project.how.model.AiScheduleRepository
@@ -15,7 +17,6 @@ import com.project.how.network.client.ScheduleRetrofit
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,29 +25,38 @@ import retrofit2.Response
 class AiScheduleViewModel : ViewModel() {
     private val aiScheduleRepository = AiScheduleRepository()
     private val _aiScheduleLiveData = aiScheduleRepository.aiScheduleLiveData
+    private val _aiScheduleListLiveData = aiScheduleRepository.aiScheduleListLiveData
     val aiScheduleLiveData : LiveData<AiSchedule>
         get() = _aiScheduleLiveData
+    val aiScheduleListLiveData : LiveData<List<AiSchedule>>
+        get() = _aiScheduleListLiveData
 
-    fun getAiSchedule(aiScheduleInput : AiScheduleInput) : Flow<Boolean> = callbackFlow {
-        val createScheduleRequest = CreateScheduleRequest(
-            aiScheduleInput.des,
-            aiScheduleInput.purpose ?: listOf(),
-            aiScheduleInput.startDate,
-            aiScheduleInput.endDate
+    fun getAiScheduleList(aiScheduleListInput : AiScheduleListInput) : Flow<Boolean> = callbackFlow {
+        val createScheduleListRequest = CreateScheduleListRequest(
+            aiScheduleListInput.des,
+            aiScheduleListInput.purpose ?: listOf(),
+            aiScheduleListInput.activities ?: listOf(),
+            aiScheduleListInput.excludingActivity ?: listOf(),
+            aiScheduleListInput.startDate,
+            aiScheduleListInput.endDate
         )
 
         ScheduleRetrofit.getApiService()?.let { apiService ->
-            apiService.createSchedule(createScheduleRequest)
-                .enqueue(object : Callback<CreateScheduleResponse>{
+            apiService.createScheduleList(createScheduleListRequest)
+                .enqueue(object : Callback<CreateScheduleListResponse>{
                     override fun onResponse(
-                        call: Call<CreateScheduleResponse>,
-                        response: Response<CreateScheduleResponse>
+                        call: Call<CreateScheduleListResponse>,
+                        response: Response<CreateScheduleListResponse>
                     ) {
                         if(response.isSuccessful){
                             val result = response.body()
                             if (result != null){
-                                Log.d("createSchedule is success", "startDate : ${result.schedules[0].date}")
-                                aiScheduleRepository.getAiSchedule(getAiSchedule(result, createScheduleRequest))
+                                Log.d("createSchedule is success", "startDate : ${result.schedules[0].schedules[0].date}")
+                                val data = mutableListOf<AiSchedule>()
+                                for (i in result.schedules.indices){
+                                    data.add(getAiSchedule(result.schedules[i], createScheduleListRequest, result.countryImage, i))
+                                }
+                                aiScheduleRepository.getAiScheduleList(data.toList())
                                 trySend(SUCCESS)
                             }else{
                                 Log.d("createSchedule is success", "response.body is null\ncode : ${response.code()}")
@@ -58,7 +68,7 @@ class AiScheduleViewModel : ViewModel() {
                         }
                     }
 
-                    override fun onFailure(call: Call<CreateScheduleResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<CreateScheduleListResponse>, t: Throwable) {
                         Log.d("createSchedule is failed", "${t.message}")
                         trySend(FAILD)
                     }
@@ -75,18 +85,23 @@ class AiScheduleViewModel : ViewModel() {
         }
     }
 
-    private fun getAiSchedule(createScheduleResponse : CreateScheduleResponse, createScheduleRequest: CreateScheduleRequest) : AiSchedule {
-        val title = createScheduleRequest.destination
-        val country = createScheduleRequest.destination
-        val startDate = createScheduleRequest.departureDate
-        val endDate = createScheduleRequest.returnDate
-        val image = createScheduleResponse.countryImage
-        val place = createScheduleResponse.schedules[0].scheduleDetail
+    private fun getAiSchedule(createScheduleResponse : CreateScheduleResponse, createScheduleListRequest: CreateScheduleListRequest, countryImage : String, position : Int) : AiSchedule {
+        val title = "${createScheduleListRequest.destination} AI 일정 생성${position+1}"
+        val country = createScheduleListRequest.destination
+        val startDate = createScheduleListRequest.departureDate
+        val endDate = createScheduleListRequest.returnDate
+        var place = mutableListOf<String>()
         val dailySchedule = mutableListOf<MutableList<AiDaysSchedule>>()
         for (i in createScheduleResponse.schedules.indices){
             val oneDaySchedule = mutableListOf<AiDaysSchedule>()
             for(j in createScheduleResponse.schedules[i].scheduleDetail.indices){
-                oneDaySchedule.add(AiDaysSchedule(AiDaysScheduleAdapter.PLACE, createScheduleResponse.schedules[i].scheduleDetail[j], createScheduleResponse.schedules[i].scheduleDetail[j]))
+                oneDaySchedule.add(AiDaysSchedule(
+                    AiDaysScheduleAdapter.PLACE,
+                    createScheduleResponse.schedules[i].scheduleDetail[j].detail,
+                    createScheduleResponse.schedules[i].scheduleDetail[j].detail,
+                    createScheduleResponse.schedules[i].scheduleDetail[j].coordinate.latitude,
+                    createScheduleResponse.schedules[i].scheduleDetail[j].coordinate.longitude))
+                place.add(createScheduleResponse.schedules[i].scheduleDetail[j].detail)
             }
             dailySchedule.add(oneDaySchedule)
         }
@@ -95,7 +110,7 @@ class AiScheduleViewModel : ViewModel() {
             title,
             country,
             place,
-            image,
+            countryImage,
             startDate,
             endDate,
             dailySchedule
@@ -103,12 +118,12 @@ class AiScheduleViewModel : ViewModel() {
     }
 
     private fun getTestAiSchedule() : AiSchedule {
-        val testAiDaysSchedule = mutableListOf<AiDaysSchedule>(AiDaysSchedule(AiDaysScheduleAdapter.PLACE, "test Todo", "test"))
-        testAiDaysSchedule.add(AiDaysSchedule(AiDaysScheduleAdapter.AIRPLANE, "test airplane", "airplane"))
-        testAiDaysSchedule.add(AiDaysSchedule(AiDaysScheduleAdapter.HOTEL, "test hotel", "hotel"))
-        val testAiDaysSchedule2 = mutableListOf<AiDaysSchedule>(AiDaysSchedule(AiDaysScheduleAdapter.AIRPLANE, "test airplane", "airplane"))
-        testAiDaysSchedule2.add(AiDaysSchedule(AiDaysScheduleAdapter.PLACE, "test Todo", "test"))
-        testAiDaysSchedule2.add(AiDaysSchedule(AiDaysScheduleAdapter.HOTEL, "test hotel", "hotel"))
+        val testAiDaysSchedule = mutableListOf<AiDaysSchedule>(AiDaysSchedule(AiDaysScheduleAdapter.PLACE, "test Todo", "test", 0.0, 0.0))
+        testAiDaysSchedule.add(AiDaysSchedule(AiDaysScheduleAdapter.AIRPLANE, "test airplane", "airplane", 0.0, 0.0))
+        testAiDaysSchedule.add(AiDaysSchedule(AiDaysScheduleAdapter.HOTEL, "test hotel", "hotel", 0.0, 0.0))
+        val testAiDaysSchedule2 = mutableListOf<AiDaysSchedule>(AiDaysSchedule(AiDaysScheduleAdapter.AIRPLANE, "test airplane", "airplane", 0.0, 0.0))
+        testAiDaysSchedule2.add(AiDaysSchedule(AiDaysScheduleAdapter.PLACE, "test Todo", "test", 0.0, 0.0))
+        testAiDaysSchedule2.add(AiDaysSchedule(AiDaysScheduleAdapter.HOTEL, "test hotel", "hotel", 0.0, 0.0))
         val dailySchedule = mutableListOf<MutableList<AiDaysSchedule>>()
         for (i in 0..2){
             if (i % 2== 0){

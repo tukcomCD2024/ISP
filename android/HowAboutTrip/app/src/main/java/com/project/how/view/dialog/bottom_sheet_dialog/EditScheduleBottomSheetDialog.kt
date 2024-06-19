@@ -18,6 +18,7 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.project.how.BuildConfig
@@ -66,6 +67,32 @@ class EditScheduleBottomSheetDialog(private val lat : Double, private val lng : 
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+        dialog?.let {
+            val bottomSheet = it.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            bottomSheet?.let { sheet ->
+                val behavior = BottomSheetBehavior.from(sheet)
+                behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                behavior.isDraggable = false
+
+                behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+                    override fun onStateChanged(bottomSheet: View, newState: Int) {
+                        if (newState == BottomSheetBehavior.STATE_COLLAPSED || newState == BottomSheetBehavior.STATE_HIDDEN) {
+                            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        }
+                    }
+
+                    override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                        if (slideOffset < 0) {
+                            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        }
+                    }
+                })
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRadioButton()
@@ -80,7 +107,7 @@ class EditScheduleBottomSheetDialog(private val lat : Double, private val lng : 
                 return@launch
             }
 
-            Places.initialize(requireContext(), apiKey)
+            Places.initializeWithNewPlacesApiEnabled(requireContext(), apiKey)
 
             placesClient = Places.createClient(requireContext())
             val googleMapOptions = GoogleMapOptions()
@@ -98,7 +125,7 @@ class EditScheduleBottomSheetDialog(private val lat : Double, private val lng : 
 
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
-                Log.i("onPlaceSelected", "Place: ${place.name}, ${place.id}\nlatitude:${place.latLng.latitude}\tlongitude:${place.latLng.longitude}")
+                Log.i("onPlaceSelected", "Place: ${place.name}, ${place.id}\nlatitude:${place.latLng?.latitude}\tlongitude:${place.latLng?.longitude}")
                 supportMapFragment.getMapAsync { map ->
 
                     val placeLocation = LatLng(place.latLng.latitude, place.latLng.longitude)
@@ -142,7 +169,7 @@ class EditScheduleBottomSheetDialog(private val lat : Double, private val lng : 
     }
 
     override fun onMapReady(map: GoogleMap) {
-        if ((schedule.latitude != null || schedule.longitude != null) || (schedule.latitude == 0.0 && schedule.longitude == 0.0)){
+        if ((schedule.latitude != null || schedule.longitude != null) && (schedule.latitude != 0.0 && schedule.longitude != 0.0)){
             val placeLocation = LatLng(schedule.latitude!!, schedule.longitude!!)
             val camera = CameraOptionProducer().makeScheduleCameraUpdate(placeLocation, 15f)
             val markerOptions = MarkerProducer().makeScheduleMarkerOptions(requireContext(), type, position, placeLocation, schedule.places)

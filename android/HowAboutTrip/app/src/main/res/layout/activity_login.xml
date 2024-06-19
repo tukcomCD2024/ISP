@@ -17,6 +17,7 @@
             android:id="@+id/lottie"
             android:layout_width="250dp"
             android:layout_height="200dp"
+            android:scaleType="fitEnd"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -35,7 +36,7 @@
             android:gravity="center"
             android:text="@string/login_under_text"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +55,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView"
-            app:layout_constraintVertical_bias="0.2"
+            app:layout_constraintVertical_bias="0.8"
             android:contentDescription="@string/google_login_content_desciption" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,12 +4,14 @@
         <item name="android:statusBarColor" >@color/white</item>
         <item name="android:windowBackground">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:fontFamily">@font/pretendard</item>
         <item name="materialCalendarFullscreenTheme">@style/ThemeOverlay.App.DatePicker</item>
     </style>
 
     <style name="Theme.HowAboutTrip.BlackStatusBar" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:statusBarColor" >@color/black</item>
         <item name="android:windowBackground">@color/white</item>
+        <item name="android:fontFamily">@font/pretendard</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
     <style name="Base.Widget.AppCompat.Button.BlackRound" parent="Widget.AppCompat.Button">
@@ -21,6 +23,12 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="SimpleTimePicker">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="WhiteTopShadowBottomAppBar" parent="Widget.MaterialComponents.BottomAppBar">
         <item name="android:background">@color/white</item>
         <item name="android:backgroundTint">@android:color/transparent</item>
@@ -29,14 +37,19 @@
         <item name="android:itemBackground">@color/white</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
-    <style name="SimpleTimePicker">
-        <item name="android:textSize">20sp</item>
-        <item name="android:fontFamily">@font/noto_sans_kr_bold</item>
-        <item name="android:textColor">@color/black</item>
-    </style>
 
     <style name="TabItemTextSize" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="AirplaneTabItemText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="LikeTabItemText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="FabRoundedCorner">
@@ -63,9 +76,17 @@
         <item name="background">@color/white</item>
         <item name="android:textColor">@color/black</item>
         <item name="rangeFillColor">@color/black</item>
+        <item name="colorSurface">@color/white</item>
         <item name="daySelectedStyle">@style/daySelected</item>
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
         <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent</item>
     </style>
-    e>
+    
+    <style name="DateRadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:buttonTint">@color/black</item>
+        <item name="rippleColor">@android:color/transparent</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>

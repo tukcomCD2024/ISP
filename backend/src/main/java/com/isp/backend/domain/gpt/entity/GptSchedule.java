@@ -9,9 +9,9 @@ import java.util.List;
 @NoArgsConstructor
 public class GptSchedule {
     private String date;
-    private List<String> scheduleDetail;
+    private List<GptScheduleDetail> scheduleDetail;
 
-    public GptSchedule(String date, List<String> scheduleDetail) {
+    public GptSchedule(String date, List<GptScheduleDetail> scheduleDetail) {
         this.date = date;
         this.scheduleDetail = scheduleDetail;
     }

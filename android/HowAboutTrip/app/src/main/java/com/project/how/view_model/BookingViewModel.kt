@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.project.how.R
 import com.project.how.data_class.dto.EmptyResponse
 import com.project.how.data_class.dto.GenerateOneWaySkyscannerUrlRequest
@@ -16,18 +17,25 @@ import com.project.how.data_class.dto.GetOneWayFlightOffersRequest
 import com.project.how.data_class.dto.GetOneWayFlightOffersResponse
 import com.project.how.data_class.dto.LikeFlightElement
 import com.project.how.data_class.dto.LikeOneWayFlightElement
+import com.project.how.data_class.roomdb.RecentAirplane
 import com.project.how.model.BookingRepository
 import com.project.how.network.client.BookingRetrofit
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.LinkedList
+import javax.inject.Inject
 
-class BookingViewModel : ViewModel() {
-    private val bookingRepository = BookingRepository()
+@HiltViewModel
+class BookingViewModel @Inject constructor(
+    private val bookingRepository: BookingRepository
+) : ViewModel() {
     private val _flightOffersLiveData = bookingRepository.flightOffersLiveData
     private val _oneWayFlightOffersLiveData = bookingRepository.oneWayFlightOffersLiveData
     private val _skyscannerUrlLiveData = bookingRepository.skyscannerUrlLiveData
@@ -44,6 +52,19 @@ class BookingViewModel : ViewModel() {
     val likeFlightListLiveData : LiveData<MutableList<Long>>
         get() = _likeFlightListLiveData
 
+    fun fetchRecentAirplanes() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val recentAirplanes = bookingRepository.fetchRecentAirplanes()
+            bookingRepository.getRecentAirplane(recentAirplanes)
+        }
+    }
+
+    fun addRecentAirplane(recentAirplane: RecentAirplane) {
+        viewModelScope.launch(Dispatchers.IO) {
+            bookingRepository.addRecentAirplane(recentAirplane)
+            fetchRecentAirplanes()
+        }
+    }
 
     fun getFlightOffers(context : Context, accessToken : String, getFlightOffersRequest: GetFlightOffersRequest) : Flow<Int> = callbackFlow{
         BookingRetrofit.getApiService()?.let {apiService ->

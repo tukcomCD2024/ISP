@@ -10,7 +10,9 @@ import com.project.how.databinding.ActivityLikeBinding
 import com.project.how.view.fragment.mypage.OneWayLikeFragment
 import com.project.how.view.fragment.mypage.HotelLikeFragment
 import com.project.how.view.fragment.mypage.RoundTripLikeFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LikeActivity : AppCompatActivity() {
     private lateinit var binding : ActivityLikeBinding
     override fun onCreate(savedInstanceState: Bundle?) {

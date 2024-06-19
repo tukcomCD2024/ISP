@@ -16,8 +16,10 @@ import com.project.how.data_class.dto.LikeOneWayFlightElement
 import com.project.how.databinding.FragmentOneWayLikeBinding
 import com.project.how.view_model.BookingViewModel
 import com.project.how.view_model.MemberViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class OneWayLikeFragment : Fragment(), OneWayAirplaneListAdapter.OnItemClickListener{
     private var _binding : FragmentOneWayLikeBinding? = null
     private val binding : FragmentOneWayLikeBinding

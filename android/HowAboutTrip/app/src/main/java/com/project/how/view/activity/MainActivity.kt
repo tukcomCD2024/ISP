@@ -11,7 +11,9 @@ import com.project.how.view.fragment.main.CalendarFragment
 import com.project.how.view.fragment.main.MypageFragment
 import com.project.how.view.fragment.main.PictureFragment
 import com.project.how.view.fragment.main.TicketFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -15,8 +15,10 @@ import com.project.how.databinding.ActivityAirplaneSearchBinding
 import com.project.how.interface_af.OnLoadListener
 import com.project.how.view.fragment.ticket.OneWaySearchFragment
 import com.project.how.view.fragment.ticket.RoundTripSearchFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class AirplaneSearchActivity : AppCompatActivity(), OnLoadListener {
     private lateinit var binding : ActivityAirplaneSearchBinding
     override fun onCreate(savedInstanceState: Bundle?) {

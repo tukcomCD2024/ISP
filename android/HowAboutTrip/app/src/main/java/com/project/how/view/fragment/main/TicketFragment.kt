@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.how.R
 import com.project.how.adapter.recyclerview.RecentAirplaneAdapter
@@ -17,11 +18,15 @@ import com.project.how.data_class.recyclerview.RecentAirplane
 import com.project.how.data_class.recyclerview.RecentHotel
 import com.project.how.databinding.FragmentTicketBinding
 import com.project.how.view.activity.ticket.AirplaneSearchActivity
+import com.project.how.view_model.BookingViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TicketFragment : Fragment(), RecentHotelAdapter.OnItemClickListener {
     private var _binding : FragmentTicketBinding? = null
     private val binding : FragmentTicketBinding
         get() = _binding!!
+    private val bookingViewModel : BookingViewModel by viewModels()
     private lateinit var eventAdapter : EventTicketViewPagerAdapter
     private lateinit var recentAirplaneAdapter: RecentAirplaneAdapter
     private lateinit var recentHotelAdapter: RecentHotelAdapter
@@ -34,7 +39,6 @@ class TicketFragment : Fragment(), RecentHotelAdapter.OnItemClickListener {
 
         for (i in 0..5){
             eventTest.add(EventViewPager("test", "항공 티켓을\n구매하세요.$i", null))
-            recentAirplaneTest.add(RecentAirplane(i.toLong(), null, "Test$i", "(3/${25 + i})", "AM 07:15 ~  AM 09:30"))
             recentHotelTest.add(RecentHotel(i.toLong(), null, "호텔 테스트 $i", "3/${25 + i}", "2 Chome-2-1 Yoyogi, Shibuya City, Tokyo 151-0053 일본"))
         }
 

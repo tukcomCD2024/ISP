@@ -22,8 +22,10 @@ import com.project.how.view.activity.calendar.CalendarEditActivity
 import com.project.how.view.dialog.bottom_sheet_dialog.WebViewBottomSheetDialog
 import com.project.how.view_model.BookingViewModel
 import com.project.how.view_model.MemberViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class RoundTripAirplaneListActivity : AppCompatActivity(), RoundTripAirplaneListAdapter.OnItemClickListener {
     private lateinit var binding : ActivityRoundTripAirplaneListBinding
     private val bookingViewModel : BookingViewModel by viewModels()

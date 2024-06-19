@@ -5,14 +5,22 @@ import androidx.lifecycle.MutableLiveData
 import com.project.how.data_class.dto.GetFlightOffersResponse
 import com.project.how.data_class.dto.GetLikeFlightResponse
 import com.project.how.data_class.dto.GetOneWayFlightOffersResponse
+import com.project.how.data_class.roomdb.RecentAirplane
+import com.project.how.roomdb.dao.RecentAirplaneDao
 import java.util.LinkedList
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class BookingRepository {
+@Singleton
+class BookingRepository @Inject constructor(
+    private val recentAirplaneDao : RecentAirplaneDao
+) {
     private val _flightOffersLiveData = MutableLiveData<GetFlightOffersResponse>()
     private val _oneWayFlightLiveData = MutableLiveData<GetOneWayFlightOffersResponse>()
     private val _skyscannerUrlLiveData = MutableLiveData<String>()
     private val _likeFlightLiveData = MutableLiveData<GetLikeFlightResponse>()
     private val _likeFlightListLiveData = MutableLiveData<MutableList<Long>>()
+    private val _recentAirplaneLiveData = MutableLiveData<List<RecentAirplane>>()
     private  var lfl = mutableListOf<Long>()
     val flightOffersLiveData : LiveData<GetFlightOffersResponse>
         get() = _flightOffersLiveData
@@ -24,8 +32,21 @@ class BookingRepository {
         get() = _likeFlightLiveData
     val likeFlightListLiveData : LiveData<MutableList<Long>>
         get() = _likeFlightListLiveData
+    val recentAirplaneLiveData : LiveData<List<RecentAirplane>>
+        get() = _recentAirplaneLiveData
 
 
+    suspend fun fetchRecentAirplanes(): List<RecentAirplane> {
+        return recentAirplaneDao.getRecentAirplanes()
+    }
+
+    suspend fun addRecentAirplane(recentAirplane: RecentAirplane) {
+        recentAirplaneDao.insert(recentAirplane)
+    }
+
+    fun getRecentAirplane(data : List<RecentAirplane>){
+        _recentAirplaneLiveData.postValue(data)
+    }
 
     fun getFlightOffers(getFlightOffersResponse: GetFlightOffersResponse){
         _flightOffersLiveData.postValue(getFlightOffersResponse)

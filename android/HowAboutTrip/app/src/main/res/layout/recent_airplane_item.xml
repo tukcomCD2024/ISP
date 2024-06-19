@@ -45,7 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.65" />
+                    app:layout_constraintGuide_percent="0.5" />
 
                 <TextView
                     android:id="@+id/des"
@@ -60,30 +60,31 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/image" />
 
-                <TextView
-                    android:id="@+id/date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/bm_hanna"
-                    android:text="@string/date"
-                    android:textColor="@color/black"
-                    android:textSize="10sp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintStart_toEndOf="@+id/des"
-                    app:layout_constraintTop_toBottomOf="@+id/image" />
-
 
                 <TextView
-                    android:id="@+id/time"
+                    android:id="@+id/time1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/time"
                     android:textColor="@color/black"
                     android:textSize="11sp"
+                    android:maxLines="1"
+                    android:layout_marginTop="4dp"
                     android:layout_marginStart="8dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/des" />
+
+                <TextView
+                    android:id="@+id/time2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/time"
+                    android:textColor="@color/black"
+                    android:textSize="11sp"
+                    android:maxLines="1"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/time1" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -18,6 +18,16 @@ class RoundTripAirplaneListAdapter(private val context: Context, private val dat
     private var likeId = lid
     private var heartClickable = false
 
+    init {
+        Log.d("RoundTripAirplaneList", "init\nhearts.size : ${hearts.size}\nlikeId.size : ${likeId.size}\ndata.size : ${data.size}\nlid.size = ${lid.size}")
+        for (i in data.indices){
+            if (i <= likeId.lastIndex){
+                Log.d("RoundTripAirplaneList", "likeId[$i] : ${likeId[i]}")
+            }
+            Log.d("RoundTripAirplaneList", "data[$i] : ${data[i]}")
+        }
+    }
+
     inner class ViewHolder(val binding : RoundTripAirplaneListItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(data : GetFlightOffersResponseElement, position: Int){
             val abroadDepartureDateTime = getDateTime(data.abroadDepartureTime)

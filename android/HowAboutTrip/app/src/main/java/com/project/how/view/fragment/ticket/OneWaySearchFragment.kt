@@ -28,11 +28,13 @@ import com.project.how.view.dialog.ConfirmDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.AirportBottomSheetDialog
 import com.project.how.view_model.BookingViewModel
 import com.project.how.view_model.MemberViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.TimeZone
 
+@AndroidEntryPoint
 class OneWaySearchFragment(private val onLoadListener: OnLoadListener) : Fragment(), OnAirportListener {
     private var _binding : FragmentOneWaySearchBinding? = null
     private val binding : FragmentOneWaySearchBinding

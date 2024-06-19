@@ -17,13 +17,14 @@
 
 ## TECH STACK
 ### Android
-- Android App Architecture
+- MVVM
 - Retrofit2, OkHttp3
 - Coroutine & Flow
 - Data Binding & View Binding
 - Google OAuth
 - Lottie
 - Google Map SDK & Google Place SDK
+- Hilt
 
 ### Backend
 - Spring Boot 3.2.2 with Java 17

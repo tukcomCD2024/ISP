@@ -43,8 +43,6 @@ class OneWayAirplaneListAdapter(private val context: Context, private val data :
             binding.abroadNonStop.text = if (data.nonstop) context.getString(R.string.non_stop) else context.getString(R.string.stop, data.transferCount.toString())
             binding.abroadDuration.text = abroadDuration
 
-            if(hearts[position]) like(binding) else unLike(binding)
-
             if (heartClickable){
                 binding.heart.setOnClickListener {
                     if (hearts[position]){

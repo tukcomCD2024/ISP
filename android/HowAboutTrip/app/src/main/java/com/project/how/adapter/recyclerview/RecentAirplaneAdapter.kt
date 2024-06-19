@@ -15,8 +15,8 @@ class RecentAirplaneAdapter(recentAirplane: List<RecentAirplane>)
     inner class ViewHolder(val binding : RecentAirplaneItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(data : RecentAirplane){
             binding.des.text = data.des
-            binding.date.text = data.date
-            binding.time.text = data.time
+            binding.time1.text = data.time1
+            binding.time2.text = data.time2
             if(data.image == null){
                 Glide.with(binding.root)
                     .load("https://mblogthumb-phinf.pstatic.net/20160614_300/ppanppane_1465870299257eqV77_PNG/%B4%EB%C7%D1%C7%D7%B0%F8_%B7%CE%B0%ED_%282%29.png?type=w800")

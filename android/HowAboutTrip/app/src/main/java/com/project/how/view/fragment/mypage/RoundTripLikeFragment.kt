@@ -19,8 +19,10 @@ import com.project.how.data_class.dto.LikeFlightElement
 import com.project.how.databinding.FragmentRoundTripLikeBinding
 import com.project.how.view_model.BookingViewModel
 import com.project.how.view_model.MemberViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class RoundTripLikeFragment : Fragment(), RoundTripAirplaneListAdapter.OnItemClickListener {
     private var _binding : FragmentRoundTripLikeBinding? = null
     private val binding : FragmentRoundTripLikeBinding
@@ -45,6 +47,8 @@ class RoundTripLikeFragment : Fragment(), RoundTripAirplaneListAdapter.OnItemCli
         }
         bookingViewModel.likeFlightLiveData.observe(viewLifecycleOwner){likes->
             lid = mutableListOf<Long>()
+            data.clear()
+
             likes.forEachIndexed { index, d ->
                 if (d.homeDuration != null){
                     lid.add(d.id)

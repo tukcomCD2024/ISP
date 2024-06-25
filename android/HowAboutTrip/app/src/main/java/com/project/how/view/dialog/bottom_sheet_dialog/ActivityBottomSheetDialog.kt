@@ -144,11 +144,11 @@ class ActivityBottomSheetDialog(private val onActivityListener: OnActivityListen
 
     fun confirm(){
         lifecycleScope.launch {
-            getSport()
-            getNature()
             getCity()
-            getMedia()
             getAtmosphere()
+            getMedia()
+            getNature()
+            getSport()
 
             Log.d("ActivityBottomSheetDialog", "confirm\nactivity size : ${activity.size}")
 

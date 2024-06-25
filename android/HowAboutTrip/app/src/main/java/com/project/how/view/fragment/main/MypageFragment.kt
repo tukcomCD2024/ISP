@@ -16,6 +16,7 @@ import com.google.android.gms.ads.MobileAds
 import com.project.how.R
 import com.project.how.databinding.FragmentMypageBinding
 import com.project.how.view.activity.mypage.LikeActivity
+import com.project.how.view.activity.mypage.WeatherActivity
 import com.project.how.view_model.MemberViewModel
 
 class MypageFragment : Fragment() {
@@ -93,5 +94,9 @@ class MypageFragment : Fragment() {
 
     fun moveLike(){
         startActivity(Intent(requireContext(), LikeActivity::class.java))
+    }
+
+    fun moveWeather(){
+        startActivity(Intent(requireContext(), WeatherActivity::class.java))
     }
 }

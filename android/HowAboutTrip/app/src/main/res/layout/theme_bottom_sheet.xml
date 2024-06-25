@@ -67,62 +67,15 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/sport"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/bm_hanna"
-                        android:text="@string/sport"
-                        android:textColor="@color/black"
-                        android:textSize="13sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/sport_list"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:orientation="horizontal"
-                        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-                        app:layout_constraintTop_toBottomOf="@+id/sport"
-                        app:spanCount="4"
-                        tools:listitem="@layout/simple_radiobutton_item" />
-
-                    <TextView
-                        android:id="@+id/nature"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:fontFamily="@font/bm_hanna"
-                        android:text="@string/nature"
-                        android:textColor="@color/black"
-                        android:textSize="13sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/sport_list" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/nature_list"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:orientation="horizontal"
-                        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-                        app:layout_constraintTop_toBottomOf="@+id/nature"
-                        app:spanCount="4"
-                        tools:layout_editor_absoluteX="29dp"
-                        tools:listitem="@layout/simple_radiobutton_item" />
-
-                    <TextView
                         android:id="@+id/city"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
                         android:fontFamily="@font/bm_hanna"
                         android:text="@string/shopping_and_city"
                         android:textColor="@color/black"
                         android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/nature_list" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/city_list"
@@ -133,6 +86,29 @@
                         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
                         app:layout_constraintTop_toBottomOf="@+id/city"
                         app:spanCount="6"
+                        tools:listitem="@layout/simple_radiobutton_item" />
+
+                    <TextView
+                        android:id="@+id/atmosphere"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/bm_hanna"
+                        android:text="@string/atmosphere"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/city_list" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/atmosphere_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                        app:layout_constraintTop_toBottomOf="@+id/atmosphere"
+                        app:spanCount="5"
                         tools:layout_editor_absoluteX="29dp"
                         tools:listitem="@layout/simple_radiobutton_item" />
 
@@ -146,7 +122,7 @@
                         android:textColor="@color/black"
                         android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/city_list" />
+                        app:layout_constraintTop_toBottomOf="@+id/atmosphere_list" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/media_list"
@@ -161,27 +137,51 @@
                         tools:listitem="@layout/simple_radiobutton_item" />
 
                     <TextView
-                        android:id="@+id/atmosphere"
+                        android:id="@+id/nature"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:fontFamily="@font/bm_hanna"
-                        android:text="@string/atmosphere"
+                        android:text="@string/nature"
                         android:textColor="@color/black"
                         android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/media_list" />
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/atmosphere_list"
+                        android:id="@+id/nature_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                        app:layout_constraintTop_toBottomOf="@+id/nature"
+                        app:spanCount="4"
+                        tools:layout_editor_absoluteX="29dp"
+                        tools:listitem="@layout/simple_radiobutton_item" />
+
+                    <TextView
+                        android:id="@+id/sport"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/bm_hanna"
+                        android:text="@string/sport"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/nature_list" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/sport_list"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="5dp"
                         android:orientation="horizontal"
                         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-                        app:layout_constraintTop_toBottomOf="@+id/atmosphere"
-                        app:spanCount="5"
+                        app:layout_constraintTop_toBottomOf="@+id/sport"
+                        app:spanCount="4"
                         tools:layout_editor_absoluteX="29dp"
                         tools:listitem="@layout/simple_radiobutton_item"
                         app:layout_constraintBottom_toBottomOf="parent"/>

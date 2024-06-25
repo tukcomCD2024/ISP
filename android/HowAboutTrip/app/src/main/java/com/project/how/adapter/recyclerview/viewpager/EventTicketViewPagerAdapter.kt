@@ -1,6 +1,7 @@
 package com.project.how.adapter.recyclerview.viewpager
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -15,6 +16,10 @@ class EventTicketViewPagerAdapter(eventInfo : List<EventViewPager>)
     inner class ViewHolder(val binding : ViewpagerRoundTicketEventBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(data : EventViewPager){
             binding.text.text = data.title
+            if (data.fade)
+                binding.fade.visibility = View.VISIBLE
+            else
+                binding.fade.visibility = View.INVISIBLE
             if(data.image == null){
                 Glide.with(binding.root)
                     .load("https://img.freepik.com/free-photo/famous-tower-bridge-in-the-evening-london-england_268835-1390.jpg?w=1380&t=st=1711373689~exp=1711374289~hmac=48368a0b7fab5f7d212f39979735f02fd5ed184aab1ef0e8535de2e856482de6")

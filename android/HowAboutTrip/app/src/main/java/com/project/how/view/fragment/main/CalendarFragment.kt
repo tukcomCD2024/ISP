@@ -60,9 +60,11 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        for(i in 0..5){
-            event.add(EventViewPager("test", "일정 생성을\n해보세요$i", null))
-        }
+        event.add(EventViewPager("test", "이번 여름방학엔\n일본여행가기", R.drawable.event_image_japan_temp, true))
+        event.add(EventViewPager("test", "니스 해변에서\n휴양하기", R.drawable.event_image_nis_temp, true))
+        event.add(EventViewPager("test", "2024 파리 올림픽\n여름방학", R.drawable.event_image_paris_temp, true))
+        event.add(EventViewPager("test", "항공권 검색으로\n편안한 여행", R.drawable.event_image_airplnae_temp, true))
+
         eventAdapter = EventViewPagerAdapter(event)
     }
 

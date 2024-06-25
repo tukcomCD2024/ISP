@@ -2,10 +2,10 @@
 ### Android 개발 환경
 - Lanaguages : Kotlin
 - Tool : Android Studio
-	- Version : Jellyfish
+	- Version : Koala
 	- Java : Java 8
-	- Android Gradle Plugin : 8.4.0
-	- Gradle Version : 8.6
+	- Android Gradle Plugin : 8.5.0
+	- Gradle Version : 8.7
 - - -
 ### 사용된 오픈소스 라이브러리 목록
 | 이름 | 라이센스 |
@@ -24,4 +24,11 @@
 | Google AdMob - Mobile Ads SDK for Android | 구글 광고를 통한 유지비 확보를 목표로 광고 구현 |
 | Firebase | 구글 로그인 & 사용자 분석 및 구글 광고 |
 | 백엔드 API | 비즈니스 로직 구현을 위한 API |
+- - -
+### 사용된 그외의 라이브러리 목록
+| Material 3 | 캘린더 뷰 구현 |
+| Live Data | MVVM 구현 및 데이터 비동기 업데이트 |
+| DataStore | 토큰 정보 저장 및 자동 로그인 |
+| Hilt | DI 처리 |
+| Room DB | 최신 검색 항공권, 최신 검색 호텔 등의 데이터 관리 |
 

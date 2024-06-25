@@ -64,7 +64,7 @@ fun getApiKey(propertyKey: String):String = gradleLocalProperties(rootDir, provi
 
 dependencies {
 
-    implementation ("org.jetbrains.kotlin:kotlin-stdlib:1.9.10")
+    implementation ("org.jetbrains.kotlin:kotlin-stdlib:1.9.23")
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
@@ -83,6 +83,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:21.2.0")
 
     implementation("com.google.dagger:hilt-android:2.46")
+    implementation("androidx.activity:activity-ktx:1.9.0")
     kapt("com.google.dagger:hilt-android-compiler:2.46")
 
     implementation("com.squareup.retrofit:retrofit:2.0.0-beta2")
@@ -96,7 +97,6 @@ dependencies {
 
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.libraries.places:places:3.5.0")
-    implementation("androidx.activity:activity-ktx:1.9.0")
     implementation("androidx.activity:activity-ktx:1.9.0")
     implementation("androidx.room:room-ktx:2.7.0-alpha04")
     kapt("androidx.room:room-compiler:2.7.0-alpha04")

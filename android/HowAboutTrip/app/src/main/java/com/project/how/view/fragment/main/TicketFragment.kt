@@ -17,6 +17,7 @@ import com.project.how.data_class.recyclerview.EventViewPager
 import com.project.how.data_class.recyclerview.RecentHotel
 import com.project.how.data_class.roomdb.RecentAirplane
 import com.project.how.databinding.FragmentTicketBinding
+import com.project.how.view.activity.mypage.LikeActivity
 import com.project.how.view.activity.ticket.AirplaneSearchActivity
 import com.project.how.view.dialog.bottom_sheet_dialog.WebViewBottomSheetDialog
 import com.project.how.view_model.BookingViewModel
@@ -38,8 +39,13 @@ class TicketFragment : Fragment(), RecentHotelAdapter.OnItemClickListener, Recen
         var eventTest = mutableListOf<EventViewPager>()
         var recentHotelTest = mutableListOf<RecentHotel>()
 
+        eventTest.add(EventViewPager("test", "2024 파리 올림픽\n여름방학", R.drawable.event_image_paris_temp, true))
+        eventTest.add(EventViewPager("test", "이번 여름방학엔\n일본여행가기", R.drawable.event_image_japan_temp, true))
+        eventTest.add(EventViewPager("test", "니스 최고의 해변에서\n휴양하기", R.drawable.event_image_nis_temp, true))
+        eventTest.add(EventViewPager("test", "2024 파리 올림픽\n여름방학", R.drawable.event_image_paris_temp, true))
+        eventTest.add(EventViewPager("test", "항공권 검색으로\n편안한 여행", R.drawable.event_image_airplnae_temp, true))
+
         for (i in 0..5) {
-            eventTest.add(EventViewPager("test", "항공 티켓을\n구매하세요.$i", null))
             recentHotelTest.add(
                 RecentHotel(
                     i.toLong(),
@@ -106,6 +112,10 @@ class TicketFragment : Fragment(), RecentHotelAdapter.OnItemClickListener, Recen
 
     fun moveAirplaneSearch(){
         startActivity(Intent(activity, AirplaneSearchActivity::class.java))
+    }
+
+    fun moveLike(){
+        startActivity(Intent(requireContext(), LikeActivity::class.java))
     }
 
     override fun onItemClickListener(url: String) {

@@ -36,8 +36,9 @@
 
 <br>
 
-## ERD
-<img width="1269" alt="스크린샷 2024-07-06 오후 10 01 59" src="https://github.com/tukcomCD2024/ISP/assets/95288297/2487b475-3e9f-4522-9439-e4034a0e55db">
+## [ERD](https://dbdiagram.io/d/HowAboutTrip-6634f0ee5b24a634d071a4d7)
+![HowAboutTrip](https://github.com/tukcomCD2024/ISP/assets/95288297/6eb6e6a6-7fde-413e-adfd-3df8f934214d)
+
 
 <br>
 <br>

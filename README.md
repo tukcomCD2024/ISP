@@ -36,6 +36,11 @@
 
 <br>
 
+## ERD
+<img width="1269" alt="스크린샷 2024-07-06 오후 10 01 59" src="https://github.com/tukcomCD2024/ISP/assets/95288297/2487b475-3e9f-4522-9439-e4034a0e55db">
+
+<br>
+<br>
 
 ## SCREENSHOTS
 |       뷰       |                                                              1                                                              |                                                              2                                                              |                                                              3                                                              |                                                              4                                                              |

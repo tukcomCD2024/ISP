@@ -12,18 +12,28 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:paddingHorizontal="35dp"
-        android:paddingTop="10dp">
+        android:paddingTop="20dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@color/grey"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{mypage.name}"
-            android:textSize="18sp"
-            android:textColor="@color/black"
+            android:layout_margin="8dp"
             android:fontFamily="@font/bm_hanna"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:text="@{mypage.name}"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/name_edit"
+            app:layout_constraintStart_toEndOf="@+id/image"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -31,13 +41,12 @@
             style="@style/Button.BlackRound"
             android:layout_width="wrap_content"
             android:layout_height="26dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="17dp"
             android:text="@string/name_edit"
             android:textColor="@color/white"
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/calendar_search"
@@ -49,17 +58,17 @@
             android:layout_marginTop="40dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name_edit"
-            app:layout_constraintEnd_toStartOf="@id/weather"/>
+            app:layout_constraintEnd_toStartOf="@id/like"/>
 
         <ImageButton
-            android:id="@+id/weather"
+            android:id="@+id/like"
             android:layout_width="0dp"
             android:layout_height="35dp"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/icon_weather"
+            android:src="@drawable/icon_heart"
             android:layout_marginTop="40dp"
-            android:onClick="@{()-> mypage.moveWeather()}"
+            android:onClick="@{()->mypage.moveLike()}"
             app:layout_constraintStart_toEndOf="@id/calendar_search"
             app:layout_constraintTop_toBottomOf="@+id/name_edit"
             app:layout_constraintEnd_toStartOf="@id/exchange_rate"/>
@@ -70,9 +79,9 @@
             android:layout_height="35dp"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/icon_exchange_rate"
+            android:src="@drawable/icon_picture_linear"
             android:layout_marginTop="40dp"
-            app:layout_constraintStart_toEndOf="@id/weather"
+            app:layout_constraintStart_toEndOf="@id/like"
             app:layout_constraintTop_toBottomOf="@+id/name_edit"
             app:layout_constraintEnd_toStartOf="@id/picture"/>
 
@@ -83,7 +92,7 @@
             android:layout_marginTop="40dp"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/icon_picture_linear"
+            android:src="@drawable/icon_bill"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/exchange_rate"
             app:layout_constraintTop_toBottomOf="@+id/name_edit" />
@@ -105,21 +114,21 @@
             android:id="@+id/textView3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/weather"
+            android:text="@string/heart"
             android:textSize="13sp"
             android:gravity="center"
             android:layout_marginTop="5dp"
             android:textColor="@color/black"
-            android:onClick="@{()-> mypage.moveWeather()}"
+            android:onClick="@{()->mypage.moveLike()}"
             app:layout_constraintStart_toEndOf="@+id/textView2"
-            app:layout_constraintTop_toBottomOf="@+id/weather"
+            app:layout_constraintTop_toBottomOf="@+id/like"
             app:layout_constraintEnd_toStartOf="@id/textView4"/>
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/exchange_rate"
+            android:text="@string/picture_record"
             android:textSize="13sp"
             android:gravity="center"
             android:layout_marginTop="5dp"
@@ -133,7 +142,7 @@
             android:id="@+id/textView5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/menu_picture"
+            android:text="@string/bill"
             android:textSize="13sp"
             android:gravity="center"
             android:layout_marginTop="5dp"
@@ -149,21 +158,21 @@
             android:layout_height="35dp"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/icon_membership"
+            android:src="@drawable/icon_weather"
             android:layout_marginTop="30dp"
-            app:layout_constraintEnd_toStartOf="@id/heart"
+            android:onClick="@{()-> mypage.moveWeather()}"
+            app:layout_constraintEnd_toStartOf="@id/weather"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
         <ImageButton
-            android:id="@+id/heart"
+            android:id="@+id/weather"
             android:layout_width="0dp"
             android:layout_height="35dp"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/icon_heart"
+            android:src="@drawable/icon_exchange_rate"
             android:layout_marginTop="30dp"
-            android:onClick="@{()->mypage.moveLike()}"
             app:layout_constraintEnd_toStartOf="@id/inquiry"
             app:layout_constraintStart_toEndOf="@+id/membership"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -175,10 +184,10 @@
             android:layout_marginStart="1dp"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/icon_talk"
+            android:src="@drawable/icon_setting"
             android:layout_marginTop="30dp"
             app:layout_constraintEnd_toStartOf="@id/setting"
-            app:layout_constraintStart_toEndOf="@+id/heart"
+            app:layout_constraintStart_toEndOf="@+id/weather"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
         <ImageButton
@@ -187,7 +196,6 @@
             android:layout_height="35dp"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/icon_setting"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="30dp"
             app:layout_constraintStart_toEndOf="@id/exchange_rate"
@@ -197,11 +205,12 @@
             android:id="@+id/textView6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/membership"
+            android:text="@string/weather"
             android:textSize="13sp"
             android:gravity="center"
             android:layout_marginTop="5dp"
             android:textColor="@color/black"
+            android:onClick="@{()-> mypage.moveWeather()}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/membership"
             app:layout_constraintEnd_toStartOf="@id/textView7"/>
@@ -210,21 +219,20 @@
             android:id="@+id/textView7"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/heart"
+            android:text="@string/exchange_rate"
             android:textSize="13sp"
             android:gravity="center"
             android:layout_marginTop="5dp"
             android:textColor="@color/black"
-            android:onClick="@{()->mypage.moveLike()}"
             app:layout_constraintStart_toEndOf="@+id/textView6"
-            app:layout_constraintTop_toBottomOf="@+id/heart"
+            app:layout_constraintTop_toBottomOf="@+id/weather"
             app:layout_constraintEnd_toStartOf="@id/textView8"/>
 
         <TextView
             android:id="@+id/textView8"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/inquiry"
+            android:text="@string/setting"
             android:textSize="13sp"
             android:gravity="center"
             android:layout_marginTop="5dp"
@@ -238,7 +246,6 @@
             android:id="@+id/textView9"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/setting"
             android:textSize="13sp"
             android:gravity="center"
             android:layout_marginTop="5dp"

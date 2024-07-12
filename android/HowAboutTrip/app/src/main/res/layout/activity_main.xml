@@ -74,7 +74,7 @@
                     android:layout_marginEnd="10dp"
                     style="@style/WhiteBottomNavigationView"
                     app:labelVisibilityMode="labeled"
-                    app:itemIconSize="28dp"
+                    app:itemIconSize="22dp"
                     app:itemIconTint="@color/main_menu"
                     app:itemTextColor="@color/main_menu"
                     app:itemRippleColor="@android:color/transparent"

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="adapter"
-            type="com.project.how.adapter.recyclerview.RoundTripAirplaneListAdapter" />
+            type="com.project.how.adapter.recyclerview.booking.airplane.RoundTripAirplaneListAdapter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,7 +30,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="20dp"
-                android:src="@color/gray"
+                android:src="@color/grey"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -95,7 +95,7 @@
                 android:layout_height="30dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:src="@color/gray"
+                android:src="@color/grey"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/abroad_airport" />
 

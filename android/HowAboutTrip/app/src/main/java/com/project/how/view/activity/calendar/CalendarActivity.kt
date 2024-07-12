@@ -18,8 +18,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.tabs.TabLayout
 import com.project.how.R
-import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
-import com.project.how.adapter.recyclerview.DaysScheduleAdapter
+import com.project.how.adapter.recyclerview.schedule.DaysScheduleAdapter
 import com.project.how.data_class.recyclerview.DaysSchedule
 import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.databinding.ActivityCalendarBinding

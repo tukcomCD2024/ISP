@@ -1,17 +1,16 @@
 package com.project.how.network.api_interface
 
 import com.project.how.data_class.dto.EmptyResponse
-import com.project.how.data_class.dto.GenerateOneWaySkyscannerUrlRequest
-import com.project.how.data_class.dto.GenerateSkyscannerUrlRequest
-import com.project.how.data_class.dto.GenerateSkyscannerUrlResponse
-import com.project.how.data_class.dto.GetFlightOffersRequest
-import com.project.how.data_class.dto.GetFlightOffersResponse
-import com.project.how.data_class.dto.GetLikeFlightResponse
-import com.project.how.data_class.dto.GetOneWayFlightOffersRequest
-import com.project.how.data_class.dto.GetOneWayFlightOffersResponse
-import com.project.how.data_class.dto.LikeFlightElement
-import com.project.how.data_class.dto.LikeFlight
-import com.project.how.data_class.dto.LikeOneWayFlightElement
+import com.project.how.data_class.dto.booking.airplane.GenerateOneWaySkyscannerUrlRequest
+import com.project.how.data_class.dto.booking.airplane.GenerateSkyscannerUrlRequest
+import com.project.how.data_class.dto.booking.airplane.GenerateSkyscannerUrlResponse
+import com.project.how.data_class.dto.booking.airplane.GetFlightOffersRequest
+import com.project.how.data_class.dto.booking.airplane.GetFlightOffersResponse
+import com.project.how.data_class.dto.booking.airplane.GetLikeFlightResponse
+import com.project.how.data_class.dto.booking.airplane.GetOneWayFlightOffersRequest
+import com.project.how.data_class.dto.booking.airplane.GetOneWayFlightOffersResponse
+import com.project.how.data_class.dto.booking.airplane.LikeFlightElement
+import com.project.how.data_class.dto.booking.airplane.LikeOneWayFlightElement
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET

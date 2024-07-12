@@ -23,7 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.project.how.BuildConfig
 import com.project.how.R
-import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
+import com.project.how.adapter.recyclerview.schedule.AiDaysScheduleAdapter
 import com.project.how.data_class.recyclerview.DaysSchedule
 import com.project.how.databinding.EditScheduleBottomSheetBinding
 import com.project.how.interface_af.OnScheduleListener

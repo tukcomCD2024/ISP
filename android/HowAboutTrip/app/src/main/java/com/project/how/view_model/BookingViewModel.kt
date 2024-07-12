@@ -7,16 +7,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.how.R
 import com.project.how.data_class.dto.EmptyResponse
-import com.project.how.data_class.dto.GenerateOneWaySkyscannerUrlRequest
-import com.project.how.data_class.dto.GenerateSkyscannerUrlRequest
-import com.project.how.data_class.dto.GenerateSkyscannerUrlResponse
-import com.project.how.data_class.dto.GetFlightOffersRequest
-import com.project.how.data_class.dto.GetFlightOffersResponse
-import com.project.how.data_class.dto.GetLikeFlightResponse
-import com.project.how.data_class.dto.GetOneWayFlightOffersRequest
-import com.project.how.data_class.dto.GetOneWayFlightOffersResponse
-import com.project.how.data_class.dto.LikeFlightElement
-import com.project.how.data_class.dto.LikeOneWayFlightElement
+import com.project.how.data_class.dto.booking.airplane.GenerateOneWaySkyscannerUrlRequest
+import com.project.how.data_class.dto.booking.airplane.GenerateSkyscannerUrlRequest
+import com.project.how.data_class.dto.booking.airplane.GenerateSkyscannerUrlResponse
+import com.project.how.data_class.dto.booking.airplane.GetFlightOffersRequest
+import com.project.how.data_class.dto.booking.airplane.GetFlightOffersResponse
+import com.project.how.data_class.dto.booking.airplane.GetLikeFlightResponse
+import com.project.how.data_class.dto.booking.airplane.GetOneWayFlightOffersRequest
+import com.project.how.data_class.dto.booking.airplane.GetOneWayFlightOffersResponse
+import com.project.how.data_class.dto.booking.airplane.LikeFlightElement
+import com.project.how.data_class.dto.booking.airplane.LikeOneWayFlightElement
 import com.project.how.data_class.roomdb.RecentAirplane
 import com.project.how.model.BookingRepository
 import com.project.how.network.client.BookingRetrofit
@@ -29,7 +29,6 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.LinkedList
 import javax.inject.Inject
 
 @HiltViewModel

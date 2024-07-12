@@ -11,10 +11,10 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.project.how.R
-import com.project.how.adapter.recyclerview.CalendarListAdapter
-import com.project.how.data_class.dto.GetCountryLocationResponse
+import com.project.how.adapter.recyclerview.schedule.CalendarListAdapter
+import com.project.how.data_class.dto.country.GetCountryLocationResponse
 import com.project.how.data_class.recyclerview.Schedule
-import com.project.how.data_class.dto.GetScheduleListResponseElement
+import com.project.how.data_class.dto.schedule.GetScheduleListResponseElement
 import com.project.how.databinding.ActivityCalendarListBinding
 import com.project.how.interface_af.OnDesListener
 import com.project.how.interface_af.OnYesOrNoListener

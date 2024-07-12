@@ -1,10 +1,10 @@
 package com.project.how.network.api_interface
 
 import com.project.how.data_class.dto.EmptyResponse
-import com.project.how.data_class.dto.LoginRequest
-import com.project.how.data_class.dto.SignUpRequest
-import com.project.how.data_class.dto.AuthRecreateRequest
-import com.project.how.data_class.dto.GetInfoResponse
+import com.project.how.data_class.dto.member.LoginRequest
+import com.project.how.data_class.dto.member.SignUpRequest
+import com.project.how.data_class.dto.member.AuthRecreateRequest
+import com.project.how.data_class.dto.member.GetInfoResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET

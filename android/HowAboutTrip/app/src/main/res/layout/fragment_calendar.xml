@@ -113,7 +113,7 @@
             <ImageButton
                 android:id="@+id/ai"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="35dp"
                 android:layout_marginTop="16dp"
                 android:background="@android:color/transparent"
                 android:scaleType="fitCenter"
@@ -126,7 +126,7 @@
             <ImageButton
                 android:id="@+id/add"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="35dp"
                 android:layout_marginTop="16dp"
                 android:background="@android:color/transparent"
                 android:scaleType="fitCenter"
@@ -139,7 +139,7 @@
             <ImageButton
                 android:id="@+id/search"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="35dp"
                 android:layout_marginTop="16dp"
                 android:background="@android:color/transparent"
                 android:scaleType="fitCenter"

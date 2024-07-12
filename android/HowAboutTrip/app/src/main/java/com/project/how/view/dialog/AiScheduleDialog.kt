@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.project.how.BuildConfig
 import com.project.how.R
-import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
+import com.project.how.adapter.recyclerview.schedule.AiDaysScheduleAdapter
 import com.project.how.data_class.recyclerview.AiSchedule
 import com.project.how.databinding.DialogAiScheduleBinding
 import com.project.how.interface_af.OnAddListener
@@ -33,7 +33,6 @@ class AiScheduleDialog(private val data : AiSchedule, private val onAddListener:
     private lateinit var adapter : AiDaysScheduleAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = AiDaysScheduleAdapter(data.dailySchedule[0])
     }
 
     override fun onCreateView(
@@ -44,6 +43,7 @@ class AiScheduleDialog(private val data : AiSchedule, private val onAddListener:
         _binding = DataBindingUtil.inflate(inflater, R.layout.dialog_ai_schedule, container, false)
         binding.ai = this
         binding.lifecycleOwner = viewLifecycleOwner
+        adapter = AiDaysScheduleAdapter(requireContext(), data.dailySchedule[0])
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         val params = dialog?.window?.attributes

@@ -8,12 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.project.how.R
 import com.project.how.data_class.MemberInfo
-import com.project.how.data_class.dto.LoginRequest
+import com.project.how.data_class.dto.member.LoginRequest
 import com.project.how.data_class.Tokens
-import com.project.how.data_class.dto.AuthRecreateRequest
+import com.project.how.data_class.dto.member.AuthRecreateRequest
 import com.project.how.data_class.dto.EmptyResponse
-import com.project.how.data_class.dto.GetInfoResponse
-import com.project.how.data_class.dto.SignUpRequest
+import com.project.how.data_class.dto.member.GetInfoResponse
+import com.project.how.data_class.dto.member.SignUpRequest
 import com.project.how.model.MemberRepository
 import com.project.how.network.client.MemberRetrofit
 import kotlinx.coroutines.channels.awaitClose

@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.core.util.Pair
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.ads.AdRequest
@@ -16,9 +15,8 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.project.how.R
 import com.project.how.data_class.recyclerview.AiSchedule
-import com.project.how.data_class.AiScheduleInput
 import com.project.how.data_class.AiScheduleListInput
-import com.project.how.data_class.dto.GetCountryLocationResponse
+import com.project.how.data_class.dto.country.GetCountryLocationResponse
 import com.project.how.data_class.recyclerview.AiScheduleList
 import com.project.how.databinding.ActivityAddAicalendarBinding
 import com.project.how.interface_af.OnAddListener
@@ -35,7 +33,6 @@ import com.project.how.view.dialog.bottom_sheet_dialog.PurposeBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.ActivityBottomSheetDialog
 import com.project.how.view_model.AiScheduleViewModel
 import com.project.how.view_model.ScheduleViewModel
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar

@@ -24,9 +24,9 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout
 import com.project.how.R
-import com.project.how.adapter.recyclerview.DaysScheduleEditAdapter
+import com.project.how.adapter.recyclerview.schedule.DaysScheduleEditAdapter
 import com.project.how.adapter.item_touch_helper.RecyclerViewItemTouchHelperCallback
-import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
+import com.project.how.adapter.recyclerview.schedule.AiDaysScheduleAdapter
 import com.project.how.data_class.recyclerview.AiSchedule
 import com.project.how.data_class.recyclerview.DaysSchedule
 import com.project.how.data_class.recyclerview.Schedule

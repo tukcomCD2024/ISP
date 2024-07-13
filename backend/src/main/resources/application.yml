@@ -39,3 +39,4 @@ api-key:
     accessKey: ${AMADEUS_ACCESS_KEY}
     secretKey: ${AMADEUS_SECRET_KEY}
   open-weather: ${OPEN_WEATHER_API_KEY}
+  exchange-rate: ${EXCHANGE_RATE_API_KEY}

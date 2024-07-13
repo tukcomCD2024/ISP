@@ -1,6 +1,5 @@
 package com.isp.backend.domain.country.service;
 
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isp.backend.domain.country.dto.response.DailyWeatherResponse;
@@ -33,7 +32,7 @@ public class CountryService {
     private CountryRepository countryRepository;
 
     @Value("${api-key.open-weather}")
-    private String apiKey;
+    private String weatherApiKey;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -58,6 +57,7 @@ public class CountryService {
     }
 
 
+
     /** 여행지의 날씨 정보 가져오기 **/
     public WeatherResponse getCurrentWeather(String city) {
         Optional<Country> findCountry = findCountryByCity(city);
@@ -65,7 +65,7 @@ public class CountryService {
         double latitude = country.getLatitude();
         double longitude = country.getLongitude();
 
-        String url = String.format("http://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&appid=%s", latitude, longitude, apiKey);
+        String url = String.format("http://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&appid=%s", latitude, longitude, weatherApiKey);
         String jsonResponse = restTemplate.getForObject(url, String.class);
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -100,7 +100,8 @@ public class CountryService {
     }
 
 
-    /** 한주의 날씨 정보 조회 **/
+
+    /** 한 주의 날씨 정보 조회 **/
     public List<DailyWeatherResponse> getWeeklyWeather(String city, LocalTime requestedTime) {
         Optional<Country> findCountry = findCountryByCity(city);
         Country country = findCountry.get();
@@ -108,7 +109,7 @@ public class CountryService {
         double longitude = country.getLongitude();
 
         List<DailyWeatherResponse> weeklyWeather = new ArrayList<>();
-        String url = String.format("http://api.openweathermap.org/data/2.5/forecast?lat=%f&lon=%f&appid=%s", latitude, longitude, apiKey);
+        String url = String.format("http://api.openweathermap.org/data/2.5/forecast?lat=%f&lon=%f&appid=%s", latitude, longitude, weatherApiKey);
         String jsonResponse = restTemplate.getForObject(url, String.class);
 
         try {
@@ -116,7 +117,7 @@ public class CountryService {
             JsonNode rootNode = objectMapper.readTree(jsonResponse);
             JsonNode forecastList = rootNode.path("list");
 
-            Map<String, List<Double>> dailyTemperatures = new HashMap<>(); // 각 날짜의 온도 목록을 저장할 맵
+            Map<String, DailyWeatherResponse> dailyWeatherMap = new HashMap<>(); // 각 날짜의 날씨 정보를 저장할 맵
 
             for (JsonNode forecast : forecastList) {
                 String dateTime = forecast.path("dt_txt").asText(); // 예측 시간 정보
@@ -127,29 +128,23 @@ public class CountryService {
                     String dateString = localDateTime.toLocalDate().toString();
                     double temperature = forecast.path("main").path("temp").asDouble(); // 온도 정보
 
-                    // 해당 날짜의 온도 목록에 추가
-                    dailyTemperatures.computeIfAbsent(dateString, k -> new ArrayList<>()).add(temperature);
+                    // 해당 날짜의 온도 정보를 저장 (동일한 시간대에 여러 데이터가 있을 경우, 가장 첫 번째 데이터를 사용)
+                    if (!dailyWeatherMap.containsKey(dateString)) {
+                        // 아이콘 URL 가져오기
+                        String iconCode = forecast.path("weather").get(0).path("icon").asText();
+                        String iconUrl = String.format(s3ImageService.get(S3BucketDirectory.WEATHER.getDirectory(), iconCode + ".png"));
+
+                        DailyWeatherResponse dailyWeather = new DailyWeatherResponse();
+                        dailyWeather.setDate(parseDayOfWeek(dateString));
+                        dailyWeather.setTemp(convertToCelsius(temperature));
+                        dailyWeather.setIconUrl(iconUrl);
+
+                        dailyWeatherMap.put(dateString, dailyWeather);
+                    }
                 }
             }
 
-            // 각 날짜의 평균 온도를 계산하여 DailyWeatherResponse 객체로 변환한 후 리스트에 추가
-            dailyTemperatures.forEach((dateString, temperatures) -> {
-                double avgTemperature = temperatures.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
-                String temperature = convertToCelsius(avgTemperature);
-
-                // 아이콘 URL 가져오기
-                String iconCode = forecastList.get(0).path("weather").get(0).path("icon").asText();
-                String iconUrl = String.format(s3ImageService.get(S3BucketDirectory.WEATHER.getDirectory(), iconCode + ".png"));
-
-                DailyWeatherResponse dailyWeather = new DailyWeatherResponse();
-                dailyWeather.setDate(parseDayOfWeek(dateString));
-                dailyWeather.setTemp(temperature);
-                dailyWeather.setIconUrl(iconUrl);
-
-                weeklyWeather.add(dailyWeather);
-            });
-
-            // 날짜 순서대로 정렬
+            weeklyWeather.addAll(dailyWeatherMap.values());
             weeklyWeather.sort(Comparator.comparing(DailyWeatherResponse::getDate));
 
         } catch (IOException e) {
@@ -159,6 +154,7 @@ public class CountryService {
 
         return weeklyWeather;
     }
+
 
 
     /** 현지 시간으로 변환 **/
@@ -171,12 +167,14 @@ public class CountryService {
     }
 
 
+
     /** 온도를 섭씨로 변환 **/
     private String convertToCelsius(double kelvin) {
         double celsius = kelvin - 273.15;
         DecimalFormat df = new DecimalFormat("#.##");
         return df.format(celsius);
     }
+
 
 
     /** 날짜 문자열에서 요일을 파싱 **/

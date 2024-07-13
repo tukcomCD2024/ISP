@@ -2,8 +2,10 @@ package com.isp.backend.domain.country.controller;
 
 import com.isp.backend.domain.country.dto.request.LocationRequest;
 import com.isp.backend.domain.country.dto.response.DailyWeatherResponse;
+import com.isp.backend.domain.country.dto.response.ExchangeRateResponse;
 import com.isp.backend.domain.country.dto.response.LocationResponse;
 import com.isp.backend.domain.country.dto.response.WeatherResponse;
+import com.isp.backend.domain.country.entity.ExchangeRate;
 import com.isp.backend.domain.country.service.CountryService;
 import com.isp.backend.domain.country.service.ExchangeRateService;
 import lombok.RequiredArgsConstructor;
@@ -58,24 +60,23 @@ public class CountryController {
     }
 
 
-    /** 특정 기준 통화에 대한 모든 환율 정보 API **/
-//    @GetMapping("/exchange-rates")
-//    public ResponseEntity<?> getExchangeRates(@RequestParam String baseCurrency) {
-//        logger.info("Received request for exchange rates with base currency: {}", baseCurrency);
-//
-//        try {
-//            Map<String, Double> exchangeRates = exchangeRateService.getExchangeRates(baseCurrency);
-//            return ResponseEntity.ok(exchangeRates);
-//        } catch (Exception e) {
-//            logger.error("Error fetching exchange rates", e);
-//            return ResponseEntity.badRequest().body(Map.of(
-//                    "errorMessage", "환율 정보를 가져오는데 실패했습니다.",
-//                    "httpStatus", "BAD_REQUEST",
-//                    "code", null
-//            ));
-//        }
-//    }
+    /** 환율 정보 업데이트 API **/
+    @GetMapping("/exchange-rates/update")
+    public String updateExchangeRate() {
+        try {
+            exchangeRateService.updateExchangeRates();
+            return "updated Successfully";
+        } catch (Exception e) {
+            return "failed to update exchange rates: " + e.getMessage();
+        }
+    }
 
+    /** 환율 정보 조회 API **/
+    @GetMapping("/exchange-rates")
+    public ResponseEntity<List<ExchangeRateResponse>> getAllExchangeRates() {
+        List<ExchangeRateResponse> exchangeRates = exchangeRateService.getAllExchangeRates();
+        return ResponseEntity.ok(exchangeRates);
 
+    }
 
 }

@@ -53,17 +53,19 @@ class RoundTripAirplaneListActivity : AppCompatActivity(), RoundTripAirplaneList
             getString(R.string.get_flight_offers_request), GetFlightOffersRequest::class.java)
 
         bookingViewModel.skyscannerUrlLiveData.observe(this){url->
-            val web = WebViewBottomSheetDialog(url)
-            web.show(supportFragmentManager, "WebViewBottomSheetDialog")
-            val recent = RecentAirplane(
-                name = getString(R.string.recent_round_trip_name, input.departure, input.destination),
-                image = null,
-                des = input.departure,
-                time1 = getString(R.string.date_text, clicked!!.abroadDepartureTime, clicked!!.abroadArrivalTime),
-                time2 = getString(R.string.date_text, clicked!!.homeDepartureTime, clicked!!.homeArrivalTime),
-                skyscannerUrl = url
-            )
-            bookingViewModel.addRecentAirplane(recent)
+            if (clicked != null){
+                val web = WebViewBottomSheetDialog(url)
+                web.show(supportFragmentManager, "WebViewBottomSheetDialog")
+                val recent = RecentAirplane(
+                    name = getString(R.string.recent_round_trip_name, input.departure, input.destination),
+                    image = null,
+                    des = input.departure,
+                    time1 = getString(R.string.date_text, clicked!!.abroadDepartureTime, clicked!!.abroadArrivalTime),
+                    time2 = getString(R.string.date_text, clicked!!.homeDepartureTime, clicked!!.homeArrivalTime),
+                    skyscannerUrl = url
+                )
+                bookingViewModel.addRecentAirplane(recent)
+            }
         }
 
         bookingViewModel.likeFlightListLiveData.observe(this){

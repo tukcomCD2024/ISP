@@ -11,7 +11,7 @@ import com.project.how.data_class.recyclerview.AiSchedule
 import com.project.how.data_class.recyclerview.DaysSchedule
 import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.data_class.dto.schedule.DailySchedule
-import com.project.how.data_class.dto.country.GetCountryLocationRequest
+import com.project.how.data_class.dto.country.GetCountryInfoRequest
 import com.project.how.data_class.dto.country.GetCountryLocationResponse
 import com.project.how.data_class.dto.schedule.GetFastestSchedulesResponse
 import com.project.how.data_class.dto.schedule.GetLatestSchedulesResponse
@@ -362,41 +362,6 @@ class ScheduleViewModel : ViewModel() {
 
                 })
 
-        } ?: close()
-
-        awaitClose()
-    }
-
-    fun getCountryLocation(country : String) : Flow<GetCountryLocationResponse?> = callbackFlow {
-        ScheduleRetrofit.getApiService()?.let {apiService ->
-            apiService.getCountryLocation(GetCountryLocationRequest(country))
-                .enqueue(object : Callback<GetCountryLocationResponse>{
-                    override fun onResponse(
-                        call: Call<GetCountryLocationResponse>,
-                        response: Response<GetCountryLocationResponse>
-                    ) {
-                        if (response.isSuccessful){
-                            val result = response.body()
-                            if (result != null){
-                                Log.d("getCountryLocation", "country : $country\nlat : ${result.lat}\tlng : ${result.lng}")
-                                trySend(result)
-                                close()
-                            }else{
-                                Log.d("getCountryLocation", "response code : ${response.code()}")
-                                trySend(null)
-                            }
-                        }else{
-                            Log.d("getCountryLocation", "response code : ${response.code()}")
-                            trySend(null)
-                        }
-                    }
-
-                    override fun onFailure(call: Call<GetCountryLocationResponse>, t: Throwable) {
-                        Log.d("getCountryLocation", "${t.message}")
-                        trySend(null)
-                    }
-
-                })
         } ?: close()
 
         awaitClose()

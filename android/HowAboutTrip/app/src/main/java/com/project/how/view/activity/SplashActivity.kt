@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
@@ -47,6 +48,9 @@ class SplashActivity : AppCompatActivity() {
                     if (check == MemberViewModel.SUCCESS){
                         moveMain()
                     }else{
+                        if (check == MemberViewModel.ON_FAILURE){
+                            Toast.makeText(this@SplashActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
+                        }
                         moveLogin()
                     }
                 }

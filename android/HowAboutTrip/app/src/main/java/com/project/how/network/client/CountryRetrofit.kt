@@ -2,7 +2,7 @@ package com.project.how.network.client
 
 import com.google.gson.GsonBuilder
 import com.project.how.BuildConfig
-import com.project.how.network.api_interface.BookingService
+import com.project.how.network.api_interface.CountryService
 import com.project.how.network.converter_factory.NullOnEmptyConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -11,11 +11,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 
-object BookingRetrofit {
+object CountryRetrofit {
     private const val BASE_URL = BuildConfig.API_SERVER
 
-    fun getApiService() : BookingService? = getInstance()
-        ?.create(BookingService::class.java)
+    fun getApiService() : CountryService? = getInstance()
+        ?.create(CountryService::class.java)
 
     private fun getInstance() : Retrofit? {
         val gson = GsonBuilder().setLenient().create()

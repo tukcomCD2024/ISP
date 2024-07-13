@@ -51,17 +51,19 @@ class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapte
         binding.airplaneList.adapter = adapter
 
         bookingViewModel.skyscannerUrlLiveData.observe(this){url->
-            val web = WebViewBottomSheetDialog(url)
-            web.show(supportFragmentManager, "WebViewBottomSheetDialog")
-            val recent = RecentAirplane(
-                name = getString(R.string.recent_one_way_name, input.departure, input.destination),
-                image = null,
-                des = input.departure,
-                time1 = getString(R.string.date_text, clicked!!.abroadDepartureTime, clicked!!.abroadArrivalTime),
-                time2 = null,
-                skyscannerUrl = url
-            )
-            bookingViewModel.addRecentAirplane(recent)
+            if (clicked != null){
+                val web = WebViewBottomSheetDialog(url)
+                web.show(supportFragmentManager, "WebViewBottomSheetDialog")
+                val recent = RecentAirplane(
+                    name = getString(R.string.recent_one_way_name, input.departure, input.destination),
+                    image = null,
+                    des = input.departure,
+                    time1 = getString(R.string.date_text, clicked!!.abroadDepartureTime, clicked!!.abroadArrivalTime),
+                    time2 = null,
+                    skyscannerUrl = url
+                )
+                bookingViewModel.addRecentAirplane(recent)
+            }
         }
 
         bookingViewModel.likeFlightListLiveData.observe(this){

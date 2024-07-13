@@ -20,6 +20,7 @@ import com.project.how.interface_af.OnDesListener
 import com.project.how.interface_af.OnYesOrNoListener
 import com.project.how.view.dialog.YesOrNoDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
+import com.project.how.view_model.CountryViewModel
 import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.launch
@@ -32,6 +33,7 @@ class CalendarListActivity
     private lateinit var binding : ActivityCalendarListBinding
     private lateinit var adapter : CalendarListAdapter
     private val viewModel : ScheduleViewModel by viewModels()
+    private val countryViewModel : CountryViewModel by viewModels()
     private var destination : String? = null
     private var departureDate : String? = null
     private var entranceDate : String? = null
@@ -110,9 +112,9 @@ class CalendarListActivity
 
     override fun onDeleteButtonClickListener(data : GetScheduleListResponseElement, position : Int) {
         val yesOrNoDialog = YesOrNoDialog(data.scheduleName, YesOrNoDialog.SCHEDULE_DELETE, position, this)
+        Log.d("onDelete", "position : ${position}")
         yesOrNoDialog.show(supportFragmentManager, "YesOrNoDialog")
     }
-
     override fun onItemClickListener(id: Long, latitude : Double, longitude : Double) {
         Log.d("onCreate", "onItemClickerListener\nid : ${id}\nlatitude : ${latitude}\tlongitude : ${longitude}")
         val intent = Intent(this, CalendarActivity::class.java)
@@ -134,6 +136,7 @@ class CalendarListActivity
     override fun onScheduleDeleteListener(position: Int) {
        lifecycleScope.launch {
            val data = adapter.getData(position)
+           Log.d("onDelete", "onScheduleDeleteListener\nposition: $position\tid : ${data.id}\ttitle : ${data.scheduleName}")
            viewModel.deleteSchedule(this@CalendarListActivity, MemberViewModel.tokensLiveData.value!!.accessToken, data.id).collect{
                 when(it){
                     ScheduleViewModel.SUCCESS -> { adapter.remove(position) }
@@ -155,13 +158,13 @@ class CalendarListActivity
 
     override fun onDesListener(des: String) {
         lifecycleScope.launch {
-            viewModel.getCountryLocation(des).collect{ location ->
+            countryViewModel.getCountryLocation(des).collect{ location ->
                 location?.let {
                     destination = des
                     latLng = location
                     showCalendar()
                 } ?: run {
-                    viewModel.getCountryLocation(des).collect { newLocation ->
+                    countryViewModel.getCountryLocation(des).collect { newLocation ->
                         newLocation?.let {
                             destination = des
                             latLng = newLocation

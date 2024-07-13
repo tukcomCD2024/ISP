@@ -312,4 +312,9 @@
     <string name="picture_record">여행 기록</string>
     <string name="bill">여행 지출</string>
     <string name="total_budget">총 예산 비용 : %1$s 원</string>
+    <string name="min_and_max_temps">%1$s℃ / %2$s℃</string>
+    <string name="temp">%1$s℃</string>
+    <string name="local_time">현지 시간</string>
+    <string name="inchon">인천</string>
+    <string name="gimpo">김포</string>
 </resources>

@@ -33,6 +33,7 @@ import com.project.how.view.activity.calendar.CalendarActivity
 import com.project.how.view.activity.calendar.CalendarEditActivity
 import com.project.how.view.activity.calendar.CalendarListActivity
 import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
+import com.project.how.view_model.CountryViewModel
 import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.Job
@@ -46,6 +47,7 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
     private val binding : FragmentCalendarBinding
         get() = _binding!!
     private val scheduleViewModel : ScheduleViewModel by viewModels()
+    private val countryViewModel :  CountryViewModel by viewModels()
     private var nearSchedule : GetFastestSchedulesResponse? = null
     private val event = mutableListOf<EventViewPager>()
     private lateinit var recentAddedCalendar : GetLatestSchedulesResponse
@@ -216,13 +218,13 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
 
     override fun onDesListener(des: String) {
         lifecycleScope.launch {
-            scheduleViewModel.getCountryLocation(des).collect{ location ->
+            countryViewModel.getCountryLocation(des).collect{ location ->
                 location?.let {
                     destination = des
                     latLng = location
                     showCalendar()
                 } ?: run {
-                    scheduleViewModel.getCountryLocation(des).collect { newLocation ->
+                    countryViewModel.getCountryLocation(des).collect { newLocation ->
                         newLocation?.let {
                             destination = des
                             latLng = newLocation

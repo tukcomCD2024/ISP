@@ -3,7 +3,7 @@ package com.project.how.network.api_interface
 import com.project.how.data_class.dto.schedule.CreateScheduleListRequest
 import com.project.how.data_class.dto.schedule.CreateScheduleListResponse
 import com.project.how.data_class.dto.schedule.CreateScheduleResponse
-import com.project.how.data_class.dto.country.GetCountryLocationRequest
+import com.project.how.data_class.dto.country.GetCountryInfoRequest
 import com.project.how.data_class.dto.country.GetCountryLocationResponse
 import com.project.how.data_class.dto.schedule.GetFastestSchedulesResponse
 import com.project.how.data_class.dto.schedule.GetLatestSchedulesResponse
@@ -62,7 +62,7 @@ interface ScheduleService {
 
     @POST("countries/locations")
     fun getCountryLocation(
-        @Body country : GetCountryLocationRequest
+        @Body country : GetCountryInfoRequest
     ) : Call<GetCountryLocationResponse>
 
     @GET("schedules/dday")

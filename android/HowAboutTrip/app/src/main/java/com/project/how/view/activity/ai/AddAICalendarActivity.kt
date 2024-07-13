@@ -32,6 +32,7 @@ import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.PurposeBottomSheetDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.ActivityBottomSheetDialog
 import com.project.how.view_model.AiScheduleViewModel
+import com.project.how.view_model.CountryViewModel
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -43,6 +44,7 @@ class AddAICalendarActivity :
     private lateinit var binding : ActivityAddAicalendarBinding
     private val viewModel : AiScheduleViewModel by viewModels()
     private val scheduleViewModel : ScheduleViewModel by viewModels()
+    private val countryViewModel : CountryViewModel by viewModels()
     private var destination : String? = null
     private var purpose : MutableList<String>? = null
     private var activities : MutableList<String>? = null
@@ -228,14 +230,14 @@ class AddAICalendarActivity :
 
     override fun onDesListener(des: String) {
         lifecycleScope.launch {
-            scheduleViewModel.getCountryLocation(des).collect{ location ->
+            countryViewModel.getCountryLocation(des).collect{ location ->
                 location?.let {
                     destination = des
                     binding.desOutput.text = des
                     binding.desOutput.visibility = View.VISIBLE
                     latLng = location
                 } ?: run {
-                    scheduleViewModel.getCountryLocation(des).collect { newLocation ->
+                    countryViewModel.getCountryLocation(des).collect { newLocation ->
                         newLocation?.let {
                             destination = des
                             binding.desOutput.text = des

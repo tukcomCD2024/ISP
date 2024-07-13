@@ -3,6 +3,7 @@ package com.project.how.view.dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,7 +55,8 @@ class DatePickerDialog(private val data : DaysSchedule, private val dates : List
 
     fun save(){
         val date = getCheckedRadioButtonDate()
-        onDateTimeListener.onSaveDate(data, date, position)
+        Log.d("getDateList", "name : ${data.todo}\nselecetedDate : ${dates[selectedDays]}\nchangedDate : $date\nposition : $position")
+        onDateTimeListener.onSaveDate(data, dates[selectedDays], date, position)
         dismiss()
     }
 

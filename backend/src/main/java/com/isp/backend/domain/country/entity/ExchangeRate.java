@@ -2,18 +2,16 @@ package com.isp.backend.domain.country.entity;
 
 import com.isp.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.math.BigDecimal;
 
 
 @Getter
+@Setter
 @AllArgsConstructor
-@Entity
-@Builder
 @NoArgsConstructor
+@Entity
 @Table(name = "exchange_rate")
 public class ExchangeRate extends BaseEntity {
 
@@ -21,10 +19,16 @@ public class ExchangeRate extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String fromCurrency;
+    private String baseCurrency;
 
-    private String toCurrency;
+    private String targetCurrency;
 
-    private BigDecimal rate;
+    private Double rate;
+
+    public ExchangeRate(String baseCurrency, String targetCurrency, Double rate) {
+        this.baseCurrency = baseCurrency;
+        this.targetCurrency = targetCurrency;
+        this.rate = rate;
+    }
 
 }

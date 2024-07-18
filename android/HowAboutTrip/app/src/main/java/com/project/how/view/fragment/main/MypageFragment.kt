@@ -15,6 +15,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.project.how.R
 import com.project.how.databinding.FragmentMypageBinding
+import com.project.how.view.activity.mypage.ExchangeRateActivity
 import com.project.how.view.activity.mypage.LikeActivity
 import com.project.how.view.activity.mypage.WeatherActivity
 import com.project.how.view_model.MemberViewModel
@@ -98,5 +99,9 @@ class MypageFragment : Fragment() {
 
     fun moveWeather(){
         startActivity(Intent(requireContext(), WeatherActivity::class.java))
+    }
+
+    fun moveExchangeRate(){
+        startActivity(Intent(requireContext(), ExchangeRateActivity::class.java))
     }
 }

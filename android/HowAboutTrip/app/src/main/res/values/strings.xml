@@ -80,7 +80,7 @@
     <string name="swiss">스위스</string>
     <string name="germany">독일</string>
     <string name="austria">오스트리아</string>
-    <string name="america">미주</string>
+    <string name="america">미국</string>
     <string name="canada">캐나다</string>
     <string name="southeast_asia">동남아시아</string>
     <string name="yufuin">유후인</string>
@@ -145,7 +145,7 @@
     <string name="input_limit">20자 이내에 입력</string>
     <string name="budget_title">예산</string>
     <string name="schedule_location">위치</string>
-    <string name="won">원</string>
+    <string name="won_unit">원</string>
     <string name="autocomplete_fragment_hint">구글 지도에서 위치 검색</string>
     <string name="tsushima">대마도</string>
     <string name="kyushu">규슈</string>
@@ -317,4 +317,12 @@
     <string name="local_time">현지 시간</string>
     <string name="inchon">인천</string>
     <string name="gimpo">김포</string>
+    <string name="thailand">태국</string>
+    <string name="target_exchange_rate">%1$s %2$s %3$s</string>
+    <string name="dollar">%1$s 달러%2$s</string>
+    <string name="won">%1$s 원</string>
+    <string name="dollar_unit">달러</string>
+    <string name="target_unit">%1$s는(은)</string>
+    <string name="euro">유럽연합</string>
+    <string name="value_hint">가격을 입력해주세요.</string>
 </resources>

@@ -19,7 +19,6 @@ import com.project.how.interface_af.OnDateTimeListener
 
 class DatePickerDialog(private val data : DaysSchedule, private val dates : List<String>, private val position : Int, private val selectedDays : Int, private val onDateTimeListener: OnDateTimeListener) : DialogFragment() {
     private var _binding : DialogDatepickerBinding? = null
-
     private val binding : DialogDatepickerBinding
         get() = _binding!!
 

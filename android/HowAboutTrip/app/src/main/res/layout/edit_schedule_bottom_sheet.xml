@@ -159,7 +159,7 @@
             android:id="@+id/won"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/won"
+            android:text="@string/won_unit"
             android:textColor="@color/black"
             android:textSize="13sp"
             android:layout_marginTop="8dp"

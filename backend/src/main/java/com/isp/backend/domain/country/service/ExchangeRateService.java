@@ -108,7 +108,7 @@ public class ExchangeRateService {
 
     /** 지원하는 통화만 가져오는 메서드 **/
     private boolean isSupportedCurrency(String currencyCode) {
-        return Set.of("JPY", "GBP", "EURO", "CHF", "CZK", "USD", "SGD", "TWD", "LAK", "MYR", "VND", "THB", "IDR", "PHP", "KRW").contains(currencyCode);
+        return Set.of("JPY", "GBP", "EUR", "CHF", "CZK", "USD", "SGD", "TWD", "LAK", "MYR", "VND", "THB", "IDR", "PHP", "KRW").contains(currencyCode);
     }
 
 

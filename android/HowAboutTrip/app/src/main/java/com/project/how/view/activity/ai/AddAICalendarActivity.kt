@@ -54,6 +54,7 @@ class AddAICalendarActivity :
     private var latLng : GetCountryLocationResponse? = null
     private lateinit var aiSchedule : AiSchedule
     private lateinit var aiScheduleList : ArrayList<AiSchedule>
+    private var check = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,22 +68,16 @@ class AddAICalendarActivity :
             binding.adView.loadAd(adRequest)
         }
 
-        viewModel.aiScheduleLiveData.observe(this){
-            if(it.startDate == departureDate && it.endDate == entranceDate){
-                Log.d("aiScheduleLiveData", "${it.startDate} - ${it.endDate}")
-                setEnabled()
-                stopLoaing()
-                aiSchedule = it
-                showAiSchedule(it)
-            }
-        }
-
         viewModel.aiScheduleListLiveData.observe(this){
-            Log.d("aiScheduleListLiveData", "${it[0].startDate} - ${it[0].endDate}")
             setEnabled()
             stopLoaing()
-            aiScheduleList = ArrayList(it)
-            moveAiScheduleList()
+            if (check){
+                Log.d("aiScheduleListLiveData", "${it[0].startDate} - ${it[0].endDate}")
+                aiScheduleList = ArrayList(it)
+                moveAiScheduleList()
+            }else{
+
+            }
         }
 
     }
@@ -155,10 +150,17 @@ class AddAICalendarActivity :
                 setUnEnabled()
                 load()
                 viewModel.getAiScheduleList(AiScheduleListInput(destination!!, purpose, activities, excludingActivities, departureDate!!, entranceDate!!)).collect { check ->
-                    if (!check){
+                    if (check == AiScheduleViewModel.FAILD){
                         stopLoaing()
                         setEnabled()
                         Toast.makeText(this@AddAICalendarActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
+                    }else if(check == AiScheduleViewModel.EMPTY){
+                        stopLoaing()
+                        setEnabled()
+                        Toast.makeText(this@AddAICalendarActivity,
+                            getString(R.string.server_ai_failed), Toast.LENGTH_SHORT).show()
+                    }else if(check == AiScheduleViewModel.SUCCESS){
+                        this@AddAICalendarActivity.check=true
                     }
                 }
             }else{

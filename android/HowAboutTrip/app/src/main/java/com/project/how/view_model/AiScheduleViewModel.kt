@@ -30,7 +30,7 @@ class AiScheduleViewModel : ViewModel() {
     val aiScheduleListLiveData : LiveData<List<AiSchedule>>
         get() = _aiScheduleListLiveData
 
-    fun getAiScheduleList(aiScheduleListInput : AiScheduleListInput) : Flow<Boolean> = callbackFlow {
+    fun getAiScheduleList(aiScheduleListInput : AiScheduleListInput) : Flow<Int> = callbackFlow {
         val createScheduleListRequest = CreateScheduleListRequest(
             aiScheduleListInput.des,
             aiScheduleListInput.purpose ?: listOf(),
@@ -50,13 +50,30 @@ class AiScheduleViewModel : ViewModel() {
                         if(response.isSuccessful){
                             val result = response.body()
                             if (result != null){
-                                Log.d("createSchedule is success", "startDate : ${result.schedules[0].schedules[0].date}")
                                 val data = mutableListOf<AiSchedule>()
-                                for (i in result.schedules.indices){
-                                    data.add(getAiSchedule(result.schedules[i], createScheduleListRequest, result.countryImage, i))
+                                if(result.schedules.isEmpty()){
+                                    Log.d("createSchedule", "result.schedules.isEmpty")
+                                    trySend(EMPTY)
+                                }else{
+                                    for (i in result.schedules.indices){
+                                        if (result.schedules[i].schedules.isNotEmpty()) {
+                                            Log.d(
+                                                "createSchedule is success",
+                                                "startDate : ${result.schedules[i].schedules[0].date}"
+                                            )
+                                            data.add(
+                                                getAiSchedule(
+                                                    result.schedules[i],
+                                                    createScheduleListRequest,
+                                                    result.countryImage,
+                                                    i
+                                                )
+                                            )
+                                        }
+                                    }
+                                    aiScheduleRepository.getAiScheduleList(data.toList())
+                                    trySend(SUCCESS)
                                 }
-                                aiScheduleRepository.getAiScheduleList(data.toList())
-                                trySend(SUCCESS)
                             }else{
                                 Log.d("createSchedule is success", "response.body is null\ncode : ${response.code()}")
                                 trySend(FAILD)
@@ -144,7 +161,8 @@ class AiScheduleViewModel : ViewModel() {
             dailySchedule)
     }
     companion object{
-        const val FAILD = false
-        const val SUCCESS = true
+        const val FAILD = 400
+        const val SUCCESS = 200
+        const val EMPTY = 401
     }
 }

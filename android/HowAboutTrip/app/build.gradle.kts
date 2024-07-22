@@ -40,6 +40,7 @@ android {
         buildConfigField("String", "GOOGLE_SERVER_ID", getApiKey("google_server_id"))
         buildConfigField("String", "API_SERVER", getApiKey("api_server"))
         buildConfigField("String", "TEMPORARY_IMAGE_URL", getApiKey("temporary_image_url"))
+        buildConfigField("String", "USER_AGENT", getApiKey("user_agent"))
     }
 
     buildTypes {

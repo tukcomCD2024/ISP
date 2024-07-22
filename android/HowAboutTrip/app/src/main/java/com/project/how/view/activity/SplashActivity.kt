@@ -22,6 +22,8 @@ class SplashActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
         binding.splash = this
 
+        Log.d("Splash Activity", "start")
+
         memberViewModel.memberInfoLiveData.observe(this){
             Log.d("tokenSaveLiveData observe", "memberInfoLiveData\nname : ${it.name}\nphone : ${it.phone}\nbirth : ${it.birth}")
             moveMain()

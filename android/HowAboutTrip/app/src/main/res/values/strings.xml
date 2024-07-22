@@ -325,4 +325,5 @@
     <string name="target_unit">%1$s는(은)</string>
     <string name="euro">유럽연합</string>
     <string name="value_hint">가격을 입력해주세요.</string>
+    <string name="server_ai_failed">일정 생성 AI가 일정 생성에 실패했습니다.\n다시 한 번 더 시도하신 다음에 문제가 지속되면 문의해주세요.</string>
 </resources>

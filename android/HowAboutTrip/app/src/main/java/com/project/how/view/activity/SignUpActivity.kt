@@ -1,5 +1,6 @@
 package com.project.how.view.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -42,7 +43,7 @@ class SignUpActivity : AppCompatActivity() {
             val bDate = LocalDate.parse(birth, DateTimeFormatter.ofPattern("yyyyMMdd"))
             val b = bDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             Log.d("sendInfo", "IF After\nname : $n\t${n.length}\nphone : $p\t${p.length}\nbirth : $b\t${b .length}")
-            memberViewModel.tokensLiveData.value?.let { memberViewModel.getInfoSignUp(this, it.accessToken, n, p, b) }
+            memberViewModel.tokensLiveData.value?.let { memberViewModel.getInfoSignUp(this, it.accessToken, n, b, p) }
             memberViewModel.memberInfoLiveData.observe(this){ info ->
                 moveMainActivity()
             }
@@ -55,5 +56,10 @@ class SignUpActivity : AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    @SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
+        Toast.makeText(this, "[필수] 모든 항목은 필수로 입력하셔야 합니다.\n한 번 더 누르시면 앱이 꺼지면 기본값으로 설정됩니다.\n기본값으로 설정될 시 다음 접속 시에 )", Toast.LENGTH_SHORT).show()
     }
 }

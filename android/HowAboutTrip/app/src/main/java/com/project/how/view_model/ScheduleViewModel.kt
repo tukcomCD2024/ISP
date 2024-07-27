@@ -6,17 +6,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.how.R
-import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
+import com.project.how.adapter.recyclerview.schedule.AiDaysScheduleAdapter
 import com.project.how.data_class.recyclerview.AiSchedule
 import com.project.how.data_class.recyclerview.DaysSchedule
 import com.project.how.data_class.recyclerview.Schedule
-import com.project.how.data_class.dto.DailySchedule
-import com.project.how.data_class.dto.GetCountryLocationRequest
-import com.project.how.data_class.dto.GetCountryLocationResponse
-import com.project.how.data_class.dto.GetFastestSchedulesResponse
-import com.project.how.data_class.dto.GetLatestSchedulesResponse
-import com.project.how.data_class.dto.GetScheduleListResponse
-import com.project.how.data_class.dto.ScheduleDetail
+import com.project.how.data_class.dto.schedule.DailySchedule
+import com.project.how.data_class.dto.country.GetCountryInfoRequest
+import com.project.how.data_class.dto.country.GetCountryLocationResponse
+import com.project.how.data_class.dto.schedule.GetFastestSchedulesResponse
+import com.project.how.data_class.dto.schedule.GetLatestSchedulesResponse
+import com.project.how.data_class.dto.schedule.GetScheduleListResponse
+import com.project.how.data_class.dto.schedule.ScheduleDetail
 import com.project.how.model.ScheduleRepository
 import com.project.how.network.client.ScheduleRetrofit
 import kotlinx.coroutines.channels.awaitClose
@@ -141,19 +141,20 @@ class ScheduleViewModel : ViewModel() {
         return context.getString(R.string.place_string)
     }
 
-    private fun changeClassFromScheduleToSaveSchedule(context : Context, schedule: Schedule) : ScheduleDetail{
+    private fun changeClassFromScheduleToSaveSchedule(context : Context, schedule: Schedule) : ScheduleDetail {
         val startDate = LocalDate.parse(schedule.startDate, DateTimeFormatter.ISO_DATE)
         var dailySchedules = listOf<DailySchedule>()
         schedule.dailySchedule.forEachIndexed { index, data ->
-            var schedules = listOf<com.project.how.data_class.dto.Schedule>()
+            var schedules = listOf<com.project.how.data_class.dto.schedule.Schedule>()
             data.forEach {daysSchedule->
-                val schedule = com.project.how.data_class.dto.Schedule(
+                val schedule = com.project.how.data_class.dto.schedule.Schedule(
                     daysSchedule.todo,
                     daysSchedule.places,
                     getScheduleType(context, daysSchedule.type),
                     daysSchedule.cost,
                     daysSchedule.latitude ?: 0.0,
-                    daysSchedule.longitude ?: 0.0)
+                    daysSchedule.longitude ?: 0.0
+                )
                 schedules = schedules.plus(schedule)
             }
             val date = startDate.plusDays(index.toLong())
@@ -361,41 +362,6 @@ class ScheduleViewModel : ViewModel() {
 
                 })
 
-        } ?: close()
-
-        awaitClose()
-    }
-
-    fun getCountryLocation(country : String) : Flow<GetCountryLocationResponse?> = callbackFlow {
-        ScheduleRetrofit.getApiService()?.let {apiService ->
-            apiService.getCountryLocation(GetCountryLocationRequest(country))
-                .enqueue(object : Callback<GetCountryLocationResponse>{
-                    override fun onResponse(
-                        call: Call<GetCountryLocationResponse>,
-                        response: Response<GetCountryLocationResponse>
-                    ) {
-                        if (response.isSuccessful){
-                            val result = response.body()
-                            if (result != null){
-                                Log.d("getCountryLocation", "country : $country\nlat : ${result.lat}\tlng : ${result.lng}")
-                                trySend(result)
-                                close()
-                            }else{
-                                Log.d("getCountryLocation", "response code : ${response.code()}")
-                                trySend(null)
-                            }
-                        }else{
-                            Log.d("getCountryLocation", "response code : ${response.code()}")
-                            trySend(null)
-                        }
-                    }
-
-                    override fun onFailure(call: Call<GetCountryLocationResponse>, t: Throwable) {
-                        Log.d("getCountryLocation", "${t.message}")
-                        trySend(null)
-                    }
-
-                })
         } ?: close()
 
         awaitClose()

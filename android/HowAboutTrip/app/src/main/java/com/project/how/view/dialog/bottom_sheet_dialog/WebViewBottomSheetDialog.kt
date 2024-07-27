@@ -1,14 +1,19 @@
 package com.project.how.view.dialog.bottom_sheet_dialog
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebSettings
+import android.webkit.WebViewClient
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.project.how.BuildConfig
 import com.project.how.R
 import com.project.how.databinding.WebViewBottomSheetDialogBinding
+
 
 class WebViewBottomSheetDialog(private val url : String) : BottomSheetDialogFragment() {
     private var _binding : WebViewBottomSheetDialogBinding? = null
@@ -25,6 +30,16 @@ class WebViewBottomSheetDialog(private val url : String) : BottomSheetDialogFrag
         binding.lifecycleOwner = viewLifecycleOwner
         binding.webview.visibility = View.VISIBLE
         binding.webview.settings.javaScriptEnabled = true
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            binding.webview.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+
+        val webSettings: WebSettings = binding.webview.getSettings()
+        val customUserAgent = BuildConfig.USER_AGENT
+        webSettings.userAgentString = customUserAgent
+        binding.webview.setWebViewClient(WebViewClient())
+
+
         binding.webview.loadUrl(url)
         return binding.root
     }

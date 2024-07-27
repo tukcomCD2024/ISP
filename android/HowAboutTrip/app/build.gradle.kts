@@ -40,6 +40,7 @@ android {
         buildConfigField("String", "GOOGLE_SERVER_ID", getApiKey("google_server_id"))
         buildConfigField("String", "API_SERVER", getApiKey("api_server"))
         buildConfigField("String", "TEMPORARY_IMAGE_URL", getApiKey("temporary_image_url"))
+        buildConfigField("String", "USER_AGENT", getApiKey("user_agent"))
     }
 
     buildTypes {
@@ -84,6 +85,7 @@ dependencies {
 
     implementation("com.google.dagger:hilt-android:2.46")
     implementation("androidx.activity:activity-ktx:1.9.0")
+    implementation("androidx.activity:activity:1.9.0")
     kapt("com.google.dagger:hilt-android-compiler:2.46")
 
     implementation("com.squareup.retrofit:retrofit:2.0.0-beta2")

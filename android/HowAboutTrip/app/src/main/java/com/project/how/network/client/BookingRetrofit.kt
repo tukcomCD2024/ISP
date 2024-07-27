@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit
 object BookingRetrofit {
     private const val BASE_URL = BuildConfig.API_SERVER
 
-    fun getApiService() : BookingService? = BookingRetrofit.getInstance()
+    fun getApiService() : BookingService? = getInstance()
         ?.create(BookingService::class.java)
 
     private fun getInstance() : Retrofit? {

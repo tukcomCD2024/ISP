@@ -14,10 +14,9 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.project.how.R
-import com.project.how.data_class.dto.GetFlightOffersRequest
-import com.project.how.data_class.dto.GetFlightOffersResponse
-import com.project.how.data_class.dto.GetOneWayFlightOffersRequest
-import com.project.how.data_class.dto.RoundTripFlightOffers
+import com.project.how.data_class.dto.booking.airplane.GetFlightOffersRequest
+import com.project.how.data_class.dto.booking.airplane.GetFlightOffersResponse
+import com.project.how.data_class.dto.booking.airplane.RoundTripFlightOffers
 import com.project.how.databinding.FragmentRoundTripSearchBinding
 import com.project.how.interface_af.OnLoadListener
 import com.project.how.interface_af.interface_ff.OnAirportListener

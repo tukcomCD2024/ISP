@@ -1,14 +1,14 @@
 package com.project.how.network.api_interface
 
-import com.project.how.data_class.dto.CreateScheduleListRequest
-import com.project.how.data_class.dto.CreateScheduleListResponse
-import com.project.how.data_class.dto.CreateScheduleResponse
-import com.project.how.data_class.dto.GetCountryLocationRequest
-import com.project.how.data_class.dto.GetCountryLocationResponse
-import com.project.how.data_class.dto.GetFastestSchedulesResponse
-import com.project.how.data_class.dto.GetLatestSchedulesResponse
-import com.project.how.data_class.dto.GetScheduleListResponse
-import com.project.how.data_class.dto.ScheduleDetail
+import com.project.how.data_class.dto.schedule.CreateScheduleListRequest
+import com.project.how.data_class.dto.schedule.CreateScheduleListResponse
+import com.project.how.data_class.dto.schedule.CreateScheduleResponse
+import com.project.how.data_class.dto.country.GetCountryInfoRequest
+import com.project.how.data_class.dto.country.GetCountryLocationResponse
+import com.project.how.data_class.dto.schedule.GetFastestSchedulesResponse
+import com.project.how.data_class.dto.schedule.GetLatestSchedulesResponse
+import com.project.how.data_class.dto.schedule.GetScheduleListResponse
+import com.project.how.data_class.dto.schedule.ScheduleDetail
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -62,7 +62,7 @@ interface ScheduleService {
 
     @POST("countries/locations")
     fun getCountryLocation(
-        @Body country : GetCountryLocationRequest
+        @Body country : GetCountryInfoRequest
     ) : Call<GetCountryLocationResponse>
 
     @GET("schedules/dday")

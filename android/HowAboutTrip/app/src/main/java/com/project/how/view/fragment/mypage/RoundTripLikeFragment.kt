@@ -10,12 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.project.how.R
-import com.project.how.adapter.recyclerview.OneWayAirplaneListAdapter
-import com.project.how.adapter.recyclerview.RoundTripAirplaneListAdapter
-import com.project.how.data_class.dto.GenerateSkyscannerUrlRequest
-import com.project.how.data_class.dto.GetFlightOffersResponseElement
-import com.project.how.data_class.dto.GetOneWayFlightOffersResponseElement
-import com.project.how.data_class.dto.LikeFlightElement
+import com.project.how.adapter.recyclerview.booking.airplane.RoundTripAirplaneListAdapter
+import com.project.how.data_class.dto.booking.airplane.GetFlightOffersResponseElement
+import com.project.how.data_class.dto.booking.airplane.LikeFlightElement
 import com.project.how.databinding.FragmentRoundTripLikeBinding
 import com.project.how.view_model.BookingViewModel
 import com.project.how.view_model.MemberViewModel

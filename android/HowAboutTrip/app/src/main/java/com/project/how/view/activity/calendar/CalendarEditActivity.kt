@@ -24,9 +24,9 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout
 import com.project.how.R
-import com.project.how.adapter.recyclerview.DaysScheduleEditAdapter
+import com.project.how.adapter.recyclerview.schedule.DaysScheduleEditAdapter
 import com.project.how.adapter.item_touch_helper.RecyclerViewItemTouchHelperCallback
-import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
+import com.project.how.adapter.recyclerview.schedule.AiDaysScheduleAdapter
 import com.project.how.data_class.recyclerview.AiSchedule
 import com.project.how.data_class.recyclerview.DaysSchedule
 import com.project.how.data_class.recyclerview.Schedule
@@ -46,6 +46,7 @@ import com.project.how.view.dp.DpPxChanger
 import com.project.how.view.map_helper.CameraOptionProducer
 import com.project.how.view.map_helper.MarkerProducer
 import com.project.how.view_model.CalendarViewModel
+import com.project.how.view_model.CountryViewModel
 import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.launch
@@ -65,6 +66,7 @@ class CalendarEditActivity
     private lateinit var binding : ActivityCalendarEditBinding
     private val viewModel : ScheduleViewModel by viewModels()
     private val calendarViewModel : CalendarViewModel by viewModels()
+    private val countryViewModel : CountryViewModel by viewModels()
     private lateinit var data : Schedule
     private var type: Int = FAILURE
     private lateinit var adapter : DaysScheduleEditAdapter
@@ -351,7 +353,6 @@ class CalendarEditActivity
     }
 
     private suspend fun saveNewSchedule(){
-
         viewModel.saveSchedule(this, MemberViewModel.tokensLiveData.value!!.accessToken, data).collect{check ->
             when(check){
                 ScheduleViewModel.NETWORK_FAILED ->{
@@ -449,13 +450,13 @@ class CalendarEditActivity
 
     override fun onDesListener(des: String) {
         lifecycleScope.launch {
-            viewModel.getCountryLocation(des).collect{ location ->
+            countryViewModel.getCountryLocation(des).collect{ location ->
                 location?.let {
                     data.country = des
                     latitude = location.lat
                     longitude = location.lng
                 } ?: run {
-                    viewModel.getCountryLocation(des).collect { newLocation ->
+                    countryViewModel.getCountryLocation(des).collect { newLocation ->
                         newLocation?.let {
                             data.country = des
                             latitude = newLocation.lat
@@ -469,13 +470,23 @@ class CalendarEditActivity
         }
     }
 
-    override fun onSaveDate(d: DaysSchedule, date: String, position: Int) {
+    override fun onSaveDate(
+        d: DaysSchedule,
+        selectedDate: String,
+        changedDate: String,
+        position: Int
+    ) {
         val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val sd = format.parse(data.startDate)
-        val ssd = format.parse(date)
+        val sd = format.parse(selectedDate)
+        val ssd = format.parse(changedDate)
         val diffMillies = abs(sd.time - ssd.time)
         val diff = (diffMillies / (24 * 60 * 60 * 1000)).toInt()
-        data.dailySchedule[selectedDays+diff].add(d)
+        Log.d("getDateList", "onSaveDate\ndata.startDate : $sd\nchangeDate : ${ssd}\ndiff : $diff")
+        if (selectedDate>changedDate){
+            data.dailySchedule[selectedDays-diff].add(d)
+        }else{
+            data.dailySchedule[selectedDays+diff].add(d)
+        }
         adapter.remove(position, true)
         supportMapFragment.getMapAsync(this)
 

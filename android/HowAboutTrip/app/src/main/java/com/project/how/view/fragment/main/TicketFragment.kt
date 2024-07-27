@@ -10,8 +10,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.how.R
-import com.project.how.adapter.recyclerview.RecentAirplaneAdapter
-import com.project.how.adapter.recyclerview.RecentHotelAdapter
+import com.project.how.adapter.recyclerview.booking.airplane.RecentAirplaneAdapter
+import com.project.how.adapter.recyclerview.booking.hotel.RecentHotelAdapter
 import com.project.how.adapter.recyclerview.viewpager.EventTicketViewPagerAdapter
 import com.project.how.data_class.recyclerview.EventViewPager
 import com.project.how.data_class.recyclerview.RecentHotel

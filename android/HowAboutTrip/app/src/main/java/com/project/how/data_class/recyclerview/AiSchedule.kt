@@ -9,6 +9,7 @@ data class AiScheduleList(
 data class AiSchedule(
     val title: String,
     val country: String,
+    val budget : Long = 0,
     val places: List<String>,
     val image: String,
     val startDate: String,
@@ -19,6 +20,7 @@ data class AiSchedule(
 data class AiDaysSchedule(
     val type : Int,
     val todo: String,
+    val budget : Long,
     val places: String,
     val lat : Double,
     val lng : Double

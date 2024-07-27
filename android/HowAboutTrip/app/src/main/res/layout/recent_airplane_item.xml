@@ -7,7 +7,7 @@
     <data>
         <variable
             name="adapter"
-            type="com.project.how.adapter.recyclerview.RecentAirplaneAdapter" />
+            type="com.project.how.adapter.recyclerview.booking.airplane.RecentAirplaneAdapter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,7 +33,7 @@
                     android:id="@+id/image"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:src="@color/gray"
+                    android:src="@color/grey"
                     android:scaleType="centerCrop"
                     app:layout_constraintBottom_toBottomOf="@+id/guideline"
                     app:layout_constraintEnd_toEndOf="parent"

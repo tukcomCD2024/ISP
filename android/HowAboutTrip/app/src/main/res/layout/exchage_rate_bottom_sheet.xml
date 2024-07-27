@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="exchange"
+            type="com.project.how.view.dialog.bottom_sheet_dialog.ExchangeRateBottomSheetDialog" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/white_round_bottom_sheet_background"
+        app:behavior_hideable="true"
+        app:behavior_draggable="true"
+        android:paddingHorizontal="29dp"
+        android:paddingTop="45dp"
+        android:paddingBottom="30dp"
+        app:layout_behavior="com.google.android.material.bottom-sheet.BottomSheetBehavior">
+
+        <RadioGroup
+            android:id="@+id/countries"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/appCompatButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </RadioGroup>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/appCompatButton"
+            style="@style/Button.BlackRound"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="40dp"
+            android:onClick="@{()->exchange.confirm()}"
+            android:text="@string/confirm"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/countries" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="15dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

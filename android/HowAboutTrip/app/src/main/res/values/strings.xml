@@ -80,7 +80,7 @@
     <string name="swiss">스위스</string>
     <string name="germany">독일</string>
     <string name="austria">오스트리아</string>
-    <string name="america">미주</string>
+    <string name="america">미국</string>
     <string name="canada">캐나다</string>
     <string name="southeast_asia">동남아시아</string>
     <string name="yufuin">유후인</string>
@@ -145,7 +145,7 @@
     <string name="input_limit">20자 이내에 입력</string>
     <string name="budget_title">예산</string>
     <string name="schedule_location">위치</string>
-    <string name="won">원</string>
+    <string name="won_unit">원</string>
     <string name="autocomplete_fragment_hint">구글 지도에서 위치 검색</string>
     <string name="tsushima">대마도</string>
     <string name="kyushu">규슈</string>
@@ -309,4 +309,21 @@
     <string name="not_mine_like">해당 계정에 저장된 관심상품이 아닙니다.</string>
     <string name="recent_one_way_name">%1$s → %2$s</string>
     <string name="recent_round_trip_name">%1$s ↔ %2$s</string>
+    <string name="picture_record">여행 기록</string>
+    <string name="bill">여행 지출</string>
+    <string name="total_budget">총 예산 비용 : %1$s 원</string>
+    <string name="min_and_max_temps">%1$s℃ / %2$s℃</string>
+    <string name="temp">%1$s℃</string>
+    <string name="local_time">현지 시간</string>
+    <string name="inchon">인천</string>
+    <string name="gimpo">김포</string>
+    <string name="thailand">태국</string>
+    <string name="target_exchange_rate">%1$s %2$s %3$s</string>
+    <string name="dollar">%1$s 달러%2$s</string>
+    <string name="won">%1$s 원</string>
+    <string name="dollar_unit">달러</string>
+    <string name="target_unit">%1$s는(은)</string>
+    <string name="euro">유럽연합</string>
+    <string name="value_hint">가격을 입력해주세요.</string>
+    <string name="server_ai_failed">일정 생성 AI가 일정 생성에 실패했습니다.\n다시 한 번 더 시도하신 다음에 문제가 지속되면 문의해주세요.</string>
 </resources>

@@ -10,13 +10,12 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.project.how.R
-import com.project.how.adapter.recyclerview.RoundTripAirplaneListAdapter
-import com.project.how.data_class.dto.GenerateSkyscannerUrlRequest
-import com.project.how.data_class.dto.GetFlightOffersRequest
-import com.project.how.data_class.dto.GetFlightOffersResponseElement
-import com.project.how.data_class.dto.LikeFlightElement
-import com.project.how.data_class.dto.LikeOneWayFlightElement
-import com.project.how.data_class.dto.RoundTripFlightOffers
+import com.project.how.adapter.recyclerview.booking.airplane.RoundTripAirplaneListAdapter
+import com.project.how.data_class.dto.booking.airplane.GenerateSkyscannerUrlRequest
+import com.project.how.data_class.dto.booking.airplane.GetFlightOffersRequest
+import com.project.how.data_class.dto.booking.airplane.GetFlightOffersResponseElement
+import com.project.how.data_class.dto.booking.airplane.LikeFlightElement
+import com.project.how.data_class.dto.booking.airplane.RoundTripFlightOffers
 import com.project.how.data_class.roomdb.RecentAirplane
 import com.project.how.databinding.ActivityRoundTripAirplaneListBinding
 import com.project.how.view.activity.calendar.CalendarEditActivity
@@ -54,17 +53,19 @@ class RoundTripAirplaneListActivity : AppCompatActivity(), RoundTripAirplaneList
             getString(R.string.get_flight_offers_request), GetFlightOffersRequest::class.java)
 
         bookingViewModel.skyscannerUrlLiveData.observe(this){url->
-            val web = WebViewBottomSheetDialog(url)
-            web.show(supportFragmentManager, "WebViewBottomSheetDialog")
-            val recent = RecentAirplane(
-                name = getString(R.string.recent_round_trip_name, input.departure, input.destination),
-                image = null,
-                des = input.departure,
-                time1 = getString(R.string.date_text, clicked!!.abroadDepartureTime, clicked!!.abroadArrivalTime),
-                time2 = getString(R.string.date_text, clicked!!.homeDepartureTime, clicked!!.homeArrivalTime),
-                skyscannerUrl = url
-            )
-            bookingViewModel.addRecentAirplane(recent)
+            if (clicked != null){
+                val web = WebViewBottomSheetDialog(url)
+                web.show(supportFragmentManager, "WebViewBottomSheetDialog")
+                val recent = RecentAirplane(
+                    name = getString(R.string.recent_round_trip_name, input.departure, input.destination),
+                    image = null,
+                    des = input.departure,
+                    time1 = getString(R.string.date_text, clicked!!.abroadDepartureTime, clicked!!.abroadArrivalTime),
+                    time2 = getString(R.string.date_text, clicked!!.homeDepartureTime, clicked!!.homeArrivalTime),
+                    skyscannerUrl = url
+                )
+                bookingViewModel.addRecentAirplane(recent)
+            }
         }
 
         bookingViewModel.likeFlightListLiveData.observe(this){

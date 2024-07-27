@@ -16,7 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.project.how.BuildConfig
 import com.project.how.R
-import com.project.how.data_class.dto.LoginRequest
+import com.project.how.data_class.dto.member.LoginRequest
 import com.project.how.databinding.ActivityLoginBinding
 import com.project.how.view_model.MemberViewModel
 import kotlinx.coroutines.launch

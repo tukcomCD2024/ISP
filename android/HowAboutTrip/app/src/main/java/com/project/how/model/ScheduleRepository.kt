@@ -5,15 +5,15 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.project.how.R
-import com.project.how.adapter.recyclerview.AiDaysScheduleAdapter
-import com.project.how.data_class.dto.GetFastestSchedulesResponse
-import com.project.how.data_class.dto.GetLatestSchedulesResponse
+import com.project.how.adapter.recyclerview.schedule.AiDaysScheduleAdapter
+import com.project.how.data_class.dto.schedule.GetFastestSchedulesResponse
+import com.project.how.data_class.dto.schedule.GetLatestSchedulesResponse
 import com.project.how.data_class.recyclerview.AiDaysSchedule
 import com.project.how.data_class.recyclerview.AiSchedule
 import com.project.how.data_class.recyclerview.DaysSchedule
 import com.project.how.data_class.recyclerview.Schedule
-import com.project.how.data_class.dto.GetScheduleListResponse
-import com.project.how.data_class.dto.ScheduleDetail
+import com.project.how.data_class.dto.schedule.GetScheduleListResponse
+import com.project.how.data_class.dto.schedule.ScheduleDetail
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.time.LocalDate
@@ -22,12 +22,6 @@ import java.time.temporal.ChronoUnit
 import java.util.Calendar
 
 class ScheduleRepository {
-    val today = Calendar.getInstance().apply {
-        set(Calendar.HOUR_OF_DAY, 0)
-        set(Calendar.MINUTE, 0)
-        set(Calendar.SECOND, 0)
-        set(Calendar.MILLISECOND, 0)
-    }.time.time
     private val _nearScheduleDayLiveData : MutableLiveData<GetFastestSchedulesResponse> = MutableLiveData()
     private val _scheduleLiveData : MutableLiveData<Schedule> = MutableLiveData()
     private val _scheduleListLiveData : MutableLiveData<GetScheduleListResponse> = MutableLiveData()
@@ -63,7 +57,7 @@ class ScheduleRepository {
             aiSchedule.country,
             aiSchedule.startDate,
             aiSchedule.endDate,
-            0,
+            aiSchedule.budget,
             getDailySchedule(aiSchedule.dailySchedule)
         )
         )

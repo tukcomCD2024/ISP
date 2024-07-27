@@ -49,12 +49,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.3"/>
+                app:layout_constraintGuide_percent="0.25"/>
 
             <ImageButton
                 android:id="@+id/airplane"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="35dp"
                 android:layout_marginTop="30dp"
                 android:background="@android:color/transparent"
                 android:scaleType="fitCenter"
@@ -67,7 +67,7 @@
             <ImageButton
                 android:id="@+id/hotel"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="35dp"
                 android:layout_marginTop="30dp"
                 android:background="@android:color/transparent"
                 android:scaleType="fitCenter"
@@ -79,7 +79,7 @@
             <ImageButton
                 android:id="@+id/like"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="35dp"
                 android:layout_marginTop="30dp"
                 android:background="@android:color/transparent"
                 android:scaleType="fitCenter"

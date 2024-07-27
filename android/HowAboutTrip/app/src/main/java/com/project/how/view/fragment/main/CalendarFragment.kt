@@ -19,13 +19,13 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.project.how.BuildConfig
 import com.project.how.R
 import com.project.how.adapter.recyclerview.viewpager.EventViewPagerAdapter
-import com.project.how.adapter.recyclerview.RecentAddedCalendarsAdapter
+import com.project.how.adapter.recyclerview.schedule.RecentAddedCalendarsAdapter
 import com.project.how.data_class.recyclerview.EventViewPager
 import com.project.how.data_class.recyclerview.Schedule
-import com.project.how.data_class.dto.GetCountryLocationResponse
-import com.project.how.data_class.dto.GetFastestSchedulesResponse
-import com.project.how.data_class.dto.GetLatestSchedulesResponse
-import com.project.how.data_class.dto.GetLatestSchedulesResponseElement
+import com.project.how.data_class.dto.country.GetCountryLocationResponse
+import com.project.how.data_class.dto.schedule.GetFastestSchedulesResponse
+import com.project.how.data_class.dto.schedule.GetLatestSchedulesResponse
+import com.project.how.data_class.dto.schedule.GetLatestSchedulesResponseElement
 import com.project.how.databinding.FragmentCalendarBinding
 import com.project.how.interface_af.OnDesListener
 import com.project.how.view.activity.ai.AddAICalendarActivity
@@ -33,6 +33,7 @@ import com.project.how.view.activity.calendar.CalendarActivity
 import com.project.how.view.activity.calendar.CalendarEditActivity
 import com.project.how.view.activity.calendar.CalendarListActivity
 import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
+import com.project.how.view_model.CountryViewModel
 import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.Job
@@ -46,6 +47,7 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
     private val binding : FragmentCalendarBinding
         get() = _binding!!
     private val scheduleViewModel : ScheduleViewModel by viewModels()
+    private val countryViewModel :  CountryViewModel by viewModels()
     private var nearSchedule : GetFastestSchedulesResponse? = null
     private val event = mutableListOf<EventViewPager>()
     private lateinit var recentAddedCalendar : GetLatestSchedulesResponse
@@ -216,13 +218,13 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
 
     override fun onDesListener(des: String) {
         lifecycleScope.launch {
-            scheduleViewModel.getCountryLocation(des).collect{ location ->
+            countryViewModel.getCountryLocation(des).collect{ location ->
                 location?.let {
                     destination = des
                     latLng = location
                     showCalendar()
                 } ?: run {
-                    scheduleViewModel.getCountryLocation(des).collect { newLocation ->
+                    countryViewModel.getCountryLocation(des).collect { newLocation ->
                         newLocation?.let {
                             destination = des
                             latLng = newLocation

@@ -3,12 +3,11 @@ package com.project.how.model
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.project.how.data_class.dto.GetFlightOffersResponse
-import com.project.how.data_class.dto.GetLikeFlightResponse
-import com.project.how.data_class.dto.GetOneWayFlightOffersResponse
+import com.project.how.data_class.dto.booking.airplane.GetFlightOffersResponse
+import com.project.how.data_class.dto.booking.airplane.GetLikeFlightResponse
+import com.project.how.data_class.dto.booking.airplane.GetOneWayFlightOffersResponse
 import com.project.how.data_class.roomdb.RecentAirplane
 import com.project.how.roomdb.dao.RecentAirplaneDao
-import java.util.LinkedList
 import javax.inject.Inject
 import javax.inject.Singleton
 

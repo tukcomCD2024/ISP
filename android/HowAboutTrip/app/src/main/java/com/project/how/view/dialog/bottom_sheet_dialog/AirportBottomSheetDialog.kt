@@ -36,8 +36,8 @@ class AirportBottomSheetDialog(private val type: Int, private val onAirportListe
         super.onCreate(savedInstanceState)
         lifecycleScope.launch {
             koreaAirports = mutableListOf(
-                "인천",
-                "김포"
+                getString(R.string.inchon),
+                getString(R.string.gimpo)
             )
 
             japanAirports = mutableListOf(

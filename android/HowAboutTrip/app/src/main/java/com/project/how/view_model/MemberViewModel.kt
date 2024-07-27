@@ -8,12 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.project.how.R
 import com.project.how.data_class.MemberInfo
-import com.project.how.data_class.dto.LoginRequest
+import com.project.how.data_class.dto.member.LoginRequest
 import com.project.how.data_class.Tokens
-import com.project.how.data_class.dto.AuthRecreateRequest
+import com.project.how.data_class.dto.member.AuthRecreateRequest
 import com.project.how.data_class.dto.EmptyResponse
-import com.project.how.data_class.dto.GetInfoResponse
-import com.project.how.data_class.dto.SignUpRequest
+import com.project.how.data_class.dto.member.GetInfoResponse
+import com.project.how.data_class.dto.member.SignUpRequest
 import com.project.how.model.MemberRepository
 import com.project.how.network.client.MemberRetrofit
 import kotlinx.coroutines.channels.awaitClose
@@ -118,34 +118,39 @@ object MemberViewModel : ViewModel() {
     }
 
     suspend fun getTokens(context : Context, lr: LoginRequest) : Int = suspendCoroutine{ continuation ->
-        Log.d("getTokens", "loginRequest : ${lr.uid}")
-        MemberRetrofit.getApiService()!!
-            .login(lr)
-            .enqueue(object : Callback<String>{
-                override fun onResponse(
-                    call: Call<String>,
-                    response: Response<String>
-                ) {
-                    if (response.isSuccessful) {
-                        viewModelScope.launch {
-                            val result = response.body().toString()
-                            val accessToken = response.headers()[ACCESS_TOKEN]
-                            val refreshToken = response.headers()[REFRESH_TOKEN]
-                            Log.d("getTokens success", "code : ${response.code()}\nresult : ${result}\naccessToken : ${accessToken}\nrefreshToken : $refreshToken")
-                            memberRepository.getTokens(context, accessToken!!, refreshToken!!)
-                            continuation.resume(response.code())
+        try {
+            Log.d("getTokens", "loginRequest : ${lr.uid}")
+            MemberRetrofit.getApiService()!!
+                .login(lr)
+                .enqueue(object : Callback<String>{
+                    override fun onResponse(
+                        call: Call<String>,
+                        response: Response<String>
+                    ) {
+                        if (response.isSuccessful) {
+                            viewModelScope.launch {
+                                val result = response.body().toString()
+                                val accessToken = response.headers()[ACCESS_TOKEN]
+                                val refreshToken = response.headers()[REFRESH_TOKEN]
+                                Log.d("getTokens success", "code : ${response.code()}\nresult : ${result}\naccessToken : ${accessToken}\nrefreshToken : $refreshToken")
+                                memberRepository.getTokens(context, accessToken!!, refreshToken!!)
+                                continuation.resume(response.code())
+                            }
+                        } else {
+                            Log.e("getTokens response is not success", "code : ${response.code()}\nError : ${response.code()}")
+                            continuation.resumeWithException(HttpException(response))
                         }
-                    } else {
-                        Log.d("getTokens response is not success", "code : ${response.code()}\nError : ${response.code()}")
-                        continuation.resumeWithException(HttpException(response))
                     }
-                }
 
-                override fun onFailure(call: Call<String>, t: Throwable) {
-                    Log.d("getTokens onFailure", "${t.message}")
-                    continuation.resume(ON_FAILURE)
-                }
-            })
+                    override fun onFailure(call: Call<String>, t: Throwable) {
+                        Log.e("getTokens onFailure", "${t.message}")
+                        continuation.resume(ON_FAILURE)
+                    }
+                })
+        }catch (e : Exception){
+            Log.e("getToekns", "Error : ${e.message}")
+            continuation.resumeWithException(e)
+        }
     }
 
     fun getInfoSignUp(context : Context, accessToken : String, name : String, birth : String, phone : String){
@@ -172,53 +177,57 @@ object MemberViewModel : ViewModel() {
     }
 
     fun getInfo(context: Context, accessToken: String) : Flow<Int> = callbackFlow{
-        MemberRetrofit.getApiService()?.let {apiService->
-            apiService.getInfo(context.resources.getString(R.string.bearer_token, accessToken))
-                .enqueue(object  : Callback<GetInfoResponse>{
-                    override fun onResponse(
-                        call: Call<GetInfoResponse>,
-                        response: Response<GetInfoResponse>
-                    ) {
-                        if(response.isSuccessful){
-                            val result = response.body()
-                            if(result != null){
-                                val name = result.name
-                                val birth = result.birth
-                                val phone = result.phone
-                                memberRepository.getInfo(MemberInfo(name, birth, phone))
-                                Log.d("getInfo success", "code : ${response.code()}\nname : ${name}\nbirth : ${birth}\nphone : $phone")
-                                trySend(SUCCESS)
-                            }else{
-                                Log.d("getInfo result is null", "code : ${response.code()}\n message : ${response.message()}")
-                                trySend(ON_FAILURE)
-                            }
-                        }else if(response.code() == BAD_REQUEST){
-                            tokensLiveData.value
-                                ?.let { AuthRecreateRequest(it.refreshToken) }
-                                ?.let { refreshToken->
-                                    viewModelScope.launch {
-                                        authRecreate(context, refreshToken).collect{check->
-                                            if (check == SUCCESS){
-                                                trySend(SUCCESS)
-                                            }else{
-                                                trySend(ON_FAILURE)
+        try {
+            MemberRetrofit.getApiService()?.let {apiService->
+                apiService.getInfo(context.resources.getString(R.string.bearer_token, accessToken))
+                    .enqueue(object  : Callback<GetInfoResponse>{
+                        override fun onResponse(
+                            call: Call<GetInfoResponse>,
+                            response: Response<GetInfoResponse>
+                        ) {
+                            if(response.isSuccessful){
+                                val result = response.body()
+                                if(result != null){
+                                    val name = result.name ?: context.getString(R.string.error)
+                                    val birth = result.birth ?: context.getString(R.string.error)
+                                    val phone = result.phone ?: context.getString(R.string.error)
+                                    memberRepository.getInfo(MemberInfo(name, birth, phone))
+                                    Log.d("getInfo success", "code : ${response.code()}\nname : ${name}\nbirth : ${birth}\nphone : $phone")
+                                    trySend(SUCCESS)
+                                }else{
+                                    Log.d("getInfo result is null", "code : ${response.code()}\n message : ${response.message()}")
+                                    trySend(ON_FAILURE)
+                                }
+                            }else if(response.code() == BAD_REQUEST){
+                                tokensLiveData.value
+                                    ?.let { AuthRecreateRequest(it.refreshToken) }
+                                    ?.let { refreshToken->
+                                        viewModelScope.launch {
+                                            authRecreate(context, refreshToken).collect{check->
+                                                if (check == SUCCESS){
+                                                    trySend(SUCCESS)
+                                                }else{
+                                                    trySend(ON_FAILURE)
+                                                }
+                                                authRecreateCount++
                                             }
-                                            authRecreateCount++
                                         }
                                     }
-                                }
-                            Log.d("getInfo Bad Request", "code : ${response.code()}\nExecute authRecreate $authRecreateCount")
-                        }else{
-                            Log.d("getInfo response is not success", "code : ${response.code()}")
-                            trySend(ON_FAILURE)
+                                Log.d("getInfo Bad Request", "code : ${response.code()}\nExecute authRecreate $authRecreateCount")
+                            }else{
+                                Log.d("getInfo response is not success", "code : ${response.code()}")
+                                trySend(ON_FAILURE)
+                            }
                         }
-                    }
 
-                    override fun onFailure(call: Call<GetInfoResponse>, t: Throwable) {
-                        Log.d("getInfo onFailure", "${t.message}")
-                    }
-                })
-        } ?: close()
+                        override fun onFailure(call: Call<GetInfoResponse>, t: Throwable) {
+                            Log.d("getInfo onFailure", "${t.message}")
+                        }
+                    })
+            } ?: close()
+        }catch (e : Exception) {
+            Log.e("getInfo", "${e.message}")
+        }
 
         awaitClose()
     }

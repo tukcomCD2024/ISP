@@ -188,9 +188,9 @@ object MemberViewModel : ViewModel() {
                             if(response.isSuccessful){
                                 val result = response.body()
                                 if(result != null){
-                                    val name = result.name
-                                    val birth = result.birth
-                                    val phone = result.phone
+                                    val name = result.name ?: context.getString(R.string.error)
+                                    val birth = result.birth ?: context.getString(R.string.error)
+                                    val phone = result.phone ?: context.getString(R.string.error)
                                     memberRepository.getInfo(MemberInfo(name, birth, phone))
                                     Log.d("getInfo success", "code : ${response.code()}\nname : ${name}\nbirth : ${birth}\nphone : $phone")
                                     trySend(SUCCESS)

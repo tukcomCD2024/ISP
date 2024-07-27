@@ -26,7 +26,12 @@ class SplashActivity : AppCompatActivity() {
 
         memberViewModel.memberInfoLiveData.observe(this){
             Log.d("tokenSaveLiveData observe", "memberInfoLiveData\nname : ${it.name}\nphone : ${it.phone}\nbirth : ${it.birth}")
-            moveMain()
+            if (it.name == getString(R.string.error)){
+                Toast.makeText(this, "이전의 회원가입 과정이 정상적으로 진행되지 않았습니다.\n모든 정보를 기입해주세요.", Toast.LENGTH_SHORT).show()
+                moveSignUp()
+            }else{
+                moveMain()
+            }
         }
 
         lifecycleScope.launch {
@@ -47,9 +52,7 @@ class SplashActivity : AppCompatActivity() {
         memberViewModel.tokensLiveData.value?.let {
             lifecycleScope.launch {
                 memberViewModel.getInfo(this@SplashActivity, it.accessToken).collect{ check->
-                    if (check == MemberViewModel.SUCCESS){
-                        moveMain()
-                    }else{
+                    if (check != MemberViewModel.SUCCESS){
                         if (check == MemberViewModel.ON_FAILURE){
                             Toast.makeText(this@SplashActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
                         }
@@ -68,6 +71,12 @@ class SplashActivity : AppCompatActivity() {
 
     private fun moveMain(){
         val intent = Intent(this@SplashActivity, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun moveSignUp(){
+        val intent = Intent(this, SignUpActivity::class.java)
         startActivity(intent)
         finish()
     }

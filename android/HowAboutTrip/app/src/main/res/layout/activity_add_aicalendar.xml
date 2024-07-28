@@ -252,7 +252,6 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
                     android:text="@string/input"
-                    android:textColor="@color/white"
                     android:textSize="13sp"
                     android:onClick="@{() -> ai.showWarningDialog()}"
                     app:layout_constraintHorizontal_bias="0.0"

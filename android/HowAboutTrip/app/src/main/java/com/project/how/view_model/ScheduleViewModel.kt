@@ -13,6 +13,7 @@ import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.data_class.dto.schedule.DailySchedule
 import com.project.how.data_class.dto.country.GetCountryInfoRequest
 import com.project.how.data_class.dto.country.GetCountryLocationResponse
+import com.project.how.data_class.dto.schedule.AddCheckListsRequestElement
 import com.project.how.data_class.dto.schedule.GetFastestSchedulesResponse
 import com.project.how.data_class.dto.schedule.GetLatestSchedulesResponse
 import com.project.how.data_class.dto.schedule.GetScheduleListResponse
@@ -365,6 +366,11 @@ class ScheduleViewModel : ViewModel() {
         } ?: close()
 
         awaitClose()
+    }
+
+
+    fun addCheckList(accessToken: String, scheduleId : Long, newCheckList : List<AddCheckListsRequestElement>){
+
     }
 
     companion object{

@@ -12,30 +12,54 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <CheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_marginVertical="10dp"
-            android:background="@drawable/checklist_checkbox"
-            android:button="@android:color/transparent"
-            android:checked="true"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/checkbox_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline13"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent">
+
+            <CheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/checklist_checkbox"
+                android:button="@android:color/transparent"
+                android:checked="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <EditText
+            android:id="@+id/editText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
             android:background="@android:color/transparent"
             android:gravity="start"
-            android:text="test"
+            android:hint="@string/checklist_item_hint"
             android:inputType="none"
-            android:layout_marginStart="13dp"
+            android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline12"
-            app:layout_constraintStart_toEndOf="@+id/checkBox"
+            app:layout_constraintStart_toEndOf="@+id/checkbox_layout"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/delete"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitCenter"
+            android:padding="8dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/icon_delete"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/guideline12"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.Guideline

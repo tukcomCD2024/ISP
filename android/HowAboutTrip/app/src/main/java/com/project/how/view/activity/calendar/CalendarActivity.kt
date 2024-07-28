@@ -26,6 +26,7 @@ import com.project.how.view.dialog.AiScheduleDialog
 import com.project.how.view.dp.DpPxChanger
 import com.project.how.view.map_helper.CameraOptionProducer
 import com.project.how.view.map_helper.MarkerProducer
+import com.project.how.view_model.CountryViewModel
 import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.flow.collect
@@ -38,6 +39,7 @@ import java.util.Locale
 class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonClickListener, OnMapReadyCallback {
     private lateinit var binding : ActivityCalendarBinding
     private val viewModel : ScheduleViewModel by viewModels()
+    private val countryViewModel : CountryViewModel by viewModels()
     private lateinit var supportMapFragment: SupportMapFragment
     private var selectedDays = 0
     private lateinit var adapter : DaysScheduleAdapter
@@ -58,11 +60,14 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
             idToLong = id.toLong()
             latitude = intent.getDoubleExtra(getString(R.string.server_calendar_latitude), 0.0)
             longitude = intent.getDoubleExtra(getString(R.string.server_calendar_longitude), 0.0)
+
             Log.d("onCreate", "id : ${id}t\nlatitude : ${latitude}\tlongitude : ${longitude}\nidToLong : $idToLong")
             viewModel.getScheduleDetail(this@CalendarActivity, MemberViewModel.tokensLiveData.value!!.accessToken, idToLong).collect()
 
             viewModel.scheduleLiveData.observe(this@CalendarActivity){schedule->
                 data = schedule
+                if (latitude == 0.0 && longitude == 0.0)
+                    getLngLat()
                 Log.d("onCreate", "getSchedule title : ${schedule.title}")
                 binding.title.text = schedule.title
                 val formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(schedule.cost)
@@ -232,6 +237,17 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
             val location = LatLng(latitude, longitude)
             val camera = CameraOptionProducer().makeScheduleCameraUpdate(location, 10f)
             map.moveCamera(camera)
+        }
+    }
+
+    private fun getLngLat(){
+        lifecycleScope.launch {
+            countryViewModel.getCountryLocation(data.country).collect{ location->
+                location?.let {
+                    longitude = location.lng
+                    latitude = location.lat
+                } ?: Toast.makeText(this@CalendarActivity, getString(R.string.location_load_error), Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

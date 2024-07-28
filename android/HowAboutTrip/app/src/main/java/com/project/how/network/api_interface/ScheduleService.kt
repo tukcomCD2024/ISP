@@ -5,6 +5,8 @@ import com.project.how.data_class.dto.schedule.CreateScheduleListResponse
 import com.project.how.data_class.dto.schedule.CreateScheduleResponse
 import com.project.how.data_class.dto.country.GetCountryInfoRequest
 import com.project.how.data_class.dto.country.GetCountryLocationResponse
+import com.project.how.data_class.dto.schedule.AddCheckListsRequest
+import com.project.how.data_class.dto.schedule.CheckListResponse
 import com.project.how.data_class.dto.schedule.GetFastestSchedulesResponse
 import com.project.how.data_class.dto.schedule.GetLatestSchedulesResponse
 import com.project.how.data_class.dto.schedule.GetScheduleListResponse
@@ -75,4 +77,30 @@ interface ScheduleService {
         @Header("Authorization") accessToken: String,
         @Query("limit") limit: Long
     ) : Call<GetLatestSchedulesResponse>
+
+    @POST("{scheduleId}/checklists")
+    fun addCheckLists(
+        @Header("Authorization") accessToken : String,
+        @Path("scheduleId", encoded = true) scheduleId: Long,
+        @Body newCheckList : AddCheckListsRequest
+    ) : Call<CheckListResponse>
+
+    @GET("{scheduleId}/checklists")
+    fun getCheckLists(
+        @Header("Authorization") accessToken : String,
+        @Path("scheduleId", encoded = true) scheduleId: Long
+    ) : Call<CheckListResponse>
+
+    @DELETE("{scheduleId}/checklists/{checkListId}")
+    fun deleteCheckLists(
+        @Header("Authorization") accessToken : String,
+        @Path("scheduleId", encoded = true) scheduleId: Long,
+        @Path("checkListId", encoded = true) checkListId : Long
+    ) : Call<CheckListResponse>
+
+    @PUT("{scheduleId}/checklists")
+    fun updateCheckLists(
+        @Header("Authorization") accessToken : String,
+        @Path("scheduleId", encoded = true) scheduleId: Long
+    ) : Call<CheckListResponse>
 }

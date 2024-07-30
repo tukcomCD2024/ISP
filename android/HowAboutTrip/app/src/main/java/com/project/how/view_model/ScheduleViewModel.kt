@@ -11,9 +11,8 @@ import com.project.how.data_class.recyclerview.AiSchedule
 import com.project.how.data_class.recyclerview.DaysSchedule
 import com.project.how.data_class.recyclerview.Schedule
 import com.project.how.data_class.dto.schedule.DailySchedule
-import com.project.how.data_class.dto.country.GetCountryInfoRequest
-import com.project.how.data_class.dto.country.GetCountryLocationResponse
 import com.project.how.data_class.dto.schedule.AddCheckListsRequestElement
+import com.project.how.data_class.dto.schedule.CheckListResponse
 import com.project.how.data_class.dto.schedule.GetFastestSchedulesResponse
 import com.project.how.data_class.dto.schedule.GetLatestSchedulesResponse
 import com.project.how.data_class.dto.schedule.GetScheduleListResponse
@@ -37,6 +36,7 @@ class ScheduleViewModel : ViewModel() {
     private val _scheduleLiveData = scheduleRepository.scheduleLiveData
     private val _scheduleListLiveData = scheduleRepository.scheduleListLiveData
     private val _latestScheduleLiveData = scheduleRepository.latestScheduleLiveData
+    private val _checkListLiveData = scheduleRepository.checkList
     val nearScheduleDayLiveData : LiveData<GetFastestSchedulesResponse>
         get() = _nearScheduleDayLiveData
     val scheduleLiveData : LiveData<Schedule>
@@ -45,6 +45,8 @@ class ScheduleViewModel : ViewModel() {
         get() = _scheduleListLiveData
     val latestScheduleLiveData : LiveData<GetLatestSchedulesResponse>
         get() = _latestScheduleLiveData
+    val checkListLiveData : LiveData<CheckListResponse>
+        get() = _checkListLiveData
 
     fun getSchedule(schedule : Schedule){
         viewModelScope.launch {
@@ -95,7 +97,7 @@ class ScheduleViewModel : ViewModel() {
                     trySend(NETWORK_FAILED).isSuccess
                 }
             }
-            apiService.saveSchedule(context.getString(R.string.bearer_token, accessToken), changeClassFromScheduleToSaveSchedule(context, schedule))
+            apiService.saveSchedule(changeClassFromScheduleToSaveSchedule(context, schedule))
                 .enqueue(callback)
         } ?: close()
 
@@ -126,7 +128,7 @@ class ScheduleViewModel : ViewModel() {
                     trySend(NETWORK_FAILED).isSuccess
                 }
             }
-            apiService.updateSchedule(context.getString(R.string.bearer_token, accessToken), id, changeClassFromScheduleToSaveSchedule(context, schedule))
+            apiService.updateSchedule(id, changeClassFromScheduleToSaveSchedule(context, schedule))
                 .enqueue(callback)
         } ?: close()
 
@@ -183,7 +185,7 @@ class ScheduleViewModel : ViewModel() {
     }
 
     fun getScheduleList(context: Context, accessToken: String){
-        ScheduleRetrofit.getApiService()!!.getScheduleList(context.getString(R.string.bearer_token, accessToken))
+        ScheduleRetrofit.getApiService()!!.getScheduleList()
             .enqueue(object : Callback<GetScheduleListResponse>{
                 override fun onResponse(
                     call: Call<GetScheduleListResponse>,
@@ -211,7 +213,7 @@ class ScheduleViewModel : ViewModel() {
 
     fun deleteSchedule(context: Context, accessToken: String, id : Long) = callbackFlow {
         ScheduleRetrofit.getApiService()?.let {apiService ->
-            apiService.deleteSchedule(context.getString(R.string.bearer_token, accessToken), id)
+            apiService.deleteSchedule(id)
             .enqueue(object : Callback<String>{
                 override fun onResponse(call: Call<String>, response: Response<String>) {
                     if (response.isSuccessful){
@@ -245,7 +247,7 @@ class ScheduleViewModel : ViewModel() {
     fun getScheduleDetail(context: Context, accessToken: String, id : Long) = callbackFlow<Int>{
         Log.d("onCreate", "getScheduleDetail start\naccessToken : $accessToken\nid : $id")
         ScheduleRetrofit.getApiService()?.let {apiService ->
-            apiService.getScheduleDetail(context.getString(com.project.how.R.string.bearer_token, accessToken), id)
+            apiService.getScheduleDetail(id)
             .enqueue(object : Callback<ScheduleDetail>{
                 override fun onResponse(
                     call: Call<ScheduleDetail>,
@@ -306,7 +308,7 @@ class ScheduleViewModel : ViewModel() {
 
     fun getFastestSchedules(context: Context, accessToken: String){
         ScheduleRetrofit.getApiService()!!
-            .getFastestSchedule(context.getString(R.string.bearer_token, accessToken))
+            .getFastestSchedule()
             .enqueue(object : Callback<GetFastestSchedulesResponse>{
                 override fun onResponse(
                     p0: Call<GetFastestSchedulesResponse>,
@@ -334,7 +336,7 @@ class ScheduleViewModel : ViewModel() {
 
     fun getLatestSchedules(context: Context, accessToken: String) : Flow<Int> = callbackFlow {
         ScheduleRetrofit.getApiService()?.let { apiService ->
-            apiService.getLatestSchedules(context.getString(R.string.bearer_token, accessToken), LATEST_COUNT)
+            apiService.getLatestSchedules(LATEST_COUNT)
                 .enqueue(object : Callback<GetLatestSchedulesResponse>{
                     override fun onResponse(
                         p0: Call<GetLatestSchedulesResponse>,
@@ -369,8 +371,25 @@ class ScheduleViewModel : ViewModel() {
     }
 
 
-    fun addCheckList(accessToken: String, scheduleId : Long, newCheckList : List<AddCheckListsRequestElement>){
+    fun addCheckList(accessToken: String, scheduleId : Long, newCheckList : List<AddCheckListsRequestElement>) : Flow<Int> = callbackFlow{
+        ScheduleRetrofit.getApiService()?.let { apiService->
+            apiService.addCheckLists(scheduleId, newCheckList)
+                .enqueue(object : Callback<CheckListResponse>{
+                    override fun onResponse(
+                        p0: Call<CheckListResponse>,
+                        p1: Response<CheckListResponse>
+                    ) {
+                        TODO("Not yet implemented")
+                    }
 
+                    override fun onFailure(p0: Call<CheckListResponse>, p1: Throwable) {
+                        TODO("Not yet implemented")
+                    }
+
+                })
+        } ?: close()
+
+        awaitClose()
     }
 
     companion object{

@@ -11,7 +11,6 @@ import androidx.lifecycle.lifecycleScope
 import com.project.how.R
 import com.project.how.databinding.ActivitySplashBinding
 import com.project.how.view_model.MemberViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SplashActivity : AppCompatActivity() {
@@ -51,7 +50,7 @@ class SplashActivity : AppCompatActivity() {
     private fun getMemberInfo() {
         memberViewModel.tokensLiveData.value?.let {
             lifecycleScope.launch {
-                memberViewModel.getInfo(this@SplashActivity, it.accessToken).collect{ check->
+                memberViewModel.getInfo(this@SplashActivity).collect{ check->
                     if (check != MemberViewModel.SUCCESS){
                         if (check == MemberViewModel.ON_FAILURE){
                             Toast.makeText(this@SplashActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()

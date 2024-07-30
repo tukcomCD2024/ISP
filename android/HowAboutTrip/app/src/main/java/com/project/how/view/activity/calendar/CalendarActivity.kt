@@ -29,7 +29,6 @@ import com.project.how.view.map_helper.MarkerProducer
 import com.project.how.view_model.CountryViewModel
 import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.time.LocalDate
@@ -62,7 +61,16 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
             longitude = intent.getDoubleExtra(getString(R.string.server_calendar_longitude), 0.0)
 
             Log.d("onCreate", "id : ${id}t\nlatitude : ${latitude}\tlongitude : ${longitude}\nidToLong : $idToLong")
-            viewModel.getScheduleDetail(this@CalendarActivity, MemberViewModel.tokensLiveData.value!!.accessToken, idToLong).collect()
+            viewModel.getScheduleDetail(this@CalendarActivity, MemberViewModel.tokensLiveData.value!!.accessToken, idToLong).collect{check->
+                if(check != ScheduleViewModel.SUCCESS) {
+                    Toast.makeText(
+                        this@CalendarActivity,
+                        getString(R.string.not_exist_schedule_error),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    finish()
+                }
+            }
 
             viewModel.scheduleLiveData.observe(this@CalendarActivity){schedule->
                 data = schedule
@@ -178,10 +186,10 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
                         finish()
                     }
                     ScheduleViewModel.OTHER_USER_SCHEDULE -> {
-                        Toast.makeText(this@CalendarActivity, getString(R.string.other_user_schedule_delete_error), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@CalendarActivity, getString(R.string.other_user_schedule_error), Toast.LENGTH_SHORT).show()
                     }
                     ScheduleViewModel.NOT_EXIST_SCHEDULE -> {
-                        Toast.makeText(this@CalendarActivity, getString(R.string.not_exist_schedule_delete_error), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@CalendarActivity, getString(R.string.not_exist_schedule_error), Toast.LENGTH_SHORT).show()
                     }
                     ScheduleViewModel.NETWORK_FAILED -> {
                         Toast.makeText(this@CalendarActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()

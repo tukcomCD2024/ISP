@@ -1,8 +1,10 @@
 package com.project.how.network.client
 
 import com.google.gson.GsonBuilder
+import com.project.how.Application
 import com.project.how.BuildConfig
 import com.project.how.network.api_interface.BookingService
+import com.project.how.network.client.interceptor.AuthInterceptor
 import com.project.how.network.converter_factory.NullOnEmptyConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -29,6 +31,7 @@ object BookingRetrofit {
             level = HttpLoggingInterceptor.Level.BODY
         }
         httpClient.addInterceptor(loggingInterceptor)
+        httpClient.addInterceptor(AuthInterceptor(Application.applicationContext()))
 
         return Retrofit.Builder()
             .baseUrl(BASE_URL)

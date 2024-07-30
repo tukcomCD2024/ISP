@@ -140,9 +140,9 @@ class CalendarListActivity
            viewModel.deleteSchedule(this@CalendarListActivity, MemberViewModel.tokensLiveData.value!!.accessToken, data.id).collect{
                 when(it){
                     ScheduleViewModel.SUCCESS -> { adapter.remove(position) }
-                    ScheduleViewModel.OTHER_USER_SCHEDULE -> { Toast.makeText(this@CalendarListActivity, getString(R.string.other_user_schedule_delete_error), Toast.LENGTH_SHORT).show()}
+                    ScheduleViewModel.OTHER_USER_SCHEDULE -> { Toast.makeText(this@CalendarListActivity, getString(R.string.other_user_schedule_error), Toast.LENGTH_SHORT).show()}
                     ScheduleViewModel.NETWORK_FAILED -> { Toast.makeText(this@CalendarListActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show() }
-                    ScheduleViewModel.NOT_EXIST_SCHEDULE -> {Toast.makeText(this@CalendarListActivity, getString(R.string.not_exist_schedule_delete_error), Toast.LENGTH_SHORT).show() }
+                    ScheduleViewModel.NOT_EXIST_SCHEDULE -> {Toast.makeText(this@CalendarListActivity, getString(R.string.not_exist_schedule_error), Toast.LENGTH_SHORT).show() }
                 }
            }
        }

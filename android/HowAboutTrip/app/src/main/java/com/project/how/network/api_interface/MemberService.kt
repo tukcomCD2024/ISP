@@ -9,10 +9,12 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.PUT
 
 interface MemberService {
+    @Headers("No-Authorization: true")
     @POST("members/login")
     fun login(
         @Body login: LoginRequest
@@ -24,13 +26,12 @@ interface MemberService {
         @Body signUp: SignUpRequest
     ) : Call<EmptyResponse>
 
+    @Headers("No-Authorization: true")
     @POST("members/refresh")
     fun authRecreate(
         @Body authRecreate : AuthRecreateRequest
     ) : Call<EmptyResponse>
 
     @GET("members/information")
-    fun getInfo(
-        @Header("Authorization") accessToken: String
-    ) : Call<GetInfoResponse>
+    fun getInfo(): Call<GetInfoResponse>
 }

@@ -176,10 +176,10 @@ object MemberViewModel : ViewModel() {
             })
     }
 
-    fun getInfo(context: Context, accessToken: String) : Flow<Int> = callbackFlow{
+    fun getInfo(context: Context) : Flow<Int> = callbackFlow{
         try {
             MemberRetrofit.getApiService()?.let {apiService->
-                apiService.getInfo(context.resources.getString(R.string.bearer_token, accessToken))
+                apiService.getInfo()
                     .enqueue(object  : Callback<GetInfoResponse>{
                         override fun onResponse(
                             call: Call<GetInfoResponse>,

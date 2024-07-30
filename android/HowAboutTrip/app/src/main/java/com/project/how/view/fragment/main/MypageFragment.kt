@@ -82,7 +82,7 @@ class MypageFragment : Fragment() {
         }else{
             context?.let { context->
                 memberViewModel.tokensLiveData.value?.let { tokens->
-                    memberViewModel.getInfo(context, tokens.accessToken) }
+                    memberViewModel.getInfo(context) }
             }
         }
     }

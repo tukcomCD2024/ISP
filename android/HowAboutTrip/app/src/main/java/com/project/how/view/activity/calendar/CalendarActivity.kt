@@ -179,7 +179,7 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
 
     fun delete(){
         lifecycleScope.launch {
-            viewModel.deleteSchedule(this@CalendarActivity, MemberViewModel.tokensLiveData.value!!.accessToken, idToLong).collect{
+            viewModel.deleteSchedule(idToLong).collect{
                 when(it){
                     ScheduleViewModel.SUCCESS -> {
                         startActivity(Intent(this@CalendarActivity, CalendarListActivity::class.java))

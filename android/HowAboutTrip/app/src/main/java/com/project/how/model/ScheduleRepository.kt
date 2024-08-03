@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.project.how.R
 import com.project.how.adapter.recyclerview.schedule.AiDaysScheduleAdapter
-import com.project.how.data_class.dto.schedule.CheckListResponse
+import com.project.how.data_class.dto.schedule.CheckList
 import com.project.how.data_class.dto.schedule.GetFastestSchedulesResponse
 import com.project.how.data_class.dto.schedule.GetLatestSchedulesResponse
 import com.project.how.data_class.recyclerview.AiDaysSchedule
@@ -20,14 +20,13 @@ import kotlinx.coroutines.flow.flow
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import java.util.Calendar
 
 class ScheduleRepository {
     private val _nearScheduleDayLiveData : MutableLiveData<GetFastestSchedulesResponse> = MutableLiveData()
     private val _scheduleLiveData : MutableLiveData<Schedule> = MutableLiveData()
     private val _scheduleListLiveData : MutableLiveData<GetScheduleListResponse> = MutableLiveData()
     private val _latestScheduleLiveData : MutableLiveData<GetLatestSchedulesResponse> = MutableLiveData()
-    private val _checkList : MutableLiveData<CheckListResponse> = MutableLiveData()
+    private val _checkList : MutableLiveData<CheckList> = MutableLiveData()
     val nearScheduleDayLiveData : LiveData<GetFastestSchedulesResponse>
         get() = _nearScheduleDayLiveData
     val scheduleLiveData : LiveData<Schedule>
@@ -36,10 +35,10 @@ class ScheduleRepository {
         get() = _scheduleListLiveData
     val latestScheduleLiveData : LiveData<GetLatestSchedulesResponse>
         get() = _latestScheduleLiveData
-    val checkList : LiveData<CheckListResponse>
+    val checkList : LiveData<CheckList>
         get() = _checkList
 
-    fun getCheckList(data : CheckListResponse){
+    fun getCheckList(data : CheckList){
         _checkList.postValue(data)
     }
 

@@ -19,7 +19,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/check"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="wrap_content"
+            android:maxHeight="350dp"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
@@ -42,9 +43,10 @@
             style="@style/Button.GrayRound"
             android:layout_marginEnd="10dp"
             android:text="@string/edit"
+            android:onClick="@{() -> checklist.edit()}"
             app:layout_constraintBottom_toTopOf="@+id/guideline5"
             app:layout_constraintEnd_toStartOf="@+id/confirm"
-            app:layout_constraintTop_toBottomOf="@+id/check" />
+            app:layout_constraintTop_toBottomOf="@+id/add" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/confirm"
@@ -53,8 +55,21 @@
             android:layout_margin="20dp"
             style="@style/Button.BlackRound"
             android:text="@string/close"
+            android:onClick="@{()-> checklist.confirm()}"
             app:layout_constraintBottom_toTopOf="@+id/guideline5"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/add" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/add"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:visibility="gone"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/icon_add_schedule"
+            android:onClick="@{()-> checklist.add()}"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/check" />
 
 

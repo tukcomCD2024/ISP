@@ -18,10 +18,10 @@ import com.project.how.data_class.dto.schedule.GetScheduleListResponseElement
 import com.project.how.databinding.ActivityCalendarListBinding
 import com.project.how.interface_af.OnDesListener
 import com.project.how.interface_af.OnYesOrNoListener
+import com.project.how.view.dialog.ChecklistDialog
 import com.project.how.view.dialog.YesOrNoDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
 import com.project.how.view_model.CountryViewModel
-import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -54,7 +54,7 @@ class CalendarListActivity
         super.onStart()
 
         lifecycleScope.launch {
-            viewModel.getScheduleList(this@CalendarListActivity, MemberViewModel.tokensLiveData.value!!.accessToken)
+            viewModel.getScheduleList()
         }
     }
 
@@ -126,7 +126,7 @@ class CalendarListActivity
     }
 
     override fun onCheckListButtonClickListener(id: Long) {
-
+        val checkList = ChecklistDialog(id).show(supportFragmentManager, "CheckListDialog")
     }
 
     override fun onShareButtonClickListener(id: Long) {
@@ -137,7 +137,7 @@ class CalendarListActivity
        lifecycleScope.launch {
            val data = adapter.getData(position)
            Log.d("onDelete", "onScheduleDeleteListener\nposition: $position\tid : ${data.id}\ttitle : ${data.scheduleName}")
-           viewModel.deleteSchedule(this@CalendarListActivity, MemberViewModel.tokensLiveData.value!!.accessToken, data.id).collect{
+           viewModel.deleteSchedule(data.id).collect{
                 when(it){
                     ScheduleViewModel.SUCCESS -> { adapter.remove(position) }
                     ScheduleViewModel.OTHER_USER_SCHEDULE -> { Toast.makeText(this@CalendarListActivity, getString(R.string.other_user_schedule_error), Toast.LENGTH_SHORT).show()}

@@ -47,7 +47,6 @@ import com.project.how.view.map_helper.CameraOptionProducer
 import com.project.how.view.map_helper.MarkerProducer
 import com.project.how.view_model.CalendarViewModel
 import com.project.how.view_model.CountryViewModel
-import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.launch
 import java.io.Serializable
@@ -353,7 +352,7 @@ class CalendarEditActivity
     }
 
     private suspend fun saveNewSchedule(){
-        viewModel.saveSchedule(this, MemberViewModel.tokensLiveData.value!!.accessToken, data).collect{check ->
+        viewModel.saveSchedule(this, data).collect{ check ->
             when(check){
                 ScheduleViewModel.NETWORK_FAILED ->{
                     Toast.makeText(this@CalendarEditActivity,
@@ -367,7 +366,7 @@ class CalendarEditActivity
     }
 
     private suspend fun saveEditSchedule(){
-        viewModel.updateSchedule(this, MemberViewModel.tokensLiveData.value!!.accessToken, id, data).collect{check->
+        viewModel.updateSchedule(this, id, data).collect{ check->
             when(check){
                 ScheduleViewModel.NETWORK_FAILED ->{
                     Toast.makeText(this@CalendarEditActivity,

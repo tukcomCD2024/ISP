@@ -1,5 +1,7 @@
 package com.project.how.view.activity.ticket
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -52,8 +54,8 @@ class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapte
 
         bookingViewModel.skyscannerUrlLiveData.observe(this){url->
             if (clicked != null){
-                val web = WebViewBottomSheetDialog(url)
-                web.show(supportFragmentManager, "WebViewBottomSheetDialog")
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                startActivity(intent)
                 val recent = RecentAirplane(
                     name = getString(R.string.recent_one_way_name, input.departure, input.destination),
                     image = null,

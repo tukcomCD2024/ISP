@@ -108,7 +108,7 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        scheduleViewModel.getFastestSchedules(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken)
+        scheduleViewModel.getFastestSchedules()
         binding.viewPager2.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
         binding.viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){

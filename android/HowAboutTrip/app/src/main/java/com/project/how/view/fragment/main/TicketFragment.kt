@@ -1,7 +1,9 @@
 package com.project.how.view.fragment.main
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -119,7 +121,7 @@ class TicketFragment : Fragment(), RecentHotelAdapter.OnItemClickListener, Recen
     }
 
     override fun onItemClickListener(url: String) {
-        val web = WebViewBottomSheetDialog(url)
-        web.show(childFragmentManager, "WebViewBottomSheetDialog")
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
     }
 }

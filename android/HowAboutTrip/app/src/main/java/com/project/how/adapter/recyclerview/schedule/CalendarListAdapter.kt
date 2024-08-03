@@ -66,7 +66,7 @@ class CalendarListAdapter (private val context: Context, data : GetScheduleListR
 
     fun remove(position: Int){
         calendars.removeAt(position)
-        notifyItemRemoved(position)
+        notifyDataSetChanged()
     }
 
     fun getData(position: Int) = calendars[position]

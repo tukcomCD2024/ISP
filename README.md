@@ -5,7 +5,7 @@
 <p align="center"><img src="https://github.com/tukcomCD2024/ISP/assets/77226122/5bc49674-fbb5-40dd-a9df-3c21d43bd1a9"></p>
 
 ```
-여행 일정이 필요해? 우리가 만들어줄게!
+✈️ 여행 일정이 필요해? 우리가 만들어줄게!
 ```
 <br>
 

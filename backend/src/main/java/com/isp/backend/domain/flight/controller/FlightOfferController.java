@@ -28,9 +28,7 @@ public class FlightOfferController {
 
     /** 항공권 검색 API **/
     @PostMapping("/search")
-    public ResponseEntity<String> getFlightOffers(@AuthenticationPrincipal CustomUserDetails customUserDetails,
-                                                  @RequestBody FlightSearchRequest request) {
-        String memberUid = customUserDetails.getUsername();
+    public ResponseEntity<String> getFlightOffers(@RequestBody FlightSearchRequest request) {
         try {
             String flightOffersJson = flightOfferService.getFlightOffers(request);
             return ResponseEntity.ok(flightOffersJson);
@@ -42,9 +40,7 @@ public class FlightOfferController {
 
     /** 항공권 선택시 스카이스캐너 사이트로 연결 API **/
     @PostMapping("/connect")
-    public ResponseEntity<String> getFlightSearchUrl(@AuthenticationPrincipal CustomUserDetails customUserDetails,
-                                                     @RequestBody SkyScannerRequest request) {
-        String memberUid = customUserDetails.getUsername();
+    public ResponseEntity<String> getFlightSearchUrl(@RequestBody SkyScannerRequest request) {
         try {
             String skyscannerUrl = flightOfferService.generateSkyscannerUrl(request);
             return ResponseEntity.ok("{\"skyscannerUrl\": \"" + skyscannerUrl + "\"}");

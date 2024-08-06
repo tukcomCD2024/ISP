@@ -2,7 +2,7 @@ package com.isp.backend.global.security;
 
 import com.isp.backend.domain.member.entity.Member;
 import com.isp.backend.domain.member.repository.MemberRepository;
-import com.isp.backend.global.exception.member.MemberNotFoundException;
+import com.isp.backend.global.exception.common.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

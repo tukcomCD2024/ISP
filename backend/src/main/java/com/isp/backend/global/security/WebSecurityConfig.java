@@ -18,15 +18,14 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-
 @RequiredArgsConstructor
 @Configuration
-@EnableWebSecurity  // Spring Security 활성화
+@EnableWebSecurity
 public class WebSecurityConfig {
 
     private static final String[] AUTH_WHITE_LIST = {
             "/members/login",
-            "/api/members/login",
+            "/members/refresh",
             "/members/test",
             "/error",
             "/h2-console/**"
@@ -42,28 +41,21 @@ public class WebSecurityConfig {
         http
                 .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))               // cors 구성
                 .csrf(CsrfConfigurer::disable)                                                                       // csrf 보호 비활성화
-                .formLogin(AbstractHttpConfigurer::disable)                                                        // 폼 기반 login 비활성화
-                .httpBasic(HttpBasicConfigurer::disable)                                                           // HTTP basic 인증 비활성화
+                .formLogin(AbstractHttpConfigurer::disable)                                                          // 폼 기반 login 비활성화
+                .httpBasic(HttpBasicConfigurer::disable)                                                             // HTTP basic 인증 비활성화
                 .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  // 세션 생성 X
-//                .authorizeHttpRequests(
-//                        requests -> {
-//                            for (String url : AUTH_WHITE_LIST) {
-//                                requests.requestMatchers(url).permitAll();  // 인증 없이 들어가는 url
-//                            }
-//                            requests.anyRequest().authenticated();
-//                        }
-//                )
 
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/**").permitAll() // 모든 요청에 대해 모든 사용자에게 권한 부여
+                                .requestMatchers(AUTH_WHITE_LIST).permitAll() // AUTH_WHITE_LIST에 포함된 URL은 인증 없이 접근 가능
+                                .anyRequest().authenticated()                  // 나머지 모든 요청은 인증 필요
                 )
 
-                .exceptionHandling(exceptionHandlingConfigurer -> exceptionHandlingConfigurer                       // 예외처리 구성 - 인증 진입 점 + 엑세스 거부 헨들러 지정
+                .exceptionHandling(exceptionHandlingConfigurer -> exceptionHandlingConfigurer            //  예외처리 구성 - 인증 진입 점 + 엑세스 거부 헨들러 지정
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                         .accessDeniedHandler(jwtAccessDeniedHandler));
 
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);                  // JWT 기반 인증 처리
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);        // JWT 기반 인증 처리
 
         return http.build();
     }

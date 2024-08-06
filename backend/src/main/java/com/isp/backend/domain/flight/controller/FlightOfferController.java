@@ -63,6 +63,7 @@ public class FlightOfferController {
         return ResponseEntity.status(HttpStatus.CREATED).body(flightId);
     }
 
+
     /** 항공권 나의 좋아요 목록 불러오기 API **/
     @GetMapping("/likes")
     public ResponseEntity<List<FlightLikeResponse>> getLikedFlights(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
@@ -70,6 +71,7 @@ public class FlightOfferController {
         List<FlightLikeResponse> likedFlights = flightOfferService.getLikedFlights(memberUid);
         return ResponseEntity.ok(likedFlights);
     }
+
 
     /** 항공권 나의 좋아요 삭제 API **/
     @DeleteMapping("/like/{id}")

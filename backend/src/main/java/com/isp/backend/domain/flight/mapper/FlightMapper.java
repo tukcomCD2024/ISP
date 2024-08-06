@@ -16,7 +16,7 @@ public class FlightMapper {
 
     public Flight toEntity(FlightLikeRequest request, Member member, Country departureIataCode, Country arrivalIataCode) {
         return Flight.builder()
-                .member(member) // 주입된 member 객체 사용
+                .member(member)
                 .carrierCode(request.getCarrierCode())
                 .price((double) request.getTotalPrice())
                 .abroadDuration(request.getAbroadDuration())

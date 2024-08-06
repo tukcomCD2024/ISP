@@ -74,16 +74,15 @@ public class FlightOfferServiceImpl implements FlightOfferService {
     @Override
     public String generateSkyscannerUrl(SkyScannerRequest request) {
         // 요청 데이터 정제
-        String departureDate = request.getDepartureDate().replace("-", "").substring(2);
-        String returnDate = (request.getReturnDate() != null) ? request.getReturnDate().replace("-", "").substring(2) : "";
+        String departureDate = request.getDepartureDate().replace("-", "").substring(2) + "/";
+        String returnDate = (request.getReturnDate() != null && !request.getReturnDate().isEmpty()) ? request.getReturnDate().replace("-", "").substring(2) + "/" : "";
         int departureTimeMinutes = convertToMinutes(request.getDepartureTime());
         String childrenParam = buildChildrenParam(request.getChildren());
 
         String url = "https://www.skyscanner.co.kr/transport/flights/" +
                 request.getDepartureIataCode().toLowerCase() + "/" +
                 request.getArrivalIataCode().toLowerCase() + "/" +
-                departureDate + "/" +
-                returnDate + "/?adultsv2=" + request.getAdults() + childrenParam +
+                departureDate + returnDate + "?adultsv2=" + request.getAdults() + childrenParam +
                 "&departure-times=" + departureTimeMinutes +
                 "&inboundaltsenabled=false&outboundaltsenabled=false&ref=home&rtn=" + (returnDate.isEmpty() ? "0" : "1");
 
@@ -112,7 +111,6 @@ public class FlightOfferServiceImpl implements FlightOfferService {
 
     /**
      * 항공권 좋아요 저장
-     *
      **/
     @Override
     @Transactional

@@ -13,7 +13,7 @@ import com.isp.backend.domain.schedule.mapper.ScheduleMapper;
 import com.isp.backend.domain.schedule.repository.ScheduleRepository;
 import com.isp.backend.domain.scheduleDetail.entity.ScheduleDetail;
 import com.isp.backend.domain.scheduleDetail.repository.ScheduleDetailRepository;
-import com.isp.backend.global.exception.member.MemberNotFoundException;
+import com.isp.backend.global.exception.common.MemberNotFoundException;
 import com.isp.backend.global.exception.schedule.CountryNotFoundException;
 import com.isp.backend.global.exception.schedule.NotYourScheduleException;
 import com.isp.backend.global.exception.schedule.ScheduleNotFoundException;

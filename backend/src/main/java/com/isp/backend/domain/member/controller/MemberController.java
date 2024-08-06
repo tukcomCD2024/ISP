@@ -48,7 +48,6 @@ public class MemberController {
     /** 멤버 정보 조회 **/
     @GetMapping("/information")
     public ResponseEntity<MemberDetailResponse> getMemberInfo(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
-
         return ResponseEntity.ok(memberService.getMemberInfo(customUserDetails.getUsername()));
     }
 

@@ -6,9 +6,9 @@ import com.isp.backend.domain.member.dto.response.MemberDetailResponse;
 import com.isp.backend.domain.member.dto.request.SignUpRequest;
 import com.isp.backend.domain.member.entity.Member;
 import com.isp.backend.domain.member.repository.MemberRepository;
-import com.isp.backend.global.exception.member.AuthenticationFailedException;
-import com.isp.backend.global.exception.member.MemberNotActivatedException;
-import com.isp.backend.global.exception.member.MemberNotFoundException;
+import com.isp.backend.global.exception.common.MemberNotActivatedException;
+import com.isp.backend.global.exception.common.MemberNotFoundException;
+import com.isp.backend.global.exception.common.RefreshTokenInvalidException;
 import com.isp.backend.global.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -99,7 +99,7 @@ public class MemberServiceImpl implements MemberService {
     public ResponseEntity<String> authRecreate(AuthRecreateRequest authRecreateRequest) {
 
         if (!tokenProvider.validateRefreshToken(authRecreateRequest.getRefreshToken())) {
-            throw new AuthenticationFailedException();
+            throw new RefreshTokenInvalidException();
         }
         String uid = tokenProvider.getUid(authRecreateRequest.getRefreshToken());
 

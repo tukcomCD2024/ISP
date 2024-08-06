@@ -19,15 +19,15 @@ import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.tabs.TabLayout
 import com.project.how.R
 import com.project.how.adapter.recyclerview.schedule.DaysScheduleAdapter
-import com.project.how.data_class.recyclerview.DaysSchedule
-import com.project.how.data_class.recyclerview.Schedule
+import com.project.how.data_class.recyclerview.schedule.DaysSchedule
+import com.project.how.data_class.recyclerview.schedule.Schedule
 import com.project.how.databinding.ActivityCalendarBinding
 import com.project.how.view.dialog.AiScheduleDialog
+import com.project.how.view.dialog.ChecklistDialog
 import com.project.how.view.dp.DpPxChanger
 import com.project.how.view.map_helper.CameraOptionProducer
 import com.project.how.view.map_helper.MarkerProducer
 import com.project.how.view_model.CountryViewModel
-import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
@@ -47,6 +47,7 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
     private var idToLong: Long = -1
     private var latitude : Double = 0.0
     private var longitude : Double = 0.0
+    private var id = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,13 +56,13 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
         binding.lifecycleOwner = this
 
         lifecycleScope.launch {
-            val id = intent.getLongExtra(getString(R.string.server_calendar_id), -1)
+            id = intent.getLongExtra(getString(R.string.server_calendar_id), -1)
             idToLong = id.toLong()
             latitude = intent.getDoubleExtra(getString(R.string.server_calendar_latitude), 0.0)
             longitude = intent.getDoubleExtra(getString(R.string.server_calendar_longitude), 0.0)
 
             Log.d("onCreate", "id : ${id}t\nlatitude : ${latitude}\tlongitude : ${longitude}\nidToLong : $idToLong")
-            viewModel.getScheduleDetail(this@CalendarActivity, MemberViewModel.tokensLiveData.value!!.accessToken, idToLong).collect{check->
+            viewModel.getScheduleDetail(this@CalendarActivity, idToLong).collect{ check->
                 if(check != ScheduleViewModel.SUCCESS) {
                     Toast.makeText(
                         this@CalendarActivity,
@@ -175,6 +176,10 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
         val startDate = LocalDate.parse(data.startDate, DateTimeFormatter.ISO_DATE)
         val formatter = DateTimeFormatter.ofPattern("MM.dd")
         return startDate.plusDays(tabNum.toLong()).format(formatter)
+    }
+
+    fun checklist(){
+        val checkList = ChecklistDialog(id).show(supportFragmentManager, "CheckListDialog")
     }
 
     fun delete(){

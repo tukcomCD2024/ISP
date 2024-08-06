@@ -9,7 +9,7 @@ import com.project.how.databinding.ActivityMainBinding
 import com.project.how.view.activity.ai.AddAICalendarActivity
 import com.project.how.view.fragment.main.CalendarFragment
 import com.project.how.view.fragment.main.MypageFragment
-import com.project.how.view.fragment.main.PictureFragment
+import com.project.how.view.fragment.main.RecordFragment
 import com.project.how.view.fragment.main.TicketFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
                         .commitAllowingStateLoss()
                 }
                 R.id.menu_picture->{
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment, PictureFragment())
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment, RecordFragment())
                         .commitAllowingStateLoss()
                 }
                 R.id.menu_mypage->{

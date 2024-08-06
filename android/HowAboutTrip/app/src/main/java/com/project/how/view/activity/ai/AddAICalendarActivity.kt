@@ -14,10 +14,10 @@ import com.google.android.gms.ads.MobileAds
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.project.how.R
-import com.project.how.data_class.recyclerview.AiSchedule
+import com.project.how.data_class.recyclerview.schedule.AiSchedule
 import com.project.how.data_class.AiScheduleListInput
 import com.project.how.data_class.dto.country.GetCountryLocationResponse
-import com.project.how.data_class.recyclerview.AiScheduleList
+import com.project.how.data_class.recyclerview.schedule.AiScheduleList
 import com.project.how.databinding.ActivityAddAicalendarBinding
 import com.project.how.interface_af.OnAddListener
 import com.project.how.interface_af.OnDesListener

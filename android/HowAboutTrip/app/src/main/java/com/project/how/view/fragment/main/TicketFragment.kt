@@ -3,7 +3,6 @@ package com.project.how.view.fragment.main
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,13 +14,12 @@ import com.project.how.R
 import com.project.how.adapter.recyclerview.booking.airplane.RecentAirplaneAdapter
 import com.project.how.adapter.recyclerview.booking.hotel.RecentHotelAdapter
 import com.project.how.adapter.recyclerview.viewpager.EventTicketViewPagerAdapter
-import com.project.how.data_class.recyclerview.EventViewPager
+import com.project.how.data_class.recyclerview.schedule.EventViewPager
 import com.project.how.data_class.recyclerview.RecentHotel
 import com.project.how.data_class.roomdb.RecentAirplane
 import com.project.how.databinding.FragmentTicketBinding
 import com.project.how.view.activity.mypage.LikeActivity
 import com.project.how.view.activity.ticket.AirplaneSearchActivity
-import com.project.how.view.dialog.bottom_sheet_dialog.WebViewBottomSheetDialog
 import com.project.how.view_model.BookingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 

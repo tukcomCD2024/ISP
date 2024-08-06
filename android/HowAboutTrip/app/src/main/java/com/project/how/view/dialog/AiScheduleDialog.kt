@@ -18,7 +18,7 @@ import com.google.android.material.tabs.TabLayout
 import com.project.how.BuildConfig
 import com.project.how.R
 import com.project.how.adapter.recyclerview.schedule.AiDaysScheduleAdapter
-import com.project.how.data_class.recyclerview.AiSchedule
+import com.project.how.data_class.recyclerview.schedule.AiSchedule
 import com.project.how.databinding.DialogAiScheduleBinding
 import com.project.how.interface_af.OnAddListener
 import com.project.how.view.dp.DpPxChanger

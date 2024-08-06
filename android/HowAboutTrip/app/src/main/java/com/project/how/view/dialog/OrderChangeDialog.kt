@@ -11,7 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.project.how.R
 import com.project.how.adapter.recyclerview.RadioButtonAdapter
-import com.project.how.data_class.recyclerview.DaysSchedule
+import com.project.how.data_class.recyclerview.schedule.DaysSchedule
 import com.project.how.databinding.DialogOrderChangeBinding
 import com.project.how.interface_af.OnOrderChangeListener
 

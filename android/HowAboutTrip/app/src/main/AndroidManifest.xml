@@ -19,21 +19,27 @@
         android:theme="@style/Base.Theme.HowAboutTrip"
         tools:targetApi="31">
         <activity
+            android:name=".view.activity.record.LocationMapActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.activity.record.BillListActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.activity.mypage.ExchangeRateActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.mypage.WeatherActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.mypage.LikeActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.ticket.OneWayAirplaneListActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.ticket.RoundTripAirplaneListActivity"
             android:exported="false"

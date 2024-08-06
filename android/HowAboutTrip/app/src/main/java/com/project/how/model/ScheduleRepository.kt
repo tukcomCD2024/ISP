@@ -9,10 +9,10 @@ import com.project.how.adapter.recyclerview.schedule.AiDaysScheduleAdapter
 import com.project.how.data_class.dto.schedule.CheckList
 import com.project.how.data_class.dto.schedule.GetFastestSchedulesResponse
 import com.project.how.data_class.dto.schedule.GetLatestSchedulesResponse
-import com.project.how.data_class.recyclerview.AiDaysSchedule
-import com.project.how.data_class.recyclerview.AiSchedule
-import com.project.how.data_class.recyclerview.DaysSchedule
-import com.project.how.data_class.recyclerview.Schedule
+import com.project.how.data_class.recyclerview.schedule.AiDaysSchedule
+import com.project.how.data_class.recyclerview.schedule.AiSchedule
+import com.project.how.data_class.recyclerview.schedule.DaysSchedule
+import com.project.how.data_class.recyclerview.schedule.Schedule
 import com.project.how.data_class.dto.schedule.GetScheduleListResponse
 import com.project.how.data_class.dto.schedule.ScheduleDetail
 import kotlinx.coroutines.flow.Flow

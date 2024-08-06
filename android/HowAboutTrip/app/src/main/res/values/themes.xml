@@ -5,6 +5,7 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowBackground">@color/white</item>
         <item name="android:fontFamily">@font/pretendard</item>
+        <item name="android:textColor">@color/black</item>
         <item name="materialCalendarFullscreenTheme">@style/ThemeOverlay.App.DatePicker</item>
     </style>
 

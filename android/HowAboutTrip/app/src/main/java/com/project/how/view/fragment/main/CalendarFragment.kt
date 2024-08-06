@@ -20,8 +20,8 @@ import com.project.how.BuildConfig
 import com.project.how.R
 import com.project.how.adapter.recyclerview.viewpager.EventViewPagerAdapter
 import com.project.how.adapter.recyclerview.schedule.RecentAddedCalendarsAdapter
-import com.project.how.data_class.recyclerview.EventViewPager
-import com.project.how.data_class.recyclerview.Schedule
+import com.project.how.data_class.recyclerview.schedule.EventViewPager
+import com.project.how.data_class.recyclerview.schedule.Schedule
 import com.project.how.data_class.dto.country.GetCountryLocationResponse
 import com.project.how.data_class.dto.schedule.GetFastestSchedulesResponse
 import com.project.how.data_class.dto.schedule.GetLatestSchedulesResponse
@@ -34,7 +34,6 @@ import com.project.how.view.activity.calendar.CalendarEditActivity
 import com.project.how.view.activity.calendar.CalendarListActivity
 import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
 import com.project.how.view_model.CountryViewModel
-import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -93,7 +92,7 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
             binding.recentAddedCalendar.adapter = recentAddedCalendarAdapter
         }
         lifecycleScope.launch {
-            scheduleViewModel.getLatestSchedules(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken).collect{check->
+            scheduleViewModel.getLatestSchedules().collect{ check->
                 if (check != ScheduleViewModel.SUCCESS){
                     recentAddedCalendar = listOf(GetLatestSchedulesResponseElement(-1, "일정을 생성해보세요!", "없음", BuildConfig.TEMPORARY_IMAGE_URL, listOf<String>("AI 일정 생성", "일반 일정 생성", "편리한 기능들을 체험해보세요.")))
                     recentAddedCalendarAdapter = RecentAddedCalendarsAdapter(recentAddedCalendar, this@CalendarFragment)

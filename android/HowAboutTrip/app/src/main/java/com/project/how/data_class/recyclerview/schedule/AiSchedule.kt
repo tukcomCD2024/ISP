@@ -1,4 +1,4 @@
-package com.project.how.data_class.recyclerview
+package com.project.how.data_class.recyclerview.schedule
 
 import java.io.Serializable
 

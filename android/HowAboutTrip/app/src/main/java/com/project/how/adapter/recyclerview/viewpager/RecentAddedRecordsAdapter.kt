@@ -1,4 +1,4 @@
-package com.project.how.adapter.recyclerview.record
+package com.project.how.adapter.recyclerview.viewpager
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -17,15 +17,17 @@ class RecentAddedRecordsAdapter(
         fun bind(data : RecentAddedRecord){
             binding.titleDate.text = if (data.endDate == null) "${data.startDate}\n${data.title}" else "${data.startDate}\n${data.endDate}\n${data.title}"
 
-            Glide.with(binding.root)
-                .load(data.image)
-                .error(BuildConfig.ERROR_IMAGE_URl)
-                .into(binding.firstImage)
+            if (!data.image.isNullOrBlank() && !data.countryImage.isNullOrBlank()){
+                Glide.with(binding.root)
+                    .load(data.image)
+                    .error(BuildConfig.ERROR_IMAGE_URl)
+                    .into(binding.firstImage)
 
-            Glide.with(binding.root)
-                .load(data.countryImage)
-                .error(BuildConfig.ERROR_IMAGE_URl)
-                .into(binding.secondImage)
+                Glide.with(binding.root)
+                    .load(data.countryImage)
+                    .error(BuildConfig.ERROR_IMAGE_URl)
+                    .into(binding.secondImage)
+            }
         }
     }
 

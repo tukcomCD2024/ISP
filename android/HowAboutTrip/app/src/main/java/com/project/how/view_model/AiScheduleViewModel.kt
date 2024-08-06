@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.how.adapter.recyclerview.schedule.AiDaysScheduleAdapter
-import com.project.how.data_class.recyclerview.AiDaysSchedule
-import com.project.how.data_class.recyclerview.AiSchedule
+import com.project.how.data_class.recyclerview.schedule.AiDaysSchedule
+import com.project.how.data_class.recyclerview.schedule.AiSchedule
 import com.project.how.data_class.AiScheduleListInput
 import com.project.how.data_class.dto.schedule.CreateScheduleListRequest
 import com.project.how.data_class.dto.schedule.CreateScheduleListResponse
@@ -47,39 +47,44 @@ class AiScheduleViewModel : ViewModel() {
                         call: Call<CreateScheduleListResponse>,
                         response: Response<CreateScheduleListResponse>
                     ) {
-                        if(response.isSuccessful){
-                            val result = response.body()
-                            if (result != null){
-                                val data = mutableListOf<AiSchedule>()
-                                if(result.schedules.isEmpty()){
-                                    Log.d("createSchedule", "result.schedules.isEmpty")
-                                    trySend(EMPTY)
-                                }else{
-                                    for (i in result.schedules.indices){
-                                        if (result.schedules[i].schedules.isNotEmpty()) {
-                                            Log.d(
-                                                "createSchedule is success",
-                                                "startDate : ${result.schedules[i].schedules[0].date}"
-                                            )
-                                            data.add(
-                                                getAiSchedule(
-                                                    result.schedules[i],
-                                                    createScheduleListRequest,
-                                                    result.countryImage,
-                                                    i
+                        try {
+                            if(response.isSuccessful){
+                                val result = response.body()
+                                if (result != null){
+                                    val data = mutableListOf<AiSchedule>()
+                                    if(result.schedules.isEmpty()){
+                                        Log.d("createSchedule", "result.schedules.isEmpty")
+                                        trySend(EMPTY)
+                                    }else{
+                                        for (i in result.schedules.indices){
+                                            if (result.schedules[i].schedules.isNotEmpty()) {
+                                                Log.d(
+                                                    "createSchedule is success",
+                                                    "startDate : ${result.schedules[i].schedules[0].date}"
                                                 )
-                                            )
+                                                data.add(
+                                                    getAiSchedule(
+                                                        result.schedules[i],
+                                                        createScheduleListRequest,
+                                                        result.countryImage,
+                                                        i
+                                                    )
+                                                )
+                                            }
                                         }
+                                        aiScheduleRepository.getAiScheduleList(data.toList())
+                                        trySend(SUCCESS)
                                     }
-                                    aiScheduleRepository.getAiScheduleList(data.toList())
-                                    trySend(SUCCESS)
+                                }else{
+                                    Log.d("createSchedule is success", "response.body is null\ncode : ${response.code()}")
+                                    trySend(FAILD)
                                 }
                             }else{
-                                Log.d("createSchedule is success", "response.body is null\ncode : ${response.code()}")
+                                Log.d("createSchedule is not success", "code : ${response.code()}")
                                 trySend(FAILD)
                             }
-                        }else{
-                            Log.d("createSchedule is not success", "code : ${response.code()}")
+                        } catch (e: Exception){
+                            Log.e("createSchedule", "Error : ${e.message}")
                             trySend(FAILD)
                         }
                     }
@@ -111,13 +116,15 @@ class AiScheduleViewModel : ViewModel() {
         for (i in createScheduleResponse.schedules.indices){
             val oneDaySchedule = mutableListOf<AiDaysSchedule>()
             for(j in createScheduleResponse.schedules[i].scheduleDetail.indices){
-                oneDaySchedule.add(AiDaysSchedule(
+                oneDaySchedule.add(
+                    AiDaysSchedule(
                     AiDaysScheduleAdapter.PLACE,
                     createScheduleResponse.schedules[i].scheduleDetail[j].detail,
                     0L,         //임시
                     createScheduleResponse.schedules[i].scheduleDetail[j].detail,
                     createScheduleResponse.schedules[i].scheduleDetail[j].coordinate.latitude,
-                    createScheduleResponse.schedules[i].scheduleDetail[j].coordinate.longitude))
+                    createScheduleResponse.schedules[i].scheduleDetail[j].coordinate.longitude)
+                )
                 place.add(createScheduleResponse.schedules[i].scheduleDetail[j].detail)
             }
             dailySchedule.add(oneDaySchedule)

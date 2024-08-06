@@ -27,9 +27,9 @@ import com.project.how.R
 import com.project.how.adapter.recyclerview.schedule.DaysScheduleEditAdapter
 import com.project.how.adapter.item_touch_helper.RecyclerViewItemTouchHelperCallback
 import com.project.how.adapter.recyclerview.schedule.AiDaysScheduleAdapter
-import com.project.how.data_class.recyclerview.AiSchedule
-import com.project.how.data_class.recyclerview.DaysSchedule
-import com.project.how.data_class.recyclerview.Schedule
+import com.project.how.data_class.recyclerview.schedule.AiSchedule
+import com.project.how.data_class.recyclerview.schedule.DaysSchedule
+import com.project.how.data_class.recyclerview.schedule.Schedule
 import com.project.how.databinding.ActivityCalendarEditBinding
 import com.project.how.interface_af.OnDateTimeListener
 import com.project.how.interface_af.OnDesListener

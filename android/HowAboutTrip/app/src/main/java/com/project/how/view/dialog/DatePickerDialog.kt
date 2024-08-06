@@ -13,7 +13,7 @@ import androidx.core.view.isEmpty
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.project.how.R
-import com.project.how.data_class.recyclerview.DaysSchedule
+import com.project.how.data_class.recyclerview.schedule.DaysSchedule
 import com.project.how.databinding.DialogDatepickerBinding
 import com.project.how.interface_af.OnDateTimeListener
 

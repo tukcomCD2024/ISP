@@ -20,7 +20,6 @@ import retrofit2.http.Query
 
 interface ScheduleService {
 
-    @Headers("No-Authorization: true")
     @POST("gpt/schedules")
     fun createScheduleList(
         @Body createCondition: CreateScheduleListRequest

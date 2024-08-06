@@ -5,7 +5,7 @@
     <data>
         <variable
             name="adapter"
-            type="com.project.how.adapter.recyclerview.record.RecentAddedRecordsAdapter" />
+            type="com.project.how.adapter.recyclerview.viewpager.RecentAddedRecordsAdapter" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -28,7 +28,8 @@
                 android:fontFamily="@font/bm_hanna"
                 android:textSize="20dp"
                 android:text="@string/recent_record_text"
-                android:maxLines="2"
+                android:maxLines="5"
+                android:maxWidth="150dp"
                 android:textColor="@color/white"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
@@ -37,7 +38,7 @@
                 android:id="@+id/second_image"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                app:layout_constraintVertical_bias="0.3"
+                app:layout_constraintVertical_bias="0.05"
                 app:civ_border_color="@color/white"
                 app:civ_border_width="3dp"
                 android:src="@drawable/record_default_back"
@@ -61,6 +62,7 @@
                 android:src="@drawable/record_default"
                 app:civ_border_color="@color/white"
                 app:civ_border_width="3dp"
+                android:layout_marginEnd="30dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.how.R
-import com.project.how.data_class.recyclerview.DaysSchedule
+import com.project.how.data_class.recyclerview.schedule.DaysSchedule
 import com.project.how.databinding.CalendarDaysScheduleItemBinding
 import java.text.NumberFormat
 import java.util.Locale

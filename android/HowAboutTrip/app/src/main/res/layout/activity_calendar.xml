@@ -130,6 +130,7 @@
                         android:drawableStart="@drawable/icon_checklist_size_fixed"
                         android:textColor="@color/black"
                         android:textSize="13dp"
+                        android:onClick="@{()-> calendar.checklist()}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
 

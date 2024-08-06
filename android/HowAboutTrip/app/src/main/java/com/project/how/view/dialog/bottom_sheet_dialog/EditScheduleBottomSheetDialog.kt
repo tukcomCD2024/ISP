@@ -24,7 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.project.how.BuildConfig
 import com.project.how.R
 import com.project.how.adapter.recyclerview.schedule.AiDaysScheduleAdapter
-import com.project.how.data_class.recyclerview.DaysSchedule
+import com.project.how.data_class.recyclerview.schedule.DaysSchedule
 import com.project.how.databinding.EditScheduleBottomSheetBinding
 import com.project.how.interface_af.OnScheduleListener
 import com.project.how.view.dialog.bottom_sheet_dialog.ratio.BottomSheetRatioHeightManager

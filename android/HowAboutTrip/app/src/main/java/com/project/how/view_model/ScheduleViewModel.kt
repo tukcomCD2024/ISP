@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.how.R
 import com.project.how.adapter.recyclerview.schedule.AiDaysScheduleAdapter
-import com.project.how.data_class.recyclerview.AiSchedule
-import com.project.how.data_class.recyclerview.DaysSchedule
-import com.project.how.data_class.recyclerview.Schedule
+import com.project.how.data_class.recyclerview.schedule.AiSchedule
+import com.project.how.data_class.recyclerview.schedule.DaysSchedule
+import com.project.how.data_class.recyclerview.schedule.Schedule
 import com.project.how.data_class.dto.schedule.DailySchedule
 import com.project.how.data_class.dto.schedule.AddCheckListsRequestElement
 import com.project.how.data_class.dto.schedule.CheckList
@@ -93,12 +93,17 @@ class ScheduleViewModel : ViewModel() {
         ScheduleRetrofit.getApiService()?.let { apiService ->
             val callback = object : Callback<String> {
                 override fun onResponse(call: Call<String>, response: Response<String>) {
-                    if (response.isSuccessful) {
-                        Log.d("saveSchedule is success", "response code : ${response.code()}")
-                        trySend(SUCCESS).isSuccess
-                    } else {
-                        Log.d("saveSchedule is not success", "response code : ${response.code()}")
-                        trySend(NETWORK_FAILED).isSuccess
+                    try {
+                        if (response.isSuccessful) {
+                            Log.d("saveSchedule", "response is success\nresponse code : ${response.code()}")
+                            trySend(SUCCESS).isSuccess
+                        } else {
+                            Log.d("saveSchedule", "response is failed\nresponse code : ${response.code()}")
+                            trySend(NETWORK_FAILED).isSuccess
+                        }
+                    }catch (e: Exception){
+                        Log.e("saveSchedule", "Error : ${e.message}")
+                        trySend(NETWORK_FAILED)
                     }
                 }
 
@@ -292,8 +297,7 @@ class ScheduleViewModel : ViewModel() {
         awaitClose()
     }.flowOn(Dispatchers.IO)
 
-    fun getScheduleDetail(context: Context, accessToken: String, id: Long) = callbackFlow<Int> {
-        Log.d("onCreate", "getScheduleDetail start\naccessToken : $accessToken\nid : $id")
+    fun getScheduleDetail(context: Context, id: Long) = callbackFlow<Int> {
         ScheduleRetrofit.getApiService()?.let { apiService ->
             apiService.getScheduleDetail(id)
                 .enqueue(object : Callback<ScheduleDetail> {
@@ -394,7 +398,7 @@ class ScheduleViewModel : ViewModel() {
         }
     }
 
-    fun getLatestSchedules(context: Context, accessToken: String): Flow<Int> = callbackFlow<Int> {
+    fun getLatestSchedules(): Flow<Int> = callbackFlow<Int> {
         ScheduleRetrofit.getApiService()?.let { apiService ->
             apiService.getLatestSchedules(LATEST_COUNT)
                 .enqueue(object : Callback<GetLatestSchedulesResponse> {

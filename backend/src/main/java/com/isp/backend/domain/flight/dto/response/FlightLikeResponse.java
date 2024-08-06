@@ -35,4 +35,8 @@ public class FlightLikeResponse {
 
     private String transferCount;
 
+    private int adult ;
+
+    private int children ;
+
 }

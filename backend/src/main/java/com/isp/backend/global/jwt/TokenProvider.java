@@ -9,10 +9,14 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 
 @Slf4j
@@ -20,8 +24,6 @@ import java.util.Date;
 public class TokenProvider implements InitializingBean {
 
     private final CustomUserDetailsService customUserDetailsService;
-
-//    private final RefreshTokenRepository refreshTokenRepository;
 
     private final String secret;
     private final Long accessExpirationTime;
@@ -83,14 +85,16 @@ public class TokenProvider implements InitializingBean {
         return refreshToken;
     }
 
-    // 토큰에서 정보 추출
-    public Authentication getAuthentication(String token) {
 
+    public Authentication getAuthentication(String token) {
         String uid = parseClaims(token).getSubject();
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(uid);
 
-        return new UsernamePasswordAuthenticationToken(userDetails, token);
+        Collection<? extends GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+
+        return new UsernamePasswordAuthenticationToken(userDetails, token, authorities);
     }
+
 
     // Access Token 검증
     public boolean validateAccessToken(String accessToken) {
@@ -144,7 +148,7 @@ public class TokenProvider implements InitializingBean {
         return false;
     }
 
-
+    // 토큰에서 uid 가져오기
     public String getUid(String token) {
         return parseClaims(token).getSubject();
     }
@@ -158,6 +162,7 @@ public class TokenProvider implements InitializingBean {
                 .getBody();
     }
 
+    // 토큰 만료 시간 가져오기
     private Date getExpirationTime(Long expirationTime) {
         return new Date((new Date()).getTime() + expirationTime);
     }

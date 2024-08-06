@@ -16,7 +16,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         // 인증되지 않은 요청이 들어왔을 때의 처리를 담당 - `commence` 메서드는 예외 처리 및 로깅을 수행한다.
-        log.error("Unauthorized Request : {}", request.getRequestURI());
+        log.error("인증되지 않은 요청입니다. : {}", request.getRequestURI());
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }

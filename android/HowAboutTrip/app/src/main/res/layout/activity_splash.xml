@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/blinker_semibold"
             android:text="@string/how_about_trip"
-            android:textSize="30sp"
+            android:textSize="30dp"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

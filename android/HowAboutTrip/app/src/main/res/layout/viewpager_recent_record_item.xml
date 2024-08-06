@@ -5,7 +5,7 @@
     <data>
         <variable
             name="adapter"
-            type="com.project.how.adapter.recyclerview.schedule.RecentAddedCalendarsAdapter" />
+            type="com.project.how.adapter.recyclerview.record.RecentAddedRecordsAdapter" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/bm_hanna"
-                android:textSize="24sp"
+                android:textSize="20dp"
                 android:text="@string/recent_record_text"
                 android:maxLines="2"
                 android:textColor="@color/white"
@@ -40,7 +40,7 @@
                 app:layout_constraintVertical_bias="0.3"
                 app:civ_border_color="@color/white"
                 app:civ_border_width="3dp"
-                android:src="@color/grey"
+                android:src="@drawable/record_default_back"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -58,7 +58,7 @@
                 android:id="@+id/first_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@color/grey"
+                android:src="@drawable/record_default"
                 app:civ_border_color="@color/white"
                 app:civ_border_width="3dp"
                 app:layout_constraintBottom_toBottomOf="parent"

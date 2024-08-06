@@ -17,7 +17,7 @@
             android:text="준비 중이에요"
             android:gravity="center"
             android:fontFamily="@font/bm_hanna"
-            android:textSize="40sp"/>
+            android:textSize="40dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

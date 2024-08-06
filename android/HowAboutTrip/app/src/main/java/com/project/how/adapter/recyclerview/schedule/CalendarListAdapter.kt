@@ -59,7 +59,6 @@ class CalendarListAdapter (private val context: Context, data : GetScheduleListR
         holder.bind(data, position)
 
         holder.itemView.setOnClickListener {
-
             onButtonClickListener.onItemClickListener(data.id, data.latitude, data.longitude)
         }
     }

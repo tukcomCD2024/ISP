@@ -47,7 +47,7 @@
                 android:fontFamily="@font/bm_hanna"
                 android:text="나만의 일정\n만들기"
                 android:textColor="@color/white"
-                android:textSize="24sp" />
+                android:textSize="24dp" />
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

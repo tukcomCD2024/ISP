@@ -25,6 +25,7 @@ class PictureFragment : Fragment() {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_picture, container, false)
         binding.picture = this
         binding.lifecycleOwner = viewLifecycleOwner
+        binding
         return binding.root
     }
 

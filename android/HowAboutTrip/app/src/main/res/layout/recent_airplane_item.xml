@@ -54,7 +54,7 @@
                     android:text="@string/hotel"
                     android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:textSize="13sp"
+                    android:textSize="13dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     app:layout_constraintStart_toStartOf="parent"

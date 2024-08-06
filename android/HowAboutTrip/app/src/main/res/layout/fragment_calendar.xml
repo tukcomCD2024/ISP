@@ -79,7 +79,7 @@
 
                     <TextView
                         android:id="@+id/d_day"
-                        android:textSize="32sp"
+                        android:textSize="32dp"
                         android:textColor="@color/white"
                         android:fontFamily="@font/bm_hanna"
                         android:layout_width="wrap_content"
@@ -155,7 +155,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/calendar_ai"
                 android:textColor="@color/black"
-                android:textSize="13sp"
+                android:textSize="13dp"
                 android:gravity="center"
                 android:fontFamily="@font/bm_hanna"
                 android:layout_marginTop="5dp"
@@ -169,7 +169,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/calendar_add"
                 android:textColor="@color/black"
-                android:textSize="13sp"
+                android:textSize="13dp"
                 android:gravity="center"
                 android:fontFamily="@font/bm_hanna"
                 android:layout_marginTop="5dp"
@@ -186,7 +186,7 @@
                 android:gravity="center"
                 android:text="@string/calendar_search"
                 android:textColor="@color/black"
-                android:textSize="13sp"
+                android:textSize="13dp"
                 android:layout_marginTop="5dp"
                 android:onClick="@{() -> calendar.moveCalendarList()}"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -209,7 +209,7 @@
                 android:fontFamily="@font/bm_hanna"
                 android:text="@string/recent_added_calendar"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView1" />
 

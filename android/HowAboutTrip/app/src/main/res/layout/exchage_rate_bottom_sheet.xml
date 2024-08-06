@@ -41,7 +41,7 @@
             android:onClick="@{()->exchange.confirm()}"
             android:text="@string/confirm"
             android:textColor="@color/white"
-            android:textSize="13sp"
+            android:textSize="13dp"
             app:layout_constraintBottom_toTopOf="@+id/guideline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/countries" />

@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/airplane"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:gravity="center"
                 android:fontFamily="@font/bm_hanna"
                 android:layout_marginTop="5dp"
@@ -109,7 +109,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/hotel"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:gravity="center"
                 android:fontFamily="@font/bm_hanna"
                 android:layout_marginTop="5dp"
@@ -125,7 +125,7 @@
                 android:gravity="center"
                 android:text="@string/heart"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:layout_marginTop="5dp"
                 android:onClick="@{()-> ticket.moveLike()}"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -140,7 +140,7 @@
                 android:fontFamily="@font/bm_hanna"
                 android:text="@string/recent_airplane"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView1" />
 
@@ -164,7 +164,7 @@
                 android:fontFamily="@font/bm_hanna"
                 android:text="@string/recent_hotel"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recent_airplane" />
 

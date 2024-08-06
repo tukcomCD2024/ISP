@@ -33,4 +33,8 @@ public class FlightLikeRequest {
 
     private String transferCount;
 
+    private int adult ;
+
+    private int children ;
+
 }

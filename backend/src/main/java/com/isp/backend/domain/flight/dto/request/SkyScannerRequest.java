@@ -17,7 +17,7 @@ public class SkyScannerRequest {
 
     private String returnDate;
 
-    private int adults;
+    private int adult;
 
     private int children;
 

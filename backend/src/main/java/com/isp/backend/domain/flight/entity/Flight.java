@@ -49,5 +49,9 @@ public class Flight {
 
     private int transferCount ;
 
+    private int adult ;
+
+    private int children ;
+
 
 }

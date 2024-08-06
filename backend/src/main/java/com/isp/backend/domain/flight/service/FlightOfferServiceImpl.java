@@ -82,7 +82,7 @@ public class FlightOfferServiceImpl implements FlightOfferService {
         String url = "https://www.skyscanner.co.kr/transport/flights/" +
                 request.getDepartureIataCode().toLowerCase() + "/" +
                 request.getArrivalIataCode().toLowerCase() + "/" +
-                departureDate + returnDate + "?adultsv2=" + request.getAdults() + childrenParam +
+                departureDate + returnDate + "?adultsv2=" + request.getAdult() + childrenParam +
                 "&departure-times=" + departureTimeMinutes +
                 "&inboundaltsenabled=false&outboundaltsenabled=false&ref=home&rtn=" + (returnDate.isEmpty() ? "0" : "1");
 

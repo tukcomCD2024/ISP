@@ -18,7 +18,5 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         // 인가되지 않은(권한이 없는) 요청이 들어왔을 때의 처리를 담당 - `handle` 메서드는 예외 처리 및 로깅을 수행한다.
         log.error("Forbidden Request : {}", request.getRequestURI());
         response.sendError(HttpServletResponse.SC_FORBIDDEN);
-
     }
-
 }

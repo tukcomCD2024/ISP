@@ -28,6 +28,8 @@ public class FlightMapper {
                 .departureIataCode(departureIataCode)
                 .arrivalIataCode(arrivalIataCode)
                 .transferCount(Integer.parseInt(request.getTransferCount()))
+                .adult(request.getAdult())
+                .children(request.getChildren())
                 .build();
     }
 
@@ -45,6 +47,8 @@ public class FlightMapper {
         response.setDepartureIataCode(flight.getDepartureIataCode().getAirportCode());
         response.setArrivalIataCode(flight.getArrivalIataCode().getAirportCode());
         response.setTransferCount(String.valueOf(flight.getTransferCount()));
+        response.setAdult(flight.getAdult());
+        response.setChildren(flight.getChildren());
         return response;
     }
 

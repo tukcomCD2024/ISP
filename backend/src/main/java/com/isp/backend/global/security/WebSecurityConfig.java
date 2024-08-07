@@ -27,6 +27,7 @@ public class WebSecurityConfig {
             "/members/login",
             "/members/refresh",
             "/members/test",
+            "/gpt/schedules",
             "/error",
             "/h2-console/**"
     };

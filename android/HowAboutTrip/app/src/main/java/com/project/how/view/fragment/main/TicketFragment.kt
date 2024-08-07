@@ -15,7 +15,7 @@ import com.project.how.adapter.recyclerview.booking.airplane.RecentAirplaneAdapt
 import com.project.how.adapter.recyclerview.booking.hotel.RecentHotelAdapter
 import com.project.how.adapter.recyclerview.viewpager.EventTicketViewPagerAdapter
 import com.project.how.data_class.recyclerview.schedule.EventViewPager
-import com.project.how.data_class.recyclerview.RecentHotel
+import com.project.how.data_class.recyclerview.ticket.RecentHotel
 import com.project.how.data_class.roomdb.RecentAirplane
 import com.project.how.databinding.FragmentTicketBinding
 import com.project.how.view.activity.mypage.LikeActivity

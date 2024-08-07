@@ -1,4 +1,4 @@
-package com.project.how.data_class.recyclerview
+package com.project.how.data_class.recyclerview.record
 
 data class RecentAddedRecord(
     val id : Long,

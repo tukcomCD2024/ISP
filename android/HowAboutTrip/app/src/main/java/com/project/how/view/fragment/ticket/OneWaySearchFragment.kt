@@ -24,7 +24,6 @@ import com.project.how.view.activity.ticket.OneWayAirplaneListActivity
 import com.project.how.view.dialog.ConfirmDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.AirportBottomSheetDialog
 import com.project.how.view_model.BookingViewModel
-import com.project.how.view_model.MemberViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -119,7 +118,7 @@ class OneWaySearchFragment(private val onLoadListener: OnLoadListener) : Fragmen
                     50,
                     nonStop
                 )
-                bookingViewModel.getFlightOffers(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken, input).collect{check->
+                bookingViewModel.getFlightOffers(input).collect{ check->
                     setEnabled()
                     onLoadListener.onLoadFinishListener()
                     when(check){

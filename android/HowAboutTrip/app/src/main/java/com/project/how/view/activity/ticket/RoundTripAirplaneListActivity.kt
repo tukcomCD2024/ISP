@@ -18,12 +18,11 @@ import com.project.how.data_class.dto.booking.airplane.GetFlightOffersRequest
 import com.project.how.data_class.dto.booking.airplane.GetFlightOffersResponseElement
 import com.project.how.data_class.dto.booking.airplane.LikeFlightElement
 import com.project.how.data_class.dto.booking.airplane.RoundTripFlightOffers
+import com.project.how.data_class.recyclerview.ticket.FlightMember
 import com.project.how.data_class.roomdb.RecentAirplane
 import com.project.how.databinding.ActivityRoundTripAirplaneListBinding
 import com.project.how.view.activity.calendar.CalendarEditActivity
-import com.project.how.view.dialog.bottom_sheet_dialog.WebViewBottomSheetDialog
 import com.project.how.view_model.BookingViewModel
-import com.project.how.view_model.MemberViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -48,7 +47,7 @@ class RoundTripAirplaneListActivity : AppCompatActivity(), RoundTripAirplaneList
         bookingViewModel.getLikeFlightList(lid)
         Log.d("RoundTripAirplaneListActivity", "data.size = ${data.size}\ndata[0] : ${data[0].id}")
 
-        adapter = RoundTripAirplaneListAdapter(this, data, lid,this)
+        adapter = RoundTripAirplaneListAdapter(this, data, lid, this, null)
         binding.airplaneList.adapter = adapter
 
         input = CalendarEditActivity.getSerializable(this,
@@ -84,7 +83,10 @@ class RoundTripAirplaneListActivity : AppCompatActivity(), RoundTripAirplaneList
         }
     }
 
-    override fun onItemClickerListener(data: GetFlightOffersResponseElement) {
+    override fun onItemClickerListener(
+        data: GetFlightOffersResponseElement,
+        flightMember: FlightMember?
+    ) {
         lifecycleScope.launch {
             clicked = data
             val request = GenerateSkyscannerUrlRequest(
@@ -97,7 +99,7 @@ class RoundTripAirplaneListActivity : AppCompatActivity(), RoundTripAirplaneList
                 data.abroadDuration,
                 data.transferCount
             )
-            bookingViewModel.generateSkyscannerUrl(this@RoundTripAirplaneListActivity, MemberViewModel.tokensLiveData.value!!.accessToken, request).collect{ check->
+            bookingViewModel.generateSkyscannerUrl(request).collect{ check->
                 when(check){
                     BookingViewModel.NOT_EXIST->{
                         Toast.makeText(this@RoundTripAirplaneListActivity, getString(R.string.not_exist_flight_offers), Toast.LENGTH_SHORT).show()
@@ -118,7 +120,7 @@ class RoundTripAirplaneListActivity : AppCompatActivity(), RoundTripAirplaneList
     ) {
         lifecycleScope.launch{
             if (check){
-                bookingViewModel.unlike(this@RoundTripAirplaneListActivity, MemberViewModel.tokensLiveData.value!!.accessToken, id, position).collect{c->
+                bookingViewModel.unlike(id, position).collect{ c->
                     when(c){
                         BookingViewModel.NOT_EXIST->{
                             Toast.makeText(this@RoundTripAirplaneListActivity,
@@ -146,9 +148,11 @@ class RoundTripAirplaneListActivity : AppCompatActivity(), RoundTripAirplaneList
                     data.departureIataCode,
                     data.arrivalIataCode,
                     data.nonstop,
-                    data.transferCount
+                    data.transferCount,
+                    input.adults,
+                    input.children
                 )
-                bookingViewModel.like(this@RoundTripAirplaneListActivity, MemberViewModel.tokensLiveData.value!!.accessToken, lowf, position).collect{c->
+                bookingViewModel.like(lowf, position).collect{ c->
                     if (c != BookingViewModel.SUCCESS){
                         Toast.makeText(this@RoundTripAirplaneListActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
                     }

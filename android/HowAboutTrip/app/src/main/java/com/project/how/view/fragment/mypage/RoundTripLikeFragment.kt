@@ -1,5 +1,7 @@
 package com.project.how.view.fragment.mypage
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,12 +13,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.project.how.R
 import com.project.how.adapter.recyclerview.booking.airplane.RoundTripAirplaneListAdapter
+import com.project.how.data_class.dto.booking.airplane.GenerateSkyscannerUrlRequest
 import com.project.how.data_class.dto.booking.airplane.GetFlightOffersResponseElement
-import com.project.how.data_class.dto.booking.airplane.LikeFlightElement
+import com.project.how.data_class.recyclerview.ticket.FlightMember
 import com.project.how.databinding.FragmentRoundTripLikeBinding
 import com.project.how.view_model.BookingViewModel
-import com.project.how.view_model.MemberViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -28,6 +31,8 @@ class RoundTripLikeFragment : Fragment(), RoundTripAirplaneListAdapter.OnItemCli
     private val data = arrayListOf<GetFlightOffersResponseElement>()
     private lateinit var adapter: RoundTripAirplaneListAdapter
     private lateinit var lid : MutableList<Long>
+    private lateinit var member : MutableList<FlightMember>
+    private var clicked = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,11 +42,13 @@ class RoundTripLikeFragment : Fragment(), RoundTripAirplaneListAdapter.OnItemCli
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_round_trip_like, container, false)
         bookingViewModel.likeFlightLiveData.observe(viewLifecycleOwner){likes->
             lid = mutableListOf<Long>()
+            member = mutableListOf()
             data.clear()
 
             likes.forEachIndexed { index, d ->
                 if (d.homeDuration != null){
                     lid.add(d.id)
+                    member.add(FlightMember(d.adult, d.children))
                     data.add(
                         GetFlightOffersResponseElement(
                             d.id.toString(),
@@ -61,13 +68,21 @@ class RoundTripLikeFragment : Fragment(), RoundTripAirplaneListAdapter.OnItemCli
                     )
                 }
             }
-            adapter = RoundTripAirplaneListAdapter(requireContext(), data, lid,this)
+            adapter = RoundTripAirplaneListAdapter(requireContext(), data, lid, this, member)
             binding.airplaneList.adapter = adapter
             adapter.unlock()
         }
         bookingViewModel.likeFlightListLiveData.observe(viewLifecycleOwner){
             lid = it
         }
+        bookingViewModel.skyscannerUrlLiveData.observe(viewLifecycleOwner){url->
+            if (clicked){
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                startActivity(intent)
+                clicked = false
+            }
+        }
+
         return binding.root
 
     }
@@ -80,7 +95,7 @@ class RoundTripLikeFragment : Fragment(), RoundTripAirplaneListAdapter.OnItemCli
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch {
-            bookingViewModel.getLikeFlight(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken).collect{ check->
+            bookingViewModel.getLikeFlight().collect{ check->
                 if (check != BookingViewModel.SUCCESS){
                     Toast.makeText(requireContext(), getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
                 }
@@ -89,8 +104,28 @@ class RoundTripLikeFragment : Fragment(), RoundTripAirplaneListAdapter.OnItemCli
 
     }
 
-    override fun onItemClickerListener(data: GetFlightOffersResponseElement) {
-
+    override fun onItemClickerListener(
+        data: GetFlightOffersResponseElement,
+        flightMember: FlightMember?
+    ) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            clicked = true
+            bookingViewModel.generateSkyscannerUrl(
+                GenerateSkyscannerUrlRequest(
+                    data.departureIataCode,
+                    data.arrivalIataCode,
+                    data.abroadDepartureTime.split(" ")[0],
+                    data.homeArrivalTime.split(" ")[0],
+                    flightMember?.adult ?: 1L,
+                    flightMember?.children ?: 0L,
+                    data.abroadDuration,
+                    data.transferCount
+                )
+            ).collect{
+                if (it != BookingViewModel.SUCCESS)
+                    clicked = false
+            }
+        }
     }
 
     override fun onHeartClickerListener(
@@ -101,7 +136,7 @@ class RoundTripLikeFragment : Fragment(), RoundTripAirplaneListAdapter.OnItemCli
     ) {
         lifecycleScope.launch {
             if (check){
-                bookingViewModel.unlike(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken, id, position).collect{c->
+                bookingViewModel.unlike(id, position).collect{ c->
                     when(c){
                         BookingViewModel.SUCCESS->{
                             adapter.remove(position)
@@ -117,26 +152,6 @@ class RoundTripLikeFragment : Fragment(), RoundTripAirplaneListAdapter.OnItemCli
                         BookingViewModel.NETWORK_FAILED->{
                             Toast.makeText(requireContext(), getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
                         }
-                    }
-                }
-            }else{
-                val lf = LikeFlightElement(
-                    data.carrierCode,
-                    data.totalPrice,
-                    data.abroadDuration,
-                    data.abroadDepartureTime,
-                    data.abroadArrivalTime,
-                    data.homeDuration,
-                    data.homeDepartureTime,
-                    data.homeArrivalTime,
-                    data.departureIataCode,
-                    data.arrivalIataCode,
-                    data.nonstop,
-                    data.transferCount
-                )
-                bookingViewModel.like(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken, lf, position).collect{c->
-                    if (c != BookingViewModel.SUCCESS){
-                        Toast.makeText(requireContext(), getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
                     }
                 }
             }

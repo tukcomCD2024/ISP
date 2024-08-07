@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.how.BuildConfig
-import com.project.how.data_class.recyclerview.RecentHotel
+import com.project.how.data_class.recyclerview.ticket.RecentHotel
 import com.project.how.databinding.RecentHotelItemBinding
 
 class RecentHotelAdapter(recentHotel : List<RecentHotel>, private val onItemClickListener: OnItemClickListener)

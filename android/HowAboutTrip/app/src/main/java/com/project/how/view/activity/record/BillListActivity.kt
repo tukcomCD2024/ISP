@@ -5,17 +5,37 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.databinding.DataBindingUtil
+import com.project.how.BuildConfig
 import com.project.how.R
+import com.project.how.adapter.recyclerview.record.BillListAdapter
+import com.project.how.data_class.recyclerview.record.Bill
+import com.project.how.databinding.ActivityBillListBinding
 
-class BillListActivity : AppCompatActivity() {
+class BillListActivity : AppCompatActivity(), BillListAdapter.OnItemClickListener {
+    private lateinit var binding : ActivityBillListBinding
+    private lateinit var adapter : BillListAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_bill_list)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_bill_list)
+        binding.bill = this
+        binding.lifecycleOwner = this
+        adapter = BillListAdapter(listOf<Bill>(
+            Bill(1, BuildConfig.TEMPORARY_IMAGE_URL, "Temporary1", "2024.01.20 - 2024.01.24", 0, 3 )
+        ),
+            this, this)
+        binding.billList.adapter = adapter
+    }
+
+    fun add(){
+
+    }
+
+    override fun onItemClickListener(id: Long) {
+
+    }
+
+    override fun onDeleteButtonClickListener(id: Long, position: Int) {
+        adapter.delete(position)
     }
 }

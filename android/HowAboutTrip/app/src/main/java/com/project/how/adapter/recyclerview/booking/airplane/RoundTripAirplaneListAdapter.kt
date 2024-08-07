@@ -7,13 +7,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.how.R
 import com.project.how.data_class.dto.booking.airplane.GetFlightOffersResponseElement
+import com.project.how.data_class.recyclerview.ticket.FlightMember
 import com.project.how.databinding.RoundTripAirplaneListItemBinding
 import java.text.NumberFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-class RoundTripAirplaneListAdapter(private val context: Context, private val data : ArrayList<GetFlightOffersResponseElement>, lid : MutableList<Long>, private val onItemClickListener : OnItemClickListener) : RecyclerView.Adapter<RoundTripAirplaneListAdapter.ViewHolder>(){
+class RoundTripAirplaneListAdapter(
+    private val context: Context,
+    private val data: ArrayList<GetFlightOffersResponseElement>,
+    lid: MutableList<Long>,
+    private val onItemClickListener: OnItemClickListener,
+    private val flightMember: List<FlightMember>?
+) : RecyclerView.Adapter<RoundTripAirplaneListAdapter.ViewHolder>(){
     private val hearts = lid.map { it > 0 }.toMutableList()
     private var likeId = lid
     private var heartClickable = false
@@ -108,7 +115,7 @@ class RoundTripAirplaneListAdapter(private val context: Context, private val dat
         val d = data[position]
         holder.bind(d, position)
         holder.itemView.setOnClickListener {
-            onItemClickListener.onItemClickerListener(d)
+            onItemClickListener.onItemClickerListener(d, if (flightMember.isNullOrEmpty()) null else flightMember!![position])
         }
     }
 
@@ -158,7 +165,10 @@ class RoundTripAirplaneListAdapter(private val context: Context, private val dat
     private fun getFormattedNumber(price : Long) : String = NumberFormat.getNumberInstance(Locale.US).format(price)
 
     interface OnItemClickListener{
-        fun onItemClickerListener(data : GetFlightOffersResponseElement)
+        fun onItemClickerListener(
+            data: GetFlightOffersResponseElement,
+            flightMember: FlightMember?
+        )
         fun onHeartClickerListener(
             check: Boolean,
             data: GetFlightOffersResponseElement,

@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.how.R
 import com.project.how.adapter.recyclerview.viewpager.RecentAddedRecordsAdapter
-import com.project.how.data_class.recyclerview.RecentAddedRecord
+import com.project.how.data_class.recyclerview.record.RecentAddedRecord
 import com.project.how.databinding.FragmentRecordBinding
 import com.project.how.view.activity.record.BillListActivity
 import com.project.how.view.activity.record.LocationMapActivity

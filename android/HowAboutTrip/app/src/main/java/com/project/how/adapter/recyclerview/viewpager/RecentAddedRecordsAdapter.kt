@@ -20,12 +20,12 @@ class RecentAddedRecordsAdapter(
             if (!data.image.isNullOrBlank() && !data.countryImage.isNullOrBlank()){
                 Glide.with(binding.root)
                     .load(data.image)
-                    .error(BuildConfig.ERROR_IMAGE_URl)
+                    .error(BuildConfig.ERROR_IMAGE_URL)
                     .into(binding.firstImage)
 
                 Glide.with(binding.root)
                     .load(data.countryImage)
-                    .error(BuildConfig.ERROR_IMAGE_URl)
+                    .error(BuildConfig.ERROR_IMAGE_URL)
                     .into(binding.secondImage)
             }
         }

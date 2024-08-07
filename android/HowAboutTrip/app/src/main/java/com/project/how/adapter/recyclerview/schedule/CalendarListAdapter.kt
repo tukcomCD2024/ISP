@@ -29,7 +29,7 @@ class CalendarListAdapter (private val context: Context, data : GetScheduleListR
             Log.d("CalendarListAdapter", "$position\n${data.imageUrl}")
             Glide.with(binding.root)
                 .load(data.imageUrl)
-                .error(BuildConfig.ERROR_IMAGE_URl)
+                .error(BuildConfig.ERROR_IMAGE_URL)
                 .into(binding.image)
 
             binding.delete.setOnClickListener {

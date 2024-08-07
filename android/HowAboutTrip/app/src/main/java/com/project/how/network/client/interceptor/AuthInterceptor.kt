@@ -32,7 +32,7 @@ class AuthInterceptor(@ApplicationContext private val context: Context) : Interc
             var request = requestBuilder.build()
 
             var response: Response = chain.proceed(request)
-            if (response.code == 400) {
+            if (response.code == 400 || response.code == 401) {
                 response.close() // 기존 응답 닫기
 
                 synchronized(this) {

@@ -51,7 +51,7 @@ class WeatherActivity : AppCompatActivity(), OnAirportListener {
             binding.description.text = it.description
             Glide.with(binding.root)
                 .load(it.iconUrl)
-                .error(BuildConfig.ERROR_IMAGE_URl)
+                .error(BuildConfig.ERROR_IMAGE_URL)
                 .into(binding.image)
         }
 

@@ -39,7 +39,7 @@ class AiScheduleAdapter(private val context: Context, data : List<AiSchedule>, p
                 binding.places.text = getPlacesText(data.places)
                 Glide.with(binding.root)
                     .load(data.image)
-                    .error(BuildConfig.ERROR_IMAGE_URl)
+                    .error(BuildConfig.ERROR_IMAGE_URL)
                     .into(binding.image)
 
                 setDaysTab(binding, data.dailySchedule.size)

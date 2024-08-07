@@ -104,7 +104,7 @@
                 android:id="@+id/bill"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="6dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/location"
                 app:layout_constraintStart_toStartOf="parent"
@@ -114,6 +114,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:padding="10dp"
                     android:onClick="@{()-> picture.moveBillList()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
@@ -123,6 +124,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:src="@drawable/icon_bill"
+                        android:clickable="false"
+                        android:focusable="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -133,6 +136,8 @@
                         android:layout_marginTop="5dp"
                         android:fontFamily="@font/bm_hanna"
                         android:gravity="center"
+                        android:clickable="false"
+                        android:focusable="false"
                         android:text="@string/bill"
                         android:textSize="13dp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -147,7 +152,7 @@
                 android:id="@+id/location"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="6dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/bill"
                 app:layout_constraintTop_toBottomOf="@+id/recent_record">
@@ -155,6 +160,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:padding="10dp"
                     android:onClick="@{()-> picture.moveLocationMap()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
@@ -163,6 +169,8 @@
                         android:id="@+id/imageView4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:focusable="false"
                         android:src="@drawable/icon_location_linear"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -174,6 +182,8 @@
                         android:layout_marginTop="5dp"
                         android:fontFamily="@font/bm_hanna"
                         android:gravity="center"
+                        android:clickable="false"
+                        android:focusable="false"
                         android:text="@string/picture_record"
                         android:textSize="13dp"
                         app:layout_constraintEnd_toEndOf="parent"

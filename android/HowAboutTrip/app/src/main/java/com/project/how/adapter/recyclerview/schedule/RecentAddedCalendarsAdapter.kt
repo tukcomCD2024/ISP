@@ -20,7 +20,7 @@ class RecentAddedCalendarsAdapter(data : GetLatestSchedulesResponse, private val
             binding.places.text = getPlacesString(data.plan)
             Glide.with(binding.root)
                 .load(data.imageUrl)
-                .error(BuildConfig.ERROR_IMAGE_URl)
+                .error(BuildConfig.ERROR_IMAGE_URL)
                 .into(binding.image)
         }
     }

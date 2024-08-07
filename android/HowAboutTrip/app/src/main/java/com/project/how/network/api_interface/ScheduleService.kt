@@ -19,7 +19,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ScheduleService {
-
     @POST("gpt/schedules")
     fun createScheduleList(
         @Body createCondition: CreateScheduleListRequest

@@ -114,7 +114,7 @@
                 android:id="@+id/ai_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="6dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/schedule"
                 app:layout_constraintEnd_toStartOf="@id/add_layout">
@@ -122,6 +122,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:padding="10dp"
                     android:onClick="@{() -> calendar.moveAddAICalendar()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
@@ -132,6 +133,8 @@
                         android:layout_height="35dp"
                         android:background="@android:color/transparent"
                         android:scaleType="fitCenter"
+                        android:clickable="false"
+                        android:focusable="false"
                         android:src="@drawable/icon_ai_calendar_linear"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -146,6 +149,8 @@
                         android:text="@string/calendar_ai"
                         android:textColor="@color/black"
                         android:textSize="13dp"
+                        android:clickable="false"
+                        android:focusable="false"
                         android:layout_marginTop="5dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -158,13 +163,14 @@
                 android:id="@+id/add_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="6dp"
                 app:layout_constraintStart_toEndOf="@+id/ai_layout"
                 app:layout_constraintTop_toBottomOf="@+id/schedule"
                 app:layout_constraintEnd_toStartOf="@id/search_layout">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:padding="10dp"
                     android:onClick="@{() -> calendar.add()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
@@ -176,6 +182,8 @@
                         android:background="@android:color/transparent"
                         android:scaleType="fitCenter"
                         android:src="@drawable/icon_calendar_add"
+                        android:clickable="false"
+                        android:focusable="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
@@ -189,6 +197,8 @@
                         android:gravity="center"
                         android:fontFamily="@font/bm_hanna"
                         android:layout_marginTop="5dp"
+                        android:clickable="false"
+                        android:focusable="false"
                         app:layout_constraintTop_toBottomOf="@+id/add"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"/>
@@ -201,7 +211,7 @@
                 android:id="@+id/search_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="6dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/add_layout"
                 app:layout_constraintTop_toBottomOf="@+id/schedule">
@@ -209,6 +219,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:padding="10dp"
                     android:onClick="@{()-> calendar.moveCalendarList()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
@@ -219,6 +230,8 @@
                         android:layout_height="35dp"
                         android:background="@android:color/transparent"
                         android:scaleType="fitCenter"
+                        android:clickable="false"
+                        android:focusable="false"
                         android:src="@drawable/icon_calendar_search"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -234,6 +247,8 @@
                         android:text="@string/calendar_search"
                         android:textColor="@color/black"
                         android:textSize="13dp"
+                        android:clickable="false"
+                        android:focusable="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/search" />
@@ -255,7 +270,7 @@
                 android:id="@+id/textView10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="30dp"
                 android:fontFamily="@font/bm_hanna"
                 android:text="@string/recent_added_calendar"
                 android:textColor="@color/black"

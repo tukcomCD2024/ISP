@@ -60,7 +60,7 @@ class AiScheduleDialog(private val data : AiSchedule, private val onAddListener:
             binding.title.text = data.title
             Glide.with(binding.root)
                 .load(data.image)
-                .error(BuildConfig.ERROR_IMAGE_URl)
+                .error(BuildConfig.ERROR_IMAGE_URL)
                 .into(binding.image)
             binding.places.text = getPlacesText(data.places)
             setDaysTab()

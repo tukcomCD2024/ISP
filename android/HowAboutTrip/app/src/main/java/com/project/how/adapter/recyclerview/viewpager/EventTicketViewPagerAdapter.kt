@@ -22,12 +22,12 @@ class EventTicketViewPagerAdapter(eventInfo : List<EventViewPager>)
             if(data.image == null){
                 Glide.with(binding.root)
                     .load("https://img.freepik.com/free-photo/famous-tower-bridge-in-the-evening-london-england_268835-1390.jpg?w=1380&t=st=1711373689~exp=1711374289~hmac=48368a0b7fab5f7d212f39979735f02fd5ed184aab1ef0e8535de2e856482de6")
-                    .error(BuildConfig.ERROR_IMAGE_URl)
+                    .error(BuildConfig.ERROR_IMAGE_URL)
                     .into(binding.image)
             }else{
                 Glide.with(binding.root)
                     .load(data.image)
-                    .error(BuildConfig.ERROR_IMAGE_URl)
+                    .error(BuildConfig.ERROR_IMAGE_URL)
                     .into(binding.image)
             }
         }

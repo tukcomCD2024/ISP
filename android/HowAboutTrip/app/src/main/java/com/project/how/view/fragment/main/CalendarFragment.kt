@@ -81,7 +81,7 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
             val dDay = resources.getString(R.string.d_day) + if (nearSchedule!!.dday.toInt() == 0) getString(R.string.d_day_zero) else nearSchedule!!.dday.toString()
             Glide.with(binding.root)
                 .load(nearSchedule!!.imageUrl)
-                .error(BuildConfig.ERROR_IMAGE_URl)
+                .error(BuildConfig.ERROR_IMAGE_URL)
                 .into(binding.scheduleImage)
             binding.dDay.text = dDay
             binding.scheduleTitle.text = nearSchedule!!.scheduleName

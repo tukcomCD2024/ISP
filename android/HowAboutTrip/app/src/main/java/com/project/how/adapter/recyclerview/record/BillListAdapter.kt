@@ -8,7 +8,7 @@ class BillListAdapter (
 
 ) : RecyclerView.Adapter<BillListAdapter.ViewHolder>(){
     inner class ViewHolder(val binding: BillListItemBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(data : ){
+        fun bind(){
 
         }
     }

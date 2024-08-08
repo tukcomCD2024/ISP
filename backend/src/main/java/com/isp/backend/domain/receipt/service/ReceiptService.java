@@ -12,6 +12,7 @@ import com.isp.backend.domain.schedule.repository.ScheduleRepository;
 import com.isp.backend.global.exception.Image.ImageAlreadyExistingException;
 import com.isp.backend.global.exception.receipt.ReceiptNotFoundException;
 import com.isp.backend.global.exception.schedule.ScheduleNotFoundException;
+import com.isp.backend.global.s3.constant.S3BucketDirectory;
 import com.isp.backend.global.s3.service.S3ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,12 +35,19 @@ public class ReceiptService {
      * 영수증 저장 API
      **/
     @Transactional
-    public Long saveReceipt(SaveReceiptRequest request) {
+    public Long saveReceipt(SaveReceiptRequest request,MultipartFile receiptImg) {
         // 일정 정보 확인
         Schedule findSchedule = validateSchedule(request.getScheduleId());
 
         // 데이터 변환 및 저장
         Receipt receipt = receiptMapper.toEntity(request, findSchedule);
+
+        // 영수증 사진 저장
+        if (receiptImg != null && !receiptImg.isEmpty()) {
+            String receiptImgUrl = s3ImageService.create(receiptImg, "RECEIPT" );
+            receipt.setReceiptImg(receiptImgUrl);
+        }
+
         receiptRepository.save(receipt);
 
         for (ReceiptDetailRequest detailRequest : request.getReceiptDetails()) {

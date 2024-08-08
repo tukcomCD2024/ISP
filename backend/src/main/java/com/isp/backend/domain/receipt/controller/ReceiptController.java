@@ -18,11 +18,11 @@ public class ReceiptController {
 
 
     /** 영수증 저장 API **/
-    @PostMapping("/image")
-    public ResponseEntity<Long> saveReceipt(@RequestBody SaveReceiptRequest request) {
-        Long receiptId = receiptService.saveReceipt(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(receiptId);
-    }
+//    @PostMapping("/image")
+//    public ResponseEntity<Long> saveReceipt(@RequestBody SaveReceiptRequest request) {
+//        Long receiptId = receiptService.saveReceipt(request);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(receiptId);
+//    }
 
     /** 영수증 사진 저장 API **/
     @PostMapping("/{receiptId}/image")
@@ -30,6 +30,15 @@ public class ReceiptController {
                                                   @RequestParam("receiptImg") MultipartFile receiptImg) {
         receiptService.saveReceiptImg(receiptId, receiptImg);
         return ResponseEntity.ok().build();
+    }
+
+    /** 영수증 저장 + 사진 API **/
+    @PostMapping
+    public ResponseEntity<Long> saveReceipt(
+            @RequestPart("request") @RequestBody SaveReceiptRequest request,
+            @RequestPart(value = "receiptImg", required = false) MultipartFile receiptImg) {
+        Long receiptId = receiptService.saveReceipt(request, receiptImg);
+        return ResponseEntity.status(HttpStatus.CREATED).body(receiptId);
     }
 
 

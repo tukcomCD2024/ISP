@@ -18,6 +18,7 @@ public enum ErrorCode {
 
     // Image
     DIRECTORY_NAME_NOTFOUND(HttpStatus.NOT_FOUND,"I001","S3에서 해당 디렉토리의 이름을 찾을 수 없습니다."),
+    IMAGE_ALREADY_EXISTING(HttpStatus.BAD_REQUEST, "I002", "이미지가 이미 저장되어 있습니다."),
 
     // Schedule
     COUNTRY_NOT_FOUND(HttpStatus.NOT_FOUND, "S001", "여행할 국가를 찾을 수 없습니다."),
@@ -26,6 +27,9 @@ public enum ErrorCode {
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "S004", "이미지를 찾을 수 없습니다."),
     IATA_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "S005", "해당 국가의 공항 코드를 찾을 수 없습니다."),
     CHECK_LIST_NOT_FOUND(HttpStatus.NOT_FOUND, "S006", "체크리스트를 찾을 수 없습니다"),
+
+    // Receipt
+    RECEIPT_NOT_FOUND(HttpStatus.NOT_FOUND, "R001", "헤딩 영수증 ID를 찾을 수 없습니다."),
 
     // Open API
     AMADEUS_SEARCH_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"F001", "아마데우스 요청을 가져오는 중 오류를 발생했습니다."),

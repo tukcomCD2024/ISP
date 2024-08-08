@@ -25,12 +25,12 @@ public class S3ImageService {
     }
 
     private String mapDirectory(String directory) {
-        if (S3BucketDirectory.valueOf(directory) == S3BucketDirectory.IMAGE ||
-                S3BucketDirectory.valueOf(directory) == S3BucketDirectory.PHOTO) {
-            return S3BucketDirectory.valueOf(directory).getDirectory();
+        if (S3BucketDirectory.isValidDirectory(directory)) {
+            return S3BucketDirectory.getDirectoryByName(directory);
         } else {
             throw new DirectoryNameNotFoundException();
         }
     }
+
 
 }

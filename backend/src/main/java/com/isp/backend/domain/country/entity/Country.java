@@ -35,14 +35,6 @@ public class Country {
 
     private String currencyCode ;
 
-<<<<<<< Updated upstream
-    @OneToMany (mappedBy = "country")
-    private List<Schedule> schedules;
-=======
     private String currencyName ;
-
-//    @OneToMany (mappedBy = "country")
-//    private List<Schedule> schedules;
->>>>>>> Stashed changes
 
 }

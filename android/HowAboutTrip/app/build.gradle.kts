@@ -42,6 +42,8 @@ android {
         buildConfigField("String", "TEMPORARY_IMAGE_URL", getApiKey("temporary_image_url"))
         buildConfigField("String", "ERROR_IMAGE_URL", getApiKey("ERROR_IMAGE_URL"))
         buildConfigField("String", "USER_AGENT", getApiKey("user_agent"))
+        buildConfigField("String", "OCR_SERVER_URL", getApiKey("taggun_url"))
+        buildConfigField("String", "OCR_API_KEY", getApiKey("taggun_api_key"))
     }
 
     buildTypes {

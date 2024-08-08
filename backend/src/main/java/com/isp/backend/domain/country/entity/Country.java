@@ -35,7 +35,6 @@ public class Country {
 
     private String currencyCode ;
 
-    @OneToMany (mappedBy = "country")
-    private List<Schedule> schedules;
+    private String currencyName ;
 
 }

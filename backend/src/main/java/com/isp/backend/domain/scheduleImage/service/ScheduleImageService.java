@@ -22,7 +22,7 @@ public class ScheduleImageService implements SaveImageService {
 	@Override
 	public SaveScheduleImageResponse save(SaveScheduleImageRequest request, MultipartFile image) {
 		String imagePath = scheduleImageS3Repository.save(request, image);
-		Schedule schedule = scheduleRepository.findById(request.scheduleId()).orElseThrow(IllegalArgumentException::new);
+		Schedule schedule = scheduleRepository.findById(request.getScheduleId()).orElseThrow(IllegalArgumentException::new);
 		ScheduleImage scheduleImage = new ScheduleImage(schedule, imagePath);
 
 		scheduleImageRepository.save(scheduleImage);

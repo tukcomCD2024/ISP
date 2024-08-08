@@ -28,7 +28,7 @@ public class ScheduleImageS3Repository {
 	}
 
 	public String save(SaveScheduleImageRequest request, MultipartFile image) {
-		String path = IMAGE + request.scheduleId() + SLASH + image.getOriginalFilename();
+		String path = IMAGE + request.getScheduleId() + SLASH + image.getOriginalFilename();
         S3Resource result = s3template.upload(bucketName, path, getInputStream(image));
         return getUrl(result);
     }

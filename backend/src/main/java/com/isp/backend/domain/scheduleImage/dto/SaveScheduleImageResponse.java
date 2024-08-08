@@ -4,10 +4,14 @@ import com.isp.backend.domain.scheduleImage.entity.ScheduleImage;
 import lombok.Getter;
 
 @Getter
-public final class SaveScheduleImageResponse {
-    private final ScheduleImage scheduleImage;
+public class SaveScheduleImageResponse {
+    private Long id;
+    private Long scheduleId;
+    private String path;
 
     public SaveScheduleImageResponse(ScheduleImage scheduleImage) {
-        this.scheduleImage = scheduleImage;
+        this.id = scheduleImage.getId();
+        this.scheduleId = scheduleImage.getSchedule().getId();
+        this.path = scheduleImage.getPath();
     }
 }

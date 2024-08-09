@@ -5,13 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class ScheduleReceiptResponse {
+public class ScheduleListWithReceiptResponse {
 
     private String scheduleName;
 
@@ -23,6 +21,6 @@ public class ScheduleReceiptResponse {
 
     private double totalReceiptsPrice ;
 
-    private List<ReceiptListResponse> receiptList;
+    private int receiptCount ; // 영수증 개수
 
 }

@@ -5,6 +5,7 @@ import com.isp.backend.domain.receipt.dto.request.SaveReceiptRequest;
 import com.isp.backend.domain.receipt.dto.response.ReceiptDetailResponse;
 import com.isp.backend.domain.receipt.dto.response.ReceiptListResponse;
 import com.isp.backend.domain.receipt.dto.response.ReceiptResponse;
+import com.isp.backend.domain.receipt.dto.response.ScheduleListWithReceiptResponse;
 import com.isp.backend.domain.receipt.entity.Receipt;
 import com.isp.backend.domain.receipt.entity.ReceiptDetail;
 import com.isp.backend.domain.receipt.entity.StoreType;
@@ -82,6 +83,21 @@ public class ReceiptMapper {
                 receiptDetail.getItem(),
                 receiptDetail.getCount(),
                 receiptDetail.getItemPrice()
+        );
+    }
+
+
+    // 영수증용 스케줄 목록 조회
+    public ScheduleListWithReceiptResponse toScheduleListWithReceiptResponseDTO(Schedule schedule, double totalReceiptsPrice, int receiptCount) {
+        String currencyName = schedule.getCountry().getCurrencyName();
+
+        return new ScheduleListWithReceiptResponse(
+                schedule.getScheduleName(),
+                schedule.getStartDate(),
+                schedule.getEndDate(),
+                currencyName,
+                totalReceiptsPrice,
+                receiptCount
         );
     }
 

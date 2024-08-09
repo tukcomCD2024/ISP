@@ -3,12 +3,15 @@ package com.isp.backend.domain.receipt.controller;
 import com.isp.backend.domain.receipt.dto.request.ChangeReceiptOrderRequest;
 import com.isp.backend.domain.receipt.dto.request.SaveReceiptRequest;
 import com.isp.backend.domain.receipt.dto.response.ReceiptResponse;
+import com.isp.backend.domain.receipt.dto.response.ScheduleListWithReceiptResponse;
 import com.isp.backend.domain.receipt.dto.response.ScheduleReceiptResponse;
 import com.isp.backend.domain.receipt.entity.Receipt;
 import com.isp.backend.domain.receipt.service.ReceiptService;
+import com.isp.backend.global.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -62,6 +65,15 @@ public class ReceiptController {
     public ResponseEntity<ReceiptResponse> getReceiptDetail(@PathVariable Long receiptId) {
         ReceiptResponse receiptResponse = receiptService.getReceiptDetail(receiptId);
         return ResponseEntity.ok(receiptResponse);
+    }
+
+
+    /** 영수증용 일정 리스트 목록 조회 API **/
+    @GetMapping("/schedules/list")
+    public ResponseEntity<List<ScheduleListWithReceiptResponse>> getScheduleListWithReceipt(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        String memberUid = userDetails.getUsername();
+        List<ScheduleListWithReceiptResponse> scheduleListWithReceipts = receiptService.getScheduleListWithReceipt(memberUid);
+        return ResponseEntity.ok(scheduleListWithReceipts);
     }
 
 

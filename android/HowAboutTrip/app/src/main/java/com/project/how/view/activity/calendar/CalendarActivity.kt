@@ -108,7 +108,6 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
 
                     setDaysTab(schedule)
                     setDaysTabItemMargin(schedule)
-                    getDaysTitle(schedule, selectedDays)
 
                     binding.daysTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                         override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -124,7 +123,7 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
                                     val googleMapOptions = GoogleMapOptions()
                                         .zoomControlsEnabled(true)
 
-                                    supportMapFragment = SupportMapFragment.newInstance(googleMapOptions);
+                                    supportMapFragment = SupportMapFragment.newInstance(googleMapOptions)
 
                                     supportFragmentManager.beginTransaction()
                                         .replace(R.id.map_card, supportMapFragment)

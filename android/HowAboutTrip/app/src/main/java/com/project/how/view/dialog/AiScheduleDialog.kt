@@ -31,15 +31,12 @@ class AiScheduleDialog(private val data : AiSchedule, private val onAddListener:
     private val binding : DialogAiScheduleBinding
         get() = _binding!!
     private lateinit var adapter : AiDaysScheduleAdapter
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.dialog_ai_schedule, container, false)
         binding.ai = this
         binding.lifecycleOwner = viewLifecycleOwner

@@ -35,7 +35,7 @@ class YesOrNoDialog(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.dialog_yes_or_no, container, false)
         binding.dialog = this
         binding.lifecycleOwner = viewLifecycleOwner
@@ -44,10 +44,6 @@ class YesOrNoDialog(
         binding.target.text = target
         binding.functionInfo.text = functionInfo
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onDestroyView() {

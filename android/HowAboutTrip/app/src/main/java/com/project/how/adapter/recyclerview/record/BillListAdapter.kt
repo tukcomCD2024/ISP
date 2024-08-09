@@ -20,7 +20,7 @@ class BillListAdapter (
         fun bind(data: Bill, position: Int){
             binding.title.text = data.title
             binding.date.text = data.date
-            binding.cost.text = context.getString(R.string.cost, data.cost.toString())
+            binding.cost.text = context.getString(R.string.total_cost) + "${data.cost}"
             binding.count.text = context.getString(R.string.bill_count, data.count.toString())
             Glide.with(binding.root)
                 .load(data.image ?: BuildConfig.TEMPORARY_IMAGE_URL)

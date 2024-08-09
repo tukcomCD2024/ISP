@@ -64,20 +64,5 @@
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
             android:paddingHorizontal="20dp"/>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="15dp"
-            android:foreground="@drawable/fab_calendar_add"
-            app:shapeAppearanceOverlay="@style/FabRoundedCorner"
-            app:tint="@color/white"
-            app:fabCustomSize="50dp"
-            android:clickable="true"
-            app:borderWidth="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

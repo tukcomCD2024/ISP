@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_bill_order_change"
+        android:title="@string/menu_sch_order_change"/>
+
+    <item
+        android:id="@+id/menu_bill_date_change"
+        android:title="@string/menu_sch_date_change"/>
+
+    <item
+        android:id="@+id/menu_bill_edit"
+        android:title="@string/edit"/>
+
+    <item
+        android:id="@+id/menu_bill_delete"
+        android:title="@string/delete"/>
+
+</menu>

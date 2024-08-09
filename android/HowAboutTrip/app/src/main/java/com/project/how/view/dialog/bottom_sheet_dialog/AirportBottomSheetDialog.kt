@@ -98,7 +98,7 @@ class AirportBottomSheetDialog(private val type: Int, private val onAirportListe
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.airport_bottom_sheet, container, false)
         binding.airport = this
         binding.lifecycleOwner = viewLifecycleOwner

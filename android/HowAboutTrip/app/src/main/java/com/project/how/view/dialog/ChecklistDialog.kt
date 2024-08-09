@@ -30,15 +30,11 @@ class ChecklistDialog(private val scheduleId : Long) : DialogFragment(),
     private var editMode = false
     private var editable = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.dialog_checklist, container, false)
         binding.checklist = this
         binding.lifecycleOwner = viewLifecycleOwner

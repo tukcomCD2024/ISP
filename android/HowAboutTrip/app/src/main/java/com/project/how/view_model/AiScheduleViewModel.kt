@@ -31,14 +31,15 @@ class AiScheduleViewModel : ViewModel() {
         get() = _aiScheduleListLiveData
 
     fun getAiScheduleList(aiScheduleListInput : AiScheduleListInput) : Flow<Int> = callbackFlow {
-        val createScheduleListRequest = CreateScheduleListRequest(
-            aiScheduleListInput.des,
-            aiScheduleListInput.purpose ?: listOf(),
-            aiScheduleListInput.activities ?: listOf(),
-            aiScheduleListInput.excludingActivity ?: listOf(),
-            aiScheduleListInput.startDate,
-            aiScheduleListInput.endDate
-        )
+        val createScheduleListRequest =
+            CreateScheduleListRequest(
+                aiScheduleListInput.des,
+                aiScheduleListInput.purpose ?: listOf(),
+                aiScheduleListInput.activities ?: listOf(),
+                aiScheduleListInput.excludingActivity ?: listOf(),
+                aiScheduleListInput.startDate,
+                aiScheduleListInput.endDate
+            )
 
         ScheduleRetrofit.getApiService()?.let { apiService ->
             apiService.createScheduleList(createScheduleListRequest)
@@ -118,12 +119,13 @@ class AiScheduleViewModel : ViewModel() {
             for(j in createScheduleResponse.schedules[i].scheduleDetail.indices){
                 oneDaySchedule.add(
                     AiDaysSchedule(
-                    AiDaysScheduleAdapter.PLACE,
-                    createScheduleResponse.schedules[i].scheduleDetail[j].detail,
-                    0L,         //임시
-                    createScheduleResponse.schedules[i].scheduleDetail[j].detail,
-                    createScheduleResponse.schedules[i].scheduleDetail[j].coordinate.latitude,
-                    createScheduleResponse.schedules[i].scheduleDetail[j].coordinate.longitude)
+                        AiDaysScheduleAdapter.PLACE,
+                        createScheduleResponse.schedules[i].scheduleDetail[j].detail,
+                        0L,         //임시
+                        createScheduleResponse.schedules[i].scheduleDetail[j].detail,
+                        createScheduleResponse.schedules[i].scheduleDetail[j].coordinate.latitude,
+                        createScheduleResponse.schedules[i].scheduleDetail[j].coordinate.longitude
+                    )
                 )
                 place.add(createScheduleResponse.schedules[i].scheduleDetail[j].detail)
             }
@@ -143,12 +145,66 @@ class AiScheduleViewModel : ViewModel() {
     }
 
     private fun getTestAiSchedule() : AiSchedule {
-        val testAiDaysSchedule = mutableListOf<AiDaysSchedule>(AiDaysSchedule(AiDaysScheduleAdapter.PLACE, "test Todo", 0L, "test", 0.0, 0.0))
-        testAiDaysSchedule.add(AiDaysSchedule(AiDaysScheduleAdapter.AIRPLANE, "test airplane",0L, "airplane", 0.0, 0.0))
-        testAiDaysSchedule.add(AiDaysSchedule(AiDaysScheduleAdapter.HOTEL, "test hotel", 0L, "hotel", 0.0, 0.0))
-        val testAiDaysSchedule2 = mutableListOf<AiDaysSchedule>(AiDaysSchedule(AiDaysScheduleAdapter.AIRPLANE, "test airplane", 0L,"airplane", 0.0, 0.0))
-        testAiDaysSchedule2.add(AiDaysSchedule(AiDaysScheduleAdapter.PLACE, "test Todo", 0L, "test", 0.0, 0.0))
-        testAiDaysSchedule2.add(AiDaysSchedule(AiDaysScheduleAdapter.HOTEL, "test hotel", 0L,"hotel", 0.0, 0.0))
+        val testAiDaysSchedule = mutableListOf<AiDaysSchedule>(
+            AiDaysSchedule(
+                AiDaysScheduleAdapter.PLACE,
+                "test Todo",
+                0L,
+                "test",
+                0.0,
+                0.0
+            )
+        )
+        testAiDaysSchedule.add(
+            AiDaysSchedule(
+                AiDaysScheduleAdapter.AIRPLANE,
+                "test airplane",
+                0L,
+                "airplane",
+                0.0,
+                0.0
+            )
+        )
+        testAiDaysSchedule.add(
+            AiDaysSchedule(
+                AiDaysScheduleAdapter.HOTEL,
+                "test hotel",
+                0L,
+                "hotel",
+                0.0,
+                0.0
+            )
+        )
+        val testAiDaysSchedule2 = mutableListOf<AiDaysSchedule>(
+            AiDaysSchedule(
+                AiDaysScheduleAdapter.AIRPLANE,
+                "test airplane",
+                0L,
+                "airplane",
+                0.0,
+                0.0
+            )
+        )
+        testAiDaysSchedule2.add(
+            AiDaysSchedule(
+                AiDaysScheduleAdapter.PLACE,
+                "test Todo",
+                0L,
+                "test",
+                0.0,
+                0.0
+            )
+        )
+        testAiDaysSchedule2.add(
+            AiDaysSchedule(
+                AiDaysScheduleAdapter.HOTEL,
+                "test hotel",
+                0L,
+                "hotel",
+                0.0,
+                0.0
+            )
+        )
         val dailySchedule = mutableListOf<MutableList<AiDaysSchedule>>()
         for (i in 0..2){
             if (i % 2== 0){
@@ -165,7 +221,8 @@ class AiScheduleViewModel : ViewModel() {
             "https://img.freepik.com/free-photo/vertical-shot-beautiful-eiffel-tower-captured-paris-france_181624-45445.jpg?w=740&t=st=1708260600~exp=1708261200~hmac=01d8abec61f555d0edb040d41ce8ea39904853aea6df7c37ce0b5a35e07c1954",
             "2024-02-18",
             "2024-02-20",
-            dailySchedule)
+            dailySchedule
+        )
     }
     companion object{
         const val FAILD = 400

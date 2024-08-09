@@ -82,7 +82,12 @@ class ChecklistAdapter(
 
     fun getNewCheckList(): AddCheckListsRequest {
         val newData = checkList.filter { it.id == -1L && !it.todo.startsWith("HintText") }
-        return newData.map { AddCheckListsRequestElement(it.todo, it.check) }.toMutableList()
+        return newData.map {
+            AddCheckListsRequestElement(
+                it.todo,
+                it.check
+            )
+        }.toMutableList()
     }
 
     fun update(newData: CheckList) {
@@ -92,7 +97,13 @@ class ChecklistAdapter(
     }
 
     fun add() {
-        checkList.add(CheckListElement(-1, "HintText체크리스트를 생성해보세요.", false))
+        checkList.add(
+            CheckListElement(
+                -1,
+                "HintText체크리스트를 생성해보세요.",
+                false
+            )
+        )
         updatedList.add(false)
         notifyItemInserted(checkList.lastIndex)
     }

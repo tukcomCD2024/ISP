@@ -24,14 +24,14 @@ class WebViewBottomSheetDialog(private val url : String) : BottomSheetDialogFrag
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.web_view_bottom_sheet_dialog, container, false)
         binding.web = this
         binding.lifecycleOwner = viewLifecycleOwner
         binding.webview.visibility = View.VISIBLE
         binding.webview.settings.javaScriptEnabled = true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            binding.webview.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+            binding.webview.getSettings().mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
         }
 
         val webSettings: WebSettings = binding.webview.getSettings()

@@ -40,7 +40,7 @@ class OneWayLikeFragment : Fragment(), OneWayAirplaneListAdapter.OnItemClickList
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_one_way_like, container, false)
         binding.like = this
         binding.lifecycleOwner = viewLifecycleOwner
@@ -55,17 +55,17 @@ class OneWayLikeFragment : Fragment(), OneWayAirplaneListAdapter.OnItemClickList
                     member.add(FlightMember(d.adult, d.children))
                     data.add(
                         GetOneWayFlightOffersResponseElement(
-                        d.id.toString(),
-                        d.carrierCode,
-                        d.totalPrice,
-                        d.departureIataCode,
-                        d.arrivalIataCode,
-                        if (d.transferCount> 0.toString()) false else true,
-                        d.transferCount.toLong(),
-                        d.abroadDuration,
-                        d.abroadDepartureTime,
-                        d.abroadArrivalTime
-                    )
+                            d.id.toString(),
+                            d.carrierCode,
+                            d.totalPrice,
+                            d.departureIataCode,
+                            d.arrivalIataCode,
+                            d.transferCount <= 0.toString(),
+                            d.transferCount.toLong(),
+                            d.abroadDuration,
+                            d.abroadDepartureTime,
+                            d.abroadArrivalTime
+                        )
                     )
                 }
             }

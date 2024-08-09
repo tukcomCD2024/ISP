@@ -29,9 +29,30 @@ class RecordFragment : Fragment() {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch {
             recent = listOf(
-                RecentAddedRecord(0, "2024-06-01", "2024-06-04", null, null,"대만 가족여행"),
-                RecentAddedRecord(0, "2024-04-17", null, "https://media.triple.guide/triple-cms/c_limit,f_auto,h_1024,w_1024/eabb2441-4a98-48f4-8b86-4984823749fd.jpeg", "https://www.ana.co.jp/japan-travel-planner/okinawa/img/hero.jpg","오키나와 당일치기"),
-                RecentAddedRecord(0, "2023-07-10", "2023-07-17", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQx-E0xIw05LNRipiI8aSdAIpgEWwN1bB9eZw&s", "https://i.namu.wiki/i/vMxhrnGtssBmIKfGJvHvaXbHc6i247nj-HA7aQOGpweTeENStf-kh7kz9RgwMSjics0H6iQkG-Lj-rjP_dYAXQ.webp","여름방학 독일 배낭 여행"),
+                RecentAddedRecord(
+                    0,
+                    "2024-06-01",
+                    "2024-06-04",
+                    null,
+                    null,
+                    "대만 가족여행"
+                ),
+                RecentAddedRecord(
+                    0,
+                    "2024-04-17",
+                    null,
+                    "https://media.triple.guide/triple-cms/c_limit,f_auto,h_1024,w_1024/eabb2441-4a98-48f4-8b86-4984823749fd.jpeg",
+                    "https://www.ana.co.jp/japan-travel-planner/okinawa/img/hero.jpg",
+                    "오키나와 당일치기"
+                ),
+                RecentAddedRecord(
+                    0,
+                    "2023-07-10",
+                    "2023-07-17",
+                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQx-E0xIw05LNRipiI8aSdAIpgEWwN1bB9eZw&s",
+                    "https://i.namu.wiki/i/vMxhrnGtssBmIKfGJvHvaXbHc6i247nj-HA7aQOGpweTeENStf-kh7kz9RgwMSjics0H6iQkG-Lj-rjP_dYAXQ.webp",
+                    "여름방학 독일 배낭 여행"
+                ),
             )
 
             adapter = RecentAddedRecordsAdapter(recent)
@@ -41,7 +62,7 @@ class RecordFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_record, container, false)
         binding.picture = this
         binding.lifecycleOwner = viewLifecycleOwner

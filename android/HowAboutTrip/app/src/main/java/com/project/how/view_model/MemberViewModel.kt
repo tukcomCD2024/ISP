@@ -94,7 +94,8 @@ object MemberViewModel : ViewModel() {
                                 trySend(SUCCESS)
                             }else{
                                 memberRepository.userLiveData.value?.let {
-                                    val lq = LoginRequest(it.uid)
+                                    val lq =
+                                        LoginRequest(it.uid)
                                     val code = getTokens(context, lq)
                                     if (code != EXISTING_MEMBER) {
                                         trySend(ON_FAILURE)
@@ -163,7 +164,13 @@ object MemberViewModel : ViewModel() {
                     response: Response<EmptyResponse>
                 ) {
                     if (response.isSuccessful){
-                        memberRepository.getInfo(MemberInfo(name, birth, phone))
+                        memberRepository.getInfo(
+                            MemberInfo(
+                                name,
+                                birth,
+                                phone
+                            )
+                        )
                         Log.d("getInfoSignUp success", "code : ${response.code()}")
                     }else{
                         Log.d("getInfoSignUp response is not success", "code : ${response.code()}")
@@ -191,7 +198,13 @@ object MemberViewModel : ViewModel() {
                                     val name = result.name ?: context.getString(R.string.error)
                                     val birth = result.birth ?: context.getString(R.string.error)
                                     val phone = result.phone ?: context.getString(R.string.error)
-                                    memberRepository.getInfo(MemberInfo(name, birth, phone))
+                                    memberRepository.getInfo(
+                                        MemberInfo(
+                                            name,
+                                            birth,
+                                            phone
+                                        )
+                                    )
                                     Log.d("getInfo success", "code : ${response.code()}\nname : ${name}\nbirth : ${birth}\nphone : $phone")
                                     trySend(SUCCESS)
                                 }else{
@@ -200,7 +213,11 @@ object MemberViewModel : ViewModel() {
                                 }
                             }else if(response.code() == BAD_REQUEST){
                                 tokensLiveData.value
-                                    ?.let { AuthRecreateRequest(it.refreshToken) }
+                                    ?.let {
+                                        AuthRecreateRequest(
+                                            it.refreshToken
+                                        )
+                                    }
                                     ?.let { refreshToken->
                                         viewModelScope.launch {
                                             authRecreate(context, refreshToken).collect{check->

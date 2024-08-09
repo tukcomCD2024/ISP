@@ -26,7 +26,7 @@ class DatePickerDialog(private val data : DaysSchedule, private val dates : List
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.dialog_datepicker, container,false)
         binding.date = this
         binding.lifecycleOwner = viewLifecycleOwner

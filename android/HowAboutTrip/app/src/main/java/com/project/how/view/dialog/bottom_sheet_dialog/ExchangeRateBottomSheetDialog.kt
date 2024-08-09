@@ -45,7 +45,7 @@ class ExchangeRateBottomSheetDialog(private val formerDes : String, private val 
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.exchage_rate_bottom_sheet, container, false)
         binding.exchange = this
         binding.lifecycleOwner = viewLifecycleOwner

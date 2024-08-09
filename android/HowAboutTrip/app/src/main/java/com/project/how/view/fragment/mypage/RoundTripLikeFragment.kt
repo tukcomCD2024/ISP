@@ -38,7 +38,7 @@ class RoundTripLikeFragment : Fragment(), RoundTripAirplaneListAdapter.OnItemCli
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_round_trip_like, container, false)
         bookingViewModel.likeFlightLiveData.observe(viewLifecycleOwner){likes->
             lid = mutableListOf<Long>()
@@ -62,7 +62,7 @@ class RoundTripLikeFragment : Fragment(), RoundTripAirplaneListAdapter.OnItemCli
                             d.homeArrivalTime!!,
                             d.departureIataCode,
                             d.arrivalIataCode,
-                            if (d.transferCount > 0.toString()) false else true,
+                            d.transferCount <= 0.toString(),
                             d.transferCount.toLong()
                         )
                     )

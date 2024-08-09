@@ -120,7 +120,7 @@ class CalendarEditActivity
             val googleMapOptions = GoogleMapOptions()
                 .zoomControlsEnabled(true)
 
-            supportMapFragment = SupportMapFragment.newInstance(googleMapOptions);
+            supportMapFragment = SupportMapFragment.newInstance(googleMapOptions)
 
             supportFragmentManager.beginTransaction()
                 .replace(R.id.map_card, supportMapFragment)

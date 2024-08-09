@@ -35,7 +35,7 @@ class OrderChangeDialog(private val data : MutableList<DaysSchedule>, private va
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.dialog_order_change, container, false)
         binding.order = this
         binding.lifecycleOwner = viewLifecycleOwner
@@ -45,10 +45,6 @@ class OrderChangeDialog(private val data : MutableList<DaysSchedule>, private va
         adapter.setCheck(currentPosition)
         binding.scheduleOrder.adapter = adapter
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onDestroyView() {

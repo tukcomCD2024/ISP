@@ -27,14 +27,10 @@ class MypageFragment : Fragment() {
     private val memberViewModel : MemberViewModel by viewModels()
     var name : String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_mypage, container, false)
         binding.mypage = this
         binding.lifecycleOwner = viewLifecycleOwner

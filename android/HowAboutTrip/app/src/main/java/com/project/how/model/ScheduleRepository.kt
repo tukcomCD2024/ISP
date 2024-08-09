@@ -14,7 +14,6 @@ import com.project.how.data_class.recyclerview.schedule.AiSchedule
 import com.project.how.data_class.recyclerview.schedule.DaysSchedule
 import com.project.how.data_class.recyclerview.schedule.Schedule
 import com.project.how.data_class.dto.schedule.GetScheduleListResponse
-import com.project.how.data_class.dto.schedule.ScheduleDetail
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.time.LocalDate
@@ -60,13 +59,13 @@ class ScheduleRepository {
     fun getSchedule(aiSchedule : AiSchedule) : Flow<Schedule> = flow{
         this.emit(
             Schedule(
-            aiSchedule.title,
-            aiSchedule.country,
-            aiSchedule.startDate,
-            aiSchedule.endDate,
-            aiSchedule.budget,
-            getDailySchedule(aiSchedule.dailySchedule)
-        )
+                aiSchedule.title,
+                aiSchedule.country,
+                aiSchedule.startDate,
+                aiSchedule.endDate,
+                aiSchedule.budget,
+                getDailySchedule(aiSchedule.dailySchedule)
+            )
         )
     }
 
@@ -137,7 +136,7 @@ class ScheduleRepository {
         _scheduleListLiveData.postValue(scheduleList)
     }
 
-    fun getDaysSchedule(context: Context, schedule: Schedule, scheduleDetail: ScheduleDetail) = flow<Schedule>{
+    fun getDaysSchedule(context: Context, schedule: Schedule, scheduleDetail: com.project.how.data_class.dto.schedule.ScheduleDetail) = flow<Schedule>{
         val std = LocalDate.parse(scheduleDetail.startDate, DateTimeFormatter.ISO_DATE)
         val end = LocalDate.parse(scheduleDetail.endDate, DateTimeFormatter.ISO_DATE)
         val diff = ChronoUnit.DAYS.between(std, end)
@@ -153,7 +152,10 @@ class ScheduleRepository {
                     for (j in 0 until scheduleDetail.dailySchedules[cnt].schedules.size){
                         dailySchedule.add(
                             DaysSchedule(
-                                getScheduleType(context, scheduleDetail.dailySchedules[cnt].schedules[j].type),
+                                getScheduleType(
+                                    context,
+                                    scheduleDetail.dailySchedules[cnt].schedules[j].type
+                                ),
                                 scheduleDetail.dailySchedules[cnt].schedules[j].todo,
                                 scheduleDetail.dailySchedules[cnt].schedules[j].place,
                                 scheduleDetail.dailySchedules[cnt].schedules[j].latitude,

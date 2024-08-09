@@ -1,5 +1,6 @@
 package com.project.how.view.activity.record
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -21,18 +22,23 @@ class BillListActivity : AppCompatActivity(), BillListAdapter.OnItemClickListene
         binding.bill = this
         binding.lifecycleOwner = this
         adapter = BillListAdapter(listOf<Bill>(
-            Bill(1, BuildConfig.TEMPORARY_IMAGE_URL, "Temporary1", "2024.01.20 - 2024.01.24", 0, 3 )
+            Bill(
+                1,
+                BuildConfig.TEMPORARY_IMAGE_URL,
+                "Temporary1",
+                "2024.01.20 - 2024.01.24",
+                0,
+                3
+            )
         ),
             this, this)
         binding.billList.adapter = adapter
     }
 
-    fun add(){
-
-    }
-
     override fun onItemClickListener(id: Long) {
-
+        val intent = Intent(this, BillActivity::class.java)
+        intent.putExtra(getString(R.string.server_calendar_id), 32L)
+        startActivity(intent)
     }
 
     override fun onDeleteButtonClickListener(id: Long, position: Int) {

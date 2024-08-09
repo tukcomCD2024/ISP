@@ -47,7 +47,7 @@ class RoundTripSearchFragment(private val onLoadListener: OnLoadListener) : Frag
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_round_trip_search, container, false)
         binding.roundTrip = this
         binding.lifecycleOwner = viewLifecycleOwner
@@ -99,7 +99,7 @@ class RoundTripSearchFragment(private val onLoadListener: OnLoadListener) : Frag
                 setUnEnabled()
                 onLoadListener.onLoadStartListener()
                 binding.search.isEnabled = false
-                nonStop = if (binding.radioGroup.checkedRadioButtonId == R.id.non_inclusive) true else false
+                nonStop = binding.radioGroup.checkedRadioButtonId == R.id.non_inclusive
                 input = GetFlightOffersRequest(
                     departure!!,
                     destination!!,

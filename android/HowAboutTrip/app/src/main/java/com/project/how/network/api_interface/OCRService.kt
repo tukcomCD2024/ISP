@@ -1,6 +1,6 @@
 package com.project.how.network.api_interface
 
-import com.project.how.data_class.dto.ocr.OcrResponse
+import com.project.how.data_class.dto.recode.ocr.OcrResponse
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.Headers

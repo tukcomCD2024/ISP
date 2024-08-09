@@ -61,10 +61,38 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        event.add(EventViewPager("test", "이번 여름방학엔\n일본여행가기", R.drawable.event_image_japan_temp, true))
-        event.add(EventViewPager("test", "니스 해변에서\n휴양하기", R.drawable.event_image_nis_temp, true))
-        event.add(EventViewPager("test", "2024 파리 올림픽\n여름방학", R.drawable.event_image_paris_temp, true))
-        event.add(EventViewPager("test", "항공권 검색으로\n편안한 여행", R.drawable.event_image_airplnae_temp, true))
+        event.add(
+            EventViewPager(
+                "test",
+                "이번 여름방학엔\n일본여행가기",
+                R.drawable.event_image_japan_temp,
+                true
+            )
+        )
+        event.add(
+            EventViewPager(
+                "test",
+                "니스 해변에서\n휴양하기",
+                R.drawable.event_image_nis_temp,
+                true
+            )
+        )
+        event.add(
+            EventViewPager(
+                "test",
+                "2024 파리 올림픽\n여름방학",
+                R.drawable.event_image_paris_temp,
+                true
+            )
+        )
+        event.add(
+            EventViewPager(
+                "test",
+                "항공권 검색으로\n편안한 여행",
+                R.drawable.event_image_airplnae_temp,
+                true
+            )
+        )
 
         eventAdapter = EventViewPagerAdapter(event)
     }
@@ -72,7 +100,7 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_calendar, container, false)
         binding.calendar = this
         binding.lifecycleOwner = viewLifecycleOwner
@@ -94,7 +122,15 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
         lifecycleScope.launch {
             scheduleViewModel.getLatestSchedules().collect{ check->
                 if (check != ScheduleViewModel.SUCCESS){
-                    recentAddedCalendar = listOf(GetLatestSchedulesResponseElement(-1, "일정을 생성해보세요!", "없음", BuildConfig.TEMPORARY_IMAGE_URL, listOf<String>("AI 일정 생성", "일반 일정 생성", "편리한 기능들을 체험해보세요.")))
+                    recentAddedCalendar = listOf(
+                        GetLatestSchedulesResponseElement(
+                            -1,
+                            "일정을 생성해보세요!",
+                            "없음",
+                            BuildConfig.TEMPORARY_IMAGE_URL,
+                            listOf<String>("AI 일정 생성", "일반 일정 생성", "편리한 기능들을 체험해보세요.")
+                        )
+                    )
                     recentAddedCalendarAdapter = RecentAddedCalendarsAdapter(recentAddedCalendar, this@CalendarFragment)
                     binding.recentAddedCalendar.adapter = recentAddedCalendarAdapter
                 }

@@ -42,7 +42,11 @@ class AuthInterceptor(@ApplicationContext private val context: Context) : Interc
                         // 토큰 재생성 호출
                         val newToken = runBlocking {
                             try {
-                                authRecreate(context, AuthRecreateRequest(refreshToken))
+                                authRecreate(context,
+                                    AuthRecreateRequest(
+                                        refreshToken
+                                    )
+                                )
                             } catch (e: Exception) {
                                 null
                             }

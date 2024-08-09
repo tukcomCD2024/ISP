@@ -328,6 +328,8 @@
     <string name="server_ai_failed">일정 생성 AI가 일정 생성에 실패했습니다.\n다시 한 번 더 시도하신 다음에 문제가 지속되면 문의해주세요.</string>
     <string name="checklist_item_hint">일정 체크리스트</string>
     <string name="location_load_error">위치 정보를 불러오는데에 실패했습니다.</string>
-    <string name="cost">총 지출 비용 : %1$s 원</string>
     <string name="bill_count">세부 내용 %1$s 개</string>
+    <string name="total_cost">총 지출 비용 :</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

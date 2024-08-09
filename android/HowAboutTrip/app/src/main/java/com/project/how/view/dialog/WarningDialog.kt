@@ -22,7 +22,7 @@ class WarningDialog(private val message : String, private val onDialogListener :
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.dialog_warning, container, false)
         binding.warning = this
         binding.lifecycleOwner = viewLifecycleOwner

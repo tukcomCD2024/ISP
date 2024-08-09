@@ -48,15 +48,11 @@ class EditScheduleBottomSheetDialog(private val lat : Double, private val lng : 
     var latitude = schedule.latitude
     var longitude = schedule.longitude
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.edit_schedule_bottom_sheet, container, false)
         binding.edit = this
         binding.lifecycleOwner = viewLifecycleOwner

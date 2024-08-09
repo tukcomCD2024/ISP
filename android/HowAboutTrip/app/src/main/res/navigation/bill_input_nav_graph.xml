@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bill_input_nav_graph"
+    app:startDestination="@id/billInputIntroFragment">
+
+    <fragment
+        android:id="@+id/billInputIntroFragment"
+        android:name="com.project.how.view.fragment.record.BillInputIntroFragment"
+        android:label="fragment_bill_input_intro"
+        tools:layout="@layout/fragment_bill_input_intro" >
+        <action
+            android:id="@+id/action_billInputIntroFragment_to_billNonOcrFragment"
+            app:destination="@id/billNonOcrFragment" />
+        <action
+            android:id="@+id/action_billInputIntroFragment_to_ocrFragment"
+            app:destination="@id/ocrFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/billNonOcrFragment"
+        android:name="com.project.how.view.fragment.record.BillNonOcrFragment"
+        android:label="fragment_bill_non_ocr"
+        tools:layout="@layout/fragment_bill_non_ocr" />
+    <fragment
+        android:id="@+id/ocrFragment"
+        android:name="com.project.how.view.fragment.record.OcrFragment"
+        android:label="fragment_ocr"
+        tools:layout="@layout/fragment_ocr" />
+</navigation>

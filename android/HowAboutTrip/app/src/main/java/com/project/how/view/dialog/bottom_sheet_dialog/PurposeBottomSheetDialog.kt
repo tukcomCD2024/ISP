@@ -86,7 +86,7 @@ class PurposeBottomSheetDialog(private val onPurposeListener : OnPurposeListener
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.purpose_bottom_sheet, container, false)
         binding.purpose = this
         binding.lifecycleOwner = viewLifecycleOwner
@@ -95,11 +95,6 @@ class PurposeBottomSheetDialog(private val onPurposeListener : OnPurposeListener
         binding.purposeList.adapter = purposeAdapter
         binding.transportationList.adapter = transportationAdapter
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
     }
 
     fun reset(){

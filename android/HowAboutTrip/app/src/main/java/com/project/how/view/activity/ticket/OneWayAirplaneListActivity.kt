@@ -88,15 +88,16 @@ class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapte
     ) {
         lifecycleScope.launch {
             clicked = data
-            val request = GenerateOneWaySkyscannerUrlRequest(
-                data.departureIataCode,
-                data.arrivalIataCode,
-                input.departureDate,
-                input.adults,
-                input.children,
-                data.abroadDuration,
-                data.transferCount
-            )
+            val request =
+                GenerateOneWaySkyscannerUrlRequest(
+                    data.departureIataCode,
+                    data.arrivalIataCode,
+                    input.departureDate,
+                    input.adults,
+                    input.children,
+                    data.abroadDuration,
+                    data.transferCount
+                )
             bookingViewModel.generateOneWaySkyscannerUrl(request).collect{ check->
                 when(check){
                     BookingViewModel.NOT_EXIST->{
@@ -134,19 +135,20 @@ class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapte
                     }
                 }
             }else{
-                val lowf = LikeOneWayFlightElement(
-                    data.carrierCode,
-                    data.totalPrice,
-                    data.departureIataCode,
-                    data.arrivalIataCode,
-                    data.abroadDuration,
-                    data.abroadDepartureTime,
-                    data.abroadArrivalTime,
-                    data.nonstop,
-                    data.transferCount,
-                    input.adults,
-                    input.children
-                )
+                val lowf =
+                    LikeOneWayFlightElement(
+                        data.carrierCode,
+                        data.totalPrice,
+                        data.departureIataCode,
+                        data.arrivalIataCode,
+                        data.abroadDuration,
+                        data.abroadDepartureTime,
+                        data.abroadArrivalTime,
+                        data.nonstop,
+                        data.transferCount,
+                        input.adults,
+                        input.children
+                    )
                 bookingViewModel.like(lowf, position).collect{ c->
                     if (c != BookingViewModel.SUCCESS){
                         Toast.makeText(this@OneWayAirplaneListActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()

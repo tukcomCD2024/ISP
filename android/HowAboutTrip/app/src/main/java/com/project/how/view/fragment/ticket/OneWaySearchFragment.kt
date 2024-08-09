@@ -46,7 +46,7 @@ class OneWaySearchFragment(private val onLoadListener: OnLoadListener) : Fragmen
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_one_way_search, container, false)
         binding.oneWay = this
         binding.lifecycleOwner = viewLifecycleOwner
@@ -108,16 +108,17 @@ class OneWaySearchFragment(private val onLoadListener: OnLoadListener) : Fragmen
                 setUnEnabled()
                 onLoadListener.onLoadStartListener()
                 binding.search.isEnabled = false
-                nonStop = if (binding.radioGroup.checkedRadioButtonId == R.id.non_inclusive) true else false
-                input = GetOneWayFlightOffersRequest(
-                    departure!!,
-                    destination!!,
-                    date!!,
-                    adults,
-                    children,
-                    50,
-                    nonStop
-                )
+                nonStop = binding.radioGroup.checkedRadioButtonId == R.id.non_inclusive
+                input =
+                    GetOneWayFlightOffersRequest(
+                        departure!!,
+                        destination!!,
+                        date!!,
+                        adults,
+                        children,
+                        50,
+                        nonStop
+                    )
                 bookingViewModel.getFlightOffers(input).collect{ check->
                     setEnabled()
                     onLoadListener.onLoadFinishListener()

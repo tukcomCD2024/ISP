@@ -115,7 +115,7 @@ class RoundTripAirplaneListAdapter(
         val d = data[position]
         holder.bind(d, position)
         holder.itemView.setOnClickListener {
-            onItemClickListener.onItemClickerListener(d, if (flightMember.isNullOrEmpty()) null else flightMember!![position])
+            onItemClickListener.onItemClickerListener(d, if (flightMember.isNullOrEmpty()) null else flightMember[position])
         }
     }
 

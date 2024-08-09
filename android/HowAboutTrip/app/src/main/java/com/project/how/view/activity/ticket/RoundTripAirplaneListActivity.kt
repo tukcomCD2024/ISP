@@ -89,16 +89,17 @@ class RoundTripAirplaneListActivity : AppCompatActivity(), RoundTripAirplaneList
     ) {
         lifecycleScope.launch {
             clicked = data
-            val request = GenerateSkyscannerUrlRequest(
-                data.departureIataCode,
-                data.arrivalIataCode,
-                input.departureDate,
-                input.returnDate,
-                input.adults,
-                input.children,
-                data.abroadDuration,
-                data.transferCount
-            )
+            val request =
+                GenerateSkyscannerUrlRequest(
+                    data.departureIataCode,
+                    data.arrivalIataCode,
+                    input.departureDate,
+                    input.returnDate,
+                    input.adults,
+                    input.children,
+                    data.abroadDuration,
+                    data.transferCount
+                )
             bookingViewModel.generateSkyscannerUrl(request).collect{ check->
                 when(check){
                     BookingViewModel.NOT_EXIST->{

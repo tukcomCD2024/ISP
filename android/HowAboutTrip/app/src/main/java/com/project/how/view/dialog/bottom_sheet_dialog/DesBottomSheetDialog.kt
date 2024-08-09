@@ -91,7 +91,7 @@ class DesBottomSheetDialog(private val onDesListener: OnDesListener) : BottomShe
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.des_bottom_sheet, container, false)
         binding.des = this
         binding.lifecycleOwner = viewLifecycleOwner
@@ -104,11 +104,6 @@ class DesBottomSheetDialog(private val onDesListener: OnDesListener) : BottomShe
             BottomSheetRatioHeightManager().setRatio(bottomSheetDialog, requireContext(), 75)
         }
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
     }
 
     override fun onDestroyView() {

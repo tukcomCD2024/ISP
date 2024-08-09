@@ -110,7 +110,7 @@ class ActivityBottomSheetDialog(private val onActivityListener: OnActivityListen
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.theme_bottom_sheet, container, false)
         binding.theme = this
         binding.lifecycleOwner = viewLifecycleOwner

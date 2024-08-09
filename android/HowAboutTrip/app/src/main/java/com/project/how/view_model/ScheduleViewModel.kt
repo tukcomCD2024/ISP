@@ -313,14 +313,15 @@ class ScheduleViewModel : ViewModel() {
                                         "getScheduleDetail is success",
                                         "schedule name : ${result.scheduleName}\ndailySchedules lastIndex : ${result.dailySchedules.lastIndex}"
                                     )
-                                    val schedule = Schedule(
-                                        result.scheduleName,
-                                        result.country,
-                                        result.startDate,
-                                        result.endDate,
-                                        0,
-                                        mutableListOf<MutableList<DaysSchedule>>()
-                                    )
+                                    val schedule =
+                                        Schedule(
+                                            result.scheduleName,
+                                            result.country,
+                                            result.startDate,
+                                            result.endDate,
+                                            0,
+                                            mutableListOf<MutableList<DaysSchedule>>()
+                                        )
                                     if ((result.dailySchedules.isEmpty())) {
                                         schedule.dailySchedule =
                                             getEmptyDaysSchedule(result.startDate, result.endDate)
@@ -451,7 +452,7 @@ class ScheduleViewModel : ViewModel() {
                                         if (!result.isNullOrEmpty()) {
                                             Log.d(
                                                 "addCheckList",
-                                                "result.size : ${result.size}\n${result.get(0)?.todo ?: "없음"}"
+                                                "result.size : ${result.size}\n${result.get(0).todo}"
                                             )
                                             val checklist =
                                                 checkListLiveData.value!!.toMutableList()

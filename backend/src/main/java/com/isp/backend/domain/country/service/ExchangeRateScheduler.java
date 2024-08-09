@@ -19,4 +19,5 @@ public class ExchangeRateScheduler {
             System.out.println("Failed to update exchange rates: " + e.getMessage());
         }
     }
+
 }

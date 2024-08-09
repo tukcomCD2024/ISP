@@ -1,13 +1,18 @@
 package com.isp.backend.domain.receipt.entity;
 
+import com.isp.backend.domain.schedule.entity.Schedule;
 import com.isp.backend.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
 @Entity
 @Builder
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "receipt")
 public class Receipt extends BaseEntity {
@@ -17,16 +22,20 @@ public class Receipt extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "schedules_id", nullable = false)
-//    private Schedules schedules;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Schedule schedule;
 
-    @Column(name = "title")
-    private String title;
+    private String storeName;
 
-    @Column(name = "price")
-    private double price;
+    @Enumerated(EnumType.STRING)
+    private StoreType storeType;
 
-    @Column(name = "purchase_date")
+    private double totalPrice;
+
     private String purchaseDate;
+
+    private String receiptImg;
+
+    private int orderNum ;
+
 }

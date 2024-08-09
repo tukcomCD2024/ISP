@@ -27,4 +27,6 @@ public class ScheduleListResponse {
 
     private double longitude ;
 
+    private String currencyName;
+
 }

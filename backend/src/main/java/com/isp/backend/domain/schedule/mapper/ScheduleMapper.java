@@ -86,7 +86,8 @@ public class ScheduleMapper {
                 schedule.getCountry().getImageUrl(),
                 schedule.getCountry().getCity(),
                 schedule.getCountry().getLatitude(),
-                schedule.getCountry().getLongitude()
+                schedule.getCountry().getLongitude(),
+                schedule.getCountry().getCurrencyName()
         );
     }
 

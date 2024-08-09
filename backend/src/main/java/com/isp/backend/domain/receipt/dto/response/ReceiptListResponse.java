@@ -17,7 +17,7 @@ public class ReceiptListResponse {
 
     private String storeType ;
 
-    private double price ; // receipt 테이블의 totalPrice
+    private double price ;
 
     private int orderNum ;
 

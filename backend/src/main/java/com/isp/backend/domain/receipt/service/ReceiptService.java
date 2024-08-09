@@ -1,12 +1,11 @@
 package com.isp.backend.domain.receipt.service;
 
+import com.isp.backend.domain.member.entity.Member;
+import com.isp.backend.domain.member.repository.MemberRepository;
 import com.isp.backend.domain.receipt.dto.request.ChangeReceiptOrderRequest;
 import com.isp.backend.domain.receipt.dto.request.ReceiptDetailRequest;
 import com.isp.backend.domain.receipt.dto.request.SaveReceiptRequest;
-import com.isp.backend.domain.receipt.dto.response.ReceiptDetailResponse;
-import com.isp.backend.domain.receipt.dto.response.ReceiptListResponse;
-import com.isp.backend.domain.receipt.dto.response.ReceiptResponse;
-import com.isp.backend.domain.receipt.dto.response.ScheduleReceiptResponse;
+import com.isp.backend.domain.receipt.dto.response.*;
 import com.isp.backend.domain.receipt.entity.Receipt;
 import com.isp.backend.domain.receipt.entity.ReceiptDetail;
 import com.isp.backend.domain.receipt.mapper.ReceiptMapper;
@@ -15,6 +14,7 @@ import com.isp.backend.domain.receipt.repository.ReceiptRepository;
 import com.isp.backend.domain.schedule.entity.Schedule;
 import com.isp.backend.domain.schedule.repository.ScheduleRepository;
 import com.isp.backend.global.exception.Image.ImageAlreadyExistingException;
+import com.isp.backend.global.exception.common.MemberNotFoundException;
 import com.isp.backend.global.exception.receipt.ReceiptNotFoundException;
 import com.isp.backend.global.exception.schedule.ScheduleNotFoundException;
 import com.isp.backend.global.s3.constant.S3BucketDirectory;
@@ -24,10 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -36,6 +33,7 @@ import java.util.stream.Collectors;
 public class ReceiptService {
     private final ReceiptRepository receiptRepository;
     private final ReceiptDetailRepository receiptDetailRepository;
+    private final MemberRepository memberRepository;
     private final ScheduleRepository scheduleRepository;
     private final ReceiptMapper receiptMapper;
     private final S3ImageService s3ImageService;
@@ -173,6 +171,31 @@ public class ReceiptService {
 
 
 
+    /** 영수증용 일정 리스트 목록 조회 API **/
+    @Transactional(readOnly = true)
+    public List<ScheduleListWithReceiptResponse> getScheduleListWithReceipt(String uid) {
+        // 유저 정보 확인
+        Member findMember = validateUserCheck(uid);
+
+        // 해당 유저의 모든 일정 불러오기
+        List<Schedule> scheduleList = scheduleRepository.findSchedulesByMember(findMember);
+
+        // 일정 리스트를 DTO로 변환
+        return scheduleList.stream()
+                .map(schedule -> {
+                    // sumTotalPriceByScheduleId가 null을 반환하면 0.0을 기본값으로 설정
+                    double totalReceiptsPrice = Optional.ofNullable(receiptRepository.sumTotalPriceByScheduleId(schedule.getId()))
+                            .orElse(0.0);
+                    int receiptCount = receiptRepository.countByScheduleId(schedule.getId());
+                    return receiptMapper.toScheduleListWithReceiptResponse(schedule, totalReceiptsPrice, receiptCount);
+                })
+                .collect(Collectors.toList());
+
+    }
+
+
+
+
     // 영수증 순서 변경 메서드 수정 예정
     /** 예외처리 및 정확한 로직 분석 필요 **/
     @Transactional
@@ -210,6 +233,15 @@ public class ReceiptService {
             receiptRepository.save(receipt);
         }
     }
+
+
+
+    /** 유효한 유저 정보 확인 **/
+    private Member validateUserCheck(String uid) {
+        return memberRepository.findByUid(uid)
+                .orElseThrow(MemberNotFoundException::new);
+    }
+
 
 
     /** 유효한 일정 확인 메소드 **/

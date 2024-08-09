@@ -17,4 +17,13 @@ public interface ReceiptRepository extends JpaRepository<Receipt, Long> {
 
     List<Receipt> findByScheduleId(Long scheduleId);
 
+    // 스케줄 ID에 해당하는 영수증의 totalPrice 합계를 구하는 쿼리
+    @Query("SELECT SUM(r.totalPrice) FROM Receipt r WHERE r.schedule.id = :scheduleId")
+    Double sumTotalPriceByScheduleId(@Param("scheduleId") Long scheduleId);
+
+    // 스케줄 ID에 해당하는 영수증의 개수를 구하는 쿼리
+    @Query("SELECT COUNT(r) FROM Receipt r WHERE r.schedule.id = :scheduleId")
+    int countByScheduleId(@Param("scheduleId") Long scheduleId);
+
+
 }

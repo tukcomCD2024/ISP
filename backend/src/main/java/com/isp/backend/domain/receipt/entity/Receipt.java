@@ -36,4 +36,6 @@ public class Receipt extends BaseEntity {
 
     private String receiptImg;
 
+    private int orderNum ;
+
 }

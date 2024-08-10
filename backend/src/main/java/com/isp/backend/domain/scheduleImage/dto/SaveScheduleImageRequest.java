@@ -7,7 +7,4 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SaveScheduleImageRequest {
     private Long scheduleId;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime saveDate;
-
 }

@@ -4,6 +4,10 @@ import com.isp.backend.domain.schedule.entity.Schedule;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
@@ -20,8 +24,16 @@ public class ScheduleImage {
 	private Schedule schedule;
 	private String path;
 
+	@CreatedDate
+	private String saveDate;
+
 	public ScheduleImage(Schedule schedule, String path) {
 		this.schedule = schedule;
 		this.path = path;
+	}
+
+	@PrePersist
+	public void onPrePersist(){
+		this.saveDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
 }

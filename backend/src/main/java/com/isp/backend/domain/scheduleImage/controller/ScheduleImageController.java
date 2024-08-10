@@ -26,7 +26,7 @@ public class ScheduleImageController {
     }
 
     @GetMapping("/{scheduleId}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public ReadScheduleImageResponse read(@PathVariable(name = "scheduleId") Long scheduleId) {
         return readScheduleImageService.read(scheduleId);
     }

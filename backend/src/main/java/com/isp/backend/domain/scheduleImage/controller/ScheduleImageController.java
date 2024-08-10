@@ -1,8 +1,10 @@
 package com.isp.backend.domain.scheduleImage.controller;
 
-import com.isp.backend.domain.scheduleImage.dto.SaveScheduleImageRequest;
-import com.isp.backend.domain.scheduleImage.dto.SaveScheduleImageResponse;
-import com.isp.backend.domain.scheduleImage.service.SaveImageService;
+import com.isp.backend.domain.scheduleImage.dto.request.SaveScheduleImageRequest;
+import com.isp.backend.domain.scheduleImage.dto.response.ReadScheduleImageResponse;
+import com.isp.backend.domain.scheduleImage.dto.response.SaveScheduleImageResponse;
+import com.isp.backend.domain.scheduleImage.service.ReadScheduleImageService;
+import com.isp.backend.domain.scheduleImage.service.SaveScheduleImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,15 +15,19 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/scheduleImages")
 public class ScheduleImageController {
 
-    private final SaveImageService saveImageService;
+    private final SaveScheduleImageService saveScheduleImageService;
+    private final ReadScheduleImageService readScheduleImageService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public SaveScheduleImageResponse create(@RequestPart(value = "image", required = false) MultipartFile image,
-            @RequestPart(value = "saveScheduleImageRequest") SaveScheduleImageRequest request) {
+                                            @RequestPart(value = "saveScheduleImageRequest") SaveScheduleImageRequest request) {
         return saveScheduleImageService.save(request, image);
     }
 
-    @GetMapping
+    @GetMapping("/{scheduleId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ReadScheduleImageResponse read(@PathVariable(name = "scheduleId") Long scheduleId) {
+        return readScheduleImageService.read(scheduleId);
     }
 }

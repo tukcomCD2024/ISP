@@ -197,6 +197,18 @@
                     app:layout_constraintStart_toStartOf="@+id/guideline1"
                     app:layout_constraintTop_toBottomOf="@id/days_title"
                     tools:listitem="@layout/bill_days_detail_item" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/add"
+                    android:layout_width="31dp"
+                    android:layout_height="31dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/icon_add_schedule"
+                    android:onClick="@{() -> bill.add()}"
+                    app:layout_constraintTop_toBottomOf="@+id/day_bills"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 

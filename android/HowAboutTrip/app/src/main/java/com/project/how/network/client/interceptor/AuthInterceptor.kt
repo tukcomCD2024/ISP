@@ -4,6 +4,7 @@ import android.content.Context
 import com.project.how.data_class.dto.member.AuthRecreateRequest
 import com.project.how.model.MemberRepository
 import com.project.how.view_model.MemberViewModel.authRecreate
+import com.project.how.view_model.MemberViewModel.authRecreate2
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -32,7 +33,7 @@ class AuthInterceptor(@ApplicationContext private val context: Context) : Interc
             var request = requestBuilder.build()
 
             var response: Response = chain.proceed(request)
-            if (response.code == 400 || response.code == 401) {
+            if ((response.code == 400) || (response.code == 401)) {
                 response.close() // 기존 응답 닫기
 
                 synchronized(this) {
@@ -42,7 +43,7 @@ class AuthInterceptor(@ApplicationContext private val context: Context) : Interc
                         // 토큰 재생성 호출
                         val newToken = runBlocking {
                             try {
-                                authRecreate(context,
+                                authRecreate2(context,
                                     AuthRecreateRequest(
                                         refreshToken
                                     )

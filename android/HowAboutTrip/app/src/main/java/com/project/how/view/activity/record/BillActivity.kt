@@ -1,5 +1,6 @@
 package com.project.how.view.activity.record
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -51,9 +52,17 @@ class BillActivity : AppCompatActivity(), BillDaysAdapter.OnItemClickListener {
 
     }
 
+    fun add(){
+        val intent = Intent(this, BillInputActivity::class.java)
+        intent.putExtra(getString(R.string.server_calendar_id), id)
+        intent.putExtra(getString(R.string.current_tab), currentTab)
+        startActivity(intent)
+    }
+
     private fun init(){
         lifecycleScope.launch {
             val id = intent.getLongExtra(getString(R.string.server_calendar_id), -1)
+            currentTab = intent.getIntExtra(getString(R.string.current_tab), 0)
             this@BillActivity.id = id.toLong()
 
             recordViewModel.getReceiptList(this@BillActivity.id)

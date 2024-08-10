@@ -52,9 +52,6 @@ class SplashActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 memberViewModel.getInfo(this@SplashActivity).collect{ check->
                     if (check != MemberViewModel.SUCCESS){
-                        if (check == MemberViewModel.ON_FAILURE){
-                            Toast.makeText(this@SplashActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
-                        }
                         moveLogin()
                     }
                 }

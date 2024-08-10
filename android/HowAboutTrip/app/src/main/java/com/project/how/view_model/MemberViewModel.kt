@@ -16,6 +16,7 @@ import com.project.how.data_class.dto.member.GetInfoResponse
 import com.project.how.data_class.dto.member.SignUpRequest
 import com.project.how.model.MemberRepository
 import com.project.how.network.client.MemberRetrofit
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -70,6 +71,43 @@ object MemberViewModel : ViewModel() {
     suspend fun init(context: Context) {
         Log.d("init", "LoginViewModel init start")
         memberRepository.init(context)
+    }
+
+    fun authRecreate2(context: Context, arr: AuthRecreateRequest){
+        viewModelScope.launch(Dispatchers.IO) {
+            MemberRetrofit.getApiService()?.let { apiService ->
+                apiService.authRecreate(arr)
+                    .enqueue(object : Callback<EmptyResponse> {
+                        override fun onResponse(
+                            call: Call<EmptyResponse>,
+                            response: Response<EmptyResponse>
+                        ) {
+                            viewModelScope.launch {
+                                if (response.code() == SUCCESS) {
+                                    val result = response.body().toString()
+                                    val accessToken = response.headers()[ACCESS_TOKEN]
+                                    val refreshToken = response.headers()[REFRESH_TOKEN]
+
+                                    memberRepository.getTokens(
+                                        context,
+                                        accessToken!!,
+                                        refreshToken!!
+                                    )
+                                    Log.d(
+                                        "authRecreate success",
+                                        "code : ${response.code()}\nresult : ${result}\naccessToken : ${accessToken}\nrefreshToken : $refreshToken"
+                                    )
+                                }
+                            }
+                        }
+
+                        override fun onFailure(call: Call<EmptyResponse>, t: Throwable) {
+                            Log.d("authRecreate onFailure", "${t.message}")
+                        }
+
+                    })
+            }
+        }
     }
 
     fun authRecreate(context: Context, arr: AuthRecreateRequest): Flow<Int> = callbackFlow {

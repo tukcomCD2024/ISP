@@ -1,6 +1,6 @@
 package com.isp.backend.domain.scheduleImage.repository;
 
-import com.isp.backend.domain.scheduleImage.dto.SaveScheduleImageRequest;
+import com.isp.backend.domain.scheduleImage.dto.request.SaveScheduleImageRequest;
 import io.awspring.cloud.s3.S3Resource;
 import io.awspring.cloud.s3.S3Template;
 import lombok.AccessLevel;

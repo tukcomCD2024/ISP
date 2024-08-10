@@ -19,6 +19,9 @@ public class ScheduleImageController {
     @ResponseStatus(HttpStatus.CREATED)
     public SaveScheduleImageResponse create(@RequestPart(value = "image", required = false) MultipartFile image,
             @RequestPart(value = "saveScheduleImageRequest") SaveScheduleImageRequest request) {
-        return saveImageService.save(request, image);
+        return saveScheduleImageService.save(request, image);
+    }
+
+    @GetMapping
     }
 }

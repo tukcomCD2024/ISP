@@ -1,4 +1,4 @@
-package com.isp.backend.domain.scheduleImage.dto;
+package com.isp.backend.domain.scheduleImage.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

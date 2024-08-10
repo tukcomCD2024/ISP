@@ -3,6 +3,7 @@ package com.isp.backend.domain.scheduleImage.controller;
 import com.isp.backend.domain.scheduleImage.dto.request.SaveScheduleImageRequest;
 import com.isp.backend.domain.scheduleImage.dto.response.ReadScheduleImageResponse;
 import com.isp.backend.domain.scheduleImage.dto.response.SaveScheduleImageResponse;
+import com.isp.backend.domain.scheduleImage.service.DeleteScheduleImageService;
 import com.isp.backend.domain.scheduleImage.service.ReadScheduleImageService;
 import com.isp.backend.domain.scheduleImage.service.SaveScheduleImageService;
 import lombok.RequiredArgsConstructor;
@@ -11,9 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@RestController
-@RequiredArgsConstructor
-@RequestMapping("/scheduleImages")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/scheduleImages")

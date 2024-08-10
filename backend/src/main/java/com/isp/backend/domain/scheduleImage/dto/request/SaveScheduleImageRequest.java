@@ -13,7 +13,4 @@ public class SaveScheduleImageRequest {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime saveDate;
 
-//    public Long scheduleId() {
-//        return scheduleId;
-//    }
 }

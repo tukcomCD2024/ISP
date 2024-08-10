@@ -1,7 +1,9 @@
 package com.isp.backend.domain.scheduleImage.controller;
 
 import com.isp.backend.domain.scheduleImage.dto.request.SaveScheduleImageRequest;
+import com.isp.backend.domain.scheduleImage.dto.response.ReadScheduleImageResponse;
 import com.isp.backend.domain.scheduleImage.dto.response.SaveScheduleImageResponse;
+import com.isp.backend.domain.scheduleImage.service.ReadScheduleImageService;
 import com.isp.backend.domain.scheduleImage.service.SaveScheduleImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,7 +26,7 @@ public class ScheduleImageController {
     }
 
     @GetMapping("/{scheduleId}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public ReadScheduleImageResponse read(@PathVariable(name = "scheduleId") Long scheduleId) {
         return readScheduleImageService.read(scheduleId);
     }

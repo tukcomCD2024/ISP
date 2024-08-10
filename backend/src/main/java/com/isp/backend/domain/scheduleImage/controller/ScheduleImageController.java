@@ -1,7 +1,7 @@
 package com.isp.backend.domain.scheduleImage.controller;
 
-import com.isp.backend.domain.scheduleImage.dto.SaveScheduleImageRequest;
-import com.isp.backend.domain.scheduleImage.dto.SaveScheduleImageResponse;
+import com.isp.backend.domain.scheduleImage.dto.request.SaveScheduleImageRequest;
+import com.isp.backend.domain.scheduleImage.dto.response.SaveScheduleImageResponse;
 import com.isp.backend.domain.scheduleImage.service.SaveImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

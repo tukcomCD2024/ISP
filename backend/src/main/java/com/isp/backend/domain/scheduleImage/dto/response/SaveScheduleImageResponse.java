@@ -1,4 +1,4 @@
-package com.isp.backend.domain.scheduleImage.dto;
+package com.isp.backend.domain.scheduleImage.dto.response;
 
 import com.isp.backend.domain.scheduleImage.entity.ScheduleImage;
 import lombok.Getter;

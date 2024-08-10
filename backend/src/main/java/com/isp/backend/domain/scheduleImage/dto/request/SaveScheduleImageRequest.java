@@ -1,4 +1,4 @@
-package com.isp.backend.domain.scheduleImage.dto;
+package com.isp.backend.domain.scheduleImage.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;

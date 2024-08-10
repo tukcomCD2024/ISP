@@ -2,8 +2,8 @@ package com.isp.backend.domain.scheduleImage.service;
 
 import com.isp.backend.domain.schedule.entity.Schedule;
 import com.isp.backend.domain.schedule.repository.ScheduleRepository;
-import com.isp.backend.domain.scheduleImage.dto.SaveScheduleImageRequest;
-import com.isp.backend.domain.scheduleImage.dto.SaveScheduleImageResponse;
+import com.isp.backend.domain.scheduleImage.dto.request.SaveScheduleImageRequest;
+import com.isp.backend.domain.scheduleImage.dto.response.SaveScheduleImageResponse;
 import com.isp.backend.domain.scheduleImage.entity.ScheduleImage;
 import com.isp.backend.domain.scheduleImage.repository.ScheduleImageRepository;
 import com.isp.backend.domain.scheduleImage.repository.ScheduleImageS3Repository;

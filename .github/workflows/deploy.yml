@@ -1,0 +1,59 @@
+name: Build and Deploy to EC2
+
+on:
+  push:
+    branches: [ "dev_backend" ]
+  pull_request:
+    branches: [ "dev_backend" ]
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  AWS_S3_BUCKET: howabouttrip-backend-s3
+  AWS_CODE_DEPLOY_APPLICATION: HowAboutTrip-Backend-CD
+  AWS_CODE_DEPLOY_GROUP: HowAboutTrip-Backend-CD-Group
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Grant execute permission for gradlew
+        working-directory: ./backend
+        run: chmod +x ./gradlew
+        shell: bash
+
+      - name: Build Project and Test
+        working-directory: ./backend
+        run: ./gradlew build test
+
+      - name: Setup MySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql database: 'trip'
+          mysql user: ${DB_USERNAME}
+          mysql password: ${DB_PASSWORD}
+
+      - name: Configure AWS credential
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ap-northeast-2
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Upload to S3
+        working-directory: ./backend
+        run: aws deploy push --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://${{ env.AWS_S3_BUCKET }}/HowAboutTrip-Backend-EC2/$GITHUB_SHA.zip --source .
+
+      - name: Code Deploy to EC2
+        working-directory: ./backend
+        run: aws deploy create-deployment --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} --s3-location bucket=${{ env.AWS_S3_BUCKET }},key=HowAboutTrip-Backend-EC2/$GITHUB_SHA.zip,bundleType=zip

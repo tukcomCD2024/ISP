@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
-public class ScheduleImageService implements SaveImageService {
+public class ScheduleImageService implements SaveScheduleImageService {
 
 	private final ScheduleImageS3Repository scheduleImageS3Repository;
 	private final ScheduleRepository scheduleRepository;

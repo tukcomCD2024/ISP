@@ -15,7 +15,20 @@
             app:destination="@id/billNonOcrFragment" />
         <action
             android:id="@+id/action_billInputIntroFragment_to_ocrFragment"
-            app:destination="@id/ocrFragment" />
+            app:destination="@id/ocrFragment">
+            <argument
+                android:name="camera"
+                app:argType="boolean" />
+            <argument
+                android:name="date"
+                app:argType="string"/>
+            <argument
+                android:name="currency"
+                app:argType="string"/>
+            <argument
+                android:name="id"
+                app:argType="long"/>
+        </action>
     </fragment>
     <fragment
         android:id="@+id/billNonOcrFragment"
@@ -26,5 +39,18 @@
         android:id="@+id/ocrFragment"
         android:name="com.project.how.view.fragment.record.OcrFragment"
         android:label="fragment_ocr"
-        tools:layout="@layout/fragment_ocr" />
+        tools:layout="@layout/fragment_ocr">
+        <argument
+            android:name="camera"
+            app:argType="boolean" />
+        <argument
+            android:name="date"
+            app:argType="string"/>
+        <argument
+            android:name="currency"
+            app:argType="string"/>
+        <argument
+            android:name="id"
+            app:argType="long"/>
+    </fragment>
 </navigation>

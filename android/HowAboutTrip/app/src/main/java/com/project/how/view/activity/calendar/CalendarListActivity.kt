@@ -148,11 +148,11 @@ class CalendarListActivity
        }
     }
 
-    override fun onAddressCheckListener() {
+    override fun onKeepCheckListener() {
         TODO("Not yet implemented")
     }
 
-    override fun onKeepCheckListener() {
+    override fun onCameraListener(answer: Boolean) {
         TODO("Not yet implemented")
     }
 

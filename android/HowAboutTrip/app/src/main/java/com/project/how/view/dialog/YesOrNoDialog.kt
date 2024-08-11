@@ -19,13 +19,12 @@ import com.project.how.view_model.ScheduleViewModel
 class YesOrNoDialog(
     private val target : String,
     private val functionType : Int,
-    private val position : Int,
+    private val position : Int = 0,
     private val onYesOrNoListener: OnYesOrNoListener) : DialogFragment() {
     private var _binding : DialogYesOrNoBinding? = null
     private val binding : DialogYesOrNoBinding
         get() = _binding!!
     private lateinit var functionInfo : String
-    private val scheduleViewModel : ScheduleViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         functionInfo = setFunctionInfo(functionType)
@@ -41,8 +40,13 @@ class YesOrNoDialog(
         binding.lifecycleOwner = viewLifecycleOwner
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
-        binding.target.text = target
-        binding.functionInfo.text = functionInfo
+        if (target.isEmpty()){
+            binding.target.text = functionInfo
+            binding.functionInfo.visibility = View.GONE
+        }else{
+            binding.target.text = target
+            binding.functionInfo.text = functionInfo
+        }
         return binding.root
     }
 
@@ -57,8 +61,27 @@ class YesOrNoDialog(
                 onYesOrNoListener.onScheduleDeleteListener(position)
                 dismiss()
             }
-            ADDRESS_CHECK -> {}
+            CAMERA_CHECK -> {
+                onYesOrNoListener.onCameraListener(true)
+                dismiss()
+            }
             KEEP_CHECK -> {}
+            else -> {
+                dismiss()
+            }
+        }
+    }
+
+    fun no(){
+        when(functionType){
+            SCHEDULE_DELETE -> {
+                dismiss()
+            }
+            CAMERA_CHECK -> {
+                onYesOrNoListener.onCameraListener(false)
+                dismiss()
+            }
+            KEEP_CHECK->{}
             else -> {
                 dismiss()
             }
@@ -69,7 +92,7 @@ class YesOrNoDialog(
         var result = ""
         when(type){
             SCHEDULE_DELETE -> {result = getString(R.string.schedule_delete_function_info)}
-            ADDRESS_CHECK -> {result = getString(R.string.address_check_function_info)}
+            CAMERA_CHECK -> {result = getString(R.string.camera_function_info)}
             KEEP_CHECK -> {result = getString(R.string.keep_check_function_info)}
             else -> {result = getString(R.string.unknown_function_info)}
         }
@@ -79,7 +102,7 @@ class YesOrNoDialog(
 
     companion object{
         const val SCHEDULE_DELETE = 0
-        const val ADDRESS_CHECK = 1
+        const val CAMERA_CHECK = 1
         const val KEEP_CHECK = 2
     }
 }

@@ -16,12 +16,16 @@ import com.project.how.databinding.BillDaysDetailItemBinding
 class BillDaysAdapter(
     private var billDetails : MutableList<ReceiptList>,
     private val context : Context,
+    private var currency : String,
     private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<BillDaysAdapter.ViewHolder>(), PopupMenu.OnMenuItemClickListener {
     private var currentPosition = -1
     private var currentData : ReceiptList? = null
     inner class ViewHolder(val binding : BillDaysDetailItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(data : ReceiptList, position: Int){
+            binding.date.text = "${data.purchaseDate} 구매"
+            binding.title.text = data.storeName
+            binding.budget.text = "${data.price} $currency"
 
             if (position == 0)
                 binding.topDottedLine.visibility = View.GONE
@@ -50,7 +54,7 @@ class BillDaysAdapter(
                 currentPosition = position
                 currentData = data
                 PopupMenu(context, binding.more).apply {
-                    inflate(R.menu.schedule_edit_more)
+                    inflate(R.menu.bill_edit_more)
                     setOnMenuItemClickListener(this@BillDaysAdapter)
                     show()
                 }
@@ -95,6 +99,12 @@ class BillDaysAdapter(
         val data = billDetails[position]
 
         holder.bind(data, position)
+    }
+
+    fun update(newData : MutableList<ReceiptList>, currency: String){
+        billDetails = newData
+        this.currency = currency
+        notifyDataSetChanged()
     }
 
     fun update(newData : MutableList<ReceiptList>){

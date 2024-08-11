@@ -87,10 +87,6 @@ class RoundTripLikeFragment : Fragment(), RoundTripAirplaneListAdapter.OnItemCli
 
     }
 
-    override fun onPause() {
-        super.onPause()
-        binding.airplaneList.adapter = null
-    }
 
     override fun onResume() {
         super.onResume()
@@ -102,6 +98,11 @@ class RoundTripLikeFragment : Fragment(), RoundTripAirplaneListAdapter.OnItemCli
             }
         }
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onItemClickerListener(

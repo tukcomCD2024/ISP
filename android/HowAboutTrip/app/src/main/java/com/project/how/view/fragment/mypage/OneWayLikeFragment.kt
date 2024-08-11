@@ -86,10 +86,6 @@ class OneWayLikeFragment : Fragment(), OneWayAirplaneListAdapter.OnItemClickList
         return binding.root
     }
 
-    override fun onPause() {
-        super.onPause()
-        binding.airplaneList.adapter = null
-    }
 
     override fun onResume() {
         super.onResume()
@@ -101,6 +97,11 @@ class OneWayLikeFragment : Fragment(), OneWayAirplaneListAdapter.OnItemClickList
             }
         }
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onItemClickerListener(

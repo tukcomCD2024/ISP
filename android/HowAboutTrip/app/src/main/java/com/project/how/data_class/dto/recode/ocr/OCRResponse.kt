@@ -6,14 +6,14 @@ data class OcrResponse (
     @SerializedName("totalAmount")
     val totalAmount: Amount,
     @SerializedName("date")
-    val date: Date,
+    val date: Detail,
     @SerializedName("entities")
     val entities: Entities,
     @SerializedName("merchantName")
-    val merchantName: Date,
+    val merchantName: Detail,
 )
 
-data class Date (
+data class Detail (
     @SerializedName("data")
     val data: String,
 )
@@ -47,7 +47,7 @@ data class Name (
 
 data class Quantity (
     @SerializedName("data")
-    val data: Long,
+    val data: Double,
     @SerializedName("text")
     val text: String
 )

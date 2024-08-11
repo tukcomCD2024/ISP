@@ -31,24 +31,25 @@ class BillActivity : AppCompatActivity(), BillDaysAdapter.OnItemClickListener {
     private lateinit var adapter : BillDaysAdapter
     private var id = 0L
     private var currentTab = 0
+    private lateinit var currentDate : String
+    private lateinit var currency : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_bill)
         binding.bill = this
         binding.lifecycleOwner = this
-        adapter = BillDaysAdapter(mutableListOf<ReceiptList>(), this, this)
+        adapter = BillDaysAdapter(mutableListOf<ReceiptList>(), this, "원",this)
         binding.dayBills.adapter = adapter
 
-        recordViewModel.currentReceiptList.observe(this){data->
+        recordViewModel.currentReceiptListLiveData.observe(this){ data->
             lifecycleScope.launch {
-                val currentDate = recordViewModel.getCurrentDate(data.startDate, currentTab)
-                adapter.update(data.receiptList.filter { it.purchaseDate == currentDate }.toMutableList())
+                currentDate = recordViewModel.getCurrentDate(data.startDate, currentTab)
+                currency = data.currencyName
+                adapter.update(data.receiptList.filter { it.purchaseDate == currentDate }.toMutableList(), currency)
                 setUI(data)
             }
         }
-
-        init()
 
     }
 
@@ -56,7 +57,14 @@ class BillActivity : AppCompatActivity(), BillDaysAdapter.OnItemClickListener {
         val intent = Intent(this, BillInputActivity::class.java)
         intent.putExtra(getString(R.string.server_calendar_id), id)
         intent.putExtra(getString(R.string.current_tab), currentTab)
+        intent.putExtra(getString(R.string.current_date), currentDate)
+        intent.putExtra(getString(R.string.currency), currency)
         startActivity(intent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        init()
     }
 
     private fun init(){
@@ -86,7 +94,7 @@ class BillActivity : AppCompatActivity(), BillDaysAdapter.OnItemClickListener {
                     binding.daysTitle.text = getString(R.string.days_title,
                         (currentTab + 1).toString(),
                         recordViewModel.getDaysTitle(data.startDate, currentTab))
-                    val currentDate = recordViewModel.getCurrentDate(data.startDate, currentTab)
+                    currentDate = recordViewModel.getCurrentDate(data.startDate, currentTab)
                     adapter.update(data.receiptList.filter { it.purchaseDate == currentDate }.toMutableList())
                 }
             }

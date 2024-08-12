@@ -92,6 +92,7 @@ public class ReceiptMapper {
         String currencyName = schedule.getCountry().getCurrencyName();
 
         return new ScheduleListWithReceiptResponse(
+                schedule.getId(),
                 schedule.getScheduleName(),
                 schedule.getStartDate(),
                 schedule.getEndDate(),

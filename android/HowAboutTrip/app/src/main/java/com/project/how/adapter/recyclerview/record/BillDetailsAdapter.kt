@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.how.data_class.dto.recode.receipt.ReceiptDetailListItem
 import com.project.how.databinding.BillDetailsItemBinding
+import java.text.NumberFormat
+import java.util.Locale
 
 class BillDetailsAdapter(
     private var details : MutableList<ReceiptDetailListItem>,
@@ -28,10 +30,12 @@ class BillDetailsAdapter(
             if (data.itemPrice == 0.0){
                 binding.totalPrice.text = 0.toString()
             }else{
-                binding.totalPrice.text = (data.count*data.itemPrice).toString()
+                val formatted = NumberFormat.getNumberInstance(Locale.getDefault()).format(data.count*data.itemPrice)
+                binding.totalPrice.text = formatted
             }
             binding.num.text = data.count.toString()
-            binding.unitPrice.setText(data.itemPrice.toString())
+            val formatted = NumberFormat.getNumberInstance(Locale.getDefault()).format(data.itemPrice)
+            binding.unitPrice.setText(formatted)
             binding.currency.text = currency
             binding.totalCurrency.text = currency
 
@@ -52,6 +56,7 @@ class BillDetailsAdapter(
             }
             binding.delete.setOnClickListener {
                 remove(position)
+                onPriceListener.onTotalPriceListener(getTotalPrice())
             }
 
             currentTextWatcher?.let { binding.unitPrice.removeTextChangedListener(it) }
@@ -63,7 +68,8 @@ class BillDetailsAdapter(
                 override fun afterTextChanged(s: Editable?) {
                     if (!s.isNullOrBlank()) {
                         val cursorPosition = binding.unitPrice.selectionStart
-                        data.itemPrice = s.toString().toDoubleOrNull() ?: 0.0
+                        val num = s.toString().replace(",", "")
+                        data.itemPrice = num.toDoubleOrNull() ?: 0.0
                         binding.unitPrice.setSelection(cursorPosition)
                         binding.totalPrice.text = (data.count*data.itemPrice).toString()
                         onPriceListener.onTotalPriceListener(getTotalPrice())

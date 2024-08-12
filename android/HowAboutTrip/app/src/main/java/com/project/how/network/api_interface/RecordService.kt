@@ -2,6 +2,7 @@ package com.project.how.network.api_interface
 
 import com.project.how.data_class.dto.recode.receipt.GetReceiptListResponse
 import com.project.how.data_class.dto.recode.receipt.ReceiptDetail
+import com.project.how.data_class.dto.recode.receipt.ReceiptSimpleList
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -23,4 +24,7 @@ interface RecordService {
         @Part("request") detail : RequestBody,
         @Part receiptImg : MultipartBody.Part
     ) : Call<String>
+
+    @GET("receipts/schedules/list")
+    fun getScheduleListWithReceipt() : Call<ReceiptSimpleList>
 }

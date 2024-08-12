@@ -17,17 +17,6 @@
         android:layout_marginVertical="6dp">
 
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/image"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:src="@color/grey"
-            app:civ_border_color="@color/white"
-            app:civ_border_width="3dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
@@ -40,50 +29,46 @@
             android:autoSizeTextType="uniform"
             android:autoSizeMinTextSize="13sp"
             android:autoSizeMaxTextSize="20sp"
-            android:maxWidth="200dp"
+            android:maxWidth="300dp"
             android:maxLines="1"
             android:ellipsize="end"
-            android:layout_marginStart="30dp"
-            app:layout_constraintStart_toEndOf="@+id/image"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
             android:text="2024.02.01 - 2024.03.01"
             android:textColor="@color/white"
             android:textSize="13dp"
             android:maxLines="1"
             android:ellipsize="end"
             android:gravity="start"
-            app:layout_constraintStart_toEndOf="@+id/image"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title" />
 
         <TextView
             android:id="@+id/cost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:textSize="13dp"
-            android:textColor="@color/white"
-            android:maxLines="1"
             android:ellipsize="end"
-            app:layout_constraintStart_toEndOf="@+id/image"
+            android:maxLines="1"
+            android:textColor="@color/white"
+            android:textSize="13dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/date" />
 
         <TextView
             android:id="@+id/count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
             android:text="@string/bill_count"
             android:textSize="13dp"
             android:textColor="@color/white"
             android:maxLines="1"
             android:ellipsize="end"
-            app:layout_constraintStart_toEndOf="@+id/image"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cost" />
 
         <androidx.appcompat.widget.AppCompatButton

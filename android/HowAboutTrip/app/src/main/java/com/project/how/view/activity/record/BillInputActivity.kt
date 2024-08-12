@@ -1,5 +1,6 @@
 package com.project.how.view.activity.record
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -42,6 +43,9 @@ class BillInputActivity : AppCompatActivity() {
             override fun handleOnBackPressed() {
                 if (!navController.navigateUp()){
                     isEnabled = false
+                    val intent = Intent(this@BillInputActivity, BillActivity::class.java)
+                    intent.putExtra(getString(R.string.server_calendar_id), id)
+                    startActivity(intent)
                     onBackPressedDispatcher.onBackPressed()
                 }
             }
@@ -60,7 +64,7 @@ class BillInputActivity : AppCompatActivity() {
 
     fun closeAllFragmentsAndFinishActivity() {
         navController.popBackStack(navController.graph.id, true)
-        finish()
+        onBackPressedDispatcher.onBackPressed()
     }
 
     fun getCurrentDate() = currentDate

@@ -4,28 +4,24 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.project.how.BuildConfig
 import com.project.how.R
-import com.project.how.data_class.recyclerview.record.Bill
+import com.project.how.data_class.dto.recode.receipt.ReceiptListItem
 import com.project.how.databinding.BillListItemBinding
+import com.project.how.data_class.dto.recode.receipt.ReceiptSimpleList
+import kotlin.math.roundToLong
 
 class BillListAdapter (
-    data : List<Bill>,
+    data : ReceiptSimpleList,
     private val context : Context,
     private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<BillListAdapter.ViewHolder>(){
     private var bills = data.toMutableList()
     inner class ViewHolder(val binding: BillListItemBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(data: Bill, position: Int){
-            binding.title.text = data.title
-            binding.date.text = data.date
-            binding.cost.text = context.getString(R.string.total_cost) + "${data.cost}"
+        fun bind(data: ReceiptListItem, position: Int){
+            binding.title.text = data.scheduleName
+            binding.date.text = "${data.startDate} - ${data.endDate}"
+            binding.cost.text = context.getString(R.string.total_cost) + " ${(data.totalPrice*100).roundToLong().toDouble()/100} ${data.currency}"
             binding.count.text = context.getString(R.string.bill_count, data.count.toString())
-            Glide.with(binding.root)
-                .load(data.image ?: BuildConfig.TEMPORARY_IMAGE_URL)
-                .error(BuildConfig.ERROR_IMAGE_URL)
-                .into(binding.image)
 
             binding.delete.setOnClickListener {
                 onItemClickListener.onDeleteButtonClickListener(data.id, position)
@@ -53,7 +49,7 @@ class BillListAdapter (
         holder.bind(data, position)
     }
 
-    fun update(newData : List<Bill>){
+    fun update(newData : ReceiptSimpleList){
         bills = newData.toMutableList()
         notifyDataSetChanged()
     }
@@ -63,7 +59,7 @@ class BillListAdapter (
         notifyItemRangeChanged(position, bills.lastIndex)
     }
 
-    fun add(newData : Bill){
+    fun add(newData : ReceiptListItem){
         bills.add(newData)
         notifyItemInserted(bills.lastIndex)
     }

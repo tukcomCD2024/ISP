@@ -24,7 +24,10 @@ import com.project.how.databinding.FragmentOcrBinding
 import com.project.how.view.activity.record.BillInputActivity
 import com.project.how.view.dialog.ConfirmDialog
 import com.project.how.view_model.RecordViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.text.NumberFormat
+import java.util.Locale
 
 
 class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
@@ -152,7 +155,7 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
                 val activity = requireActivity() as? BillInputActivity
                 activity?.closeAllFragmentsAndFinishActivity()
             }catch (e : Exception){
-                val confirm = ConfirmDialog(listOf(getString(R.string.image))).show(childFragmentManager, "ConfirmDialog")
+                ConfirmDialog(listOf(getString(R.string.image))).show(childFragmentManager, "ConfirmDialog")
             }
         }
     }
@@ -166,7 +169,8 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
     }
 
     override fun onTotalPriceListener(total: Double) {
-        binding.total.text = getString(R.string.bill_total_price, total.toString(), currency)
+        val formatted = NumberFormat.getNumberInstance(Locale.getDefault()).format(total)
+        binding.total.text = getString(R.string.bill_total_price, formatted, currency)
         totalPrice = total
     }
 

@@ -13,6 +13,7 @@ import com.project.how.data_class.dto.recode.ocr.ProductLineItem
 import com.project.how.data_class.dto.recode.receipt.GetReceiptListResponse
 import com.project.how.data_class.dto.recode.receipt.ReceiptDetail
 import com.project.how.data_class.dto.recode.receipt.ReceiptDetailListItem
+import com.project.how.data_class.dto.recode.receipt.ReceiptSimpleList
 import com.project.how.data_class.dto.recode.receipt.StoreType
 import com.project.how.model.RecordRepository
 import com.project.how.network.client.OCRRetrofit
@@ -43,12 +44,15 @@ class RecordViewModel : ViewModel() {
     private val _currentReceiptListLiveData = recordRepository.currentReceiptListLiveData
     private val _uriLiveData = recordRepository.uriLiveData
     private val _ocrResponseLiveData = recordRepository.ocrResponseLiveData
+    private val _receiptSimpleListLiveData = recordRepository.receiptSimpleListLiveData
     val currentReceiptListLiveData : LiveData<GetReceiptListResponse>
         get() = _currentReceiptListLiveData
     val uriLiveData : LiveData<Uri>
         get() = _uriLiveData
     val ocrResponseLiveData : LiveData<OcrResponse?>
         get() = _ocrResponseLiveData
+    val receiptSimpleListLiveData : LiveData<ReceiptSimpleList>
+        get() = _receiptSimpleListLiveData
 
     fun uploadReceipt(context: Context, uri: Uri) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -109,6 +113,34 @@ class RecordViewModel : ViewModel() {
         }
     }
 
+    fun getScheduleListWithReceipt(){
+        viewModelScope.launch(Dispatchers.IO) {
+            RecordRetrofit.getApiService()?.let { apiService->
+                apiService.getScheduleListWithReceipt()
+                    .enqueue(object : Callback<ReceiptSimpleList>{
+                        override fun onResponse(
+                            p0: Call<ReceiptSimpleList>,
+                            p1: Response<ReceiptSimpleList>
+                        ) {
+                            try {
+                                val result = p1.body()
+                                recordRepository.getReceiptSimpleList(result)
+                            }catch (e : Exception){
+                                Log.e("getScheduleListWithReceipt", "code : ${p1.code()}\nerror : ${e.message}")
+                                recordRepository.getReceiptSimpleList(null)
+                            }
+                        }
+
+                        override fun onFailure(p0: Call<ReceiptSimpleList>, p1: Throwable) {
+                            Log.e("getSchedule", "onFailure\nerror : ${p1.message}")
+                            recordRepository.getReceiptSimpleList(null)
+                        }
+
+                    })
+
+            }
+        }
+    }
 
     fun getReceiptList(scheduleId : Long){
         viewModelScope.launch (Dispatchers.IO){

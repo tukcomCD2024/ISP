@@ -2,6 +2,7 @@ package com.project.how.view.activity.record
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.activity.viewModels
@@ -42,8 +43,13 @@ class BillActivity : AppCompatActivity(), BillDaysAdapter.OnItemClickListener {
         adapter = BillDaysAdapter(mutableListOf<ReceiptList>(), this, "원",this)
         binding.dayBills.adapter = adapter
 
+        binding.swipeRefreshLayout.setOnRefreshListener { // 새로 고침을 위한 작업 수행
+            init()
+        }
+
         recordViewModel.currentReceiptListLiveData.observe(this){ data->
             lifecycleScope.launch {
+                binding.swipeRefreshLayout.isRefreshing = false
                 currentDate = recordViewModel.getCurrentDate(data.startDate, currentTab)
                 currency = data.currencyName
                 adapter.update(data.receiptList.filter { it.purchaseDate == currentDate }.toMutableList(), currency)
@@ -60,6 +66,7 @@ class BillActivity : AppCompatActivity(), BillDaysAdapter.OnItemClickListener {
         intent.putExtra(getString(R.string.current_date), currentDate)
         intent.putExtra(getString(R.string.currency), currency)
         startActivity(intent)
+        finish()
     }
 
     override fun onResume() {
@@ -75,6 +82,9 @@ class BillActivity : AppCompatActivity(), BillDaysAdapter.OnItemClickListener {
 
             recordViewModel.getReceiptList(this@BillActivity.id)
         }
+    }
+
+    private fun refresh(){
     }
 
     private fun setUI(data : GetReceiptListResponse){

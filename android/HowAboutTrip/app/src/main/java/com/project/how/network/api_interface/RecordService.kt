@@ -1,11 +1,13 @@
 package com.project.how.network.api_interface
 
+import com.project.how.data_class.dto.EmptyResponse
 import com.project.how.data_class.dto.recode.receipt.GetReceiptListResponse
 import com.project.how.data_class.dto.recode.receipt.ReceiptDetail
 import com.project.how.data_class.dto.recode.receipt.ReceiptSimpleList
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -27,4 +29,9 @@ interface RecordService {
 
     @GET("receipts/schedules/list")
     fun getScheduleListWithReceipt() : Call<ReceiptSimpleList>
+
+    @DELETE("receipts/{receiptId}")
+    fun deleteReceipt(
+        @Path("receiptId", encoded = true) id : Long
+    ) : Call<EmptyResponse>
 }

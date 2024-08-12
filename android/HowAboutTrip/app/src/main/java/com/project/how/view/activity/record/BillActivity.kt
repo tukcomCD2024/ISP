@@ -2,7 +2,6 @@ package com.project.how.view.activity.record
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.activity.viewModels
@@ -34,6 +33,7 @@ class BillActivity : AppCompatActivity(), BillDaysAdapter.OnItemClickListener {
     private var currentTab = 0
     private lateinit var currentDate : String
     private lateinit var currency : String
+    private var totalPrice = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +44,7 @@ class BillActivity : AppCompatActivity(), BillDaysAdapter.OnItemClickListener {
         binding.dayBills.adapter = adapter
 
         binding.swipeRefreshLayout.setOnRefreshListener { // 새로 고침을 위한 작업 수행
-            init()
+            refresh()
         }
 
         recordViewModel.currentReceiptListLiveData.observe(this){ data->
@@ -52,11 +52,13 @@ class BillActivity : AppCompatActivity(), BillDaysAdapter.OnItemClickListener {
                 binding.swipeRefreshLayout.isRefreshing = false
                 currentDate = recordViewModel.getCurrentDate(data.startDate, currentTab)
                 currency = data.currencyName
+                totalPrice = data.totalReceiptsPrice
                 adapter.update(data.receiptList.filter { it.purchaseDate == currentDate }.toMutableList(), currency)
                 setUI(data)
             }
         }
 
+        init()
     }
 
     fun add(){
@@ -69,9 +71,8 @@ class BillActivity : AppCompatActivity(), BillDaysAdapter.OnItemClickListener {
         finish()
     }
 
-    override fun onResume() {
-        super.onResume()
-        init()
+    private fun refresh(){
+        recordViewModel.getReceiptList(id)
     }
 
     private fun init(){
@@ -79,12 +80,8 @@ class BillActivity : AppCompatActivity(), BillDaysAdapter.OnItemClickListener {
             val id = intent.getLongExtra(getString(R.string.server_calendar_id), -1)
             currentTab = intent.getIntExtra(getString(R.string.current_tab), 0)
             this@BillActivity.id = id.toLong()
-
             recordViewModel.getReceiptList(this@BillActivity.id)
         }
-    }
-
-    private fun refresh(){
     }
 
     private fun setUI(data : GetReceiptListResponse){
@@ -153,7 +150,15 @@ class BillActivity : AppCompatActivity(), BillDaysAdapter.OnItemClickListener {
     override fun onMoreMenuOrderChangeClickListener(position: Int) {
     }
 
-    override fun onMoreMenuDeleteClickListener(position: Int) {
+    override fun onMoreMenuDeleteClickListener(id: Long, position: Int) {
+        lifecycleScope.launch {
+            recordViewModel.deleteReceipt(id).collect{check->
+                if (check){
+                    totalPrice-=adapter.remove(position)
+                    binding.cost.text = NumberFormat.getNumberInstance(Locale.getDefault()).format(totalPrice)
+                }
+            }
+        }
     }
 
     override fun onMoreMenuEditClickListener(data: ReceiptList, position: Int) {

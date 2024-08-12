@@ -82,7 +82,7 @@ class BillDaysAdapter(
                 onItemClickListener.onMoreMenuEditClickListener(currentData!!, currentPosition)
             }
             R.id.menu_bill_delete -> {
-                onItemClickListener.onMoreMenuDeleteClickListener(currentPosition)
+                onItemClickListener.onMoreMenuDeleteClickListener(currentData!!.receiptId, currentPosition)
             }
             else ->{
                 Toast.makeText(context, context.getString(R.string.non_exist_menu_warning), Toast.LENGTH_SHORT).show()
@@ -117,16 +117,18 @@ class BillDaysAdapter(
         notifyItemInserted(billDetails.lastIndex)
     }
 
-    fun remove(position: Int){
+    fun remove(position: Int) : Double {
+        val removedPrice = billDetails[position].price
         billDetails.removeAt(position)
         notifyDataSetChanged()
+        return removedPrice
     }
 
     interface OnItemClickListener{
         fun onItemClickListener(data : ReceiptList, position: Int)
         fun onMoreMenuDateChangeClickListener(data : ReceiptList, position: Int)
         fun onMoreMenuOrderChangeClickListener(position: Int)
-        fun onMoreMenuDeleteClickListener(position: Int)
+        fun onMoreMenuDeleteClickListener(id: Long, position: Int)
         fun onMoreMenuEditClickListener(data : ReceiptList, position: Int)
     }
 }

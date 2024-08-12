@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.project.how.BuildConfig
+import com.project.how.data_class.dto.EmptyResponse
 import com.project.how.data_class.dto.recode.ocr.OcrResponse
 import com.project.how.data_class.dto.recode.ocr.ProductLineItem
 import com.project.how.data_class.dto.recode.receipt.GetReceiptListResponse
@@ -19,6 +20,10 @@ import com.project.how.model.RecordRepository
 import com.project.how.network.client.OCRRetrofit
 import com.project.how.network.client.RecordRetrofit
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType
@@ -141,6 +146,45 @@ class RecordViewModel : ViewModel() {
             }
         }
     }
+
+    fun deleteReceipt(receiptId : Long) : Flow<Boolean> = callbackFlow<Boolean> {
+        RecordRetrofit.getApiService()?.let { apiService ->
+            apiService.deleteReceipt(receiptId)
+                .enqueue(object : Callback<EmptyResponse>{
+                    override fun onResponse(p0: Call<EmptyResponse>, p1: Response<EmptyResponse>) {
+                        try {
+                            Log.d("deleteReceipt", "code : ${p1.code()}")
+                            when(p1.code()){
+                                200->{
+                                    Log.d("deleteReceipt", "success")
+                                    trySend(true)
+                                }
+                                404->{
+                                    Log.d("deleteReceipt", "this receipt ($receiptId) is not exist")
+                                    trySend(false)
+                                }
+                                else->{
+                                    Log.d("deleteReceipt", "unknown error\ncode : ${p1.code()}")
+                                    trySend(false)
+                                }
+                            }
+
+                        }catch (e : Exception){
+                            Log.e("deleteReceipt", "code : ${p1.code()}\nerror : ${e.message}")
+                            trySend(false)
+                        }
+                    }
+
+                    override fun onFailure(p0: Call<EmptyResponse>, p1: Throwable) {
+                        Log.e("deleteReceipt", "onFailure\nerror : ${p1.message}")
+                    }
+
+                })
+
+        } ?: close()
+
+        awaitClose()
+    }.flowOn(Dispatchers.IO)
 
     fun getReceiptList(scheduleId : Long){
         viewModelScope.launch (Dispatchers.IO){

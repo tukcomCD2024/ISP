@@ -11,6 +11,8 @@ import lombok.Setter;
 @Setter
 public class ScheduleListWithReceiptResponse {
 
+    private Long scheduleId ;
+
     private String scheduleName;
 
     private String startDate;

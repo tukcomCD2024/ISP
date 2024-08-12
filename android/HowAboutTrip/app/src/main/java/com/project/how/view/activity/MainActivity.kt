@@ -1,8 +1,12 @@
 package com.project.how.view.activity
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.project.how.R
 import com.project.how.databinding.ActivityMainBinding
@@ -23,6 +27,10 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
 
         val menu = intent.getIntExtra(getString(R.string.menu_intent), 2)
+
+        if (!allPermissionsGranted()){
+            ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE)
+        }
 
         supportFragmentManager.beginTransaction().add(R.id.fragment, CalendarFragment()).commitAllowingStateLoss()
         binding.menu.menu.getItem(menu).isEnabled = false
@@ -52,10 +60,25 @@ class MainActivity : AppCompatActivity() {
 
     fun moveAddAICalendar(){
         startActivity(Intent(this, AddAICalendarActivity::class.java))
-    }companion object{
+    }
+
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    companion object{
         const val TICKET = 1
         const val CALENDAR = 2
         const val PICTURE = 3
         const val MY_PAGE = 4
+
+        const val REQUEST_CODE = 10
+        val REQUIRED_PERMISSIONS = arrayOf(
+            Manifest.permission.INTERNET,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 }

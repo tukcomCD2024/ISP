@@ -1,6 +1,10 @@
 package com.project.how.view.fragment.record
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.InputType
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -37,6 +41,8 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
     private val recordViewModel : RecordViewModel by viewModels()
     private lateinit var adapter : BillDetailsAdapter
     private lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
+    private lateinit var cameraLauncher : ActivityResultLauncher<Intent>
+    private var cameraImage : Uri? = null
     private val args: OcrFragmentArgs by navArgs()
     private lateinit var data : ReceiptDetail
     private lateinit var currentDate : String
@@ -79,6 +85,17 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
                 unlock()
             }
         }
+        cameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                if (cameraImage != null){
+                    lock()
+                    binding.image.setImageURI(cameraImage)
+                    recordViewModel.uploadReceipt(requireContext(), cameraImage!!)
+                }
+            }
+        }
+
+
         recordViewModel.ocrResponseLiveData.observe(viewLifecycleOwner){ocrResult->
             lifecycleScope.launch {
                 unlock()
@@ -105,6 +122,17 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
 
     fun putImage(){
         pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
+
+    private fun camera(){
+        try {
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            cameraImage = recordViewModel.createUri(requireContext().contentResolver)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraImage)
+            cameraLauncher.launch(intent)
+        }catch (e : Exception){
+            Toast.makeText(requireContext(), getString(R.string.camera_failed), Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun lock(){
@@ -162,7 +190,7 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
 
     private fun imageInit(){
         if (camera){
-
+            camera()
         }else{
             putImage()
         }

@@ -1,7 +1,10 @@
 package com.project.how.view_model
 
+import android.content.ContentResolver
+import android.content.ContentValues
 import android.content.Context
 import android.net.Uri
+import android.provider.MediaStore
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -294,6 +297,15 @@ class RecordViewModel : ViewModel() {
         }catch (e : Exception){
             return null
         }
+    }
+
+    fun createUri(resolver: ContentResolver) : Uri? {
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.TITLE, "Captured Image")
+            put(MediaStore.Images.Media.DESCRIPTION, "Image captured by camera")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+        }
+        return resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
     }
 
     private fun getReceiptDetails(productLineItems: List<ProductLineItem>): List<ReceiptDetailListItem> {

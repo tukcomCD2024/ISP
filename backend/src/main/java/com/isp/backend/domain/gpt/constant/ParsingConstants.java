@@ -13,8 +13,10 @@ public enum ParsingConstants {
     PRICE_PREFIX("("),
     PRICE_SUFFIX(")"),
     DETAIL_PREFIX("- "),
-    DETAIL_SUFFIX(": "),
+    PRICE_FREE("무료"),
+    PRICE_VAR("변동"),
     DEFAULT_PRICE(0.0),
+    DETAIL_SUFFIX(": "),
     DEFAULT_COORDINATE(0.0);
     private final String stringValue;
     private final Double doubleValue;

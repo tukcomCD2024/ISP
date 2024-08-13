@@ -1,13 +1,34 @@
 package com.isp.backend.domain.gpt.constant;
 
-import java.util.List;
+import lombok.Getter;
 
-public class ParsingConstants {
-    public static final String DATE_REGEX = "(\\d{4}\\.\\d{2}\\.\\d{2})";
-    public static final String NEW_LINE_REGEX = "\n";
-    public static final String CURRENT_DATE = "";
-    public static final String COMMA = ", ";
-    public static final List<String> FILTER_STRINGS = List.of(
-            "Message(role=assistant, content=", ")"
-            );
+import javax.swing.*;
+
+@Getter
+public enum ParsingConstants {
+    COMMA(", "),
+    ENTRY_SEPARATOR("<"),
+    LINE_SEPARATOR("\n"),
+    DATE_SUFFIX(">"),
+    PRICE_PREFIX("("),
+    PRICE_SUFFIX(")"),
+    DETAIL_PREFIX("- "),
+    PRICE_FREE("무료"),
+    PRICE_VAR("변동"),
+    DEFAULT_PRICE(0.0),
+    DETAIL_SUFFIX(":"),
+    DEFAULT_COORDINATE(0.0);
+    private final String stringValue;
+    private final Double doubleValue;
+
+    ParsingConstants(String stringValue) {
+        this.stringValue = stringValue;
+        this.doubleValue = null;
+    }
+
+    ParsingConstants(Double doubleValue) {
+        this.stringValue = null;
+        this.doubleValue = doubleValue;
+    }
+
 }

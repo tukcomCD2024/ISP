@@ -38,7 +38,10 @@ public enum ErrorCode {
     NOT_YOUR_FLIGHT(HttpStatus.UNAUTHORIZED, "F004", "사용자의 항공권이 아닙니다"),
     OPEN_WEATHER_SEARCH_FAILED(HttpStatus.NOT_FOUND,"F005", "날씨 정보 파싱에 실패하였습니다"),
     EXCHANGE_RATE_SEARCH_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"F006", "환율 요청을 가져오는 중 오류를 발생했습니다."),
-    EXCHANGE_RATE_IS_FAILED(HttpStatus.BAD_REQUEST,"F007", "환율 DB를 저장하던 중 오류가 발생하였습니다.");
+    EXCHANGE_RATE_IS_FAILED(HttpStatus.BAD_REQUEST,"F007", "환율 DB를 저장하던 중 오류가 발생하였습니다."),
+
+    // Gpt
+    PARSING_IS_NOT_VALIDATED(HttpStatus.BAD_REQUEST, "G001", "GPT 응답을 파싱하던 중 오류가 발생했습니다.");
 
 
     private HttpStatus status;

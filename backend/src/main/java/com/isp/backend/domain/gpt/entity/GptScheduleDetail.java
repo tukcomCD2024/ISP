@@ -7,10 +7,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GptScheduleDetail {
     private String detail;
+    private Double price;
     private Coordinate coordinate;
 
-    public GptScheduleDetail(String detail, Coordinate coordinate) {
+    public GptScheduleDetail(String detail, Double price, Coordinate coordinate) {
         this.detail = detail;
+        this.price = price;
         this.coordinate = coordinate;
     }
 }

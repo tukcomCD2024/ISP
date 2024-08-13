@@ -1,6 +1,7 @@
 package com.isp.backend.domain.gpt.service;
 
 import com.isp.backend.domain.country.entity.Country;
+import com.isp.backend.domain.country.repository.CountryRepository;
 import com.isp.backend.domain.gpt.config.GptConfig;
 import com.isp.backend.domain.gpt.constant.ParsingConstants;
 import com.isp.backend.domain.gpt.dto.request.GptRequest;
@@ -12,6 +13,7 @@ import com.isp.backend.domain.gpt.entity.GptMessage;
 import com.isp.backend.domain.gpt.entity.GptSchedule;
 import com.isp.backend.domain.gpt.entity.GptScheduleParser;
 import com.isp.backend.domain.schedule.service.ScheduleService;
+import com.isp.backend.global.exception.schedule.CountryNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -34,6 +36,7 @@ import java.util.stream.Collectors;
 public class GptService {
 
     private final GptScheduleParser gptScheduleParser;
+    private final CountryRepository countryRepository;
     private final ScheduleService scheduleService;
     private final WebClient webClient;
 
@@ -49,7 +52,6 @@ public class GptService {
                 .retrieve()
                 .bodyToMono(GptResponse.class)
                 .block();
-
         List<GptSchedule> gptSchedules = gptScheduleParser.parseScheduleText(extractScheduleText(response));
         return new GptScheduleResponse(gptSchedules);
     }
@@ -61,9 +63,8 @@ public class GptService {
     @Async
     public CompletableFuture<GptSchedulesResponse> askQuestion(GptScheduleRequest questionRequest) {
         String question = formatQuestion(questionRequest);
+        Country country = countryRepository.findAirportCodeByCity(questionRequest.getDestination()).orElseThrow(CountryNotFoundException::new);        String countryImage = country.getImageUrl();
         List<GptMessage> messages = Collections.singletonList(createMessage(question));
-        Country country = scheduleService.validateCountry(questionRequest.getDestination());
-        String countryImage = country.getImageUrl();
 
         ExecutorService executorService = Executors.newFixedThreadPool(5);
         List<CompletableFuture<GptScheduleResponse>> futures = Arrays.asList(
@@ -103,7 +104,7 @@ public class GptService {
                 questionRequest.getExcludedActivities(),
                 questionRequest.getDepartureDate(),
                 questionRequest.getReturnDate(),
-                String.join(ParsingConstants.COMMA, questionRequest.getPurpose())
+                String.join(ParsingConstants.COMMA.getStringValue(), questionRequest.getPurpose())
         );
     }
 

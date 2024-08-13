@@ -24,6 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -133,6 +135,13 @@ public class ReceiptService {
         double totalReceiptsPrice = receipts.stream()
                 .mapToDouble(Receipt::getTotalPrice)
                 .sum();
+
+        // 소수점 2자리로 반올림
+        BigDecimal roundedTotalReceiptsPrice = BigDecimal.valueOf(totalReceiptsPrice)
+                .setScale(2, RoundingMode.HALF_UP);
+
+        double finalTotalReceiptsPrice = roundedTotalReceiptsPrice.doubleValue();
+
         // 영수증들 매핑
         List<ReceiptListResponse> receiptList = receipts.stream()
                 .map(receiptMapper::toReceiptListResponse)
@@ -149,7 +158,7 @@ public class ReceiptService {
     }
 
 
-
+    // 영수증에서 세부 내역의 합계를 서버에서 구현하도록 수정
     /** 영수증 별 상세 내역 조회 메소드 **/
     @Transactional(readOnly = true)
     public ReceiptResponse getReceiptDetail(Long receiptId) {

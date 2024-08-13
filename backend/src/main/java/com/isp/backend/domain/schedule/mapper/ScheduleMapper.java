@@ -160,6 +160,7 @@ public class ScheduleMapper {
         response.setScheduleName(schedule.getScheduleName());
         response.setDday(calculateDday(schedule.getStartDate()));
         response.setCountry(schedule.getCountry().getCity());
+        response.setCurrencyName(schedule.getCountry().getCurrencyName());
         response.setImageUrl(schedule.getCountry().getImageUrl());
 
         return response;

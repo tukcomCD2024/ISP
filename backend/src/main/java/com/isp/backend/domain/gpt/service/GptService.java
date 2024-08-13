@@ -12,7 +12,6 @@ import com.isp.backend.domain.gpt.dto.response.GptSchedulesResponse;
 import com.isp.backend.domain.gpt.entity.GptMessage;
 import com.isp.backend.domain.gpt.entity.GptSchedule;
 import com.isp.backend.domain.gpt.entity.GptScheduleParser;
-import com.isp.backend.domain.schedule.service.ScheduleService;
 import com.isp.backend.global.exception.schedule.CountryNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,7 +36,6 @@ public class GptService {
 
     private final GptScheduleParser gptScheduleParser;
     private final CountryRepository countryRepository;
-    private final ScheduleService scheduleService;
     private final WebClient webClient;
 
     @Value("${api-key.gpt-trip}")

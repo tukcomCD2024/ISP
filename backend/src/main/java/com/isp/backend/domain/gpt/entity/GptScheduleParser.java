@@ -14,7 +14,8 @@ import java.util.regex.Pattern;
 @Component
 public class GptScheduleParser {
 
-    private static final Pattern LINE_PATTERN = Pattern.compile("-\\s*(.*?):\\s*([\\d.]+,\\s*[\\d.]+)?\\s*\\((.*?)\\)");
+    private static final Pattern LINE_PATTERN =Pattern.compile("-\\s*(.*?):\\s*([\\d.]+),\\s*([-\\d.]+)\\s*\\[(\\d+(\\.\\d+)?)\\]");
+
 
     public List<GptSchedule> parseScheduleText(String scheduleText) {
         System.out.println(scheduleText);
@@ -35,16 +36,23 @@ public class GptScheduleParser {
 
                 Matcher matcher = LINE_PATTERN.matcher(line);
                 if (matcher.find()) {
-                    String detail = matcher.group(1);
-                    String coordinatesStr = matcher.group(2);
-                    String priceStr = matcher.group(3);
+                    try {
+                        String detail = matcher.group(1);
+                        String latitude = matcher.group(2);
+                        String longitude = matcher.group(3);
+                        String priceString = matcher.group(4);
 
-                    Coordinate coordinate = parseCoordinates(coordinatesStr);
-                    double price = parsePriceString(priceStr);
+                        Coordinate coordinate = new Coordinate(Double.parseDouble(latitude), Double.parseDouble(longitude));
+                        double price = parsePriceString(priceString);
 
-                    scheduleDetails.add(new GptScheduleDetail(detail, price, coordinate));
+                        scheduleDetails.add(new GptScheduleDetail(detail, price, coordinate));
+                    } catch (Exception e) {
+                        System.err.println("Error processing line: " + line);
+                        e.printStackTrace();
+                        throw new NonValidatedParsingException();
+                    }
                 } else {
-                    System.out.println("767867889");
+                    System.out.println("No match found for line: " + line);
                     throw new NonValidatedParsingException();
                 }
             }
@@ -59,26 +67,6 @@ public class GptScheduleParser {
         return line.trim().replace(ParsingConstants.DATE_SUFFIX.getStringValue(), "");
     }
 
-    private Coordinate parseCoordinates(String coordinatesStr) {
-        if (coordinatesStr == null || coordinatesStr.isEmpty()) {
-            return new Coordinate(ParsingConstants.DEFAULT_COORDINATE.getDoubleValue(), ParsingConstants.DEFAULT_COORDINATE.getDoubleValue());
-        }
-
-        String[] parts = coordinatesStr.split(",");
-        if (parts.length != 2) {
-            System.out.println("1546351");
-            throw new NonValidatedParsingException();
-        }
-
-        try {
-            double latitude = Double.parseDouble(parts[0].trim());
-            double longitude = Double.parseDouble(parts[1].trim());
-            return new Coordinate(latitude, longitude);
-        } catch (NumberFormatException e) {
-            System.out.println("1234");
-            throw new NonValidatedParsingException();
-        }
-    }
 
     private double parsePriceString(String priceStr) {
         if (ParsingConstants.PRICE_FREE.getStringValue().equals(priceStr)) {
@@ -88,7 +76,6 @@ public class GptScheduleParser {
         try {
             return Double.parseDouble(priceStr.replaceAll("[^\\d.]", ""));
         } catch (NumberFormatException e) {
-            System.out.println("5678");
             return ParsingConstants.DEFAULT_PRICE.getDoubleValue();
         }
     }

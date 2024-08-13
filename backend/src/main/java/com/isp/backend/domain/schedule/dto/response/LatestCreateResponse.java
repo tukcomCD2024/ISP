@@ -19,6 +19,8 @@ public class LatestCreateResponse {
 
     private String city; // 여행지 장소
 
+    private String currencyName ;
+
     private String imageUrl; // 이미지 url
 
     private List<String> plan ; // 여행 일정 리스트

@@ -115,6 +115,7 @@ public class ScheduleMapper {
         return new ScheduleSaveRequest(
                 schedule.getScheduleName(),
                 schedule.getCountry().getCity(), // 국가에서 도시 가져오기로 수정
+                schedule.getCountry().getCurrencyName(),
                 schedule.getStartDate(),
                 schedule.getEndDate(),
                 sortedDailySchedules
@@ -192,6 +193,7 @@ public class ScheduleMapper {
                 schedule.getId(),
                 schedule.getScheduleName(),
                 schedule.getCountry().getCity(), // 국가에서 도시 가져오기로 수정
+                schedule.getCountry().getCurrencyName(), // 통화명 가져오기
                 schedule.getCountry().getImageUrl(), // 이미지 URL 추가 (엔티티에 이 필드가 있다고 가정)
                 limitedPlan
         );

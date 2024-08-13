@@ -19,6 +19,8 @@ public class FastestScheduleResponse {
 
     private String country ;
 
+    private String currencyName; //통화명
+
     private String imageUrl;
 
 }

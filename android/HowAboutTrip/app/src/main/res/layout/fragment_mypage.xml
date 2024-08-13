@@ -56,6 +56,7 @@
             android:scaleType="fitCenter"
             android:src="@drawable/icon_calendar_search"
             android:layout_marginTop="40dp"
+            android:onClick="@{()-> mypage.moveCalendarList()}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name_edit"
             app:layout_constraintEnd_toStartOf="@id/like"/>
@@ -93,6 +94,7 @@
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
             android:src="@drawable/icon_bill"
+            android:onClick="@{()->mypage.moveBillList()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/exchange_rate"
             app:layout_constraintTop_toBottomOf="@+id/name_edit" />
@@ -106,6 +108,7 @@
             android:gravity="center"
             android:layout_marginTop="5dp"
             android:textColor="@color/black"
+            android:onClick="@{()-> mypage.moveCalendarList()}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/calendar_search"
             app:layout_constraintEnd_toStartOf="@id/textView3"/>
@@ -147,6 +150,7 @@
             android:gravity="center"
             android:layout_marginTop="5dp"
             android:textColor="@color/black"
+            android:onClick="@{()->mypage.moveBillList()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView4"
             app:layout_constraintTop_toBottomOf="@+id/picture" />

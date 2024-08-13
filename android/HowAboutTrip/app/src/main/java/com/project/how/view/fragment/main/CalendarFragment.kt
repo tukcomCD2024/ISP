@@ -56,6 +56,7 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
     private var departureDate : String? = null
     private var entranceDate : String? = null
     private var latLng : GetCountryLocationResponse? = null
+    private lateinit var currency : String
     private lateinit var autoScrollJob : Job
     private var viewPagerPosition = 0
 
@@ -238,9 +239,10 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
             val schedule = Schedule(
                 destination!!,
                 destination!!,
+                currency,
                 departureDate!!,
                 entranceDate!!,
-                0,
+                0.0,
                 scheduleViewModel.getEmptyDaysSchedule(departureDate!!, entranceDate!!)
             )
             intent.putExtra(getString(R.string.type), CalendarEditActivity.NEW)
@@ -257,12 +259,14 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
                 location?.let {
                     destination = des
                     latLng = location
+                    currency = location.currency
                     showCalendar()
                 } ?: run {
                     countryViewModel.getCountryLocation(des).collect { newLocation ->
                         newLocation?.let {
                             destination = des
                             latLng = newLocation
+                            currency = newLocation.currency
                             showCalendar()
                         } ?: run {
                             Toast.makeText(activity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()

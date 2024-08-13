@@ -33,7 +33,13 @@ import com.project.how.view.map_helper.MarkerProducer
 import kotlinx.coroutines.launch
 
 
-class EditScheduleBottomSheetDialog(private val lat : Double, private val lng : Double, private val schedule : DaysSchedule, private val position : Int, private val onScheduleListener: OnScheduleListener)
+class EditScheduleBottomSheetDialog(
+    private val lat : Double,
+    private val lng : Double,
+    private val schedule : DaysSchedule,
+    private val position : Int,
+    private val currency : String,
+    private val onScheduleListener: OnScheduleListener)
     : BottomSheetDialogFragment(), OnMapReadyCallback {
     private var _binding : EditScheduleBottomSheetBinding? = null
     private val binding : EditScheduleBottomSheetBinding
@@ -56,6 +62,7 @@ class EditScheduleBottomSheetDialog(private val lat : Double, private val lng : 
         _binding = DataBindingUtil.inflate(inflater, R.layout.edit_schedule_bottom_sheet, container, false)
         binding.edit = this
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.unit.text = currency
         dialog?.setOnShowListener {
             val bottomSheetDialog = it as BottomSheetDialog
             BottomSheetRatioHeightManager().setMaxRatio(bottomSheetDialog, requireContext())
@@ -198,7 +205,7 @@ class EditScheduleBottomSheetDialog(private val lat : Double, private val lng : 
             place,
             latitude ?: 0.0,
             longitude ?: 0.0,
-            cost.toLong(),
+            cost.toDouble(),
             schedule.purchaseStatus,
             schedule.purchaseDate
         )

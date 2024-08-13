@@ -21,6 +21,7 @@ import java.util.Locale
 class DaysScheduleEditAdapter (
     data: MutableList<DaysSchedule>,
     private val context: Context,
+    private var currency : String,
     private val onItemClickListener: OnItemClickListener
 )
     : RecyclerView.Adapter<DaysScheduleEditAdapter.ViewHolder>(), ItemMoveListener, PopupMenu.OnMenuItemClickListener {
@@ -34,7 +35,7 @@ class DaysScheduleEditAdapter (
         fun bind(data : DaysSchedule, position: Int){
             binding.scheduleTitle.text = data.todo
             val formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(data.cost)
-            binding.budget.text = context.getString(R.string.budget, formattedNumber)
+            binding.budget.text = context.getString(R.string.budget, formattedNumber, currency)
 
             if ((data.latitude == null || data.longitude == null) || (data.latitude == 0.0 && data.longitude == 0.0)){
               binding.perfect.visibility = View.GONE
@@ -166,7 +167,10 @@ class DaysScheduleEditAdapter (
             notifyDataSetChanged()
     }
 
-
+    fun updateCurrency(newCurrency : String){
+        currency = newCurrency
+        notifyDataSetChanged()
+    }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         Log.d("addOnItemTouchListener", "onItemMove start\nfrom : $fromPosition\tto : $toPosition")

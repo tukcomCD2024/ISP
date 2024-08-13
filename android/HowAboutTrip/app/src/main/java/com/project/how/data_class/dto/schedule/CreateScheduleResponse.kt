@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class CreateScheduleListResponse(
     @SerializedName("countryImage") val countryImage : String,
+    @SerializedName("currencyUnit") val currency : String?,
     @SerializedName("schedules") val schedules : List<CreateScheduleResponse>
 )
 
@@ -18,6 +19,7 @@ data class AiSimpleSchedule (
 
 data class AiScheduleDetail (
     @SerializedName("detail") val detail: String,
+    @SerializedName("price") val price : Double,
     @SerializedName("coordinate") val coordinate: Coordinate
 )
 

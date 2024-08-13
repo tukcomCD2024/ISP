@@ -99,12 +99,12 @@ class CalendarEditActivity
             }
             binding.date.text = "${data.startDate} - ${data.endDate}"
             val formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(data.cost)
-            binding.budget.text = getString(R.string.calendar_budget, formattedNumber)
+            binding.budget.text = getString(R.string.calendar_budget, formattedNumber, data.currency)
             if (selectedDays > data.dailySchedule.lastIndex){
                 selectedDays = data.dailySchedule.lastIndex
             }
 
-            adapter = DaysScheduleEditAdapter(data.dailySchedule[selectedDays], this@CalendarEditActivity, this@CalendarEditActivity)
+            adapter = DaysScheduleEditAdapter(data.dailySchedule[selectedDays], this@CalendarEditActivity, data.currency, this@CalendarEditActivity)
             binding.daySchedules.adapter = adapter
 
             binding.daysTab.removeAllTabs()
@@ -282,12 +282,12 @@ class CalendarEditActivity
             "",
             null,
             null,
-            0.toLong(),
+            0.0,
             false,
             null
         )
         data.dailySchedule[selectedDays].add(newData)
-        val editScheduleBottomSheet = EditScheduleBottomSheetDialog(latitude, longitude, newData , data.dailySchedule[selectedDays].lastIndex, this)
+        val editScheduleBottomSheet = EditScheduleBottomSheetDialog(latitude, longitude, newData , data.dailySchedule[selectedDays].lastIndex, data.currency,this)
         editScheduleBottomSheet.show(supportFragmentManager, "EditScheduleBottomSheetDialog")
     }
 
@@ -400,14 +400,14 @@ class CalendarEditActivity
         finish()
     }
 
-    private fun setBudgetText(totalCost : Long){
+    private fun setBudgetText(totalCost : Double){
         data.cost = totalCost
         val formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(data.cost)
-        binding.budget.text = getString(R.string.calendar_budget, formattedNumber)
+        binding.budget.text = getString(R.string.calendar_budget, formattedNumber, "원")
     }
 
     override fun onEditButtonClickListener(data : DaysSchedule, position : Int) {
-        val editScheduleBottomSheet = EditScheduleBottomSheetDialog(latitude, longitude, data , position, this)
+        val editScheduleBottomSheet = EditScheduleBottomSheetDialog(latitude, longitude, data , position, this.data.currency, this)
         editScheduleBottomSheet.show(supportFragmentManager, "EditScheduleBottomSheetDialog")
     }
 
@@ -454,12 +454,16 @@ class CalendarEditActivity
                     data.country = des
                     latitude = location.lat
                     longitude = location.lng
+                    data.currency = location.currency
+                    adapter.updateCurrency(data.currency)
                 } ?: run {
                     countryViewModel.getCountryLocation(des).collect { newLocation ->
                         newLocation?.let {
                             data.country = des
                             latitude = newLocation.lat
                             longitude = newLocation.lng
+                            data.currency = newLocation.currency
+                            adapter.updateCurrency(data.currency)
                         } ?: run {
                             Toast.makeText(this@CalendarEditActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
                         }

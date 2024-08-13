@@ -12,26 +12,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
+import com.project.how.BuildConfig
 import com.project.how.R
 import com.project.how.adapter.recyclerview.record.BillDetailsAdapter
 import com.project.how.data_class.dto.recode.receipt.ReceiptDetail
 import com.project.how.data_class.dto.recode.receipt.ReceiptDetailListItem
 import com.project.how.databinding.FragmentOcrBinding
+import com.project.how.view.activity.record.BillActivity
 import com.project.how.view.activity.record.BillInputActivity
 import com.project.how.view.dialog.ConfirmDialog
 import com.project.how.view_model.RecordViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.Locale
+import kotlin.math.roundToLong
 
 
 class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
@@ -47,8 +51,10 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
     private lateinit var data : ReceiptDetail
     private lateinit var currentDate : String
     private lateinit var currency : String
+    private lateinit var storeName : String
     private var camera = false
     private var id = -1L
+    private var receiptId = -1L
     private var totalPrice = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,8 +63,10 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
         currency = args.currency
         camera = args.camera
         id = args.id
+        receiptId = args.receiptId
+        storeName = args.storeName
 
-        Log.d("OcrFragment", "currentDate : $currentDate\ncurrency : $currency\ncamera : $camera\nid : $id")
+        Log.d("OcrFragment", "currentDate : $currentDate\ncurrency : $currency\ncamera : $camera\nid : $id\nreceiptId : $receiptId\nstoreName : $storeName")
 
         adapter = BillDetailsAdapter(mutableListOf<ReceiptDetailListItem>(), currency, this)
     }
@@ -95,6 +103,13 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
             }
         }
 
+        recordViewModel.saveCheckLiveData.observe(viewLifecycleOwner){
+            if (it){
+                close()
+            }else{
+                Toast.makeText(requireContext(), getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
+            }
+        }
 
         recordViewModel.ocrResponseLiveData.observe(viewLifecycleOwner){ocrResult->
             lifecycleScope.launch {
@@ -115,9 +130,23 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
             }
         }
 
-        imageInit()
+        if (receiptId > -1){
+            lifecycleScope.launch {
+                getReceiptDetail()
+            }
+        }else{
+            imageInit()
+        }
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (receiptId > -1){
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            }
+        }
     }
 
     fun putImage(){
@@ -162,6 +191,11 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
     fun setUI(receiptDetail: ReceiptDetail){
         binding.title.setText(receiptDetail.storeName)
         binding.date.text = currentDate
+        if (receiptId > -1){
+            binding.save.text = getString(R.string.close)
+            binding.add.visibility = View.GONE
+            binding.image.isEnabled = false
+        }
     }
 
     override fun onDestroyView() {
@@ -173,15 +207,26 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
         adapter.add()
     }
 
-    fun save(){
+    fun confirm() {
+        if (receiptId > -1){
+            close()
+        }else{
+            save()
+        }
+    }
+
+    private fun close(){
+        val activity = requireActivity() as? BillInputActivity
+        activity?.closeAllFragmentsAndFinishActivity()
+    }
+
+    private fun save(){
         lifecycleScope.launch {
             try {
                 val storeName = binding.title.text.toString()
                 if (storeName.isNullOrBlank()) data.storeName = getString(R.string.empty_title) else data.storeName = storeName
                 data.totalPrice = totalPrice
                 recordViewModel.saveReceipt(requireContext(), data).join()
-                val activity = requireActivity() as? BillInputActivity
-                activity?.closeAllFragmentsAndFinishActivity()
             }catch (e : Exception){
                 ConfirmDialog(listOf(getString(R.string.image))).show(childFragmentManager, "ConfirmDialog")
             }
@@ -196,10 +241,32 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
         }
     }
 
+    private suspend fun getReceiptDetail(){
+        recordViewModel.getReceiptDetail(receiptId).collect{data->
+            if (data != null){
+                val d = recordViewModel.getReceiptDetail(data, storeName)
+                d?.let {
+                    this.data = it
+                    adapter.update(this.data.receiptDetails)
+                    setUI(this.data)
+                    Glide.with(binding.root)
+                        .load(data.image)
+                        .error(BuildConfig.ERROR_IMAGE_URL)
+                        .into(binding.image)
+                } ?: {
+                    Toast.makeText(requireContext(), getString(R.string.non_have_grant), Toast.LENGTH_SHORT).show()
+                    val activity = requireActivity() as? BillInputActivity
+                    activity?.closeAllFragmentsAndFinishActivity()
+                }
+                return@collect
+            }
+        }
+    }
+
     override fun onTotalPriceListener(total: Double) {
         val formatted = NumberFormat.getNumberInstance(Locale.getDefault()).format(total)
         binding.total.text = getString(R.string.bill_total_price, formatted, currency)
-        totalPrice = total
+        totalPrice = ((total*100).roundToLong().toDouble()/100)
     }
 
 }

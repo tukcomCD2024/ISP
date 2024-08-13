@@ -23,7 +23,7 @@ class CalendarListAdapter (private val context: Context, data : GetScheduleListR
         fun bind(data : GetScheduleListResponseElement, position: Int){
             val formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(data.totalPrice)
             binding.link.visibility = View.GONE
-            binding.budget.text = context.getString(R.string.calendar_budget, formattedNumber)
+            binding.budget.text = context.getString(R.string.calendar_budget, formattedNumber, data.currency)
             binding.title.text = data.scheduleName
             binding.date.text = "${data.startDate} - ${data.endDate}"
             Log.d("CalendarListAdapter", "$position\n${data.imageUrl}")
@@ -59,7 +59,7 @@ class CalendarListAdapter (private val context: Context, data : GetScheduleListR
         holder.bind(data, position)
 
         holder.itemView.setOnClickListener {
-            onButtonClickListener.onItemClickListener(data.id, data.latitude, data.longitude)
+            onButtonClickListener.onItemClickListener(data.id, data.latitude, data.longitude, data.currency)
         }
     }
 
@@ -68,11 +68,17 @@ class CalendarListAdapter (private val context: Context, data : GetScheduleListR
         notifyDataSetChanged()
     }
 
+    fun update(newDatas : GetScheduleListResponse){
+        calendars.clear()
+        calendars.addAll(newDatas)
+        notifyDataSetChanged()
+    }
+
     fun getData(position: Int) = calendars[position]
 
     interface OnCalendarListButtonClickListener{
         fun onDeleteButtonClickListener(data : GetScheduleListResponseElement, position: Int)
-        fun onItemClickListener(id: Long, latitude : Double, longitude : Double)
+        fun onItemClickListener(id: Long, latitude: Double, longitude: Double, currency: String)
         fun onCheckListButtonClickListener(id: Long)
         fun onShareButtonClickListener(id: Long)
     }

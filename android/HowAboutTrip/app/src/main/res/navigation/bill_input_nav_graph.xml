@@ -28,6 +28,12 @@
             <argument
                 android:name="id"
                 app:argType="long"/>
+            <argument
+                android:name="receipt_id"
+                app:argType="long"/>
+            <argument
+                android:name="store_name"
+                app:argType="string"/>
         </action>
     </fragment>
     <fragment
@@ -52,5 +58,11 @@
         <argument
             android:name="id"
             app:argType="long"/>
+        <argument
+            android:name="receipt_id"
+            app:argType="long"/>
+        <argument
+            android:name="store_name"
+            app:argType="string"/>
     </fragment>
 </navigation>

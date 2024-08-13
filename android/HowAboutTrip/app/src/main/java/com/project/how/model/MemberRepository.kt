@@ -60,8 +60,8 @@ object MemberRepository {
         val currentUser = firebaseAuth.currentUser
         if(currentUser != null){
             Log.d("checkCurrentUser", "firebaseAuth.current != null\nemail : ${currentUser.email}\ndisplayName : ${currentUser.displayName}")
-            _currentUserLiveData.postValue(currentUser)
-            Log.d("checkCurrentUser", "currentUserLiveData.value : ${currentUserLiveData.value}")
+            _currentUserLiveData.postValue(currentUser!!)
+            Log.d("checkCurrentUser", "currentUserLiveData.value : ${_currentUserLiveData.value}")
         }else{
             Log.d("checkCurrentUser", "firebaseAuth.current == null")
         }

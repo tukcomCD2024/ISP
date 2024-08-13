@@ -17,65 +17,55 @@ class AuthInterceptor(@ApplicationContext private val context: Context) : Interc
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest: Request = chain.request()
         val accessToken = MemberRepository.tokensLiveData.value?.accessToken
-
-        // "No-Authorization" 헤더가 있는지 확인
         val noAuth = originalRequest.header("No-Authorization") != null
 
+        // "No-Authorization" 헤더가 있을 경우 제거
         if (noAuth) {
-            // "No-Authorization" 헤더 제거
             val requestBuilder = originalRequest.newBuilder()
                 .removeHeader("No-Authorization")
             return chain.proceed(requestBuilder.build())
-        } else {
-            // 토큰 추가
-            var requestBuilder = originalRequest.newBuilder()
-                .header("Authorization", "Bearer $accessToken")
-            var request = requestBuilder.build()
+        }
 
-            var response: Response = chain.proceed(request)
-            if ((response.code == 400) || (response.code == 401)) {
-                response.close() // 기존 응답 닫기
+        // 토큰 추가
+        var requestBuilder = originalRequest.newBuilder()
+            .header("Authorization", "Bearer $accessToken")
+        var response: Response = chain.proceed(requestBuilder.build())
 
-                synchronized(this) {
-                    val currentAccessToken = MemberRepository.tokensLiveData.value?.accessToken
-                    if (accessToken == currentAccessToken) {
-                        val refreshToken = MemberRepository.tokensLiveData.value?.refreshToken ?: ""
-                        // 토큰 재생성 호출
-                        val newToken = runBlocking {
-                            try {
-                                authRecreate2(context,
-                                    AuthRecreateRequest(
-                                        refreshToken
-                                    )
-                                )
-                            } catch (e: Exception) {
-                                null
-                            }
+        // 400 또는 401 응답 처리
+        if (response.code == 400 || response.code == 401) {
+            response.close() // 기존 응답 닫기
+
+            synchronized(this) {
+                val currentAccessToken = MemberRepository.tokensLiveData.value?.accessToken
+                if (accessToken == currentAccessToken) {
+                    val refreshToken = MemberRepository.tokensLiveData.value?.refreshToken ?: ""
+                    val newToken = runBlocking {
+                        try {
+                            authRecreate2(context, AuthRecreateRequest(refreshToken))
+                        } catch (e: Exception) {
+                            null
                         }
+                    }
 
-                        // 새로운 토큰으로 요청 다시 시도
-                        if (newToken != null) {
-                            requestBuilder = originalRequest.newBuilder()
-                                .header("Authorization", "Bearer $newToken")
-                            request = requestBuilder.build()
-                            response = chain.proceed(request)
-                        } else {
-                            // 토큰 재발급 실패 시 실패 메시지 표시
-                            throw IOException("Token recreate failed")
-                        }
+                    // 새로운 토큰으로 요청 다시 시도
+                    if (newToken != null) {
+                        requestBuilder = originalRequest.newBuilder()
+                            .header("Authorization", "Bearer $newToken")
+                        response = chain.proceed(requestBuilder.build())
                     } else {
-                        // 이미 다른 스레드에서 토큰이 갱신된 경우, 새로운 토큰으로 다시 시도
-                        val newAccessToken = MemberRepository.tokensLiveData.value?.accessToken
-                        if (newAccessToken != null) {
-                            requestBuilder = originalRequest.newBuilder()
-                                .header("Authorization", "Bearer $newAccessToken")
-                            request = requestBuilder.build()
-                            response = chain.proceed(request)
-                        }
+                        throw IOException("Token recreate failed")
+                    }
+                } else {
+                    // 이미 다른 스레드에서 토큰이 갱신된 경우
+                    val newAccessToken = MemberRepository.tokensLiveData.value?.accessToken
+                    if (newAccessToken != null) {
+                        requestBuilder = originalRequest.newBuilder()
+                            .header("Authorization", "Bearer $newAccessToken")
+                        response = chain.proceed(requestBuilder.build())
                     }
                 }
             }
-            return response
         }
+        return response
     }
 }

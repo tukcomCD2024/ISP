@@ -17,6 +17,7 @@ import com.project.how.data_class.dto.recode.ocr.ProductLineItem
 import com.project.how.data_class.dto.recode.receipt.GetReceiptListResponse
 import com.project.how.data_class.dto.recode.receipt.ReceiptDetail
 import com.project.how.data_class.dto.recode.receipt.ReceiptDetailListItem
+import com.project.how.data_class.dto.recode.receipt.GetReceiptDetail
 import com.project.how.data_class.dto.recode.receipt.ReceiptSimpleList
 import com.project.how.data_class.dto.recode.receipt.StoreType
 import com.project.how.model.RecordRepository
@@ -29,17 +30,14 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
 import retrofit2.Response
-import retrofit2.http.Part
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -53,6 +51,7 @@ class RecordViewModel : ViewModel() {
     private val _uriLiveData = recordRepository.uriLiveData
     private val _ocrResponseLiveData = recordRepository.ocrResponseLiveData
     private val _receiptSimpleListLiveData = recordRepository.receiptSimpleListLiveData
+    private val _saveCheckLiveData = recordRepository.saveCheckLiveData
     val currentReceiptListLiveData : LiveData<GetReceiptListResponse>
         get() = _currentReceiptListLiveData
     val uriLiveData : LiveData<Uri>
@@ -61,6 +60,8 @@ class RecordViewModel : ViewModel() {
         get() = _ocrResponseLiveData
     val receiptSimpleListLiveData : LiveData<ReceiptSimpleList>
         get() = _receiptSimpleListLiveData
+    val saveCheckLiveData : LiveData<Boolean>
+        get() = _saveCheckLiveData
 
     fun uploadReceipt(context: Context, uri: Uri) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -120,6 +121,34 @@ class RecordViewModel : ViewModel() {
             }
         }
     }
+
+    fun getReceiptDetail(receiptId : Long) : Flow<GetReceiptDetail?> = callbackFlow<GetReceiptDetail?> {
+        RecordRetrofit.getApiService()?.let { apiService->
+            apiService.getReceiptDetail(receiptId)
+                .enqueue(object : Callback<GetReceiptDetail>{
+                    override fun onResponse(
+                        p0: Call<GetReceiptDetail>,
+                        p1: Response<GetReceiptDetail>
+                    ) {
+                        try {
+                            val result = p1.body()
+                            trySend(result)
+                        }catch (e : Exception){
+                            Log.e("getReceiptDetail", "code : ${p1.code()}\nerror : ${e.message}")
+                            trySend(null)
+                        }
+                    }
+
+                    override fun onFailure(p0: Call<GetReceiptDetail>, p1: Throwable) {
+                        Log.e("getReceiptDetail", "onFailure\nerror : ${p1.message}")
+                        trySend(null)
+                    }
+
+                })
+        } ?: close()
+
+        awaitClose()
+    }.flowOn(Dispatchers.IO)
 
     fun getScheduleListWithReceipt(){
         viewModelScope.launch(Dispatchers.IO) {
@@ -226,15 +255,26 @@ class RecordViewModel : ViewModel() {
 
             val mediaType = getImageType(file)
             val requestFile = file.asRequestBody(mediaType.toMediaTypeOrNull())
-            val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+            val body = MultipartBody.Part.createFormData("receiptImg", file.name, requestFile)
 
             RecordRetrofit.getApiService()?.let { apiService->
                 apiService.saveReceipt(requestBody, body)
                     .enqueue(object : Callback<String>{
                         override fun onResponse(p0: Call<String>, p1: Response<String>) {
+                            try {
+                                if (p1.code() == 201){
+                                    recordRepository.getSaveCheck(true)
+                                }else{
+                                    recordRepository.getSaveCheck(false)
+                                }
+                            }catch (e: Exception){
+                                Log.e("saveReceipt", "code : ${p1.code()}\nerror : ${e.message}")
+                                recordRepository.getSaveCheck(false)
+                            }
                         }
                         override fun onFailure(p0: Call<String>, p1: Throwable) {
                             Log.e("saveReceipt", "onFailure\nerror : ${p1.message}")
+                            recordRepository.getSaveCheck(false)
                         }
 
                     })
@@ -276,6 +316,23 @@ class RecordViewModel : ViewModel() {
 
             Log.d("uploadReceipt", "getRealPathFromURI end\n$file")
             file
+        }
+    }
+
+    suspend fun getReceiptDetail(data : GetReceiptDetail, storeName : String) : ReceiptDetail?{
+        return try {
+            withContext(Dispatchers.IO){
+                ReceiptDetail(
+                    data.id,
+                    storeName,
+                    StoreType.PLACE,
+                    data.purchaseDate,
+                    data.totalPrice,
+                    data.receiptDetailList
+                )
+            }
+        }catch (e : Exception){
+            null
         }
     }
 

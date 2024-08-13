@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.how.R
@@ -16,18 +17,22 @@ import com.project.how.databinding.FragmentRecordBinding
 import com.project.how.view.activity.record.BillListActivity
 import com.project.how.view.activity.record.LocationMapActivity
 import com.project.how.view_model.MemberViewModel
+import com.project.how.view_model.RecordViewModel
 import kotlinx.coroutines.launch
 
 class RecordFragment : Fragment() {
     private var _binding : FragmentRecordBinding? = null
     private val binding : FragmentRecordBinding
         get() = _binding!!
+    private val recordViewModel : RecordViewModel by viewModels()
     private lateinit var adapter : RecentAddedRecordsAdapter
     private lateinit var recent : List<RecentAddedRecord>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch {
+            recordViewModel.getScheduleListWithReceipt()
+
             recent = listOf(
                 RecentAddedRecord(
                     0,
@@ -67,6 +72,9 @@ class RecordFragment : Fragment() {
         binding.picture = this
         binding.lifecycleOwner = viewLifecycleOwner
         binding.recentRecord.adapter = adapter
+        recordViewModel.receiptSimpleListLiveData.observe(viewLifecycleOwner){
+            binding.recordCount.text = getString(R.string.record_count, it.size.toString())
+        }
         binding.recordCount.text = getString(R.string.record_count, 0.toString())
         binding.countTitle.text = getString(R.string.record_count_user_title, MemberViewModel.memberInfoLiveData.value?.name ?: getString(R.string.error))
         TabLayoutMediator(binding.indicator, binding.recentRecord) { _, _ -> }.attach()

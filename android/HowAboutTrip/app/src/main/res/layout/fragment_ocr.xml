@@ -136,7 +136,7 @@
             android:textSize="18dp"
             android:textColor="@color/white"
             android:fontFamily="@font/bm_hanna"
-            android:onClick="@{()->ocr.save()}"
+            android:onClick="@{()->ocr.confirm()}"
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <ImageView

@@ -50,6 +50,10 @@ class BillDaysAdapter(
                 }
             }
 
+            itemView.setOnClickListener {
+                onItemClickListener.onItemClickListener(data, position)
+            }
+
             binding.more.setOnClickListener {
                 currentPosition = position
                 currentData = data

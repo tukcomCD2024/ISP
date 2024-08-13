@@ -10,6 +10,7 @@ import com.project.how.data_class.dto.recode.receipt.ReceiptDetailListItem
 import com.project.how.databinding.BillDetailsItemBinding
 import java.text.NumberFormat
 import java.util.Locale
+import kotlin.math.roundToLong
 
 class BillDetailsAdapter(
     private var details : MutableList<ReceiptDetailListItem>,
@@ -21,6 +22,7 @@ class BillDetailsAdapter(
         private var titleTextWatcher: TextWatcher? = null
 
         fun bind(data : ReceiptDetailListItem, position : Int){
+            data.itemPrice = (data.itemPrice*100).roundToLong().toDouble()/100
             if (data.title.startsWith("Hint")){
                 binding.title.setHint(data.title.replace("Hint", ""))
             }else{

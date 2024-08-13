@@ -25,6 +25,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
 import retrofit2.Response
+import retrofit2.awaitResponse
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -73,40 +74,20 @@ object MemberViewModel : ViewModel() {
         memberRepository.init(context)
     }
 
-    fun authRecreate2(context: Context, arr: AuthRecreateRequest){
-        viewModelScope.launch(Dispatchers.IO) {
-            MemberRetrofit.getApiService()?.let { apiService ->
-                apiService.authRecreate(arr)
-                    .enqueue(object : Callback<EmptyResponse> {
-                        override fun onResponse(
-                            call: Call<EmptyResponse>,
-                            response: Response<EmptyResponse>
-                        ) {
-                            viewModelScope.launch {
-                                if (response.code() == SUCCESS) {
-                                    val result = response.body().toString()
-                                    val accessToken = response.headers()[ACCESS_TOKEN]
-                                    val refreshToken = response.headers()[REFRESH_TOKEN]
-
-                                    memberRepository.getTokens(
-                                        context,
-                                        accessToken!!,
-                                        refreshToken!!
-                                    )
-                                    Log.d(
-                                        "authRecreate success",
-                                        "code : ${response.code()}\nresult : ${result}\naccessToken : ${accessToken}\nrefreshToken : $refreshToken"
-                                    )
-                                }
-                            }
-                        }
-
-                        override fun onFailure(call: Call<EmptyResponse>, t: Throwable) {
-                            Log.d("authRecreate onFailure", "${t.message}")
-                        }
-
-                    })
+    suspend fun authRecreate2(context: Context, arr: AuthRecreateRequest): String? {
+        return try {
+            val response = MemberRetrofit.getApiService()?.authRecreate(arr)?.awaitResponse()
+            if (response?.isSuccessful == true) {
+                val accessToken = response.headers()[ACCESS_TOKEN]
+                val refreshToken = response.headers()[REFRESH_TOKEN]
+                memberRepository.getTokens(context, accessToken!!, refreshToken!!)
+                accessToken // 새로운 토큰 반환
+            } else {
+                null
             }
+        } catch (e: Exception) {
+            Log.d("authRecreate error", "${e.message}")
+            null
         }
     }
 

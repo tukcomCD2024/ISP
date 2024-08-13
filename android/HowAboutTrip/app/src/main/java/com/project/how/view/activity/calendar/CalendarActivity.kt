@@ -80,7 +80,7 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
                 Log.d("onCreate", "getSchedule title : ${schedule.title}")
                 binding.title.text = schedule.title
                 val formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(schedule.cost)
-                binding.budget.text = getString(R.string.calendar_budget, formattedNumber)
+                binding.budget.text = getString(R.string.calendar_budget, formattedNumber, data.currency)
                 binding.date.text = "${schedule.startDate} - ${schedule.endDate}"
 
                 val googleMapOptions = GoogleMapOptions()
@@ -100,7 +100,7 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
                 }
 
                 if (schedule.dailySchedule.size != 0){
-                    adapter = DaysScheduleAdapter(schedule.dailySchedule[selectedDays], this@CalendarActivity, this@CalendarActivity)
+                    adapter = DaysScheduleAdapter(schedule.dailySchedule[selectedDays], this@CalendarActivity, data.currency,this@CalendarActivity)
                     binding.daySchedules.adapter = adapter
                     binding.daysTitle.text = getString(R.string.days_title, (selectedDays+1).toString(), getDaysTitle(data, selectedDays))
 
@@ -219,36 +219,38 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
     }
 
     override fun onMapReady(map: GoogleMap) {
-        map.clear()
-        val polylineOptions = PolylineOptions()
-        val latitudes = mutableListOf<Double>()
-        val longitudes = mutableListOf<Double>()
+        lifecycleScope.launch {
+            map.clear()
+            val polylineOptions = PolylineOptions()
+            val latitudes = mutableListOf<Double>()
+            val longitudes = mutableListOf<Double>()
 
-        data.dailySchedule[selectedDays].forEachIndexed {position, data->
-            if((data.latitude != null && data.longitude != null) && (data.longitude != 0.0 && data.latitude != 0.0)){
-                val location = LatLng(data.latitude, data.longitude)
-                latitudes.add(data.latitude)
-                longitudes.add(data.longitude)
-                polylineOptions.add(location)
-                val markerOptions = MarkerProducer().makeScheduleMarkerOptions(this, data.type, position, location, data.places)
-                map.addMarker(markerOptions)
+            data.dailySchedule[selectedDays].forEachIndexed {position, data->
+                if((data.latitude != null && data.longitude != null) && (data.longitude != 0.0 && data.latitude != 0.0)){
+                    val location = LatLng(data.latitude, data.longitude)
+                    latitudes.add(data.latitude)
+                    longitudes.add(data.longitude)
+                    polylineOptions.add(location)
+                    val markerOptions = MarkerProducer().makeScheduleMarkerOptions(this@CalendarActivity, data.type, position, location, data.places)
+                    map.addMarker(markerOptions)
+                }
             }
-        }
-        map.addPolyline(polylineOptions)
+            map.addPolyline(polylineOptions)
 
-        if(latitudes.lastIndex == 0){
-            val cop = CameraOptionProducer()
-            val camera = cop.makeScheduleCameraUpdate(LatLng(latitudes[0], longitudes[0]), 12f)
-            map.moveCamera(camera)
-        }else if (latitudes.isNotEmpty()){
-            val cop = CameraOptionProducer()
-            val locations = cop.makeLatLngBounds(latitudes, longitudes)
-            val camera = cop.makeScheduleBoundsCameraUpdate(locations[0], locations[1], 120)
-            map.moveCamera(camera)
-        }else{
-            val location = LatLng(latitude, longitude)
-            val camera = CameraOptionProducer().makeScheduleCameraUpdate(location, 10f)
-            map.moveCamera(camera)
+            if(latitudes.lastIndex == 0){
+                val cop = CameraOptionProducer()
+                val camera = cop.makeScheduleCameraUpdate(LatLng(latitudes[0], longitudes[0]), 12f)
+                map.moveCamera(camera)
+            }else if (latitudes.isNotEmpty()){
+                val cop = CameraOptionProducer()
+                val locations = cop.makeLatLngBounds(latitudes, longitudes)
+                val camera = cop.makeScheduleBoundsCameraUpdate(locations[0], locations[1], 120)
+                map.moveCamera(camera)
+            }else{
+                val location = LatLng(latitude, longitude)
+                val camera = CameraOptionProducer().makeScheduleCameraUpdate(location, 10f)
+                map.moveCamera(camera)
+            }
         }
     }
 

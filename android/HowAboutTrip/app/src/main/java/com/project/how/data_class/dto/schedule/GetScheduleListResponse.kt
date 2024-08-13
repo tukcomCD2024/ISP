@@ -9,9 +9,10 @@ data class GetScheduleListResponseElement (
     @SerializedName("scheduleName") val scheduleName: String,
     @SerializedName("startDate") val startDate: String,
     @SerializedName("endDate") val endDate: String,
-    @SerializedName("totalPrice") val totalPrice: Long,
+    @SerializedName("totalPrice") val totalPrice: Double,
     @SerializedName("imageUrl") val imageUrl: String,
     @SerializedName("country") val country : String,
     @SerializedName("latitude") val latitude : Double,
-    @SerializedName("longitude") val longitude : Double
+    @SerializedName("longitude") val longitude : Double,
+    @SerializedName("currencyName") val currency : String
 )

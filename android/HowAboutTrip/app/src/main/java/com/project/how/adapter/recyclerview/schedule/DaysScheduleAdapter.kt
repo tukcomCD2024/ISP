@@ -14,17 +14,17 @@ import java.util.Locale
 class DaysScheduleAdapter (
     data: MutableList<DaysSchedule>,
     private val context: Context,
+    private val currency : String,
     private val onButtonClickListener: OnDaysButtonClickListener
 )
     : RecyclerView.Adapter<DaysScheduleAdapter.ViewHolder>(){
     private var dailySchedule = data
-    private var initList: MutableList<DaysSchedule> = mutableListOf()
 
     inner class ViewHolder(val binding: CalendarDaysScheduleItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(data : DaysSchedule, position: Int){
             binding.scheduleTitle.text = data.todo
             val formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(data.cost)
-            binding.budget.text = context.getString(R.string.budget, formattedNumber)
+            binding.budget.text = context.getString(R.string.budget, formattedNumber, currency)
 
             if (data.purchaseStatus){
                 binding.date.visibility = View.VISIBLE

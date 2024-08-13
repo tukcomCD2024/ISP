@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HowAboutTrip</string>
+    <string name="app_name">여행어때</string>
     <string name="login_under_text">HowAboutTrip에서 여행 계획을\n세우는 건 어떤가요?</string>
     <string name="google_login_content_desciption">google login</string>
     <string name="how_about_trip">How About Trip</string>
@@ -26,7 +26,7 @@
     <string name="reset">초기화</string>
     <string name="save_check">saveCheck</string>
     <string name="menu_ticket">항공 숙박</string>
-    <string name="menu_calendar">일정 조회</string>
+    <string name="menu_calendar">일정</string>
     <string name="menu_picture">사진 기록</string>
     <string name="menu_mypage">My</string>
     <string name="bearer_token">Bearer %1$s</string>
@@ -132,9 +132,9 @@
     <string name="type">type</string>
     <string name="schedule">Schedule</string>
     <string name="get_data_failed">일정 정보를 가져오는 과정에서 오류가 발생했습니다.\n다시 한 번 더 시도해주세요.</string>
-    <string name="calendar_budget">예상 지출 금액 : %1$s 원</string>
+    <string name="calendar_budget">예상 지출 금액 : %1$s %2$s</string>
     <string name="calendar_title_max_length">최대 20자</string>
-    <string name="budget">예산 : %1$s 원</string>
+    <string name="budget">예산 : %1$s %2$s</string>
     <string name="some_schedule_lng_lat">특정 일정의 주소</string>
     <string name="schedule_type">일정 유형</string>
     <string name="airplane">항공</string>
@@ -311,7 +311,7 @@
     <string name="recent_round_trip_name">%1$s ↔ %2$s</string>
     <string name="picture_record">여행 기록</string>
     <string name="bill">영수증 기록</string>
-    <string name="total_budget">총 예산 비용 : %1$s 원</string>
+    <string name="total_budget">총 예산 비용 : %1$s %2$s</string>
     <string name="min_and_max_temps">%1$s℃ / %2$s℃</string>
     <string name="temp">%1$s℃</string>
     <string name="local_time">현지 시간</string>
@@ -348,4 +348,8 @@
     <string name="empty_title">무제</string>
     <string name="image">이미지</string>
     <string name="camera_failed">카메라 실행을 실패했습니다.</string>
+    <string name="receipt_id">receiptId</string>
+    <string name="store_name">storeName</string>
+    <string name="non_have_grant">열람 권한이 없습니다.</string>
+    <string name="free_price">무료</string>
 </resources>

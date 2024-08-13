@@ -38,15 +38,17 @@ class CalendarListActivity
     private var departureDate : String? = null
     private var entranceDate : String? = null
     private var latLng : GetCountryLocationResponse? = null
+    private lateinit var currency: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_calendar_list)
         binding.list = this
         binding.lifecycleOwner = this
+        adapter = CalendarListAdapter(this, listOf(), this)
+        binding.calendarList.adapter = adapter
 
         viewModel.scheduleListLiveData.observe(this@CalendarListActivity){
-            adapter = CalendarListAdapter(this@CalendarListActivity, it, this@CalendarListActivity)
-            binding.calendarList.adapter = adapter
+            adapter.update(it)
         }
     }
 
@@ -97,9 +99,10 @@ class CalendarListActivity
         val schedule = Schedule(
             destination!!,
             destination!!,
+            currency,
             departureDate!!,
             entranceDate!!,
-            0,
+            0.0,
             viewModel.getEmptyDaysSchedule(departureDate!!, entranceDate!!)
         )
         intent.putExtra(getString(R.string.type), CalendarEditActivity.NEW)
@@ -115,12 +118,18 @@ class CalendarListActivity
         Log.d("onDelete", "position : ${position}")
         yesOrNoDialog.show(supportFragmentManager, "YesOrNoDialog")
     }
-    override fun onItemClickListener(id: Long, latitude : Double, longitude : Double) {
+    override fun onItemClickListener(
+        id: Long,
+        latitude: Double,
+        longitude: Double,
+        currency: String
+    ) {
         Log.d("onCreate", "onItemClickerListener\nid : ${id}\nlatitude : ${latitude}\tlongitude : ${longitude}")
         val intent = Intent(this, CalendarActivity::class.java)
         intent.putExtra(getString(R.string.server_calendar_id), id)
         intent.putExtra(getString(R.string.server_calendar_latitude), latitude)
         intent.putExtra(getString(R.string.server_calendar_longitude), longitude)
+        intent.putExtra(getString(R.string.currency), currency)
         startActivity(intent)
         finish()
     }
@@ -162,12 +171,14 @@ class CalendarListActivity
                 location?.let {
                     destination = des
                     latLng = location
+                    currency = location.currency
                     showCalendar()
                 } ?: run {
                     countryViewModel.getCountryLocation(des).collect { newLocation ->
                         newLocation?.let {
                             destination = des
                             latLng = newLocation
+                            currency = newLocation.currency
                             showCalendar()
                         } ?: run {
                             Toast.makeText(this@CalendarListActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()

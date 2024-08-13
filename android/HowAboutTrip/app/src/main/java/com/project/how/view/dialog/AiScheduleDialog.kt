@@ -40,7 +40,7 @@ class AiScheduleDialog(private val data : AiSchedule, private val onAddListener:
         _binding = DataBindingUtil.inflate(inflater, R.layout.dialog_ai_schedule, container, false)
         binding.ai = this
         binding.lifecycleOwner = viewLifecycleOwner
-        adapter = AiDaysScheduleAdapter(requireContext(), data.dailySchedule[0])
+        adapter = AiDaysScheduleAdapter(requireContext(), data.dailySchedule[0], data.currency)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         val params = dialog?.window?.attributes

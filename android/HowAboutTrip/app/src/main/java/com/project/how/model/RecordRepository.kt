@@ -13,6 +13,7 @@ class RecordRepository {
     private val _uriLiveData : MutableLiveData<Uri> = MutableLiveData()
     private val _ocrResponseLiveData : MutableLiveData<OcrResponse?> = MutableLiveData()
     private val _receiptSimpleListLiveData : MutableLiveData<ReceiptSimpleList> = MutableLiveData()
+    private val _saveCheckLiveData : MutableLiveData<Boolean> = MutableLiveData()
     val currentReceiptListLiveData : LiveData<GetReceiptListResponse>
         get() = _currentReceiptListLiveData
     val uriLiveData : LiveData<Uri>
@@ -21,6 +22,8 @@ class RecordRepository {
         get() = _ocrResponseLiveData
     val receiptSimpleListLiveData : LiveData<ReceiptSimpleList>
         get() = _receiptSimpleListLiveData
+    val saveCheckLiveData : LiveData<Boolean>
+        get() = _saveCheckLiveData
 
     fun getCurrentReceiptList(data : GetReceiptListResponse){
         _currentReceiptListLiveData.postValue(data)
@@ -36,5 +39,9 @@ class RecordRepository {
 
     fun getReceiptSimpleList(data : ReceiptSimpleList?){
         _receiptSimpleListLiveData.postValue(data ?: listOf(ReceiptListItem(0,null, "", "", "", 0.0, 0)))
+    }
+
+    fun getSaveCheck(data : Boolean){
+        _saveCheckLiveData.postValue(data)
     }
 }

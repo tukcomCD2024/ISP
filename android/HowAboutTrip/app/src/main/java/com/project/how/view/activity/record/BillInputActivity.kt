@@ -2,6 +2,7 @@ package com.project.how.view.activity.record
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -16,9 +17,10 @@ class BillInputActivity : AppCompatActivity() {
     private lateinit var binding : ActivityBillInputBinding
     private lateinit var navController: NavController
     private lateinit var currentDate : String
-    private lateinit var dateRange : String
     private lateinit var currency : String
+    private lateinit var storeName : String
     private var id = -1L
+    private var receiptId = -1L
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_bill_input)
@@ -26,10 +28,13 @@ class BillInputActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
 
         currentDate = intent.getStringExtra(getString(R.string.current_date)) ?: ""
-        dateRange = intent.getStringExtra(getString(R.string.date_range)) ?: ""
         currency = intent.getStringExtra(getString(R.string.currency)) ?: ""
+        storeName = intent.getStringExtra(getString(R.string.store_name)) ?: ""
         val id = intent.getLongExtra(getString(R.string.server_calendar_id), -1)
+        val receiptId = intent.getLongExtra(getString(R.string.receipt_id), -1)
         this.id = id.toLong()
+        this.receiptId = receiptId.toLong()
+        Log.d("BillInputActivity", "receiptId : $receiptId\nthis.receiptId : ${this.receiptId}")
 
 
         setSupportActionBar(binding.toolbar)
@@ -49,7 +54,6 @@ class BillInputActivity : AppCompatActivity() {
                     onBackPressedDispatcher.onBackPressed()
                 }
             }
-
         })
 
         navController.addOnDestinationChangedListener { _, _, _ ->
@@ -67,11 +71,13 @@ class BillInputActivity : AppCompatActivity() {
         onBackPressedDispatcher.onBackPressed()
     }
 
-    fun getCurrentDate() = currentDate
+    fun getReceiptId() = receiptId
 
-    fun getDateRange() = dateRange
+    fun getCurrentDate() = currentDate
 
     fun getCurrency() = currency
 
     fun getId() = id
+
+    fun getStoreName() = storeName
 }

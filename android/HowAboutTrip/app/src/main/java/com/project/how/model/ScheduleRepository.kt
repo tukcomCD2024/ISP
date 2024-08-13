@@ -14,8 +14,10 @@ import com.project.how.data_class.recyclerview.schedule.AiSchedule
 import com.project.how.data_class.recyclerview.schedule.DaysSchedule
 import com.project.how.data_class.recyclerview.schedule.Schedule
 import com.project.how.data_class.dto.schedule.GetScheduleListResponse
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -61,6 +63,7 @@ class ScheduleRepository {
             Schedule(
                 aiSchedule.title,
                 aiSchedule.country,
+                aiSchedule.currency,
                 aiSchedule.startDate,
                 aiSchedule.endDate,
                 aiSchedule.budget,
@@ -69,15 +72,15 @@ class ScheduleRepository {
         )
     }
 
-    fun getTotalCost(schedule: Schedule) :Flow<Long> = flow {
-        var totalCost : Long = 0
+    fun getTotalCost(schedule: Schedule) :Flow<Double> = flow {
+        var totalCost = 0.0
         for (i in schedule.dailySchedule.indices){
             for (j in schedule.dailySchedule[i].indices){
                 totalCost += schedule.dailySchedule[i][j].cost
             }
         }
         this.emit(totalCost)
-    }
+    }.flowOn(Dispatchers.IO)
 
     fun getLatestSchedule(data : GetLatestSchedulesResponse){
         _latestScheduleLiveData.postValue(data)
@@ -95,7 +98,7 @@ class ScheduleRepository {
                         aiDailySchedule[i][j].places,
                         aiDailySchedule[i][j].lat,
                         aiDailySchedule[i][j].lng,
-                        0,
+                        aiDailySchedule[i][j].budget,
                         false,
                         null
                     )
@@ -160,7 +163,7 @@ class ScheduleRepository {
                                 scheduleDetail.dailySchedules[cnt].schedules[j].place,
                                 scheduleDetail.dailySchedules[cnt].schedules[j].latitude,
                                 scheduleDetail.dailySchedules[cnt].schedules[j].longitude,
-                                scheduleDetail.dailySchedules[cnt].schedules[j].budget,
+                                scheduleDetail.dailySchedules[cnt].schedules[j].budget.toDouble(),
                                 false,
                                 null
                             )

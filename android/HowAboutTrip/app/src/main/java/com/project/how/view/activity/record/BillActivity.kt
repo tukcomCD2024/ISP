@@ -2,6 +2,7 @@ package com.project.how.view.activity.record
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.activity.viewModels
@@ -49,12 +50,14 @@ class BillActivity : AppCompatActivity(), BillDaysAdapter.OnItemClickListener {
 
         recordViewModel.currentReceiptListLiveData.observe(this){ data->
             lifecycleScope.launch {
-                binding.swipeRefreshLayout.isRefreshing = false
                 currentDate = recordViewModel.getCurrentDate(data.startDate, currentTab)
                 currency = data.currencyName
                 totalPrice = data.totalReceiptsPrice
+                Log.d("BillActivity", "${data.receiptList.filter { it.purchaseDate == currentDate }.toMutableList().size}\ncurrentDate : $currentDate")
                 adapter.update(data.receiptList.filter { it.purchaseDate == currentDate }.toMutableList(), currency)
                 setUI(data)
+                binding.swipeRefreshLayout.isRefreshing = false
+
             }
         }
 
@@ -91,6 +94,7 @@ class BillActivity : AppCompatActivity(), BillDaysAdapter.OnItemClickListener {
         binding.costUnit.text = " ${data.currencyName}"
         binding.daysTitle.text = getString(R.string.days_title, (currentTab + 1).toString(), recordViewModel.getDaysTitle(data.startDate, currentTab))
 
+        binding.daysTab.removeAllTabs()
         setDaysTab(data.startDate, data.endDate)
         setDaysTabItemMargin()
 
@@ -141,7 +145,15 @@ class BillActivity : AppCompatActivity(), BillDaysAdapter.OnItemClickListener {
     }
 
     override fun onItemClickListener(data: ReceiptList, position: Int) {
-
+        val intent = Intent(this, BillInputActivity::class.java)
+        intent.putExtra(getString(R.string.server_calendar_id), id)
+        intent.putExtra(getString(R.string.receipt_id), data.receiptId)
+        intent.putExtra(getString(R.string.store_name), data.storeName)
+        intent.putExtra(getString(R.string.current_tab), currentTab)
+        intent.putExtra(getString(R.string.current_date), currentDate)
+        intent.putExtra(getString(R.string.currency), currency)
+        startActivity(intent)
+        finish()
     }
 
     override fun onMoreMenuDateChangeClickListener(data: ReceiptList, position: Int) {

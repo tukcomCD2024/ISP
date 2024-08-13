@@ -8,6 +8,7 @@ import com.project.how.data_class.dto.schedule.GetFastestSchedulesResponse
 import com.project.how.data_class.dto.schedule.GetLatestSchedulesResponse
 import com.project.how.data_class.dto.schedule.GetScheduleListResponse
 import com.project.how.data_class.dto.schedule.ScheduleDetail
+import com.project.how.data_class.dto.schedule.ScheduleDetailToServer
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -26,7 +27,7 @@ interface ScheduleService {
 
     @POST("schedules")
     fun saveSchedule(
-        @Body saveScheduleRequest: ScheduleDetail
+        @Body saveScheduleRequest: ScheduleDetailToServer
     ) : Call<String>
 
     @GET("schedules")
@@ -45,8 +46,8 @@ interface ScheduleService {
     @PUT("schedules/{scheduleId}")
     fun updateSchedule(
         @Path("scheduleId", encoded = true) scheduleId: Long,
-        @Body updateScheduleRequest: ScheduleDetail
-    ) : Call<ScheduleDetail>
+        @Body updateScheduleRequest: ScheduleDetailToServer
+    ) : Call<ScheduleDetailToServer>
 
     @GET("schedules/dday")
     fun getFastestSchedule(): Call<GetFastestSchedulesResponse>

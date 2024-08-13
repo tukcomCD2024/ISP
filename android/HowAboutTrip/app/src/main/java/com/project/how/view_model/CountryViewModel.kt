@@ -12,11 +12,13 @@ import com.project.how.data_class.dto.country.weather.GetCurrentWeatherResponse
 import com.project.how.data_class.dto.country.weather.GetWeeklyWeathersResponse
 import com.project.how.model.CountryRepository
 import com.project.how.network.client.CountryRetrofit
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -74,7 +76,7 @@ class CountryViewModel : ViewModel() {
         } ?: close()
 
         awaitClose()
-    }
+    }.flowOn(Dispatchers.IO)
 
     fun getCurrentWeather(country: String) : Flow<Boolean> = callbackFlow {
         CountryRetrofit.getApiService()?.let { apiService->

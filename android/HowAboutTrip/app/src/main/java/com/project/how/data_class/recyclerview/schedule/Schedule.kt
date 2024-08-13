@@ -5,9 +5,10 @@ import java.io.Serializable
 class Schedule (
     var title: String,
     var country : String,
+    var currency : String,
     var startDate : String,
     var endDate : String,
-    var cost: Long,
+    var cost: Double,
     var dailySchedule: MutableList<MutableList<DaysSchedule>>
 ) : Serializable
 
@@ -17,7 +18,7 @@ data class DaysSchedule(
     val places: String,
     val latitude : Double?,
     val longitude : Double?,
-    val cost : Long,
+    val cost : Double,
     val purchaseStatus : Boolean,
     val purchaseDate : String?
 ) : Serializable

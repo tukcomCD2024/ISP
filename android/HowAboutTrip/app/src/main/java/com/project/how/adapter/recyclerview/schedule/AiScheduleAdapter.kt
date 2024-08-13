@@ -35,7 +35,7 @@ class AiScheduleAdapter(private val context: Context, data : List<AiSchedule>, p
         inner class ViewHolder(val binding : AiScheduleItemBinding) : RecyclerView.ViewHolder(binding.root){
             fun bind(data : AiSchedule, position: Int){
                 binding.title.text = data.title
-                binding.budget.text = context.getString(R.string.total_budget, data.budget.toString())
+                binding.budget.text = context.getString(R.string.total_budget, data.budget.toString(), data.currency)
                 binding.places.text = getPlacesText(data.places)
                 Glide.with(binding.root)
                     .load(data.image)
@@ -48,7 +48,7 @@ class AiScheduleAdapter(private val context: Context, data : List<AiSchedule>, p
 
                 binding.daysTitle.text = context.getString(R.string.days_title, (1).toString(), getDaysTitle(data, 0))
 
-                val adapter = AiDaysScheduleAdapter(context, data.dailySchedule[selectedDay])
+                val adapter = AiDaysScheduleAdapter(context, data.dailySchedule[selectedDay], data.currency)
                 binding.daySchedules.adapter = adapter
 
                 binding.drawer.setOnClickListener {

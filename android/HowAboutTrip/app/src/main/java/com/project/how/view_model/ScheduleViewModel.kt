@@ -18,6 +18,7 @@ import com.project.how.data_class.dto.schedule.GetFastestSchedulesResponse
 import com.project.how.data_class.dto.schedule.GetLatestSchedulesResponse
 import com.project.how.data_class.dto.schedule.GetScheduleListResponse
 import com.project.how.data_class.dto.schedule.ScheduleDetail
+import com.project.how.data_class.dto.schedule.ScheduleDetailToServer
 import com.project.how.model.ScheduleRepository
 import com.project.how.network.client.ScheduleRetrofit
 import kotlinx.coroutines.Dispatchers
@@ -65,7 +66,7 @@ class ScheduleViewModel : ViewModel() {
         }
     }
 
-    fun getTotalCost(schedule: Schedule): Flow<Long> = scheduleRepository.getTotalCost(schedule)
+    fun getTotalCost(schedule: Schedule): Flow<Double> = scheduleRepository.getTotalCost(schedule)
 
     fun getDaysSchedule(
         context: Context,
@@ -122,10 +123,10 @@ class ScheduleViewModel : ViewModel() {
     fun updateSchedule(context: Context, id: Long, schedule: Schedule): Flow<Int> =
         callbackFlow<Int> {
             ScheduleRetrofit.getApiService()?.let { apiService ->
-                val callback = object : Callback<ScheduleDetail> {
+                val callback = object : Callback<ScheduleDetailToServer> {
                     override fun onResponse(
-                        call: Call<ScheduleDetail>,
-                        response: Response<ScheduleDetail>
+                        call: Call<ScheduleDetailToServer>,
+                        response: Response<ScheduleDetailToServer>
                     ) {
                         if (response.isSuccessful) {
                             val result = response.body()
@@ -148,7 +149,7 @@ class ScheduleViewModel : ViewModel() {
                         }
                     }
 
-                    override fun onFailure(call: Call<ScheduleDetail>, t: Throwable) {
+                    override fun onFailure(call: Call<ScheduleDetailToServer>, t: Throwable) {
                         Log.d("saveSchedule onFailure", "${t.message}")
                         trySend(NETWORK_FAILED).isSuccess
                     }
@@ -183,7 +184,7 @@ class ScheduleViewModel : ViewModel() {
     private fun changeClassFromScheduleToSaveSchedule(
         context: Context,
         schedule: Schedule
-    ): ScheduleDetail {
+    ): ScheduleDetailToServer {
         val startDate = LocalDate.parse(schedule.startDate, DateTimeFormatter.ISO_DATE)
         var dailySchedules = listOf<DailySchedule>()
         schedule.dailySchedule.forEachIndexed { index, data ->
@@ -208,7 +209,7 @@ class ScheduleViewModel : ViewModel() {
             dailySchedules = dailySchedules.plus(ds)
         }
 
-        return ScheduleDetail(
+        return ScheduleDetailToServer(
             schedule.title,
             schedule.country,
             schedule.startDate,
@@ -317,9 +318,10 @@ class ScheduleViewModel : ViewModel() {
                                         Schedule(
                                             result.scheduleName,
                                             result.country,
+                                            result.currency ?: "원",
                                             result.startDate,
                                             result.endDate,
-                                            0,
+                                            0.0,
                                             mutableListOf<MutableList<DaysSchedule>>()
                                         )
                                     if ((result.dailySchedules.isEmpty())) {

@@ -11,5 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 public class GptSchedulesResponse {
     private String countryImage;
+    private String currencyUnit;
     private List<GptScheduleResponse> schedules;
 }

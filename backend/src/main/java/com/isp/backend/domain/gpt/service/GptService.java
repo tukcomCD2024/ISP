@@ -73,10 +73,12 @@ public class GptService {
                 sendRequestAsync(messages, executorService)
         );
 
+
+
         CompletableFuture<List<GptScheduleResponse>> combinedFuture = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
                 .thenApply(v -> futures.stream().map(CompletableFuture::join).collect(Collectors.toList()));
 
-        return combinedFuture.thenApply(schedules -> new GptSchedulesResponse(countryImage, schedules));
+        return combinedFuture.thenApply(schedules -> new GptSchedulesResponse(countryImage, country.getCurrencyName(), schedules));
     }
 
     private CompletableFuture<GptScheduleResponse> sendRequestAsync(List<GptMessage> messages, ExecutorService executor) {

@@ -50,6 +50,7 @@ public class CountryServiceImpl implements CountryService {
                 LocationResponse locationDTO = new LocationResponse();
                 locationDTO.setLatitude(country.getLatitude());
                 locationDTO.setLongitude(country.getLongitude());
+                locationDTO.setCurrencyName(country.getCurrencyName());
                 return locationDTO;
             });
         } else {

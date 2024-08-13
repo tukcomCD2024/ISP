@@ -17,6 +17,8 @@ public class ScheduleSaveRequest {
 
     private String country;        // 여행할 국가
 
+    private String currencyName;   // 여햏할 국가 통화 코드
+
     private String startDate;      // 여행 시작 날짜
 
     private String endDate;        // 여행 종료 날짜

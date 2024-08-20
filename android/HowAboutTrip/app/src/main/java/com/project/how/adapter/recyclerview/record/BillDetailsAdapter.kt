@@ -167,7 +167,7 @@ class BillDetailsAdapter(
     private fun unableEdit(binding : BillDetailsItemBinding) {
         binding.title.inputType = InputType.TYPE_NULL
         binding.unitPrice.inputType = InputType.TYPE_NULL
-        binding.plus.visibility = View.GONE
+        binding.plus.visibility = View.INVISIBLE
         binding.minus.visibility = View.GONE
         binding.delete.visibility = View.GONE
     }

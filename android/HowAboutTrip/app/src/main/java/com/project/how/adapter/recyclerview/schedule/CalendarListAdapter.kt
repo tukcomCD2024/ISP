@@ -35,9 +35,6 @@ class CalendarListAdapter (private val context: Context, data : GetScheduleListR
             binding.delete.setOnClickListener {
                 onButtonClickListener.onDeleteButtonClickListener(data, position)
             }
-            binding.share.setOnClickListener {
-                onButtonClickListener.onShareButtonClickListener(data.id)
-            }
             binding.checklist.setOnClickListener {
                 onButtonClickListener.onCheckListButtonClickListener(data.id)
             }

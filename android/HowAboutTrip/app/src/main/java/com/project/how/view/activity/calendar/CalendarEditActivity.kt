@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -83,6 +84,12 @@ class CalendarEditActivity
         binding.edit = this
         binding.lifecycleOwner = this
 
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                moveCalendarFragment()
+            }
+        })
+
         lifecycleScope.launch {
             type = intent.getIntExtra(resources.getString(R.string.type), FAILURE)
             latitude = intent.getDoubleExtra(getString(R.string.server_calendar_latitude), 0.0)
@@ -132,27 +139,6 @@ class CalendarEditActivity
             }
 
             supportMapFragment.getMapAsync(this@CalendarEditActivity)
-
-//            supportMapFragment.view?.setOnTouchListener { v, event ->
-//                var parent : ViewParent? = v.parent
-//                while(v != null){
-//                    if (parent is NestedScrollView){
-//                        Log.d("CalendarEditActivity", "parent is NestedScrollView")
-//                        when (event.action) {
-//                            MotionEvent.ACTION_DOWN -> {
-//                                parent.requestDisallowInterceptTouchEvent(true)
-//                                Log.d("CalendarEditActivity", "MotionEvent.ACTION_DOWN\nparent.requestDisallowInterceptTouchEvent(true)")
-//                            }
-//                            MotionEvent.ACTION_UP -> {
-//                                parent.requestDisallowInterceptTouchEvent(false)
-//                                Log.d("CalendarEditActivity", "MotionEvent.ACTION_UP\nparent.requestDisallowInterceptTouchEvent(false)")
-//                            }
-//                        }
-//                    }
-//                    parent = parent?.parent
-//                }
-//                false
-//            }
 
             adapter.itemDragListener(object : ItemStartDragListener {
                 override fun onDropActivity(
@@ -383,9 +369,8 @@ class CalendarEditActivity
     }
 
     private fun moveCalendarFragment(){
-        val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra(getString(R.string.menu_intent), MainActivity.CALENDAR)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+        val intent = Intent(this, CalendarListActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
         startActivity(intent)
 
     }

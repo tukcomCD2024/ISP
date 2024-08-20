@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
@@ -54,6 +55,15 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
         binding = DataBindingUtil.setContentView(this, R.layout.activity_calendar)
         binding.calendar = this
         binding.lifecycleOwner = this
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@CalendarActivity, CalendarListActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                startActivity(intent)
+                finish()
+            }
+        })
 
         lifecycleScope.launch {
             init()

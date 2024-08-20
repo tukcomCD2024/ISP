@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +19,7 @@ import com.project.how.data_class.dto.schedule.GetScheduleListResponseElement
 import com.project.how.databinding.ActivityCalendarListBinding
 import com.project.how.interface_af.OnDesListener
 import com.project.how.interface_af.OnYesOrNoListener
+import com.project.how.view.activity.MainActivity
 import com.project.how.view.dialog.ChecklistDialog
 import com.project.how.view.dialog.YesOrNoDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
@@ -50,6 +52,15 @@ class CalendarListActivity
         viewModel.scheduleListLiveData.observe(this@CalendarListActivity){
             adapter.update(it)
         }
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@CalendarListActivity, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
+            }
+        })
     }
 
     override fun onStart() {

@@ -36,7 +36,7 @@
 
                 <EditText
                     android:id="@+id/title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:minWidth="60dp"
                     android:layout_marginTop="35dp"
@@ -47,6 +47,16 @@
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/guideline14"
                     app:layout_constraintTop_toBottomOf="@+id/image" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/edit"
+                    android:layout_width="50dp"
+                    android:layout_height="22dp"
+                    style="@style/Button.BlackRound"
+                    android:text="@string/edit"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@+id/date"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline15" />
 
                 <TextView
                     android:id="@+id/date"

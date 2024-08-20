@@ -1,6 +1,7 @@
 package com.project.how.adapter.recyclerview.record
 
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
@@ -11,12 +12,15 @@ import com.project.how.databinding.BillDetailsItemBinding
 import java.text.NumberFormat
 import java.util.Locale
 import kotlin.math.roundToLong
+import kotlin.math.truncate
 
 class BillDetailsAdapter(
     private var details : MutableList<ReceiptDetailListItem>,
     private val currency : String,
     private val onPriceListener: OnPriceListener
 ) : RecyclerView.Adapter<BillDetailsAdapter.ViewHolder>() {
+    private var editMode = true
+
     inner class ViewHolder(val binding : BillDetailsItemBinding) : RecyclerView.ViewHolder(binding.root){
         private var currentTextWatcher: TextWatcher? = null
         private var titleTextWatcher: TextWatcher? = null
@@ -28,6 +32,11 @@ class BillDetailsAdapter(
             }else{
                 binding.title.setText(data.title)
             }
+
+            if (editMode)
+                ableEdit(binding)
+            else
+                unableEdit(binding)
 
             if (data.itemPrice == 0.0){
                 binding.totalPrice.text = 0.toString()
@@ -73,7 +82,8 @@ class BillDetailsAdapter(
                         val num = s.toString().replace(",", "")
                         data.itemPrice = num.toDoubleOrNull() ?: 0.0
                         binding.unitPrice.setSelection(cursorPosition)
-                        binding.totalPrice.text = (data.count*data.itemPrice).toString()
+                        val formatted = NumberFormat.getNumberInstance(Locale.getDefault()).format(data.count*data.itemPrice)
+                        binding.totalPrice.text = formatted
                         onPriceListener.onTotalPriceListener(getTotalPrice())
                     }
                 }
@@ -144,9 +154,37 @@ class BillDetailsAdapter(
         notifyItemInserted(details.lastIndex)
     }
 
+    fun startEdit(){
+        editMode = true
+        notifyDataSetChanged()
+    }
+
+    fun finishEdit(){
+        editMode = false
+        notifyDataSetChanged()
+    }
+
+    private fun unableEdit(binding : BillDetailsItemBinding) {
+        binding.title.inputType = InputType.TYPE_NULL
+        binding.unitPrice.inputType = InputType.TYPE_NULL
+        binding.plus.visibility = View.GONE
+        binding.minus.visibility = View.GONE
+        binding.delete.visibility = View.GONE
+    }
+
+    private fun ableEdit(binding: BillDetailsItemBinding){
+        binding.title.inputType = InputType.TYPE_CLASS_TEXT
+        binding.unitPrice.inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL
+        binding.plus.visibility = View.VISIBLE
+        binding.minus.visibility = View.VISIBLE
+        binding.delete.visibility = View.VISIBLE
+    }
+
     fun getTotalPrice() : Double = details.sumOf { it.itemPrice * it.count }
 
     fun getAllData() : List<ReceiptDetailListItem> = details.toList()
+
+    fun getEditMode() : Boolean = editMode
 
     interface OnPriceListener{
         fun onTotalPriceListener(total : Double)

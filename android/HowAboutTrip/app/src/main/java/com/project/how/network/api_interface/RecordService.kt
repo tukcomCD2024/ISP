@@ -11,6 +11,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 
@@ -39,4 +40,13 @@ interface RecordService {
     fun getReceiptDetail(
         @Path("receiptId", encoded = true) id : Long
     ) : Call<GetReceiptDetail>
+
+    @Multipart
+    @PUT("receipts/{receiptId}")
+    fun updateReceipt(
+        @Path("receiptId", encoded = true) id : Long,
+        @Part("request") detail : RequestBody,
+        @Part receiptImg : MultipartBody.Part
+    ) : Call<String>
+
 }

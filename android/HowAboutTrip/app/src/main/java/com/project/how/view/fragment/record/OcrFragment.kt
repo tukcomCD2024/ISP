@@ -85,7 +85,10 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
             if (uri != null) {
                 lock()
                 Log.d("PhotoPicker", "Selected URI: $uri")
-                binding.image.setImageURI(uri)
+                Glide.with(binding.root)
+                    .load(uri)
+                    .error(R.color.grey)
+                    .into(binding.image)
                 recordViewModel.uploadReceipt(requireContext(), uri)
 
             } else {
@@ -97,7 +100,10 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
             if (result.resultCode == RESULT_OK) {
                 if (cameraImage != null){
                     lock()
-                    binding.image.setImageURI(cameraImage)
+                    Glide.with(binding.root)
+                        .load(cameraImage)
+                        .error(R.color.grey)
+                        .into(binding.image)
                     recordViewModel.uploadReceipt(requireContext(), cameraImage!!)
                 }
             }
@@ -132,6 +138,11 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
 
         if (receiptId > -1){
             lifecycleScope.launch {
+                binding.edit.visibility = View.VISIBLE
+                binding.save.text = getString(R.string.close)
+                binding.add.visibility = View.GONE
+                binding.image.isEnabled = false
+                adapter.finishEdit()
                 getReceiptDetail()
             }
         }else{
@@ -147,6 +158,14 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
             requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             }
         }
+    }
+
+    fun edit(){
+        adapter.startEdit()
+        binding.edit.visibility = View.GONE
+        binding.save.text = getString(R.string.save_long)
+        binding.add.visibility = View.VISIBLE
+        binding.image.isEnabled = true
     }
 
     fun putImage(){
@@ -191,7 +210,7 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
     fun setUI(receiptDetail: ReceiptDetail){
         binding.title.setText(receiptDetail.storeName)
         binding.date.text = currentDate
-        if (receiptId > -1){
+        if (receiptId > -1 && !adapter.getEditMode()){
             binding.save.text = getString(R.string.close)
             binding.add.visibility = View.GONE
             binding.image.isEnabled = false
@@ -208,8 +227,11 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
     }
 
     fun confirm() {
-        if (receiptId > -1){
+        val editMode = adapter.getEditMode()
+        if (receiptId > -1 && !editMode){
             close()
+        }else if (receiptId > -1 && editMode){
+
         }else{
             save()
         }
@@ -220,13 +242,17 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
         activity?.closeAllFragmentsAndFinishActivity()
     }
 
+    private fun update(){
+        recordViewModel
+    }
+
     private fun save(){
         lifecycleScope.launch {
             try {
                 val storeName = binding.title.text.toString()
                 if (storeName.isNullOrBlank()) data.storeName = getString(R.string.empty_title) else data.storeName = storeName
                 data.totalPrice = totalPrice
-                recordViewModel.saveReceipt(requireContext(), data).join()
+                recordViewModel.saveReceipt(requireContext(), data)
             }catch (e : Exception){
                 ConfirmDialog(listOf(getString(R.string.image))).show(childFragmentManager, "ConfirmDialog")
             }

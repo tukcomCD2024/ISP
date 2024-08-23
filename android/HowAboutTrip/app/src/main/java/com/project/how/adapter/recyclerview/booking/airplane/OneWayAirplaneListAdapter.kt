@@ -7,13 +7,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.how.R
 import com.project.how.data_class.dto.booking.airplane.GetOneWayFlightOffersResponseElement
+import com.project.how.data_class.recyclerview.ticket.FlightMember
 import com.project.how.databinding.OneWayAirplaneListItemBinding
 import java.text.NumberFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-class OneWayAirplaneListAdapter(private val context: Context, private val data : ArrayList<GetOneWayFlightOffersResponseElement>, lid : MutableList<Long>, private val onItemClickListener : OnItemClickListener) : RecyclerView.Adapter<OneWayAirplaneListAdapter.ViewHolder>(){
+class OneWayAirplaneListAdapter(
+    private val context: Context,
+    private val data: ArrayList<GetOneWayFlightOffersResponseElement>,
+    lid: MutableList<Long>,
+    private val onItemClickListener: OnItemClickListener,
+    private var flightMember: List<FlightMember>?
+) : RecyclerView.Adapter<OneWayAirplaneListAdapter.ViewHolder>(){
     private val hearts = lid.map { it > 0 }.toMutableList()
     private var likeId = lid
     private var heartClickable = false
@@ -91,7 +98,7 @@ class OneWayAirplaneListAdapter(private val context: Context, private val data :
         val d = data[position]
         holder.bind(d, position)
         holder.itemView.setOnClickListener {
-            onItemClickListener.onItemClickerListener(d)
+            onItemClickListener.onItemClickerListener(d, if(flightMember.isNullOrEmpty()) null else flightMember!![position])
         }
     }
 
@@ -141,7 +148,10 @@ class OneWayAirplaneListAdapter(private val context: Context, private val data :
     private fun getFormattedNumber(price : Long) : String = NumberFormat.getNumberInstance(Locale.US).format(price)
 
     interface OnItemClickListener{
-        fun onItemClickerListener(data : GetOneWayFlightOffersResponseElement)
+        fun onItemClickerListener(
+            data: GetOneWayFlightOffersResponseElement,
+            flightMember: FlightMember?
+        )
         fun onHeartClickerListener(
             check: Boolean,
             data: GetOneWayFlightOffersResponseElement,

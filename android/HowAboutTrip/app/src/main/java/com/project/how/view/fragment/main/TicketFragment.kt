@@ -1,6 +1,7 @@
 package com.project.how.view.fragment.main
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,13 +14,12 @@ import com.project.how.R
 import com.project.how.adapter.recyclerview.booking.airplane.RecentAirplaneAdapter
 import com.project.how.adapter.recyclerview.booking.hotel.RecentHotelAdapter
 import com.project.how.adapter.recyclerview.viewpager.EventTicketViewPagerAdapter
-import com.project.how.data_class.recyclerview.EventViewPager
-import com.project.how.data_class.recyclerview.RecentHotel
+import com.project.how.data_class.recyclerview.schedule.EventViewPager
+import com.project.how.data_class.recyclerview.ticket.RecentHotel
 import com.project.how.data_class.roomdb.RecentAirplane
 import com.project.how.databinding.FragmentTicketBinding
 import com.project.how.view.activity.mypage.LikeActivity
 import com.project.how.view.activity.ticket.AirplaneSearchActivity
-import com.project.how.view.dialog.bottom_sheet_dialog.WebViewBottomSheetDialog
 import com.project.how.view_model.BookingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,11 +39,46 @@ class TicketFragment : Fragment(), RecentHotelAdapter.OnItemClickListener, Recen
         var eventTest = mutableListOf<EventViewPager>()
         var recentHotelTest = mutableListOf<RecentHotel>()
 
-        eventTest.add(EventViewPager("test", "2024 파리 올림픽\n여름방학", R.drawable.event_image_paris_temp, true))
-        eventTest.add(EventViewPager("test", "이번 여름방학엔\n일본여행가기", R.drawable.event_image_japan_temp, true))
-        eventTest.add(EventViewPager("test", "니스 최고의 해변에서\n휴양하기", R.drawable.event_image_nis_temp, true))
-        eventTest.add(EventViewPager("test", "2024 파리 올림픽\n여름방학", R.drawable.event_image_paris_temp, true))
-        eventTest.add(EventViewPager("test", "항공권 검색으로\n편안한 여행", R.drawable.event_image_airplnae_temp, true))
+        eventTest.add(
+            EventViewPager(
+                "test",
+                "2024 파리 올림픽\n여름방학",
+                R.drawable.event_image_paris_temp,
+                true
+            )
+        )
+        eventTest.add(
+            EventViewPager(
+                "test",
+                "이번 여름방학엔\n일본여행가기",
+                R.drawable.event_image_japan_temp,
+                true
+            )
+        )
+        eventTest.add(
+            EventViewPager(
+                "test",
+                "니스 최고의 해변에서\n휴양하기",
+                R.drawable.event_image_nis_temp,
+                true
+            )
+        )
+        eventTest.add(
+            EventViewPager(
+                "test",
+                "2024 파리 올림픽\n여름방학",
+                R.drawable.event_image_paris_temp,
+                true
+            )
+        )
+        eventTest.add(
+            EventViewPager(
+                "test",
+                "항공권 검색으로\n편안한 여행",
+                R.drawable.event_image_airplnae_temp,
+                true
+            )
+        )
 
         for (i in 0..5) {
             recentHotelTest.add(
@@ -64,7 +99,7 @@ class TicketFragment : Fragment(), RecentHotelAdapter.OnItemClickListener, Recen
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_ticket, container, false)
         binding.ticket = this
         binding.lifecycleOwner = viewLifecycleOwner
@@ -119,7 +154,7 @@ class TicketFragment : Fragment(), RecentHotelAdapter.OnItemClickListener, Recen
     }
 
     override fun onItemClickListener(url: String) {
-        val web = WebViewBottomSheetDialog(url)
-        web.show(childFragmentManager, "WebViewBottomSheetDialog")
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
     }
 }

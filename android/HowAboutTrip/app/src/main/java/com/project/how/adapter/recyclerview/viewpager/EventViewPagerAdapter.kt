@@ -6,8 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.how.BuildConfig
-import com.project.how.R
-import com.project.how.data_class.recyclerview.EventViewPager
+import com.project.how.data_class.recyclerview.schedule.EventViewPager
 import com.project.how.databinding.ViewpagerRoundEventBinding
 
 class EventViewPagerAdapter(
@@ -24,12 +23,12 @@ class EventViewPagerAdapter(
                 if(data.image == null){
                     Glide.with(binding.root)
                         .load("https://img.freepik.com/free-photo/asian-woman-wearing-japanese-traditional-kimono-at-yasaka-pagoda-and-sannen-zaka-street-in-kyoto-japan_335224-121.jpg?w=1380&t=st=1711376316~exp=1711376916~hmac=c66b5094e4df32daf35dbf1047664b2c5317cbb3215b8c6615900aa0f80fbf6b")
-                        .error(BuildConfig.ERROR_IMAGE_URl)
+                        .error(BuildConfig.ERROR_IMAGE_URL)
                         .into(binding.image)
                 }else{
                     Glide.with(binding.root)
                         .load(data.image)
-                        .error(BuildConfig.ERROR_IMAGE_URl)
+                        .error(BuildConfig.ERROR_IMAGE_URL)
                         .into(binding.image)
                 }
             }

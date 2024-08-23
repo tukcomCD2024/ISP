@@ -9,7 +9,8 @@ import com.project.how.data_class.dto.schedule.GetLatestSchedulesResponse
 import com.project.how.data_class.dto.schedule.GetLatestSchedulesResponseElement
 import com.project.how.databinding.RecentAddedCalendarsItemBinding
 
-class RecentAddedCalendarsAdapter(data : GetLatestSchedulesResponse, private val onItemClickListener: OnItemClickListener) : RecyclerView.Adapter<RecentAddedCalendarsAdapter.ViewHolder>() {
+class RecentAddedCalendarsAdapter(data : GetLatestSchedulesResponse, private val onItemClickListener: OnItemClickListener)
+    : RecyclerView.Adapter<RecentAddedCalendarsAdapter.ViewHolder>() {
     private var recentAddedCalendars = data
 
     inner class ViewHolder(val binding : RecentAddedCalendarsItemBinding) : RecyclerView.ViewHolder(binding.root){
@@ -19,7 +20,7 @@ class RecentAddedCalendarsAdapter(data : GetLatestSchedulesResponse, private val
             binding.places.text = getPlacesString(data.plan)
             Glide.with(binding.root)
                 .load(data.imageUrl)
-                .error(BuildConfig.ERROR_IMAGE_URl)
+                .error(BuildConfig.ERROR_IMAGE_URL)
                 .into(binding.image)
         }
     }

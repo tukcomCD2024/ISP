@@ -24,7 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.project.how.BuildConfig
 import com.project.how.R
 import com.project.how.adapter.recyclerview.schedule.AiDaysScheduleAdapter
-import com.project.how.data_class.recyclerview.DaysSchedule
+import com.project.how.data_class.recyclerview.schedule.DaysSchedule
 import com.project.how.databinding.EditScheduleBottomSheetBinding
 import com.project.how.interface_af.OnScheduleListener
 import com.project.how.view.dialog.bottom_sheet_dialog.ratio.BottomSheetRatioHeightManager
@@ -33,7 +33,13 @@ import com.project.how.view.map_helper.MarkerProducer
 import kotlinx.coroutines.launch
 
 
-class EditScheduleBottomSheetDialog(private val lat : Double, private val lng : Double, private val schedule : DaysSchedule, private val position : Int, private val onScheduleListener: OnScheduleListener)
+class EditScheduleBottomSheetDialog(
+    private val lat : Double,
+    private val lng : Double,
+    private val schedule : DaysSchedule,
+    private val position : Int,
+    private val currency : String,
+    private val onScheduleListener: OnScheduleListener)
     : BottomSheetDialogFragment(), OnMapReadyCallback {
     private var _binding : EditScheduleBottomSheetBinding? = null
     private val binding : EditScheduleBottomSheetBinding
@@ -48,18 +54,15 @@ class EditScheduleBottomSheetDialog(private val lat : Double, private val lng : 
     var latitude = schedule.latitude
     var longitude = schedule.longitude
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.edit_schedule_bottom_sheet, container, false)
         binding.edit = this
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.unit.text = currency
         dialog?.setOnShowListener {
             val bottomSheetDialog = it as BottomSheetDialog
             BottomSheetRatioHeightManager().setMaxRatio(bottomSheetDialog, requireContext())
@@ -202,7 +205,7 @@ class EditScheduleBottomSheetDialog(private val lat : Double, private val lng : 
             place,
             latitude ?: 0.0,
             longitude ?: 0.0,
-            cost.toLong(),
+            cost.toDouble(),
             schedule.purchaseStatus,
             schedule.purchaseDate
         )

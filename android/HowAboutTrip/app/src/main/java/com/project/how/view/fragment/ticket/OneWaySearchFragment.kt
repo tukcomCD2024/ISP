@@ -24,7 +24,6 @@ import com.project.how.view.activity.ticket.OneWayAirplaneListActivity
 import com.project.how.view.dialog.ConfirmDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.AirportBottomSheetDialog
 import com.project.how.view_model.BookingViewModel
-import com.project.how.view_model.MemberViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -47,7 +46,7 @@ class OneWaySearchFragment(private val onLoadListener: OnLoadListener) : Fragmen
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_one_way_search, container, false)
         binding.oneWay = this
         binding.lifecycleOwner = viewLifecycleOwner
@@ -109,17 +108,18 @@ class OneWaySearchFragment(private val onLoadListener: OnLoadListener) : Fragmen
                 setUnEnabled()
                 onLoadListener.onLoadStartListener()
                 binding.search.isEnabled = false
-                nonStop = if (binding.radioGroup.checkedRadioButtonId == R.id.non_inclusive) true else false
-                input = GetOneWayFlightOffersRequest(
-                    departure!!,
-                    destination!!,
-                    date!!,
-                    adults,
-                    children,
-                    50,
-                    nonStop
-                )
-                bookingViewModel.getFlightOffers(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken, input).collect{check->
+                nonStop = binding.radioGroup.checkedRadioButtonId == R.id.non_inclusive
+                input =
+                    GetOneWayFlightOffersRequest(
+                        departure!!,
+                        destination!!,
+                        date!!,
+                        adults,
+                        children,
+                        50,
+                        nonStop
+                    )
+                bookingViewModel.getFlightOffers(input).collect{ check->
                     setEnabled()
                     onLoadListener.onLoadFinishListener()
                     when(check){

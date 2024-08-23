@@ -1,4 +1,4 @@
-package com.project.how.data_class.recyclerview
+package com.project.how.data_class.recyclerview.schedule
 
 import java.io.Serializable
 
@@ -9,7 +9,8 @@ data class AiScheduleList(
 data class AiSchedule(
     val title: String,
     val country: String,
-    val budget : Long = 0,
+    val currency : String,
+    val budget : Double,
     val places: List<String>,
     val image: String,
     val startDate: String,
@@ -20,7 +21,7 @@ data class AiSchedule(
 data class AiDaysSchedule(
     val type : Int,
     val todo: String,
-    val budget : Long,
+    val budget : Double,
     val places: String,
     val lat : Double,
     val lng : Double

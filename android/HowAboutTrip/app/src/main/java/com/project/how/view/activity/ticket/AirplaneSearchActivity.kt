@@ -28,12 +28,11 @@ class AirplaneSearchActivity : AppCompatActivity(), OnLoadListener {
         binding.lifecycleOwner = this
 
         binding.viewPager.isUserInputEnabled = false
-        binding.viewPager.adapter = ViewPagerAdapter(listOf(OneWaySearchFragment(this), RoundTripSearchFragment(this)), this)
-
+        binding.viewPager.adapter = ViewPagerAdapter(listOf(RoundTripSearchFragment(this),OneWaySearchFragment(this)), this)
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             when (position) {
-                0 -> tab.text = getString(R.string.one_way)
-                1 -> tab.text = getString(R.string.round_trip)
+                1 -> tab.text = getString(R.string.one_way)
+                0 -> tab.text = getString(R.string.round_trip)
             }
         }.attach()
 

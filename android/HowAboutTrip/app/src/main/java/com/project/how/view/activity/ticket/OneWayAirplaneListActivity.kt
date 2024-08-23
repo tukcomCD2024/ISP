@@ -1,5 +1,7 @@
 package com.project.how.view.activity.ticket
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -15,12 +17,11 @@ import com.project.how.data_class.dto.booking.airplane.GetOneWayFlightOffersRequ
 import com.project.how.data_class.dto.booking.airplane.GetOneWayFlightOffersResponseElement
 import com.project.how.data_class.dto.booking.airplane.LikeOneWayFlightElement
 import com.project.how.data_class.dto.booking.airplane.OneWayFlightOffers
+import com.project.how.data_class.recyclerview.ticket.FlightMember
 import com.project.how.data_class.roomdb.RecentAirplane
 import com.project.how.databinding.ActivityOneWayAirplaneListBinding
 import com.project.how.view.activity.calendar.CalendarEditActivity
-import com.project.how.view.dialog.bottom_sheet_dialog.WebViewBottomSheetDialog
 import com.project.how.view_model.BookingViewModel
-import com.project.how.view_model.MemberViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -44,7 +45,7 @@ class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapte
             getString(R.string.one_way_flight_offers), OneWayFlightOffers::class.java).data
         lid = MutableList<Long>(data.size) { -1L }
         bookingViewModel.getLikeFlightList(lid)
-        adapter = OneWayAirplaneListAdapter(this, data, lid,this)
+        adapter = OneWayAirplaneListAdapter(this, data, lid, this, null)
 
         input = CalendarEditActivity.getSerializable(this, getString(R.string.get_one_way_flight_offers_request), GetOneWayFlightOffersRequest::class.java)
 
@@ -52,8 +53,8 @@ class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapte
 
         bookingViewModel.skyscannerUrlLiveData.observe(this){url->
             if (clicked != null){
-                val web = WebViewBottomSheetDialog(url)
-                web.show(supportFragmentManager, "WebViewBottomSheetDialog")
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                startActivity(intent)
                 val recent = RecentAirplane(
                     name = getString(R.string.recent_one_way_name, input.departure, input.destination),
                     image = null,
@@ -81,19 +82,23 @@ class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapte
 
     }
 
-    override fun onItemClickerListener(data: GetOneWayFlightOffersResponseElement) {
+    override fun onItemClickerListener(
+        data: GetOneWayFlightOffersResponseElement,
+        flightMember: FlightMember?
+    ) {
         lifecycleScope.launch {
             clicked = data
-            val request = GenerateOneWaySkyscannerUrlRequest(
-                data.departureIataCode,
-                data.arrivalIataCode,
-                input.departureDate,
-                input.adults,
-                input.children,
-                data.abroadDuration,
-                data.transferCount
-            )
-            bookingViewModel.generateOneWaySkyscannerUrl(this@OneWayAirplaneListActivity, MemberViewModel.tokensLiveData.value!!.accessToken, request).collect{check->
+            val request =
+                GenerateOneWaySkyscannerUrlRequest(
+                    data.departureIataCode,
+                    data.arrivalIataCode,
+                    input.departureDate,
+                    input.adults,
+                    input.children,
+                    data.abroadDuration,
+                    data.transferCount
+                )
+            bookingViewModel.generateOneWaySkyscannerUrl(request).collect{ check->
                 when(check){
                     BookingViewModel.NOT_EXIST->{
                         Toast.makeText(this@OneWayAirplaneListActivity, getString(R.string.not_exist_flight_offers), Toast.LENGTH_SHORT).show()
@@ -114,7 +119,7 @@ class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapte
     ){
         lifecycleScope.launch{
             if (check){
-                bookingViewModel.unlike(this@OneWayAirplaneListActivity, MemberViewModel.tokensLiveData.value!!.accessToken, id, position).collect{c->
+                bookingViewModel.unlike(id, position).collect{ c->
                     when(c){
                         BookingViewModel.NOT_EXIST->{
                             Toast.makeText(this@OneWayAirplaneListActivity,
@@ -130,18 +135,21 @@ class OneWayAirplaneListActivity : AppCompatActivity(), OneWayAirplaneListAdapte
                     }
                 }
             }else{
-                val lowf = LikeOneWayFlightElement(
-                    data.carrierCode,
-                    data.totalPrice,
-                    data.departureIataCode,
-                    data.arrivalIataCode,
-                    data.abroadDuration,
-                    data.abroadDepartureTime,
-                    data.abroadArrivalTime,
-                    data.nonstop,
-                    data.transferCount
-                )
-                bookingViewModel.like(this@OneWayAirplaneListActivity, MemberViewModel.tokensLiveData.value!!.accessToken, lowf, position).collect{c->
+                val lowf =
+                    LikeOneWayFlightElement(
+                        data.carrierCode,
+                        data.totalPrice,
+                        data.departureIataCode,
+                        data.arrivalIataCode,
+                        data.abroadDuration,
+                        data.abroadDepartureTime,
+                        data.abroadArrivalTime,
+                        data.nonstop,
+                        data.transferCount,
+                        input.adults,
+                        input.children
+                    )
+                bookingViewModel.like(lowf, position).collect{ c->
                     if (c != BookingViewModel.SUCCESS){
                         Toast.makeText(this@OneWayAirplaneListActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
                     }

@@ -24,7 +24,6 @@ import com.project.how.view.activity.ticket.RoundTripAirplaneListActivity
 import com.project.how.view.dialog.ConfirmDialog
 import com.project.how.view.dialog.bottom_sheet_dialog.AirportBottomSheetDialog
 import com.project.how.view_model.BookingViewModel
-import com.project.how.view_model.MemberViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -48,7 +47,7 @@ class RoundTripSearchFragment(private val onLoadListener: OnLoadListener) : Frag
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_round_trip_search, container, false)
         binding.roundTrip = this
         binding.lifecycleOwner = viewLifecycleOwner
@@ -100,7 +99,7 @@ class RoundTripSearchFragment(private val onLoadListener: OnLoadListener) : Frag
                 setUnEnabled()
                 onLoadListener.onLoadStartListener()
                 binding.search.isEnabled = false
-                nonStop = if (binding.radioGroup.checkedRadioButtonId == R.id.non_inclusive) true else false
+                nonStop = binding.radioGroup.checkedRadioButtonId == R.id.non_inclusive
                 input = GetFlightOffersRequest(
                     departure!!,
                     destination!!,
@@ -111,7 +110,7 @@ class RoundTripSearchFragment(private val onLoadListener: OnLoadListener) : Frag
                     50,
                     nonStop
                 )
-                bookingViewModel.getFlightOffers(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken, input).collect{check->
+                bookingViewModel.getFlightOffers(input).collect{ check->
                     setEnabled()
                     onLoadListener.onLoadFinishListener()
                     when(check){

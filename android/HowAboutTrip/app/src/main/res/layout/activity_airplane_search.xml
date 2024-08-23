@@ -105,7 +105,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/bm_hanna"
             android:gravity="center"
-            android:textSize="20sp"
+            android:textSize="20dp"
             android:text="@string/flight_search_load"
             android:textColor="@color/white"
             android:visibility="gone"

@@ -8,15 +8,7 @@ import com.project.how.databinding.SimpleRadiobuttonItemBinding
 class RadioButtonAdapter(data: List<String>, private val multiple : Boolean, private val onItemClickListener: OnItemClickListener, private val type: Int)
     : RecyclerView.Adapter<RadioButtonAdapter.ViewHolder>(){
     private var data= data
-    private var check = mutableListOf<Boolean>()
-
-    init {
-        if (check.isEmpty()){
-            for(i in data.indices){
-                check.add(false)
-            }
-        }
-    }
+    private var check = MutableList(data.size) { false }
 
     inner class ViewHolder(val binding : SimpleRadiobuttonItemBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(data: String, position: Int){

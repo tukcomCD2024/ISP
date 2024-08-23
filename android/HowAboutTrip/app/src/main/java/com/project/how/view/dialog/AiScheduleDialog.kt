@@ -18,7 +18,7 @@ import com.google.android.material.tabs.TabLayout
 import com.project.how.BuildConfig
 import com.project.how.R
 import com.project.how.adapter.recyclerview.schedule.AiDaysScheduleAdapter
-import com.project.how.data_class.recyclerview.AiSchedule
+import com.project.how.data_class.recyclerview.schedule.AiSchedule
 import com.project.how.databinding.DialogAiScheduleBinding
 import com.project.how.interface_af.OnAddListener
 import com.project.how.view.dp.DpPxChanger
@@ -31,19 +31,16 @@ class AiScheduleDialog(private val data : AiSchedule, private val onAddListener:
     private val binding : DialogAiScheduleBinding
         get() = _binding!!
     private lateinit var adapter : AiDaysScheduleAdapter
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.dialog_ai_schedule, container, false)
         binding.ai = this
         binding.lifecycleOwner = viewLifecycleOwner
-        adapter = AiDaysScheduleAdapter(requireContext(), data.dailySchedule[0])
+        adapter = AiDaysScheduleAdapter(requireContext(), data.dailySchedule[0], data.currency)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         val params = dialog?.window?.attributes
@@ -60,7 +57,7 @@ class AiScheduleDialog(private val data : AiSchedule, private val onAddListener:
             binding.title.text = data.title
             Glide.with(binding.root)
                 .load(data.image)
-                .error(BuildConfig.ERROR_IMAGE_URl)
+                .error(BuildConfig.ERROR_IMAGE_URL)
                 .into(binding.image)
             binding.places.text = getPlacesText(data.places)
             setDaysTab()

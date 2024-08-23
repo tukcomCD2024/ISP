@@ -6,26 +6,28 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.project.how.R
 import com.project.how.adapter.recyclerview.schedule.AiDaysScheduleAdapter
+import com.project.how.data_class.dto.schedule.CheckList
 import com.project.how.data_class.dto.schedule.GetFastestSchedulesResponse
 import com.project.how.data_class.dto.schedule.GetLatestSchedulesResponse
-import com.project.how.data_class.recyclerview.AiDaysSchedule
-import com.project.how.data_class.recyclerview.AiSchedule
-import com.project.how.data_class.recyclerview.DaysSchedule
-import com.project.how.data_class.recyclerview.Schedule
+import com.project.how.data_class.recyclerview.schedule.AiDaysSchedule
+import com.project.how.data_class.recyclerview.schedule.AiSchedule
+import com.project.how.data_class.recyclerview.schedule.DaysSchedule
+import com.project.how.data_class.recyclerview.schedule.Schedule
 import com.project.how.data_class.dto.schedule.GetScheduleListResponse
-import com.project.how.data_class.dto.schedule.ScheduleDetail
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import java.util.Calendar
 
 class ScheduleRepository {
     private val _nearScheduleDayLiveData : MutableLiveData<GetFastestSchedulesResponse> = MutableLiveData()
     private val _scheduleLiveData : MutableLiveData<Schedule> = MutableLiveData()
     private val _scheduleListLiveData : MutableLiveData<GetScheduleListResponse> = MutableLiveData()
     private val _latestScheduleLiveData : MutableLiveData<GetLatestSchedulesResponse> = MutableLiveData()
+    private val _checkList : MutableLiveData<CheckList> = MutableLiveData()
     val nearScheduleDayLiveData : LiveData<GetFastestSchedulesResponse>
         get() = _nearScheduleDayLiveData
     val scheduleLiveData : LiveData<Schedule>
@@ -34,6 +36,12 @@ class ScheduleRepository {
         get() = _scheduleListLiveData
     val latestScheduleLiveData : LiveData<GetLatestSchedulesResponse>
         get() = _latestScheduleLiveData
+    val checkList : LiveData<CheckList>
+        get() = _checkList
+
+    fun getCheckList(data : CheckList){
+        _checkList.postValue(data)
+    }
 
     fun getNearScheduleDay(data : GetFastestSchedulesResponse){
         _nearScheduleDayLiveData.postValue(data)
@@ -53,25 +61,26 @@ class ScheduleRepository {
     fun getSchedule(aiSchedule : AiSchedule) : Flow<Schedule> = flow{
         this.emit(
             Schedule(
-            aiSchedule.title,
-            aiSchedule.country,
-            aiSchedule.startDate,
-            aiSchedule.endDate,
-            aiSchedule.budget,
-            getDailySchedule(aiSchedule.dailySchedule)
-        )
+                aiSchedule.title,
+                aiSchedule.country,
+                aiSchedule.currency,
+                aiSchedule.startDate,
+                aiSchedule.endDate,
+                aiSchedule.budget,
+                getDailySchedule(aiSchedule.dailySchedule)
+            )
         )
     }
 
-    fun getTotalCost(schedule: Schedule) :Flow<Long> = flow {
-        var totalCost : Long = 0
+    fun getTotalCost(schedule: Schedule) :Flow<Double> = flow {
+        var totalCost = 0.0
         for (i in schedule.dailySchedule.indices){
             for (j in schedule.dailySchedule[i].indices){
                 totalCost += schedule.dailySchedule[i][j].cost
             }
         }
         this.emit(totalCost)
-    }
+    }.flowOn(Dispatchers.IO)
 
     fun getLatestSchedule(data : GetLatestSchedulesResponse){
         _latestScheduleLiveData.postValue(data)
@@ -89,7 +98,7 @@ class ScheduleRepository {
                         aiDailySchedule[i][j].places,
                         aiDailySchedule[i][j].lat,
                         aiDailySchedule[i][j].lng,
-                        0,
+                        aiDailySchedule[i][j].budget,
                         false,
                         null
                     )
@@ -130,7 +139,7 @@ class ScheduleRepository {
         _scheduleListLiveData.postValue(scheduleList)
     }
 
-    fun getDaysSchedule(context: Context, schedule: Schedule, scheduleDetail: ScheduleDetail) = flow<Schedule>{
+    fun getDaysSchedule(context: Context, schedule: Schedule, scheduleDetail: com.project.how.data_class.dto.schedule.ScheduleDetail) = flow<Schedule>{
         val std = LocalDate.parse(scheduleDetail.startDate, DateTimeFormatter.ISO_DATE)
         val end = LocalDate.parse(scheduleDetail.endDate, DateTimeFormatter.ISO_DATE)
         val diff = ChronoUnit.DAYS.between(std, end)
@@ -146,12 +155,15 @@ class ScheduleRepository {
                     for (j in 0 until scheduleDetail.dailySchedules[cnt].schedules.size){
                         dailySchedule.add(
                             DaysSchedule(
-                                getScheduleType(context, scheduleDetail.dailySchedules[cnt].schedules[j].type),
+                                getScheduleType(
+                                    context,
+                                    scheduleDetail.dailySchedules[cnt].schedules[j].type
+                                ),
                                 scheduleDetail.dailySchedules[cnt].schedules[j].todo,
                                 scheduleDetail.dailySchedules[cnt].schedules[j].place,
                                 scheduleDetail.dailySchedules[cnt].schedules[j].latitude,
                                 scheduleDetail.dailySchedules[cnt].schedules[j].longitude,
-                                scheduleDetail.dailySchedules[cnt].schedules[j].budget,
+                                scheduleDetail.dailySchedules[cnt].schedules[j].budget.toDouble(),
                                 false,
                                 null
                             )

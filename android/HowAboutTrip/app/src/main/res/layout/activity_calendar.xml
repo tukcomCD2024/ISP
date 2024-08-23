@@ -33,7 +33,7 @@
                     android:background="@android:color/transparent"
                     android:src="@drawable/arrow_left_white"
                     android:scaleType="fitCenter"
-                    android:onClick="@{()-> calendar.finish()}"
+                    android:onClick="@{()-> calendar.onBackPressed()}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -84,7 +84,7 @@
                         android:maxLength="20"
                         android:maxLines="1"
                         android:textColor="@color/white"
-                        android:textSize="18sp"
+                        android:textSize="18dp"
                         app:layout_constraintBottom_toTopOf="@+id/date"
                         app:layout_constraintStart_toStartOf="parent" />
 
@@ -93,7 +93,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
-                        android:textSize="13sp"
+                        android:textSize="13dp"
                         app:layout_constraintBottom_toTopOf="@+id/budget"
                         app:layout_constraintStart_toStartOf="parent" />
 
@@ -102,7 +102,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
-                        android:textSize="13sp"
+                        android:textSize="13dp"
                         android:layout_marginBottom="8dp"
                         app:layout_constraintBottom_toTopOf="@+id/checklist"
                         app:layout_constraintStart_toStartOf="parent" />
@@ -114,7 +114,7 @@
                         android:background="@drawable/white_round_rectangle"
                         android:text="@string/delete"
                         android:textColor="@color/black"
-                        android:textSize="13sp"
+                        android:textSize="13dp"
                         android:onClick="@{()-> calendar.delete()}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
@@ -129,23 +129,10 @@
                         android:text="@string/checklist"
                         android:drawableStart="@drawable/icon_checklist_size_fixed"
                         android:textColor="@color/black"
-                        android:textSize="13sp"
+                        android:textSize="13dp"
+                        android:onClick="@{()-> calendar.checklist()}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/share"
-                        android:layout_width="60dp"
-                        android:layout_height="22dp"
-                        android:background="@drawable/white_round_rectangle"
-                        android:text="@string/share"
-                        android:textColor="@color/black"
-                        android:drawableStart="@drawable/icon_share_size_fixed"
-                        android:textSize="13sp"
-                        android:layout_marginStart="8dp"
-                        android:paddingHorizontal="8dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/checklist" />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/edit"
@@ -156,11 +143,11 @@
                         android:text="@string/edit"
                         android:drawableStart="@drawable/icon_edit_black_size_fixed"
                         android:textColor="@color/black"
-                        android:textSize="13sp"
+                        android:textSize="13dp"
                         android:layout_marginStart="8dp"
                         android:onClick="@{()-> calendar.edit()}"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/share" />
+                        app:layout_constraintStart_toEndOf="@+id/checklist" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -222,7 +209,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:fontFamily="@font/bm_hanna"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="@id/guideline2"
                     app:layout_constraintStart_toStartOf="@id/guideline1"

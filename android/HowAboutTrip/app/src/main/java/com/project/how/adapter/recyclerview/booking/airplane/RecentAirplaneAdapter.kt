@@ -20,12 +20,12 @@ class RecentAirplaneAdapter(recentAirplane: List<RecentAirplane>, private val on
             if(data.image == null){
                 Glide.with(binding.root)
                     .load(R.drawable.event_image_airplnae_temp)
-                    .error(BuildConfig.ERROR_IMAGE_URl)
+                    .error(BuildConfig.ERROR_IMAGE_URL)
                     .into(binding.image)
             }else{
                 Glide.with(binding.root)
                     .load(data.image)
-                    .error(BuildConfig.ERROR_IMAGE_URl)
+                    .error(BuildConfig.ERROR_IMAGE_URL)
                     .into(binding.image)
             }
         }

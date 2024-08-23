@@ -14,10 +14,10 @@ import com.google.android.gms.ads.MobileAds
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.project.how.R
-import com.project.how.data_class.recyclerview.AiSchedule
+import com.project.how.data_class.recyclerview.schedule.AiSchedule
 import com.project.how.data_class.AiScheduleListInput
 import com.project.how.data_class.dto.country.GetCountryLocationResponse
-import com.project.how.data_class.recyclerview.AiScheduleList
+import com.project.how.data_class.recyclerview.schedule.AiScheduleList
 import com.project.how.databinding.ActivityAddAicalendarBinding
 import com.project.how.interface_af.OnAddListener
 import com.project.how.interface_af.OnDesListener
@@ -149,7 +149,16 @@ class AddAICalendarActivity :
                 Log.d("aiScheduleLiveData", "start ${destination}, ${departureDate}, ${entranceDate}")
                 setUnEnabled()
                 load()
-                viewModel.getAiScheduleList(AiScheduleListInput(destination!!, purpose, activities, excludingActivities, departureDate!!, entranceDate!!)).collect { check ->
+                viewModel.getAiScheduleList(
+                    AiScheduleListInput(
+                        destination!!,
+                        purpose,
+                        activities,
+                        excludingActivities,
+                        departureDate!!,
+                        entranceDate!!
+                    )
+                ).collect { check ->
                     if (check == AiScheduleViewModel.FAILD){
                         stopLoaing()
                         setEnabled()
@@ -210,7 +219,9 @@ class AddAICalendarActivity :
 
     private fun moveAiScheduleList(){
         val intent = Intent(this, AiScheduleListActivity::class.java)
-        intent.putExtra(getString(R.string.aischedule), AiScheduleList(aiScheduleList))
+        intent.putExtra(getString(R.string.aischedule),
+            AiScheduleList(aiScheduleList)
+        )
         intent.putExtra(getString(R.string.server_calendar_latitude), latLng?.lat)
         intent.putExtra(getString(R.string.server_calendar_longitude), latLng?.lng)
         startActivity(intent)

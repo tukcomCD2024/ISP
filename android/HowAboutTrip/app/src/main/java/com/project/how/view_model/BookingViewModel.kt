@@ -1,11 +1,9 @@
 package com.project.how.view_model
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.project.how.R
 import com.project.how.data_class.dto.EmptyResponse
 import com.project.how.data_class.dto.booking.airplane.GenerateOneWaySkyscannerUrlRequest
 import com.project.how.data_class.dto.booking.airplane.GenerateSkyscannerUrlRequest
@@ -25,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -74,9 +73,9 @@ class BookingViewModel @Inject constructor(
         }
     }
 
-    fun getFlightOffers(context : Context, accessToken : String, getFlightOffersRequest: GetFlightOffersRequest) : Flow<Int> = callbackFlow{
+    fun getFlightOffers(getFlightOffersRequest: GetFlightOffersRequest) : Flow<Int> = callbackFlow{
         BookingRetrofit.getApiService()?.let {apiService ->
-            apiService.getFlightOffers(context.getString(R.string.bearer_token, accessToken), getFlightOffersRequest)
+            apiService.getFlightOffers(getFlightOffersRequest)
                 .enqueue(object : Callback<GetFlightOffersResponse>{
                     override fun onResponse(
                         call: Call<GetFlightOffersResponse>,
@@ -112,11 +111,11 @@ class BookingViewModel @Inject constructor(
         } ?: close()
 
         awaitClose()
-    }
+    }.flowOn(Dispatchers.IO)
 
-    fun getFlightOffers(context : Context, accessToken : String, getOneWayFlightOffersRequest: GetOneWayFlightOffersRequest) : Flow<Int> = callbackFlow{
+    fun getFlightOffers(getOneWayFlightOffersRequest: GetOneWayFlightOffersRequest) : Flow<Int> = callbackFlow<Int> {
         BookingRetrofit.getApiService()?.let {apiService ->
-            apiService.getOneWayFligthOffers(context.getString(R.string.bearer_token, accessToken), getOneWayFlightOffersRequest)
+            apiService.getOneWayFligthOffers(getOneWayFlightOffersRequest)
                 .enqueue(object : Callback<GetOneWayFlightOffersResponse>{
                     override fun onResponse(
                         call: Call<GetOneWayFlightOffersResponse>,
@@ -152,11 +151,11 @@ class BookingViewModel @Inject constructor(
         } ?: close()
 
         awaitClose()
-    }
+    }.flowOn(Dispatchers.IO)
 
-    fun generateSkyscannerUrl(context : Context, accessToken : String, generateSkyscannerUrlRequest: GenerateSkyscannerUrlRequest) : Flow<Int> = callbackFlow {
+    fun generateSkyscannerUrl(generateSkyscannerUrlRequest: GenerateSkyscannerUrlRequest) : Flow<Int> = callbackFlow<Int> {
         BookingRetrofit.getApiService()?.let {apiService->
-           apiService.generateSkyscannerUrl(context.getString(R.string.bearer_token, accessToken), generateSkyscannerUrlRequest)
+           apiService.generateSkyscannerUrl(generateSkyscannerUrlRequest)
                .enqueue(object : Callback<GenerateSkyscannerUrlResponse>{
                    override fun onResponse(
                        call: Call<GenerateSkyscannerUrlResponse>,
@@ -187,11 +186,11 @@ class BookingViewModel @Inject constructor(
         } ?: close()
 
         awaitClose()
-    }
+    }.flowOn(Dispatchers.IO)
 
-    fun generateOneWaySkyscannerUrl(context : Context, accessToken : String, generateOneWaySkyscannerUrlRequest: GenerateOneWaySkyscannerUrlRequest) : Flow<Int> = callbackFlow {
+    fun generateOneWaySkyscannerUrl(generateOneWaySkyscannerUrlRequest: GenerateOneWaySkyscannerUrlRequest) : Flow<Int> = callbackFlow<Int> {
         BookingRetrofit.getApiService()?.let {apiService->
-            apiService.generateOneWaySkyscannerUrl(context.getString(R.string.bearer_token, accessToken), generateOneWaySkyscannerUrlRequest)
+            apiService.generateOneWaySkyscannerUrl(generateOneWaySkyscannerUrlRequest)
                 .enqueue(object : Callback<GenerateSkyscannerUrlResponse>{
                     override fun onResponse(
                         call: Call<GenerateSkyscannerUrlResponse>,
@@ -222,11 +221,11 @@ class BookingViewModel @Inject constructor(
         } ?: close()
 
         awaitClose()
-    }
+    }.flowOn(Dispatchers.IO)
 
-    fun like(context: Context, accessToken: String, likeFlightElement: LikeFlightElement, position: Int) : Flow<Int> = callbackFlow{
+    fun like(likeFlightElement: LikeFlightElement, position: Int) : Flow<Int> = callbackFlow<Int> {
         BookingRetrofit.getApiService()?.let { apiService->
-            apiService.addLikeFlight(context.getString(R.string.bearer_token, accessToken), likeFlightElement)
+            apiService.addLikeFlight(likeFlightElement)
                 .enqueue(object : Callback<String>{
                     override fun onResponse(p0: Call<String>, p1: Response<String>) {
                         if (p1.isSuccessful){
@@ -255,11 +254,11 @@ class BookingViewModel @Inject constructor(
         } ?: close()
 
         awaitClose()
-    }
+    }.flowOn(Dispatchers.IO)
 
-    fun like(context: Context, accessToken: String, likeOneWayFlightElement: LikeOneWayFlightElement, position: Int) : Flow<Int> = callbackFlow {
+    fun like(likeOneWayFlightElement: LikeOneWayFlightElement, position: Int) : Flow<Int> = callbackFlow<Int> {
         BookingRetrofit.getApiService()?.let { apiService->
-            apiService.addLikeOneWayFlight(context.getString(R.string.bearer_token, accessToken), likeOneWayFlightElement)
+            apiService.addLikeOneWayFlight(likeOneWayFlightElement)
                 .enqueue(object : Callback<String>{
                     override fun onResponse(p0: Call<String>, p1: Response<String>) {
                         if (p1.isSuccessful){
@@ -288,11 +287,11 @@ class BookingViewModel @Inject constructor(
         } ?: close()
 
         awaitClose()
-    }
+    }.flowOn(Dispatchers.IO)
 
-    fun getLikeFlight(context: Context, accessToken: String) : Flow<Int> = callbackFlow {
+    fun getLikeFlight(): Flow<Int> = callbackFlow<Int> {
         BookingRetrofit.getApiService()?.let { apiService->
-            apiService.getLikeFlight(context.getString(R.string.bearer_token, accessToken))
+            apiService.getLikeFlight()
                 .enqueue(object : Callback<GetLikeFlightResponse>{
                     override fun onResponse(
                         p0: Call<GetLikeFlightResponse>,
@@ -323,11 +322,11 @@ class BookingViewModel @Inject constructor(
         } ?: close()
 
         awaitClose()
-    }
+    }.flowOn(Dispatchers.IO)
 
-    fun unlike(context: Context, accessToken: String, id: Long, position: Int) : Flow<Int> = callbackFlow{
+    fun unlike(id: Long, position: Int) : Flow<Int> = callbackFlow<Int> {
         BookingRetrofit.getApiService()?.let {apiService->
-            apiService.deleteLikeFlight(context.getString(R.string.bearer_token, accessToken), id)
+            apiService.deleteLikeFlight(id)
                 .enqueue(object : Callback<EmptyResponse>{
                     override fun onResponse(p0: Call<EmptyResponse>, p1: Response<EmptyResponse>) {
                         if (p1.isSuccessful){
@@ -355,7 +354,7 @@ class BookingViewModel @Inject constructor(
         } ?: close()
 
         awaitClose()
-    }
+    }.flowOn(Dispatchers.IO)
 
     fun getLikeFlightList(data : MutableList<Long>){
         bookingRepository.getLikeFlightList(data)

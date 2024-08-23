@@ -43,13 +43,14 @@
             android:id="@+id/fragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_guide"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/coordinatorLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -57,12 +58,12 @@
             <com.google.android.material.bottomappbar.BottomAppBar
                 android:id="@+id/bottomAppBar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="65dp"
                 style="@style/Widget.MaterialComponents.BottomAppBar"
                 android:background="@drawable/white_rectangle_top_shadow"
                 android:backgroundTint="@color/white"
-                android:layout_marginTop="30dp"
-                android:paddingTop="10dp"
+                android:layout_marginTop="20dp"
+                android:paddingTop="0dp"
                 app:fabAnchorMode="cradle"
                 app:fabCradleMargin="-20dp"
                 app:fabAlignmentMode="center">
@@ -70,11 +71,12 @@
                 <com.google.android.material.bottomnavigation.BottomNavigationView
                     android:id="@+id/menu"
                     android:layout_width="match_parent"
-                    android:layout_height="75dp"
+                    android:layout_height="65dp"
                     android:layout_marginEnd="10dp"
                     style="@style/WhiteBottomNavigationView"
+                    android:layout_marginBottom="10dp"
                     app:labelVisibilityMode="labeled"
-                    app:itemIconSize="22dp"
+                    app:itemIconSize="18dp"
                     app:itemIconTint="@color/main_menu"
                     app:itemTextColor="@color/main_menu"
                     app:itemRippleColor="@android:color/transparent"
@@ -90,8 +92,8 @@
                 app:shapeAppearance="@drawable/black_oval_fab"
                 android:clickable="true"
                 app:borderWidth="0dp"
-                app:fabCustomSize="70dp"
-                app:maxImageSize="35dp"
+                app:fabCustomSize="60dp"
+                app:maxImageSize="30dp"
                 android:src="@drawable/icon_ai_calendar_size_fixed"
                 android:backgroundTint="@color/black"
                 app:tint="@color/white"
@@ -101,11 +103,12 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
+            android:id="@+id/bottom_guide"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.9" />
+            app:layout_constraintGuide_end="65dp"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

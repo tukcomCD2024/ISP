@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HowAboutTrip</string>
+    <string name="app_name">여행어때</string>
     <string name="login_under_text">HowAboutTrip에서 여행 계획을\n세우는 건 어떤가요?</string>
     <string name="google_login_content_desciption">google login</string>
     <string name="how_about_trip">How About Trip</string>
@@ -26,7 +26,7 @@
     <string name="reset">초기화</string>
     <string name="save_check">saveCheck</string>
     <string name="menu_ticket">항공 숙박</string>
-    <string name="menu_calendar">일정 조회</string>
+    <string name="menu_calendar">일정</string>
     <string name="menu_picture">사진 기록</string>
     <string name="menu_mypage">My</string>
     <string name="bearer_token">Bearer %1$s</string>
@@ -132,9 +132,9 @@
     <string name="type">type</string>
     <string name="schedule">Schedule</string>
     <string name="get_data_failed">일정 정보를 가져오는 과정에서 오류가 발생했습니다.\n다시 한 번 더 시도해주세요.</string>
-    <string name="calendar_budget">예상 지출 금액 : %1$s 원</string>
+    <string name="calendar_budget">예상 지출 금액 : %1$s %2$s</string>
     <string name="calendar_title_max_length">최대 20자</string>
-    <string name="budget">예산 : %1$s 원</string>
+    <string name="budget">예산 : %1$s %2$s</string>
     <string name="some_schedule_lng_lat">특정 일정의 주소</string>
     <string name="schedule_type">일정 유형</string>
     <string name="airplane">항공</string>
@@ -178,8 +178,8 @@
     <string name="hotel_string">HOTEL</string>
     <string name="place_string">PLACE</string>
     <string name="schedule_id_and_latlng">ScheduleIdAndLatLng</string>
-    <string name="not_exist_schedule_delete_error">존재하지 않는 여행 일정입니다.\n잠시 화면을 나갔다가 다시 시도해주세요.\n해당 문제가 지속될 경우 문의해주세요.</string>
-    <string name="other_user_schedule_delete_error">현재 유저에게 존재하지 않는 여행 일정입니다.\\n해당 화면을 나갔다가 다시 들어와 시도해주세요.\\n해당문제가 지속될 경우 문의해주세요.</string>
+    <string name="not_exist_schedule_error">존재하지 않는 여행 일정입니다.\n잠시 화면을 나갔다가 다시 시도해주세요.\n해당 문제가 지속될 경우 문의해주세요.</string>
+    <string name="other_user_schedule_error">현재 유저에게 존재하지 않는 여행 일정입니다.\\n해당 화면을 나갔다가 다시 들어와 시도해주세요.\\n해당문제가 지속될 경우 문의해주세요.</string>
     <string name="server_calendar_id">id</string>
     <string name="server_calendar_latitude">latitude</string>
     <string name="server_calendar_longitude">longitude</string>
@@ -280,7 +280,7 @@
     <string name="destination_change">목적지 변경</string>
     <string name="date_change">날짜 변경</string>
     <string name="warning_basic">위의 내용을 확인하셨습니까?\n해당 문제는 추후 업데이트를 통해 해결될 수도 있습니다.</string>
-    <string name="ai_date_range_warning">AI 일정 생성에서는 최대 10일 정도의 일정을 생성해야 합니다.\n10일을 초과하는 일정을 생성할 시 로딩이 매우 길어질 수 있습니다.</string>
+    <string name="ai_date_range_warning">AI 일정 생성에서는 10일을 초과하는 일정을 생성할 시\n로딩이 매우 길어질 수 있습니다.</string>
     <string name="one_way">편도</string>
     <string name="round_trip">왕복</string>
     <string name="departure">출발지</string>
@@ -310,8 +310,8 @@
     <string name="recent_one_way_name">%1$s → %2$s</string>
     <string name="recent_round_trip_name">%1$s ↔ %2$s</string>
     <string name="picture_record">여행 기록</string>
-    <string name="bill">여행 지출</string>
-    <string name="total_budget">총 예산 비용 : %1$s 원</string>
+    <string name="bill">영수증 기록</string>
+    <string name="total_budget">총 예산 비용 : %1$s %2$s</string>
     <string name="min_and_max_temps">%1$s℃ / %2$s℃</string>
     <string name="temp">%1$s℃</string>
     <string name="local_time">현지 시간</string>
@@ -326,4 +326,31 @@
     <string name="euro">유럽연합</string>
     <string name="value_hint">가격을 입력해주세요.</string>
     <string name="server_ai_failed">일정 생성 AI가 일정 생성에 실패했습니다.\n다시 한 번 더 시도하신 다음에 문제가 지속되면 문의해주세요.</string>
+    <string name="checklist_item_hint">일정 체크리스트</string>
+    <string name="location_load_error">위치 정보를 불러오는데에 실패했습니다.</string>
+    <string name="bill_count">세부 내용 %1$s 개</string>
+    <string name="total_cost">총 지출 비용 : </string>
+    <string name="current_tab">current_tab</string>
+    <string name="ocr_intro_info">영수증 내용이 최대한 보이는 사진을 사용해주세요. 영수증이 조금 회전한 사진을 사용하셔도 텍스트 인식에 대부분 문제가 없지만, 영수증이 과도하게 회전한 사진은 텍스트 인식 과정에서 문제가 발생할 수 있습니다.</string>
+    <string name="ocr_button">영수증 사진 입력</string>
+    <string name="image_input">직접 입력하기</string>
+    <string name="camera_function_info">영수증 사진을 지금 찍으시겠습니까?</string>
+    <string name="current_date">currentDate</string>
+    <string name="date_range">dateRange</string>
+    <string name="save_long">저장하기</string>
+    <string name="currency">currency</string>
+    <string name="bill_total_price">총 금액 : %1$s %2$s</string>
+    <string name="ocr_fail_message">영수증 OCR에 실패했습니다.</string>
+    <string name="not_supported_image_type">지원하지 않는 유형의 이미지 파일입니다.</string>
+    <string name="store_name_hint">가게 이름</string>
+    <string name="empty_title">무제</string>
+    <string name="image">이미지</string>
+    <string name="camera_failed">카메라 실행을 실패했습니다.</string>
+    <string name="receipt_id">receiptId</string>
+    <string name="store_name">storeName</string>
+    <string name="non_have_grant">열람 권한이 없습니다.</string>
+    <string name="free_price">무료</string>
+    <string name="error_message_simple">%1$s 도중에 오류가 발생하였습니다.</string>
+    <string name="receipt_update">영수증 업데이트</string>
+    <string name="ocr_function_info">OCR 기능을 사용하시겠습니까?</string>
 </resources>

@@ -11,7 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.project.how.R
 import com.project.how.adapter.recyclerview.RadioButtonAdapter
-import com.project.how.data_class.recyclerview.DaysSchedule
+import com.project.how.data_class.recyclerview.schedule.DaysSchedule
 import com.project.how.databinding.DialogOrderChangeBinding
 import com.project.how.interface_af.OnOrderChangeListener
 
@@ -35,7 +35,7 @@ class OrderChangeDialog(private val data : MutableList<DaysSchedule>, private va
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.dialog_order_change, container, false)
         binding.order = this
         binding.lifecycleOwner = viewLifecycleOwner
@@ -45,10 +45,6 @@ class OrderChangeDialog(private val data : MutableList<DaysSchedule>, private va
         adapter.setCheck(currentPosition)
         binding.scheduleOrder.adapter = adapter
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onDestroyView() {

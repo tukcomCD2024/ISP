@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.how.BuildConfig
-import com.project.how.data_class.recyclerview.RecentHotel
+import com.project.how.data_class.recyclerview.ticket.RecentHotel
 import com.project.how.databinding.RecentHotelItemBinding
 
 class RecentHotelAdapter(recentHotel : List<RecentHotel>, private val onItemClickListener: OnItemClickListener)
@@ -19,12 +19,12 @@ class RecentHotelAdapter(recentHotel : List<RecentHotel>, private val onItemClic
             if(data.image == null){
                 Glide.with(binding.root)
                     .load("https://www.hankyu-hotel.com/-/media/hotel/res/osaka/accommodation/images/02_Standard%20Twin_1.jpg")
-                    .error(BuildConfig.ERROR_IMAGE_URl)
+                    .error(BuildConfig.ERROR_IMAGE_URL)
                     .into(binding.image)
             }else{
                 Glide.with(binding.root)
                     .load(data.image)
-                    .error(BuildConfig.ERROR_IMAGE_URl)
+                    .error(BuildConfig.ERROR_IMAGE_URL)
                     .into(binding.image)
             }
         }

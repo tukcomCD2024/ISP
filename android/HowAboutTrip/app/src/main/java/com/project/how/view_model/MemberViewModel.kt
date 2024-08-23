@@ -16,6 +16,7 @@ import com.project.how.data_class.dto.member.GetInfoResponse
 import com.project.how.data_class.dto.member.SignUpRequest
 import com.project.how.model.MemberRepository
 import com.project.how.network.client.MemberRetrofit
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -24,6 +25,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
 import retrofit2.Response
+import retrofit2.awaitResponse
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -72,6 +74,23 @@ object MemberViewModel : ViewModel() {
         memberRepository.init(context)
     }
 
+    suspend fun authRecreate2(context: Context, arr: AuthRecreateRequest): String? {
+        return try {
+            val response = MemberRetrofit.getApiService()?.authRecreate(arr)?.awaitResponse()
+            if (response?.isSuccessful == true) {
+                val accessToken = response.headers()[ACCESS_TOKEN]
+                val refreshToken = response.headers()[REFRESH_TOKEN]
+                memberRepository.getTokens(context, accessToken!!, refreshToken!!)
+                accessToken // 새로운 토큰 반환
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            Log.d("authRecreate error", "${e.message}")
+            null
+        }
+    }
+
     fun authRecreate(context: Context, arr: AuthRecreateRequest): Flow<Int> = callbackFlow {
         MemberRetrofit.getApiService()?.let {apiService->
             apiService.authRecreate(arr)
@@ -94,7 +113,8 @@ object MemberViewModel : ViewModel() {
                                 trySend(SUCCESS)
                             }else{
                                 memberRepository.userLiveData.value?.let {
-                                    val lq = LoginRequest(it.uid)
+                                    val lq =
+                                        LoginRequest(it.uid)
                                     val code = getTokens(context, lq)
                                     if (code != EXISTING_MEMBER) {
                                         trySend(ON_FAILURE)
@@ -163,7 +183,13 @@ object MemberViewModel : ViewModel() {
                     response: Response<EmptyResponse>
                 ) {
                     if (response.isSuccessful){
-                        memberRepository.getInfo(MemberInfo(name, birth, phone))
+                        memberRepository.getInfo(
+                            MemberInfo(
+                                name,
+                                birth,
+                                phone
+                            )
+                        )
                         Log.d("getInfoSignUp success", "code : ${response.code()}")
                     }else{
                         Log.d("getInfoSignUp response is not success", "code : ${response.code()}")
@@ -176,10 +202,10 @@ object MemberViewModel : ViewModel() {
             })
     }
 
-    fun getInfo(context: Context, accessToken: String) : Flow<Int> = callbackFlow{
+    fun getInfo(context: Context) : Flow<Int> = callbackFlow{
         try {
             MemberRetrofit.getApiService()?.let {apiService->
-                apiService.getInfo(context.resources.getString(R.string.bearer_token, accessToken))
+                apiService.getInfo()
                     .enqueue(object  : Callback<GetInfoResponse>{
                         override fun onResponse(
                             call: Call<GetInfoResponse>,
@@ -191,7 +217,13 @@ object MemberViewModel : ViewModel() {
                                     val name = result.name ?: context.getString(R.string.error)
                                     val birth = result.birth ?: context.getString(R.string.error)
                                     val phone = result.phone ?: context.getString(R.string.error)
-                                    memberRepository.getInfo(MemberInfo(name, birth, phone))
+                                    memberRepository.getInfo(
+                                        MemberInfo(
+                                            name,
+                                            birth,
+                                            phone
+                                        )
+                                    )
                                     Log.d("getInfo success", "code : ${response.code()}\nname : ${name}\nbirth : ${birth}\nphone : $phone")
                                     trySend(SUCCESS)
                                 }else{
@@ -200,7 +232,11 @@ object MemberViewModel : ViewModel() {
                                 }
                             }else if(response.code() == BAD_REQUEST){
                                 tokensLiveData.value
-                                    ?.let { AuthRecreateRequest(it.refreshToken) }
+                                    ?.let {
+                                        AuthRecreateRequest(
+                                            it.refreshToken
+                                        )
+                                    }
                                     ?.let { refreshToken->
                                         viewModelScope.launch {
                                             authRecreate(context, refreshToken).collect{check->

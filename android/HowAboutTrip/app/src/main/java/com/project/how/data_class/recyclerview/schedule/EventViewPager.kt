@@ -1,4 +1,4 @@
-package com.project.how.data_class.recyclerview
+package com.project.how.data_class.recyclerview.schedule
 
 data class EventViewPager(
     val url : String,

@@ -2,9 +2,18 @@ package com.project.how.data_class.dto.schedule
 
 import com.google.gson.annotations.SerializedName
 
+data class ScheduleDetailToServer(
+    @SerializedName("scheduleName") val scheduleName: String,
+    @SerializedName("country") val country : String,
+    @SerializedName("startDate") val startDate: String,
+    @SerializedName("endDate") val endDate: String,
+    @SerializedName("dailySchedules") val dailySchedules: List<DailySchedule>
+)
+
 data class ScheduleDetail (
     @SerializedName("scheduleName") val scheduleName: String,
     @SerializedName("country") val country : String,
+    @SerializedName("currencyName") val currency : String?,
     @SerializedName("startDate") val startDate: String,
     @SerializedName("endDate") val endDate: String,
     @SerializedName("dailySchedules") val dailySchedules: List<DailySchedule>
@@ -19,7 +28,7 @@ data class Schedule (
     @SerializedName("todo") val todo: String,
     @SerializedName("place") val place: String,
     @SerializedName("type") val type : String,
-    @SerializedName("budget") val budget: Long,
+    @SerializedName("budget") val budget: Double,
     @SerializedName("latitude") val latitude: Double,
     @SerializedName("longitude") val longitude: Double
 )

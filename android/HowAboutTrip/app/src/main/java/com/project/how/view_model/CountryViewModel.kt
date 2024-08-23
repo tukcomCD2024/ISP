@@ -12,11 +12,13 @@ import com.project.how.data_class.dto.country.weather.GetCurrentWeatherResponse
 import com.project.how.data_class.dto.country.weather.GetWeeklyWeathersResponse
 import com.project.how.model.CountryRepository
 import com.project.how.network.client.CountryRetrofit
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,7 +41,11 @@ class CountryViewModel : ViewModel() {
 
     fun getCountryLocation(country : String) : Flow<GetCountryLocationResponse?> = callbackFlow {
         CountryRetrofit.getApiService()?.let { apiService ->
-            apiService.getCountryLocation(GetCountryInfoRequest(country))
+            apiService.getCountryLocation(
+                GetCountryInfoRequest(
+                    country
+                )
+            )
                 .enqueue(object : Callback<GetCountryLocationResponse> {
                     override fun onResponse(
                         call: Call<GetCountryLocationResponse>,
@@ -70,11 +76,15 @@ class CountryViewModel : ViewModel() {
         } ?: close()
 
         awaitClose()
-    }
+    }.flowOn(Dispatchers.IO)
 
     fun getCurrentWeather(country: String) : Flow<Boolean> = callbackFlow {
         CountryRetrofit.getApiService()?.let { apiService->
-            apiService.getCurrentWeather(GetCountryInfoRequest(country))
+            apiService.getCurrentWeather(
+                GetCountryInfoRequest(
+                    country
+                )
+            )
                 .enqueue(object : Callback<GetCurrentWeatherResponse>{
                     override fun onResponse(
                         p0: Call<GetCurrentWeatherResponse>,
@@ -110,7 +120,11 @@ class CountryViewModel : ViewModel() {
 
     fun getWeeklyWeathers(country: String) : Flow<Boolean> = callbackFlow {
         CountryRetrofit.getApiService()?.let { apiService->
-            apiService.getWeeklyWeather(GetCountryInfoRequest(country))
+            apiService.getWeeklyWeather(
+                GetCountryInfoRequest(
+                    country
+                )
+            )
                 .enqueue(object : Callback<GetWeeklyWeathersResponse>{
                     override fun onResponse(
                         p0: Call<GetWeeklyWeathersResponse>,
@@ -187,7 +201,7 @@ class CountryViewModel : ViewModel() {
         } ?: let{
             getAllExchangeRates().collect{ allExchangeRates->
                 if (!allExchangeRates.isNullOrEmpty()){
-                    result = allExchangeRates!!.filter { it.targetCurrency == unitCode }
+                    result = allExchangeRates.filter { it.targetCurrency == unitCode }
                     emit(result)
                 }else{
                     Log.d("getExchangeRate", "getAllExchangeRates is failed, so getExchangeRate is failed.\ncheck getExchangeRate and getAllExchangeRate")
@@ -310,7 +324,14 @@ class CountryViewModel : ViewModel() {
         }
 
         Log.d("getTargetExchangeRate", "targetUnit : $targetUnit\ntargetUnitCode : $targetUnitCode\ntargetCountry : $targetCountry\ntargetUnitWonExchangeRate : $targetUnitWonExchangeRate\ntargetUnitDollarExchangeRate : $targetUnitDollarExchangeRate")
-        return TargetExchangeRate(targetUnit, targetUnitCode, targetCountry, targetUnitWonExchangeRate, targetUnitDollarExchangeRate, targetUnitStandard)
+        return TargetExchangeRate(
+            targetUnit,
+            targetUnitCode,
+            targetCountry,
+            targetUnitWonExchangeRate,
+            targetUnitDollarExchangeRate,
+            targetUnitStandard
+        )
     }
 
     private fun calculateCurrency(standard: Double, wonRate: Double, dollarRate: Double) : List<Double>{

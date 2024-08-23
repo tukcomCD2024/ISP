@@ -19,15 +19,11 @@ class TimePickerDialog(private val onTimeListener: OnTimeListener) : DialogFragm
     private val binding: DialogTimepickerBinding
         get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.dialog_timepicker, container, false)
         binding.time = this
         binding.lifecycleOwner = viewLifecycleOwner

@@ -28,7 +28,7 @@ class ConfirmDialog(private val notEntered : List<String>) : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.dialog_confirm, container, false)
         binding.confirm = this
         binding.lifecycleOwner = viewLifecycleOwner
@@ -36,10 +36,6 @@ class ConfirmDialog(private val notEntered : List<String>) : DialogFragment() {
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         binding.notEnteredList.text = notEnteredMessage
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onDestroyView() {

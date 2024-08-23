@@ -33,7 +33,7 @@
                     android:background="@android:color/transparent"
                     android:src="@drawable/arrow_left_white"
                     android:scaleType="fitCenter"
-                    android:onClick="@{()-> edit.finish()}"
+                    android:onClick="@{()-> edit.onBackPressed()}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -86,7 +86,7 @@
                         android:maxLines="1"
                         android:inputType="text"
                         android:textColor="@color/white"
-                        android:textSize="18sp"
+                        android:textSize="18dp"
                         app:layout_constraintBottom_toTopOf="@+id/date"
                         app:layout_constraintStart_toStartOf="parent" />
 
@@ -95,7 +95,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
-                        android:textSize="13sp"
+                        android:textSize="13dp"
                         app:layout_constraintBottom_toTopOf="@+id/budget"
                         app:layout_constraintStart_toStartOf="parent" />
 
@@ -104,7 +104,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
-                        android:textSize="13sp"
+                        android:textSize="13dp"
                         android:layout_marginBottom="8dp"
                         app:layout_constraintBottom_toTopOf="@+id/country_change"
                         app:layout_constraintStart_toStartOf="parent" />
@@ -119,7 +119,7 @@
                         android:paddingHorizontal="15dp"
                         android:text="@string/save"
                         android:textColor="@color/black"
-                        android:textSize="13sp"
+                        android:textSize="13dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -132,7 +132,7 @@
                         android:paddingHorizontal="8dp"
                         android:text="@string/destination_change"
                         android:textColor="@color/black"
-                        android:textSize="13sp"
+                        android:textSize="13dp"
                         android:onClick="@{() -> edit.showEditDes()}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
@@ -144,7 +144,7 @@
                         android:background="@drawable/white_round_rectangle"
                         android:text="@string/date_change"
                         android:textColor="@color/black"
-                        android:textSize="13sp"
+                        android:textSize="13dp"
                         android:layout_marginStart="8dp"
                         android:paddingHorizontal="8dp"
                         android:onClick="@{() -> edit.showRangeCalendar()}"
@@ -210,7 +210,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:fontFamily="@font/bm_hanna"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="@id/guideline2"
                     app:layout_constraintStart_toStartOf="@id/guideline1"

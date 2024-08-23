@@ -20,8 +20,8 @@ import com.project.how.BuildConfig
 import com.project.how.R
 import com.project.how.adapter.recyclerview.viewpager.EventViewPagerAdapter
 import com.project.how.adapter.recyclerview.schedule.RecentAddedCalendarsAdapter
-import com.project.how.data_class.recyclerview.EventViewPager
-import com.project.how.data_class.recyclerview.Schedule
+import com.project.how.data_class.recyclerview.schedule.EventViewPager
+import com.project.how.data_class.recyclerview.schedule.Schedule
 import com.project.how.data_class.dto.country.GetCountryLocationResponse
 import com.project.how.data_class.dto.schedule.GetFastestSchedulesResponse
 import com.project.how.data_class.dto.schedule.GetLatestSchedulesResponse
@@ -34,7 +34,6 @@ import com.project.how.view.activity.calendar.CalendarEditActivity
 import com.project.how.view.activity.calendar.CalendarListActivity
 import com.project.how.view.dialog.bottom_sheet_dialog.DesBottomSheetDialog
 import com.project.how.view_model.CountryViewModel
-import com.project.how.view_model.MemberViewModel
 import com.project.how.view_model.ScheduleViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -57,15 +56,44 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
     private var departureDate : String? = null
     private var entranceDate : String? = null
     private var latLng : GetCountryLocationResponse? = null
+    private lateinit var currency : String
     private lateinit var autoScrollJob : Job
     private var viewPagerPosition = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        event.add(EventViewPager("test", "이번 여름방학엔\n일본여행가기", R.drawable.event_image_japan_temp, true))
-        event.add(EventViewPager("test", "니스 해변에서\n휴양하기", R.drawable.event_image_nis_temp, true))
-        event.add(EventViewPager("test", "2024 파리 올림픽\n여름방학", R.drawable.event_image_paris_temp, true))
-        event.add(EventViewPager("test", "항공권 검색으로\n편안한 여행", R.drawable.event_image_airplnae_temp, true))
+        event.add(
+            EventViewPager(
+                "test",
+                "이번 여름방학엔\n일본여행가기",
+                R.drawable.event_image_japan_temp,
+                true
+            )
+        )
+        event.add(
+            EventViewPager(
+                "test",
+                "니스 해변에서\n휴양하기",
+                R.drawable.event_image_nis_temp,
+                true
+            )
+        )
+        event.add(
+            EventViewPager(
+                "test",
+                "2024 파리 올림픽\n여름방학",
+                R.drawable.event_image_paris_temp,
+                true
+            )
+        )
+        event.add(
+            EventViewPager(
+                "test",
+                "항공권 검색으로\n편안한 여행",
+                R.drawable.event_image_airplnae_temp,
+                true
+            )
+        )
 
         eventAdapter = EventViewPagerAdapter(event)
     }
@@ -73,7 +101,7 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_calendar, container, false)
         binding.calendar = this
         binding.lifecycleOwner = viewLifecycleOwner
@@ -82,7 +110,7 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
             val dDay = resources.getString(R.string.d_day) + if (nearSchedule!!.dday.toInt() == 0) getString(R.string.d_day_zero) else nearSchedule!!.dday.toString()
             Glide.with(binding.root)
                 .load(nearSchedule!!.imageUrl)
-                .error(BuildConfig.ERROR_IMAGE_URl)
+                .error(BuildConfig.ERROR_IMAGE_URL)
                 .into(binding.scheduleImage)
             binding.dDay.text = dDay
             binding.scheduleTitle.text = nearSchedule!!.scheduleName
@@ -93,9 +121,17 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
             binding.recentAddedCalendar.adapter = recentAddedCalendarAdapter
         }
         lifecycleScope.launch {
-            scheduleViewModel.getLatestSchedules(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken).collect{check->
+            scheduleViewModel.getLatestSchedules().collect{ check->
                 if (check != ScheduleViewModel.SUCCESS){
-                    recentAddedCalendar = listOf(GetLatestSchedulesResponseElement(-1, "일정을 생성해보세요!", "없음", BuildConfig.TEMPORARY_IMAGE_URL, listOf<String>("AI 일정 생성", "일반 일정 생성", "편리한 기능들을 체험해보세요.")))
+                    recentAddedCalendar = listOf(
+                        GetLatestSchedulesResponseElement(
+                            -1,
+                            "일정을 생성해보세요!",
+                            "없음",
+                            BuildConfig.TEMPORARY_IMAGE_URL,
+                            listOf<String>("AI 일정 생성", "일반 일정 생성", "편리한 기능들을 체험해보세요.")
+                        )
+                    )
                     recentAddedCalendarAdapter = RecentAddedCalendarsAdapter(recentAddedCalendar, this@CalendarFragment)
                     binding.recentAddedCalendar.adapter = recentAddedCalendarAdapter
                 }
@@ -108,7 +144,7 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        scheduleViewModel.getFastestSchedules(requireContext(), MemberViewModel.tokensLiveData.value!!.accessToken)
+        scheduleViewModel.getFastestSchedules()
         binding.viewPager2.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
         binding.viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
@@ -203,9 +239,10 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
             val schedule = Schedule(
                 destination!!,
                 destination!!,
+                currency,
                 departureDate!!,
                 entranceDate!!,
-                0,
+                0.0,
                 scheduleViewModel.getEmptyDaysSchedule(departureDate!!, entranceDate!!)
             )
             intent.putExtra(getString(R.string.type), CalendarEditActivity.NEW)
@@ -222,12 +259,14 @@ class CalendarFragment : Fragment(), OnDesListener, RecentAddedCalendarsAdapter.
                 location?.let {
                     destination = des
                     latLng = location
+                    currency = location.currency
                     showCalendar()
                 } ?: run {
                     countryViewModel.getCountryLocation(des).collect { newLocation ->
                         newLocation?.let {
                             destination = des
                             latLng = newLocation
+                            currency = newLocation.currency
                             showCalendar()
                         } ?: run {
                             Toast.makeText(activity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()

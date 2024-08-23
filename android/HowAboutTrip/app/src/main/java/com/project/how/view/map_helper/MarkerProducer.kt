@@ -28,7 +28,7 @@ class MarkerProducer {
             })
     }
 
-    fun inflateLayoutToBitmap(context: Context, type : Int, position: Int): Bitmap? {
+    fun inflateLayoutToBitmap(context: Context, type : Int, position: Int): Bitmap {
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(R.layout.map_marker_schedule, null)
         val markerBinding: MapMarkerScheduleBinding? = DataBindingUtil.bind(view)

@@ -11,8 +11,8 @@ data class GenerateSkyscannerUrlRequest(
     val departureDate : String,
     @SerializedName("returnDate")
     val returnDate : String,
-    @SerializedName("adults")
-    val adults : Long,
+    @SerializedName("adult")
+    val adult : Long,
     @SerializedName("children")
     val children : Long,
     @SerializedName("departureTime")
@@ -28,8 +28,8 @@ data class GenerateOneWaySkyscannerUrlRequest(
     val arrivalIataCode : String,
     @SerializedName("departureDate")
     val departureDate : String,
-    @SerializedName("adults")
-    val adults : Long,
+    @SerializedName("adult")
+    val adult : Long,
     @SerializedName("children")
     val children : Long,
     @SerializedName("departureTime")

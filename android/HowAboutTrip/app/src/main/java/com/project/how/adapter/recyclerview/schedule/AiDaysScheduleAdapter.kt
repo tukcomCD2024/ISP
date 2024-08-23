@@ -6,17 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.how.R
-import com.project.how.data_class.recyclerview.AiDaysSchedule
+import com.project.how.data_class.recyclerview.schedule.AiDaysSchedule
 import com.project.how.databinding.AiDaysScheduleItemBinding
 
-class AiDaysScheduleAdapter(private val context: Context, data: List<AiDaysSchedule>)
+class AiDaysScheduleAdapter(private val context: Context, data: List<AiDaysSchedule>, private val currency : String)
     : RecyclerView.Adapter<AiDaysScheduleAdapter.ViewHolder>(){
         private var dailySchedule = data
 
         inner class ViewHolder(val binding: AiDaysScheduleItemBinding) : RecyclerView.ViewHolder(binding.root){
             fun bind(data : AiDaysSchedule, position: Int){
                 binding.scheduleTitle.text = data.places
-                binding.budget.text = context.getString(R.string.budget, data.budget.toString())
+                if(data.budget == 0.0){
+                    binding.budget.text = context.getString(R.string.free_price)
+                }else{
+                    binding.budget.text = context.getString(R.string.budget, data.budget.toString(), currency)
+                    
+                }
                 when (position) {
                     0 -> binding.topDottedLine.visibility = View.GONE
                     dailySchedule.lastIndex -> binding.bottomDottedLine.visibility = View.GONE

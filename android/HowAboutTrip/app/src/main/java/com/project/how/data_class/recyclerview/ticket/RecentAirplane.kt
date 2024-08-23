@@ -1,4 +1,4 @@
-package com.project.how.data_class.recyclerview
+package com.project.how.data_class.recyclerview.ticket
 
 data class RecentAirplane(
     val id : Long,

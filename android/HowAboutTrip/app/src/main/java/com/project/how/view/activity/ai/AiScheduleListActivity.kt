@@ -7,8 +7,8 @@ import android.util.Log
 import androidx.databinding.DataBindingUtil
 import com.project.how.R
 import com.project.how.adapter.recyclerview.schedule.AiScheduleAdapter
-import com.project.how.data_class.recyclerview.AiSchedule
-import com.project.how.data_class.recyclerview.AiScheduleList
+import com.project.how.data_class.recyclerview.schedule.AiSchedule
+import com.project.how.data_class.recyclerview.schedule.AiScheduleList
 import com.project.how.databinding.ActivityAiScheduleListBinding
 import com.project.how.view.activity.calendar.CalendarEditActivity
 

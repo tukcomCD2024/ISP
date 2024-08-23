@@ -63,7 +63,7 @@
                 android:layout_marginStart="20dp"
                 android:text="ICN → NRT ,  OZ"
                 android:textColor="@color/black"
-                android:textSize="11sp"
+                android:textSize="11dp"
                 app:layout_constraintStart_toEndOf="@+id/abroad_image"
                 app:layout_constraintTop_toBottomOf="@+id/abroad_time" />
 
@@ -74,7 +74,7 @@
                 android:layout_marginEnd="20dp"
                 android:text="2시간 30분"
                 android:textColor="@color/black_gray"
-                android:textSize="11sp"
+                android:textSize="11dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/abroad_date" />
 
@@ -85,7 +85,7 @@
                 android:layout_marginEnd="20dp"
                 android:text="@string/non_stop"
                 android:textColor="@color/black_gray"
-                android:textSize="11sp"
+                android:textSize="11dp"
                 app:layout_constraintBottom_toTopOf="@+id/abroad_duration"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -130,7 +130,7 @@
                 android:layout_marginStart="20dp"
                 android:text="ICN → NRT ,  OZ"
                 android:textColor="@color/black"
-                android:textSize="11sp"
+                android:textSize="11dp"
                 app:layout_constraintStart_toEndOf="@+id/home_image"
                 app:layout_constraintTop_toBottomOf="@+id/home_time" />
 
@@ -141,7 +141,7 @@
                 android:layout_marginEnd="20dp"
                 android:text="2시간 30분"
                 android:textColor="@color/black_gray"
-                android:textSize="11sp"
+                android:textSize="11dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/home_date" />
 
@@ -152,7 +152,7 @@
                 android:layout_marginEnd="20dp"
                 android:text="@string/non_stop"
                 android:textColor="@color/black_gray"
-                android:textSize="11sp"
+                android:textSize="11dp"
                 app:layout_constraintBottom_toTopOf="@+id/home_duration"
                 app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>

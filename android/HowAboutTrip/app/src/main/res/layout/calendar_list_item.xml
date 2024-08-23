@@ -35,7 +35,7 @@
             android:fontFamily="@font/bm_hanna"
             android:gravity="start"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="20dp"
             android:text="test"
             android:autoSizeTextType="uniform"
             android:autoSizeMinTextSize="13sp"
@@ -63,7 +63,7 @@
             android:layout_marginStart="30dp"
             android:text="2024.02.01 - 2024.03.01"
             android:textColor="@color/white"
-            android:textSize="13sp"
+            android:textSize="13dp"
             android:maxLines="1"
             android:ellipsize="end"
             android:gravity="start"
@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:text="@string/calendar_budget"
-            android:textSize="13sp"
+            android:textSize="13dp"
             android:textColor="@color/white"
             android:maxLines="1"
             android:ellipsize="end"
@@ -91,28 +91,12 @@
             android:layout_marginTop="10dp"
             android:text="@string/checklist"
             android:textColor="@color/black"
-            android:textSize="13sp"
+            android:textSize="13dp"
             android:paddingHorizontal="10dp"
             android:gravity="center"
             android:drawableStart="@drawable/icon_checklist_size_fixed"
             android:background="@drawable/white_round_rectangle"
             app:layout_constraintStart_toEndOf="@+id/image"
-            app:layout_constraintTop_toBottomOf="@+id/budget" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/share"
-            android:layout_width="65dp"
-            android:layout_height="22dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/white_round_rectangle"
-            android:drawableStart="@drawable/icon_share_size_fixed"
-            android:gravity="center"
-            android:paddingHorizontal="10dp"
-            android:text="@string/share"
-            android:textColor="@color/black"
-            android:textSize="13sp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintStart_toEndOf="@+id/checklist"
             app:layout_constraintTop_toBottomOf="@+id/budget" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -123,9 +107,9 @@
             android:layout_marginStart="8dp"
             android:text="@string/delete"
             android:textColor="@color/black"
-            android:textSize="13sp"
+            android:textSize="13dp"
             android:background="@drawable/white_round_rectangle"
-            app:layout_constraintStart_toEndOf="@+id/share"
+            app:layout_constraintStart_toEndOf="@+id/checklist"
             app:layout_constraintTop_toBottomOf="@+id/budget" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

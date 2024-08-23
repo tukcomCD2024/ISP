@@ -8,9 +8,11 @@ import com.project.how.data_class.dto.country.weather.GetWeeklyWeathersResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface CountryService {
+
     @POST("countries/locations")
     fun getCountryLocation(
         @Body country : GetCountryInfoRequest

@@ -14,7 +14,7 @@ data class ReceiptDetail(
     @SerializedName("totalPrice")
     var totalPrice : Double,
     @SerializedName("receiptDetails")
-    val receiptDetails : List<ReceiptDetailListItem>
+    var receiptDetails : List<ReceiptDetailListItem>
 )
 
 data class ReceiptDetailListItem(

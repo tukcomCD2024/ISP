@@ -76,6 +76,10 @@ class RecordViewModel : ViewModel() {
         }
     }
 
+    fun getImageUri(uri: Uri){
+        recordRepository.getUri(uri)
+    }
+
     fun saveReceipt(context: Context, detail: ReceiptDetail) = viewModelScope.launch (Dispatchers.IO) {
             if (uriLiveData.value == null){
                 return@launch
@@ -83,7 +87,16 @@ class RecordViewModel : ViewModel() {
 
             val imageFile = getFileFromURI(context, uriLiveData.value!!) ?: return@launch
             saveReceipt(imageFile, detail).join()
+    }
+
+    fun updateReceipt(context: Context, receiptId : Long, detail: ReceiptDetail) = viewModelScope.launch (Dispatchers.IO){
+        if (uriLiveData.value == null){
+            updateReceipt(receiptId, null, detail)
+        }else{
+            val imageFile = getFileFromURI(context, uriLiveData.value!!)
+            updateReceipt(receiptId, imageFile, detail).join()
         }
+    }
 
     private fun uploadReceipt(file : File){
         viewModelScope.launch (Dispatchers.IO) {
@@ -187,11 +200,11 @@ class RecordViewModel : ViewModel() {
                         try {
                             Log.d("deleteReceipt", "code : ${p1.code()}")
                             when(p1.code()){
-                                200->{
+                                SUCCESS->{
                                     Log.d("deleteReceipt", "success")
                                     trySend(true)
                                 }
-                                404->{
+                                NOT_FOUND->{
                                     Log.d("deleteReceipt", "this receipt ($receiptId) is not exist")
                                     trySend(false)
                                 }
@@ -246,6 +259,51 @@ class RecordViewModel : ViewModel() {
                     })
 
             }
+        }
+    }
+
+    private fun updateReceipt(receiptId : Long, file: File?, detail: ReceiptDetail) = viewModelScope.launch(Dispatchers.IO) {
+        val requestBody =
+            Gson().toJson(detail).toRequestBody("application/json".toMediaTypeOrNull())
+
+        var body : MultipartBody.Part? = null
+        if (file != null){
+            val mediaType = getImageType(file)
+            val requestFile = file.asRequestBody(mediaType.toMediaTypeOrNull())
+            body = MultipartBody.Part.createFormData("receiptImg", file.name, requestFile)
+        }
+        RecordRetrofit.getApiService()?.let { apiService->
+            apiService.updateReceipt(receiptId, requestBody, body)
+                .enqueue(object : Callback<String>{
+                    override fun onResponse(p0: Call<String>, p1: Response<String>) {
+                        try {
+                            when(p1.code()) {
+                                SUCCESS -> {
+                                    Log.d("updateReceipt", "success")
+                                    recordRepository.getSaveCheck(true)
+                                }
+                                NOT_FOUND -> {
+                                    Log.d("updateReceipt", "this receipt ($receiptId) is not exist")
+                                    recordRepository.getSaveCheck(false)
+                                }
+                                else -> {
+                                    Log.d("updateReceipt", "unknown error code : ${p1.code()}")
+                                    recordRepository.getSaveCheck(false)
+                                }
+
+                            }
+                        }catch (e : Exception){
+                            Log.e("updateReceipt", "code : ${p1.code()}\nerror : ${e.message}")
+                            recordRepository.getSaveCheck(false)
+                        }
+                    }
+
+                    override fun onFailure(p0: Call<String>, p1: Throwable) {
+                        Log.e("updateReceipt", "onFailure\nerror : ${p1.message}")
+                        recordRepository.getSaveCheck(false)
+                    }
+
+                })
         }
     }
 
@@ -394,5 +452,6 @@ class RecordViewModel : ViewModel() {
 
     companion object{
         const val SUCCESS = 200
+        const val NOT_FOUND = 404
     }
 }

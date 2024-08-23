@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -83,116 +84,117 @@ class CalendarEditActivity
         binding.edit = this
         binding.lifecycleOwner = this
 
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                moveCalendarFragment()
+            }
+        })
+
         lifecycleScope.launch {
-            type = intent.getIntExtra(resources.getString(R.string.type), FAILURE)
-            latitude = intent.getDoubleExtra(getString(R.string.server_calendar_latitude), 0.0)
-            longitude = intent.getDoubleExtra(getString(R.string.server_calendar_longitude), 0.0)
-            Log.d("CalendarEditActivity", "type : $type")
-            getData(type)
+            init()
         }
 
-        viewModel.scheduleLiveData.observe(this){
-            Log.d("CalendarEditActivity", "scheduleLiveData.observe start\n data.title : ${it.title}")
-            data = it
-            if (!mapInitCheck){
-                binding.title.setText(data.title)
-            }
-            binding.date.text = "${data.startDate} - ${data.endDate}"
-            val formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(data.cost)
-            binding.budget.text = getString(R.string.calendar_budget, formattedNumber, data.currency)
-            if (selectedDays > data.dailySchedule.lastIndex){
-                selectedDays = data.dailySchedule.lastIndex
-            }
 
-            adapter = DaysScheduleEditAdapter(data.dailySchedule[selectedDays], this@CalendarEditActivity, data.currency, this@CalendarEditActivity)
-            binding.daySchedules.adapter = adapter
+        lifecycleScope.launch {
+            viewModel.scheduleLiveData.observe(this@CalendarEditActivity){
+                Log.d("CalendarEditActivity", "scheduleLiveData.observe start\n data.title : ${it.title}")
+                data = it
 
-            binding.daysTab.removeAllTabs()
-            binding.daysTitle.text = getString(R.string.days_title, (selectedDays+1).toString(), getDaysTitle( selectedDays+1))
+                setCalendarTopUI()
+                mapInit()
 
-            setDaysTab()
-            setDaysTabItemMargin()
+                adapter = DaysScheduleEditAdapter(data.dailySchedule[selectedDays], this@CalendarEditActivity, data.currency, this@CalendarEditActivity)
+                binding.daySchedules.adapter = adapter
 
-            val mCallback = RecyclerViewItemTouchHelperCallback(adapter)
-            val mItemTouchHelper = ItemTouchHelper(mCallback)
-            mItemTouchHelper.attachToRecyclerView(binding.daySchedules)
+                val mCallback = RecyclerViewItemTouchHelperCallback(adapter)
+                val mItemTouchHelper = ItemTouchHelper(mCallback)
+                mItemTouchHelper.attachToRecyclerView(binding.daySchedules)
 
-            val googleMapOptions = GoogleMapOptions()
-                .zoomControlsEnabled(true)
+                adapter.itemDragListener(object : ItemStartDragListener {
+                    override fun onDropActivity(
+                        initList: MutableList<DaysSchedule>,
+                        changeList: MutableList<DaysSchedule>
+                    ) {
+                        Log.d("addOnItemTouchListener", "itemDragListener\ndrop and getMapAsync")
+                        supportMapFragment.getMapAsync(this@CalendarEditActivity)
+                    }
 
-            supportMapFragment = SupportMapFragment.newInstance(googleMapOptions)
+                })
 
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.map_card, supportMapFragment)
-                .commit()
-            supportMapFragment.getMapAsync {map ->
-                val location = LatLng(latitude, longitude)
-                val camera = CameraOptionProducer().makeScheduleCameraUpdate(location, 10f)
-                map.moveCamera(camera)
+                binding.daysTab.removeAllTabs()
+                binding.daysTitle.text = getString(R.string.days_title, (selectedDays+1).toString(), getDaysTitle( selectedDays+1))
+
+                setDaysTab()
+                setDaysTabItemMargin()
+
             }
 
-            supportMapFragment.getMapAsync(this@CalendarEditActivity)
+            binding.daysTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    val selectedTabPosition = binding.daysTab.selectedTabPosition
+                    Log.d("OnTabSelected", "selectedTabPosition : $selectedTabPosition")
+                    binding.daysTitle.text = getString(R.string.days_title, (selectedTabPosition + 1).toString(), getDaysTitle(selectedTabPosition))
+                    lifecycleScope.launch {
+                        data.dailySchedule[selectedDays] = adapter.getData()
+                        adapter.update(data.dailySchedule[selectedTabPosition])
+                        selectedDays = selectedTabPosition
+                        if (mapInitCheck){
+                            supportMapFragment.getMapAsync(this@CalendarEditActivity)
+                        }else{
+                            mapInitCheck = true
+                        }
+                    }
+                }
 
-//            supportMapFragment.view?.setOnTouchListener { v, event ->
-//                var parent : ViewParent? = v.parent
-//                while(v != null){
-//                    if (parent is NestedScrollView){
-//                        Log.d("CalendarEditActivity", "parent is NestedScrollView")
-//                        when (event.action) {
-//                            MotionEvent.ACTION_DOWN -> {
-//                                parent.requestDisallowInterceptTouchEvent(true)
-//                                Log.d("CalendarEditActivity", "MotionEvent.ACTION_DOWN\nparent.requestDisallowInterceptTouchEvent(true)")
-//                            }
-//                            MotionEvent.ACTION_UP -> {
-//                                parent.requestDisallowInterceptTouchEvent(false)
-//                                Log.d("CalendarEditActivity", "MotionEvent.ACTION_UP\nparent.requestDisallowInterceptTouchEvent(false)")
-//                            }
-//                        }
-//                    }
-//                    parent = parent?.parent
-//                }
-//                false
-//            }
+                override fun onTabUnselected(tab: TabLayout.Tab?) {
 
-            adapter.itemDragListener(object : ItemStartDragListener {
-                override fun onDropActivity(
-                    initList: MutableList<DaysSchedule>,
-                    changeList: MutableList<DaysSchedule>
-                ) {
-                    Log.d("addOnItemTouchListener", "itemDragListener\ndrop and getMapAsync")
-                    supportMapFragment.getMapAsync(this@CalendarEditActivity)
+                }
+
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+
                 }
 
             })
         }
 
-        binding.daysTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                val selectedTabPosition = binding.daysTab.selectedTabPosition
-                Log.d("OnTabSelected", "selectedTabPosition : $selectedTabPosition")
-                binding.daysTitle.text = getString(R.string.days_title, (selectedTabPosition + 1).toString(), getDaysTitle(selectedTabPosition))
-                lifecycleScope.launch {
-                    data.dailySchedule[selectedDays] = adapter.getData()
-                    adapter.update(data.dailySchedule[selectedTabPosition])
-                    selectedDays = selectedTabPosition
-                    if (mapInitCheck){
-                        supportMapFragment.getMapAsync(this@CalendarEditActivity)
-                    }else{
-                        mapInitCheck = true
-                    }
-                }
-            }
+    }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
+    private fun mapInit(){
+        val googleMapOptions = GoogleMapOptions()
+            .zoomControlsEnabled(true)
 
-            }
+        supportMapFragment = SupportMapFragment.newInstance(googleMapOptions)
 
-            override fun onTabReselected(tab: TabLayout.Tab?) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.map_card, supportMapFragment)
+            .commit()
+        supportMapFragment.getMapAsync {map ->
+            val location = LatLng(latitude, longitude)
+            val camera = CameraOptionProducer().makeScheduleCameraUpdate(location, 10f)
+            map.moveCamera(camera)
+        }
 
-            }
+        supportMapFragment.getMapAsync(this@CalendarEditActivity)
+    }
 
-        })
+    private fun setCalendarTopUI(){
+        if (!mapInitCheck){
+            binding.title.setText(data.title)
+        }
+        binding.date.text = "${data.startDate} - ${data.endDate}"
+        val formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(data.cost)
+        binding.budget.text = getString(R.string.calendar_budget, formattedNumber, data.currency)
+        if (selectedDays > data.dailySchedule.lastIndex){
+            selectedDays = data.dailySchedule.lastIndex
+        }
+    }
 
+    private fun init(){
+        type = intent.getIntExtra(resources.getString(R.string.type), FAILURE)
+        latitude = intent.getDoubleExtra(getString(R.string.server_calendar_latitude), 0.0)
+        longitude = intent.getDoubleExtra(getString(R.string.server_calendar_longitude), 0.0)
+        Log.d("CalendarEditActivity", "type : $type")
+        getData(type)
     }
 
     override fun onMapReady(map: GoogleMap) {
@@ -383,9 +385,8 @@ class CalendarEditActivity
     }
 
     private fun moveCalendarFragment(){
-        val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra(getString(R.string.menu_intent), MainActivity.CALENDAR)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+        val intent = Intent(this, CalendarListActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
         startActivity(intent)
 
     }

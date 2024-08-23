@@ -4,4 +4,5 @@ interface OnYesOrNoListener {
     fun onScheduleDeleteListener(position: Int)
     fun onKeepCheckListener()
     fun onCameraListener(answer : Boolean)
+    fun onOcrListener(answer : Boolean)
 }

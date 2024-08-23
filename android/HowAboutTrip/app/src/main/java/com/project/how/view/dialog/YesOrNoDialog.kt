@@ -66,6 +66,10 @@ class YesOrNoDialog(
                 dismiss()
             }
             KEEP_CHECK -> {}
+            OCR_CHECK -> {
+                onYesOrNoListener.onOcrListener(true)
+                dismiss()
+            }
             else -> {
                 dismiss()
             }
@@ -82,6 +86,10 @@ class YesOrNoDialog(
                 dismiss()
             }
             KEEP_CHECK->{}
+            OCR_CHECK ->{
+                onYesOrNoListener.onOcrListener(false)
+                dismiss()
+            }
             else -> {
                 dismiss()
             }
@@ -94,6 +102,7 @@ class YesOrNoDialog(
             SCHEDULE_DELETE -> {result = getString(R.string.schedule_delete_function_info)}
             CAMERA_CHECK -> {result = getString(R.string.camera_function_info)}
             KEEP_CHECK -> {result = getString(R.string.keep_check_function_info)}
+            OCR_CHECK -> {result = getString(R.string.ocr_function_info)}
             else -> {result = getString(R.string.unknown_function_info)}
         }
 
@@ -104,5 +113,6 @@ class YesOrNoDialog(
         const val SCHEDULE_DELETE = 0
         const val CAMERA_CHECK = 1
         const val KEEP_CHECK = 2
+        const val OCR_CHECK = 3
     }
 }

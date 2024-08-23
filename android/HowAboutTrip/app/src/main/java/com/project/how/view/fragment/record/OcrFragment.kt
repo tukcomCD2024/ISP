@@ -28,9 +28,12 @@ import com.project.how.adapter.recyclerview.record.BillDetailsAdapter
 import com.project.how.data_class.dto.recode.receipt.ReceiptDetail
 import com.project.how.data_class.dto.recode.receipt.ReceiptDetailListItem
 import com.project.how.databinding.FragmentOcrBinding
+import com.project.how.interface_af.OnYesOrNoListener
 import com.project.how.view.activity.record.BillActivity
 import com.project.how.view.activity.record.BillInputActivity
 import com.project.how.view.dialog.ConfirmDialog
+import com.project.how.view.dialog.WarningDialog
+import com.project.how.view.dialog.YesOrNoDialog
 import com.project.how.view_model.RecordViewModel
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
@@ -38,7 +41,7 @@ import java.util.Locale
 import kotlin.math.roundToLong
 
 
-class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
+class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener, OnYesOrNoListener {
     private var _binding : FragmentOcrBinding? = null
     private val binding : FragmentOcrBinding
         get() = _binding!!
@@ -56,6 +59,7 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
     private var id = -1L
     private var receiptId = -1L
     private var totalPrice = 0.0
+    private var ocr = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,13 +87,18 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
         binding.date.text = currentDate
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
-                lock()
                 Log.d("PhotoPicker", "Selected URI: $uri")
                 Glide.with(binding.root)
                     .load(uri)
                     .error(R.color.grey)
                     .into(binding.image)
-                recordViewModel.uploadReceipt(requireContext(), uri)
+                if (ocr) {
+                    lock()
+                    recordViewModel.uploadReceipt(requireContext(), uri)
+                }else {
+                    recordViewModel.getImageUri(uri)
+                    binding.save.isEnabled = false
+                }
 
             } else {
                 Log.d("PhotoPicker", "No media selected")
@@ -115,6 +124,11 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
             }else{
                 Toast.makeText(requireContext(), getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
             }
+        }
+
+        recordViewModel.uriLiveData.observe(viewLifecycleOwner){
+            if (!ocr)
+                binding.save.isEnabled = true
         }
 
         recordViewModel.ocrResponseLiveData.observe(viewLifecycleOwner){ocrResult->
@@ -169,6 +183,16 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
     }
 
     fun putImage(){
+        if (receiptId > -1){
+            YesOrNoDialog("",
+                YesOrNoDialog.OCR_CHECK,
+                onYesOrNoListener = this).show(childFragmentManager, "YesOrNoDialog")
+            return
+        }
+        gallery()
+    }
+
+    private fun gallery(){
         pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
@@ -231,7 +255,7 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
         if (receiptId > -1 && !editMode){
             close()
         }else if (receiptId > -1 && editMode){
-
+            update()
         }else{
             save()
         }
@@ -243,7 +267,21 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
     }
 
     private fun update(){
-        recordViewModel
+        lifecycleScope.launch {
+            try {
+                val storeName = binding.title.text.toString()
+                if (storeName.isNullOrBlank()) data.storeName = getString(R.string.empty_title) else data.storeName = storeName
+                    data.totalPrice = totalPrice
+                    data.receiptDetails = adapter.getAllData()
+                    Log.d("OcrFragment", "size : ${data.receiptDetails.size}\ndata : ${data.receiptDetails[0].title}\t ${data.receiptDetails[0].count}\t ${data.receiptDetails[0].itemPrice}")
+                    recordViewModel.updateReceipt(requireContext(), receiptId, data)
+
+            }catch (e: Exception){
+                Toast.makeText(requireContext(), getString(R.string.error_message_simple, getString(
+                    R.string.receipt_update
+                )), Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun save(){
@@ -252,6 +290,7 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
                 val storeName = binding.title.text.toString()
                 if (storeName.isNullOrBlank()) data.storeName = getString(R.string.empty_title) else data.storeName = storeName
                 data.totalPrice = totalPrice
+                data.receiptDetails = adapter.getAllData()
                 recordViewModel.saveReceipt(requireContext(), data)
             }catch (e : Exception){
                 ConfirmDialog(listOf(getString(R.string.image))).show(childFragmentManager, "ConfirmDialog")
@@ -277,7 +316,7 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
                     setUI(this.data)
                     Glide.with(binding.root)
                         .load(data.image)
-                        .error(BuildConfig.ERROR_IMAGE_URL)
+                        .error(R.color.grey)
                         .into(binding.image)
                 } ?: {
                     Toast.makeText(requireContext(), getString(R.string.non_have_grant), Toast.LENGTH_SHORT).show()
@@ -293,6 +332,21 @@ class OcrFragment : Fragment(), BillDetailsAdapter.OnPriceListener {
         val formatted = NumberFormat.getNumberInstance(Locale.getDefault()).format(total)
         binding.total.text = getString(R.string.bill_total_price, formatted, currency)
         totalPrice = ((total*100).roundToLong().toDouble()/100)
+    }
+
+    override fun onScheduleDeleteListener(position: Int) {
+
+    }
+
+    override fun onKeepCheckListener() {
+    }
+
+    override fun onCameraListener(answer: Boolean) {
+    }
+
+    override fun onOcrListener(answer: Boolean) {
+        ocr = answer
+        gallery()
     }
 
 }

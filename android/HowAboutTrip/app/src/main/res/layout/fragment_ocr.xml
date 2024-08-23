@@ -41,7 +41,6 @@
                     android:minWidth="60dp"
                     android:layout_marginTop="35dp"
                     android:background="@android:color/transparent"
-                    android:fontFamily="@font/bm_hanna"
                     android:hint="@string/store_name_hint"
                     android:textSize="18dp"
                     android:textStyle="bold"
@@ -55,6 +54,7 @@
                     style="@style/Button.BlackRound"
                     android:text="@string/edit"
                     android:visibility="gone"
+                    android:onClick="@{()-> ocr.edit()}"
                     app:layout_constraintBottom_toTopOf="@+id/date"
                     app:layout_constraintEnd_toStartOf="@+id/guideline15" />
 

@@ -330,8 +330,6 @@
     <string name="location_load_error">위치 정보를 불러오는데에 실패했습니다.</string>
     <string name="bill_count">세부 내용 %1$s 개</string>
     <string name="total_cost">총 지출 비용 : </string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="current_tab">current_tab</string>
     <string name="ocr_intro_info">영수증 내용이 최대한 보이는 사진을 사용해주세요. 영수증이 조금 회전한 사진을 사용하셔도 텍스트 인식에 대부분 문제가 없지만, 영수증이 과도하게 회전한 사진은 텍스트 인식 과정에서 문제가 발생할 수 있습니다.</string>
     <string name="ocr_button">영수증 사진 입력</string>
@@ -352,4 +350,7 @@
     <string name="store_name">storeName</string>
     <string name="non_have_grant">열람 권한이 없습니다.</string>
     <string name="free_price">무료</string>
+    <string name="error_message_simple">%1$s 도중에 오류가 발생하였습니다.</string>
+    <string name="receipt_update">영수증 업데이트</string>
+    <string name="ocr_function_info">OCR 기능을 사용하시겠습니까?</string>
 </resources>

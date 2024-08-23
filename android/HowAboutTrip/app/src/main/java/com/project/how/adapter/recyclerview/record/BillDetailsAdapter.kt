@@ -34,7 +34,7 @@ class BillDetailsAdapter(
             }
 
             if (editMode)
-                ableEdit(binding)
+                ableEdit(data.count, binding)
             else
                 unableEdit(binding)
 
@@ -50,12 +50,6 @@ class BillDetailsAdapter(
             binding.currency.text = currency
             binding.totalCurrency.text = currency
 
-            if (data.count == 1L){
-                binding.minus.visibility = View.GONE
-            }else{
-                binding.minus.visibility = View.VISIBLE
-            }
-
             onPriceListener.onTotalPriceListener(getTotalPrice())
 
 
@@ -69,9 +63,6 @@ class BillDetailsAdapter(
                 remove(position)
                 onPriceListener.onTotalPriceListener(getTotalPrice())
             }
-
-            currentTextWatcher?.let { binding.unitPrice.removeTextChangedListener(it) }
-            titleTextWatcher?.let { binding.title.removeTextChangedListener(it) }
 
             currentTextWatcher = object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -88,8 +79,6 @@ class BillDetailsAdapter(
                     }
                 }
             }
-            binding.unitPrice.addTextChangedListener(currentTextWatcher)
-
             titleTextWatcher = object : TextWatcher{
                 override fun beforeTextChanged(
                     s: CharSequence?,
@@ -105,6 +94,10 @@ class BillDetailsAdapter(
                 }
 
             }
+
+            binding.unitPrice.addTextChangedListener(currentTextWatcher)
+            binding.title.addTextChangedListener(titleTextWatcher)
+
         }
     }
 
@@ -167,16 +160,20 @@ class BillDetailsAdapter(
     private fun unableEdit(binding : BillDetailsItemBinding) {
         binding.title.inputType = InputType.TYPE_NULL
         binding.unitPrice.inputType = InputType.TYPE_NULL
-        binding.plus.visibility = View.GONE
+        binding.plus.visibility = View.INVISIBLE
         binding.minus.visibility = View.GONE
         binding.delete.visibility = View.GONE
     }
 
-    private fun ableEdit(binding: BillDetailsItemBinding){
+    private fun ableEdit(count : Long, binding: BillDetailsItemBinding){
         binding.title.inputType = InputType.TYPE_CLASS_TEXT
         binding.unitPrice.inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL
         binding.plus.visibility = View.VISIBLE
-        binding.minus.visibility = View.VISIBLE
+        if (count == 1L){
+            binding.minus.visibility = View.GONE
+        }else{
+            binding.minus.visibility = View.VISIBLE
+        }
         binding.delete.visibility = View.VISIBLE
     }
 

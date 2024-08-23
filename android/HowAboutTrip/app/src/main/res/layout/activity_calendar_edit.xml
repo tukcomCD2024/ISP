@@ -33,7 +33,7 @@
                     android:background="@android:color/transparent"
                     android:src="@drawable/arrow_left_white"
                     android:scaleType="fitCenter"
-                    android:onClick="@{()-> edit.finish()}"
+                    android:onClick="@{()-> edit.onBackPressed()}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
@@ -55,49 +56,26 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
         binding.calendar = this
         binding.lifecycleOwner = this
 
-        lifecycleScope.launch {
-            id = intent.getLongExtra(getString(R.string.server_calendar_id), -1)
-            idToLong = id.toLong()
-            latitude = intent.getDoubleExtra(getString(R.string.server_calendar_latitude), 0.0)
-            longitude = intent.getDoubleExtra(getString(R.string.server_calendar_longitude), 0.0)
-
-            Log.d("onCreate", "id : ${id}t\nlatitude : ${latitude}\tlongitude : ${longitude}\nidToLong : $idToLong")
-            viewModel.getScheduleDetail(this@CalendarActivity, idToLong).collect{ check->
-                if(check != ScheduleViewModel.SUCCESS) {
-                    Toast.makeText(
-                        this@CalendarActivity,
-                        getString(R.string.not_exist_schedule_error),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    finish()
-                }
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@CalendarActivity, CalendarListActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                startActivity(intent)
+                finish()
             }
+        })
+
+        lifecycleScope.launch {
+            init()
 
             viewModel.scheduleLiveData.observe(this@CalendarActivity){schedule->
                 data = schedule
                 if (latitude == 0.0 && longitude == 0.0)
                     getLngLat()
                 Log.d("onCreate", "getSchedule title : ${schedule.title}")
-                binding.title.text = schedule.title
-                val formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(schedule.cost)
-                binding.budget.text = getString(R.string.calendar_budget, formattedNumber, data.currency)
-                binding.date.text = "${schedule.startDate} - ${schedule.endDate}"
 
-                val googleMapOptions = GoogleMapOptions()
-                    .zoomControlsEnabled(true)
-
-                supportMapFragment = SupportMapFragment.newInstance(googleMapOptions)
-
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.map_card, supportMapFragment)
-                    .commit()
-                mapInitCheck = true
-
-                supportMapFragment.getMapAsync {map ->
-                    val location = LatLng(latitude, longitude)
-                    val camera = CameraOptionProducer().makeScheduleCameraUpdate(location, 10f)
-                    map.moveCamera(camera)
-                }
+                setCalendarTopUI()
+                mapInit()
 
                 if (schedule.dailySchedule.size != 0){
                     adapter = DaysScheduleAdapter(schedule.dailySchedule[selectedDays], this@CalendarActivity, data.currency,this@CalendarActivity)
@@ -106,47 +84,77 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
 
                     supportMapFragment.getMapAsync(this@CalendarActivity)
 
-                    setDaysTab(schedule)
-                    setDaysTabItemMargin(schedule)
-
-                    binding.daysTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                        override fun onTabSelected(tab: TabLayout.Tab?) {
-                            val selectedTabPosition = binding.daysTab.selectedTabPosition
-                            Log.d("OnTabSelected", "selectedTabPosition : $selectedTabPosition")
-                            binding.daysTitle.text = getString(R.string.days_title, (selectedTabPosition + 1).toString(), getDaysTitle(data, selectedTabPosition))
-                            lifecycleScope.launch {
-                                adapter.update(data.dailySchedule[selectedTabPosition])
-                                selectedDays = selectedTabPosition
-                                if (mapInitCheck){
-                                    supportMapFragment.getMapAsync(this@CalendarActivity)
-                                }else{
-                                    val googleMapOptions = GoogleMapOptions()
-                                        .zoomControlsEnabled(true)
-
-                                    supportMapFragment = SupportMapFragment.newInstance(googleMapOptions)
-
-                                    supportFragmentManager.beginTransaction()
-                                        .replace(R.id.map_card, supportMapFragment)
-                                        .commit()
-                                    supportMapFragment.getMapAsync(this@CalendarActivity)
-                                    mapInitCheck = true
-                                }
-                            }
-                        }
-
-                        override fun onTabUnselected(tab: TabLayout.Tab?) {
-
-                        }
-
-                        override fun onTabReselected(tab: TabLayout.Tab?) {
-
-                        }
-
-                    })
+                    setDaysTab()
                 }
             }
         }
 
+    }
+
+    private fun mapInit(){
+        val googleMapOptions = GoogleMapOptions()
+            .zoomControlsEnabled(true)
+
+        supportMapFragment = SupportMapFragment.newInstance(googleMapOptions)
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.map_card, supportMapFragment)
+            .commit()
+        mapInitCheck = true
+
+        supportMapFragment.getMapAsync {map ->
+            val location = LatLng(latitude, longitude)
+            val camera = CameraOptionProducer().makeScheduleCameraUpdate(location, 10f)
+            map.moveCamera(camera)
+        }
+    }
+
+    private fun setCalendarTopUI(){
+        binding.title.text = data.title
+        val formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(data.cost)
+        binding.budget.text = getString(R.string.calendar_budget, formattedNumber, data.currency)
+        binding.date.text = "${data.startDate} - ${data.endDate}"
+    }
+
+    private fun setDaysTab(){
+        setDaysTab(data)
+        setDaysTabItemMargin(data)
+
+        binding.daysTab.clearOnTabSelectedListeners()
+        binding.daysTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                val selectedTabPosition = binding.daysTab.selectedTabPosition
+                Log.d("OnTabSelected", "selectedTabPosition : $selectedTabPosition")
+                binding.daysTitle.text = getString(R.string.days_title, (selectedTabPosition + 1).toString(), getDaysTitle(data, selectedTabPosition))
+                lifecycleScope.launch {
+                    adapter.update(data.dailySchedule[selectedTabPosition])
+                    selectedDays = selectedTabPosition
+                    if (mapInitCheck){
+                        supportMapFragment.getMapAsync(this@CalendarActivity)
+                    }else{
+                        val googleMapOptions = GoogleMapOptions()
+                            .zoomControlsEnabled(true)
+
+                        supportMapFragment = SupportMapFragment.newInstance(googleMapOptions)
+
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.map_card, supportMapFragment)
+                            .commit()
+                        supportMapFragment.getMapAsync(this@CalendarActivity)
+                        mapInitCheck = true
+                    }
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+
+        })
     }
 
     private fun setDaysTab(data : Schedule){
@@ -199,6 +207,25 @@ class CalendarActivity : AppCompatActivity(), DaysScheduleAdapter.OnDaysButtonCl
                         Toast.makeText(this@CalendarActivity, getString(R.string.server_network_error), Toast.LENGTH_SHORT).show()
                     }
                 }
+            }
+        }
+    }
+
+    private suspend fun init(){
+        id = intent.getLongExtra(getString(R.string.server_calendar_id), -1)
+        idToLong = id.toLong()
+        latitude = intent.getDoubleExtra(getString(R.string.server_calendar_latitude), 0.0)
+        longitude = intent.getDoubleExtra(getString(R.string.server_calendar_longitude), 0.0)
+
+        Log.d("onCreate", "id : ${id}t\nlatitude : ${latitude}\tlongitude : ${longitude}\nidToLong : $idToLong")
+        viewModel.getScheduleDetail(this@CalendarActivity, idToLong).collect{ check->
+            if(check != ScheduleViewModel.SUCCESS) {
+                Toast.makeText(
+                    this@CalendarActivity,
+                    getString(R.string.not_exist_schedule_error),
+                    Toast.LENGTH_SHORT
+                ).show()
+                finish()
             }
         }
     }

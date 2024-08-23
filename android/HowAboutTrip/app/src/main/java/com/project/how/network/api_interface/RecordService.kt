@@ -46,7 +46,7 @@ interface RecordService {
     fun updateReceipt(
         @Path("receiptId", encoded = true) id : Long,
         @Part("request") detail : RequestBody,
-        @Part receiptImg : MultipartBody.Part
+        @Part receiptImg : MultipartBody.Part?
     ) : Call<String>
 
 }

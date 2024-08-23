@@ -96,4 +96,8 @@ class BillInputIntroFragment : Fragment(), OnYesOrNoListener {
         }
     }
 
+    override fun onOcrListener(answer: Boolean) {
+
+    }
+
 }

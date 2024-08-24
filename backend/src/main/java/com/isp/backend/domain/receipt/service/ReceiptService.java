@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -205,43 +206,55 @@ public class ReceiptService {
 
 
 
-    // 영수증 순서 변경 메서드 수정 예정
-    /** 예외처리 및 정확한 로직 분석 필요 **/
+    /**  영수증 순서 변경 메서드 수정 예정 **/
     @Transactional
     public void changeOrderReceipt(Long scheduleId, List<ChangeReceiptOrderRequest> changeRequests) {
-        // 해당 스케줄에 존재하는 영수증 전체 목록 조회
+        // 1. 해당 스케줄의 모든 영수증 조회
         List<Receipt> existingReceipts = receiptRepository.findByScheduleId(scheduleId);
 
-        // 클라이언트가 제공한 정보로 이루어진 Map 생성 (key: purchaseDate, receiptId, value: orderNum)
-        Map<String, Map<Long, Integer>> providedReceiptsMap = changeRequests.stream()
-                .collect(Collectors.groupingBy(
-                        ChangeReceiptOrderRequest::getPurchaseDate,
-                        Collectors.toMap(ChangeReceiptOrderRequest::getReceiptId, ChangeReceiptOrderRequest::getOrderNum)
-                ));
+        // 2. 요청에서 받은 영수증 ID 수집
+        Set<Long> requestReceiptIds = changeRequests.stream()
+                .map(ChangeReceiptOrderRequest::getReceiptId)
+                .collect(Collectors.toSet());
 
-        // 제공된 모든 receiptId와 날짜가 해당 스케줄의 영수증에 일치하는지 확인
-        for (Receipt receipt : existingReceipts) {
-            Map<Long, Integer> dateSpecificReceipts = providedReceiptsMap.get(receipt.getPurchaseDate());
-            if (dateSpecificReceipts == null || !dateSpecificReceipts.containsKey(receipt.getId())) {
-                throw new IllegalArgumentException("모든 영수증 ID와 날짜를 제공해야 합니다.");
+        // 3. 기존 영수증 ID 수집
+        Set<Long> existingReceiptIds = existingReceipts.stream()
+                .map(Receipt::getId)
+                .collect(Collectors.toSet());
+
+        // 4. 모든 영수증 ID가 제공되었는지 확인
+        if (!existingReceiptIds.equals(requestReceiptIds)) {
+            throw new IllegalArgumentException("모든 영수증 ID와 날짜를 제공해야 합니다.");
+        }
+
+        // 5. 날짜별로 orderNum 중복 확인
+        Map<String, Set<Integer>> dateToOrderNumsMap = new HashMap<>();
+        for (ChangeReceiptOrderRequest request : changeRequests) {
+            dateToOrderNumsMap
+                    .computeIfAbsent(request.getPurchaseDate(), k -> new HashSet<>())
+                    .add(request.getOrderNum());
+        }
+
+        for (Map.Entry<String, Set<Integer>> entry : dateToOrderNumsMap.entrySet()) {
+            if (entry.getValue().size() != changeRequests.stream()
+                    .filter(req -> req.getPurchaseDate().equals(entry.getKey()))
+                    .count()) {
+                throw new IllegalArgumentException("날짜 " + entry.getKey() + "에 대한 orderNum 값이 중복됩니다.");
             }
         }
 
-        // 날짜별로 orderNum 값이 중복되지 않는지 확인
-        for (Map<Long, Integer> receiptMap : providedReceiptsMap.values()) {
-            Set<Integer> orderNums = new HashSet<>(receiptMap.values());
-            if (orderNums.size() != receiptMap.size()) {
-                throw new IllegalArgumentException("날짜별 orderNum 값이 중복됩니다.");
-            }
-        }
+        // 6. 영수증 업데이트
+        Map<Long, ChangeReceiptOrderRequest> requestMap = changeRequests.stream()
+                .collect(Collectors.toMap(ChangeReceiptOrderRequest::getReceiptId, Function.identity()));
 
-        // orderNum 업데이트
         for (Receipt receipt : existingReceipts) {
-            int newOrderNum = providedReceiptsMap.get(receipt.getPurchaseDate()).get(receipt.getId());
-            receipt.setOrderNum(newOrderNum);
+            ChangeReceiptOrderRequest request = requestMap.get(receipt.getId());
+            receipt.setPurchaseDate(request.getPurchaseDate());
+            receipt.setOrderNum(request.getOrderNum());
             receiptRepository.save(receipt);
         }
     }
+
 
 
 

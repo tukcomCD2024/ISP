@@ -1,10 +1,14 @@
 package com.isp.backend.domain.scheduleImage.service;
 
+import com.isp.backend.domain.gpt.entity.Coordinate;
+import com.isp.backend.domain.schedule.dto.response.ScheduleListResponse;
 import com.isp.backend.domain.schedule.entity.Schedule;
 import com.isp.backend.domain.schedule.repository.ScheduleRepository;
 import com.isp.backend.domain.scheduleImage.dto.request.SaveScheduleImageRequest;
+import com.isp.backend.domain.scheduleImage.dto.response.ReadScheduleImageCountriesResponse;
 import com.isp.backend.domain.scheduleImage.dto.response.ReadScheduleImageResponse;
 import com.isp.backend.domain.scheduleImage.dto.response.SaveScheduleImageResponse;
+import com.isp.backend.domain.scheduleImage.dto.response.ScheduleLocationResponse;
 import com.isp.backend.domain.scheduleImage.entity.ScheduleImage;
 import com.isp.backend.domain.scheduleImage.repository.ScheduleImageRepository;
 import com.isp.backend.domain.scheduleImage.repository.ScheduleImageS3Repository;
@@ -14,13 +18,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ScheduleImageService implements SaveScheduleImageService, ReadScheduleImageService, DeleteScheduleImageService {
+public class ScheduleImageService implements SaveScheduleImageService, ReadScheduleImageService, DeleteScheduleImageService, ReadScheduleImageCountriesService {
 
 	private final ScheduleImageS3Repository scheduleImageS3Repository;
 	private final ScheduleRepository scheduleRepository;
@@ -34,6 +40,26 @@ public class ScheduleImageService implements SaveScheduleImageService, ReadSched
 
 		scheduleImageRepository.save(scheduleImage);
 		return new SaveScheduleImageResponse(scheduleImage);
+	}
+
+
+	@Override
+	public ReadScheduleImageCountriesResponse readCountries(List<ScheduleListResponse> schedules) {
+		Map<Coordinate, List<Long>> locationSchedules = new HashMap<>();
+
+		for (ScheduleListResponse schedule : schedules) {
+			Coordinate coordinate = new Coordinate(schedule.getLatitude(), schedule.getLongitude());
+			locationSchedules.computeIfAbsent(coordinate, k -> new ArrayList<>()).add(schedule.getId());
+		}
+
+		List<ScheduleLocationResponse> responses = locationSchedules.entrySet().stream()
+				.map(entry -> new ScheduleLocationResponse(
+						entry.getKey().getLatitude(),
+						entry.getKey().getLongitude(),
+						entry.getValue()))
+				.collect(Collectors.toList());
+
+		return new ReadScheduleImageCountriesResponse(responses);
 	}
 
 	@Override
@@ -57,4 +83,5 @@ public class ScheduleImageService implements SaveScheduleImageService, ReadSched
 		scheduleImageRepository.deleteById(scheduleImageId);
 		return ResponseEntity.noContent().build();
 	}
+
 }

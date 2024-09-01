@@ -3,12 +3,14 @@ package com.isp.backend.domain.scheduleImage.dto.response;
 import com.isp.backend.domain.scheduleImage.entity.ScheduleImage;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class SaveScheduleImageResponse {
     private Long id;
     private Long scheduleId;
     private String path;
-    private String saveDate;
+    private LocalDateTime saveDate;
 
     public SaveScheduleImageResponse(ScheduleImage scheduleImage) {
         this.id = scheduleImage.getId();

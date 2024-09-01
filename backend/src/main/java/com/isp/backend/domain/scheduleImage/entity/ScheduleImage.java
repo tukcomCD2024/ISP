@@ -1,13 +1,12 @@
 package com.isp.backend.domain.scheduleImage.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.isp.backend.domain.schedule.entity.Schedule;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
@@ -24,8 +23,8 @@ public class ScheduleImage {
 	private Schedule schedule;
 	private String path;
 
-	@CreatedDate
-	private String saveDate;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime saveDate;
 
 	public ScheduleImage(Schedule schedule, String path) {
 		this.schedule = schedule;
@@ -34,6 +33,6 @@ public class ScheduleImage {
 
 	@PrePersist
 	public void onPrePersist(){
-		this.saveDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		this.saveDate = LocalDateTime.now().withNano(0);
 	}
 }

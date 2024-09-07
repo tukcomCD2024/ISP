@@ -26,13 +26,9 @@ public class ScheduleImage {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime saveDate;
 
-	public ScheduleImage(Schedule schedule, String path) {
+	public ScheduleImage(Schedule schedule, LocalDateTime saveDate, String path) {
 		this.schedule = schedule;
+		this.saveDate = saveDate;
 		this.path = path;
-	}
-
-	@PrePersist
-	public void onPrePersist(){
-		this.saveDate = LocalDateTime.now().withNano(0);
 	}
 }

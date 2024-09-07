@@ -33,7 +33,7 @@ public class ScheduleImageService implements SaveScheduleImageService, ReadSched
 	public SaveScheduleImageResponse save(SaveScheduleImageRequest request, MultipartFile image) {
 		String imagePath = scheduleImageS3Repository.save(request, image);
 		Schedule schedule = scheduleRepository.findById(request.getScheduleId()).orElseThrow(IllegalArgumentException::new);
-		ScheduleImage scheduleImage = new ScheduleImage(schedule, imagePath);
+		ScheduleImage scheduleImage = new ScheduleImage(schedule, request.getSaveDate(), imagePath);
 
 		scheduleImageRepository.save(scheduleImage);
 		return new SaveScheduleImageResponse(scheduleImage);

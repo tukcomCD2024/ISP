@@ -2,12 +2,23 @@
 
 
 # 여행어때
+
+<br>
+
+```
+ | 🏆 2024 한이음 공모전 입선  
+```
+
+<br>
+
 <p align="center"><img src="https://github.com/tukcomCD2024/ISP/assets/77226122/5bc49674-fbb5-40dd-a9df-3c21d43bd1a9"></p>
 
 ```
 ✈️ 여행 일정이 필요해? 우리가 만들어줄게!
 ```
 <br>
+
+
 
 ## CONTRIBUTORS
 |                                   김수현<br/>([@ksh-g001](https://github.com/ksh-g001))                                    |                                      홍다연<br/>([@Dayeon-Hong](https://github.com/Dayon-Hong))                                       |                                  김지윤<br/>([@yo0oni](https://github.com/yo0oni))                                   | 
